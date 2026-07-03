@@ -147,6 +147,88 @@ def pyscf_hf_energy(query: str) -> str:
                 "Example: 'H 0 0 0; H 0 0 0.74'.")
 
 
+def _polyene_atom_string(n_carbons: int) -> str:
+    """Build a simple planar all-trans C_n H_(n+2) geometry for small polyenes."""
+    if n_carbons < 4 or n_carbons % 2 != 0:
+        raise ValueError("polyene controls require an even carbon count >= 4")
+    x = 0.0
+    carbon_x = [x]
+    for idx in range(n_carbons - 1):
+        x += 1.34 if idx % 2 == 0 else 1.46
+        carbon_x.append(x)
+
+    atoms = [f"C {x_pos:.3f} 0.000 0.000" for x_pos in carbon_x]
+    c_h = 1.09
+    for idx, x_pos in enumerate(carbon_x):
+        if idx in (0, n_carbons - 1):
+            atoms.append(f"H {x_pos:.3f} {c_h:.3f} 0.000")
+            atoms.append(f"H {x_pos:.3f} {-c_h:.3f} 0.000")
+        else:
+            y_pos = c_h if idx % 2 else -c_h
+            atoms.append(f"H {x_pos:.3f} {y_pos:.3f} 0.000")
+    return "; ".join(atoms)
+
+
+def pyscf_polyene_hf_gap(query: str) -> str:
+    """Run RHF/STO-3G controls for generated linear polyenes.
+    Format: '4,6;basis=sto-3g'. Keep n small; this is an independent quantum-chemistry
+    sanity check, not a high-quality geometry optimization.
+    """
+    try:
+        from pyscf import gto, scf
+    except ImportError:
+        return "Error: PySCF not available in this environment."
+
+    parts = query.split(";basis=")
+    counts_text = parts[0].strip()
+    basis = parts[1].strip() if len(parts) > 1 else "sto-3g"
+    try:
+        counts = [int(part.strip()) for part in counts_text.replace(" ", "").split(",") if part.strip()]
+        if not counts:
+            return "Error: Provide carbon counts, e.g. '4,6;basis=sto-3g'"
+        invalid = [n for n in counts if n < 4 or n % 2 != 0]
+        if invalid:
+            return f"Error: PySCF polyene controls require even carbon counts >= 4. Invalid: {invalid}"
+
+        rows = []
+        gaps = []
+        for n_carbons in counts:
+            atoms_str = _polyene_atom_string(n_carbons)
+            mol = gto.Mole()
+            mol.atom = atoms_str
+            mol.basis = basis
+            mol.verbose = 0
+            mol.build()
+            mf = scf.RHF(mol)
+            mf.verbose = 0
+            energy = float(mf.kernel())
+            homo = float(mf.mo_energy[mol.nelectron // 2 - 1])
+            lumo = float(mf.mo_energy[mol.nelectron // 2])
+            gap_ev = (lumo - homo) * 27.211386
+            gaps.append(gap_ev)
+            rows.append(
+                f"    n={n_carbons}: formula=C{n_carbons}H{n_carbons + 2}; "
+                f"total_energy={energy:.8f} Ha; HOMO={homo:.6f} Ha; "
+                f"LUMO={lumo:.6f} Ha; HF_gap={gap_ev:.4f} eV; converged={mf.converged}"
+            )
+
+        trend = "decreases" if len(gaps) >= 2 and gaps[-1] < gaps[0] else "not_monotone"
+        return (
+            "PySCF polyene RHF/STO-3G HOMO-LUMO gap controls:\n"
+            "  Geometry: rough planar all-trans C_n H_(n+2), alternating C-C distances 1.34/1.46 A, C-H=1.09 A.\n"
+            f"  Basis: {basis}\n"
+            f"  Carbon counts: {counts}\n"
+            "  Observations:\n"
+            + "\n".join(rows)
+            + "\n"
+            f"  HF trend over tested counts: {trend}\n"
+            "  Interpretation: RHF/STO-3G orbital gaps are method-dependent and not optical gaps, "
+            "but they provide an independent ab initio control on the sign of the length trend."
+        )
+    except Exception as exc:
+        return f"Error: {exc}. Format: '4,6;basis=sto-3g'."
+
+
 def pyscf_dft_energy(query: str) -> str:
     """Run DFT (B3LYP) on a small molecule.
     Format: same as pyscf_hf_energy. Example: 'O 0 0 0;H 0 0 0.96;H 0.93 0 -0.24'.
@@ -339,6 +421,15 @@ EXTENDED_TOOLS = [
         "function": pyscf_hf_energy,
         "input_format": "'atom1 x y z; atom2 x y z;basis=sto-3g'",
         "output_format": "total energy (Ha), HOMO, LUMO, gap (eV)",
+        "evidence_grade": "real_local",
+    },
+    {
+        "name": "pyscf_polyene_hf_gap",
+        "domain": "chemistry",
+        "description": "Generate small linear polyene geometries and compute RHF/STO-3G HOMO-LUMO gaps. Input: '4,6;basis=sto-3g'.",
+        "function": pyscf_polyene_hf_gap,
+        "input_format": "comma-separated even carbon counts plus optional ;basis=sto-3g",
+        "output_format": "per-polyene total energy, HOMO, LUMO, gap (eV), convergence",
         "evidence_grade": "real_local",
     },
     {

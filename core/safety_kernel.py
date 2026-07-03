@@ -12,8 +12,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 import hashlib
 import json
+import logging
 import re
 import uuid
+
+# Use the stdlib logger (not structlog) so this kernel stays dependency-free
+# and importable from Atlas's separate venv. See module docstring.
+_log = logging.getLogger("amy.safety_kernel")
 
 
 @dataclass(frozen=True)
@@ -194,8 +199,10 @@ def record_safety_event(
         event["event_hash"] = hashlib.sha256(serialized.encode("utf-8")).hexdigest()
         with log_path.open("a", encoding="utf-8") as fh:
             fh.write(json.dumps(event, sort_keys=True, ensure_ascii=False) + "\n")
-    except Exception:
+    except Exception as exc:
         # Safety decisions must never fail open because logging failed.
+        # But we do surface the failure so it is not completely silent.
+        _log.error("safety_kernel.log_failed: %s", exc)
         return
 
 

@@ -35,7 +35,9 @@ Enable with::
 from __future__ import annotations
 
 import json
+import math
 import os
+import re
 
 import structlog
 
@@ -88,9 +90,10 @@ def _format_results_context(results: list[dict], limit: int = 12) -> str:
         tool = r.get("tool", "unknown")
         desc = r.get("description", "").strip()
         result_text = str(r.get("result", "")).strip()
-        # Keep each result bounded so a single verbose tool can't blow the context.
-        if len(result_text) > 800:
-            result_text = result_text[:800] + " …[truncated]"
+        # Keep each result bounded while preserving fit metrics and audit hashes
+        # from compact scientific tools such as huckel_polyene_scaling.
+        if len(result_text) > 2000:
+            result_text = result_text[:2000] + " …[truncated]"
         eid = r.get("experiment_id")
         header = f"[E{i}] tool=`{tool}`"
         if eid:
@@ -113,6 +116,66 @@ def _format_hypotheses(hypotheses: list[dict]) -> str:
         conf = h.get("confidence", 0.5)
         out.append(f"H{i} [{status}, confidence {conf:.0%}]: {h.get('hypothesis','')}")
     return "\n".join(out)
+
+
+def _decimal_claims(text: str) -> list[str]:
+    return [
+        raw.replace("−", "-")
+        for raw in re.findall(r"[-−]?\d+\.\d+(?:[eE][+-]?\d+)?", text or "")
+    ]
+
+
+def _evidence_decimal_values(results: list[dict]) -> tuple[str, list[float]]:
+    evidence_text = "\n".join(str(r.get("result", "")) for r in results)
+    values = []
+    for token in _decimal_claims(evidence_text):
+        try:
+            values.append(float(token))
+        except ValueError:
+            continue
+    return evidence_text, values
+
+
+def _decimal_is_grounded(token: str, evidence_text: str, evidence_values: list[float]) -> bool:
+    if token in evidence_text:
+        return True
+    if re.search(re.escape(token) + r"\d*", evidence_text):
+        return True
+    try:
+        value = float(token)
+    except ValueError:
+        return False
+    return any(math.isclose(value, known, rel_tol=5e-4, abs_tol=5e-6) for known in evidence_values)
+
+
+def _drop_unsupported_numeric_sentences(content: str, results: list[dict]) -> tuple[str, list[str]]:
+    """Remove LLM sentences that introduce decimal claims absent from evidence."""
+    evidence_text, evidence_values = _evidence_decimal_values(results)
+    if not evidence_text:
+        return content, []
+
+    unsupported = [
+        token
+        for token in _decimal_claims(content)
+        if not _decimal_is_grounded(token, evidence_text, evidence_values)
+    ]
+    if not unsupported:
+        return content, []
+
+    unsupported_set = set(unsupported)
+    cleaned_paragraphs = []
+    for paragraph in content.split("\n\n"):
+        sentences = re.split(r"(?<=[.!?])\s+", paragraph)
+        kept = [
+            sentence
+            for sentence in sentences
+            if sentence and not any(token in sentence for token in unsupported_set)
+        ]
+        if kept:
+            cleaned_paragraphs.append(" ".join(kept))
+
+    cleaned = "\n\n".join(cleaned_paragraphs).strip()
+    return cleaned, list(dict.fromkeys(unsupported))
 
 
 DISCUSSION_SYSTEM = (
@@ -140,7 +203,8 @@ STRICT RULES:
 3. If all evidence comes from one underlying tool/method, state that this is internal consistency, NOT methodological independence or cross-validation.
 4. Consider at least one alternative explanation or limitation (e.g. floating-point artifacts, finite sample size, lack of observational data) for the main result.
 5. Do NOT fabricate citations. Do not include a reference list (it is added separately).
-6. Write 3-6 substantive paragraphs. Use Markdown. You may use **bold** subheadings per theme. End with a short **Implications** paragraph that states what new, testable question the evidence motivates — grounded in the actual results, not generic boilerplate.
+6. Do NOT compute new predicted values for future experiments. Future-work paragraphs may name the next variable or limit qualitatively, but must not include a new decimal prediction unless that exact decimal appears in EVIDENCE.
+7. Write 3-6 substantive paragraphs. Use Markdown. You may use **bold** subheadings per theme. End with a short **Implications** paragraph that states what new, testable question the evidence motivates — grounded in the actual results, not generic boilerplate.
 
 Return ONLY the Discussion section text (Markdown). Do not add a "## Discussion" heading — start directly with the prose."""
 
@@ -275,6 +339,20 @@ async def generate_discussion_llm(
                     content = content[len("markdown"):].lstrip()
             if len(content) < 120:
                 log.info("llm_enhancer.too_short", length=len(content), attempt=attempt)
+                if attempt == 0:
+                    await asyncio.sleep(1.5)
+                    continue
+                return None
+            content, removed_decimals = _drop_unsupported_numeric_sentences(content, grounded)
+            if removed_decimals:
+                log.info(
+                    "llm_enhancer.numeric_sentences_removed",
+                    count=len(removed_decimals),
+                    decimals=removed_decimals[:12],
+                )
+            if len(content) < 120:
+                log.info("llm_enhancer.too_short_after_numeric_sanitizer",
+                         length=len(content), attempt=attempt)
                 if attempt == 0:
                     await asyncio.sleep(1.5)
                     continue

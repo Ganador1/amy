@@ -345,6 +345,15 @@ class DynamicToolRegistry:
             input_format="integer_limit",
             output_format="gap_statistics"
         ))
+
+        self.register_tool(ToolDescriptor(
+            name="prime_gap_model_comparison",
+            domain="number_theory",
+            description="Compare prime-gap statistics against log(N) and log(N)^2 scaling controls. Input: comma-separated limits like '10000,100000,1000000'",
+            function=self._prime_gap_model_comparison,
+            input_format="integer_limit_series",
+            output_format="scaling_model_comparison"
+        ))
         
         self.register_tool(ToolDescriptor(
             name="hypothesis_tester",
@@ -353,6 +362,15 @@ class DynamicToolRegistry:
             function=self._hypothesis_tester,
             input_format="test_and_data",
             output_format="test_results"
+        ))
+
+        self.register_tool(ToolDescriptor(
+            name="two_sample_effect_power",
+            domain="statistics",
+            description="Report two-sample effect size, confidence interval, deterministic bootstrap CI, and observed power. Input: '[1,2,3];[4,5,6]'",
+            function=self._two_sample_effect_power,
+            input_format="two_numeric_arrays",
+            output_format="effect_power_summary"
         ))
         
         # Chemistry tools
@@ -363,6 +381,24 @@ class DynamicToolRegistry:
             function=self._molecular_orbital_energy,
             input_format="atoms_and_bond",
             output_format="energy_levels"
+        ))
+
+        self.register_tool(ToolDescriptor(
+            name="huckel_polyene_scaling",
+            domain="chemistry",
+            description="Fit HOMO-LUMO gap scaling for linear polyenes. Input: comma-separated even atom counts like '4,6,8,10,12,16,20'",
+            function=self._huckel_polyene_scaling,
+            input_format="atom_count_series",
+            output_format="scaling_model_comparison"
+        ))
+
+        self.register_tool(ToolDescriptor(
+            name="bond_alternated_polyene_scaling",
+            domain="chemistry",
+            description="Compare HOMO-LUMO gap scaling for bond-alternated linear polyenes. Input: '4,6,8;strong=-2.7;weak=-2.3'",
+            function=self._bond_alternated_polyene_scaling,
+            input_format="atom_count_series_with_betas",
+            output_format="bond_alternation_gap_series"
         ))
         
         self.register_tool(ToolDescriptor(
@@ -392,6 +428,15 @@ class DynamicToolRegistry:
             input_format="dna_sequence",
             output_format="sequence_analysis"
         ))
+
+        self.register_tool(ToolDescriptor(
+            name="gc_at_panel_comparison",
+            domain="biology",
+            description="Compare GC-rich and AT-rich DNA sequence panels with effect size, confidence intervals, bootstrap CI, and coding-context controls. Input: 'gc=SEQ,SEQ;at=SEQ,SEQ'",
+            function=self._gc_at_panel_comparison,
+            input_format="labeled_sequence_panels",
+            output_format="gc_at_panel_statistics"
+        ))
         
         self.register_tool(ToolDescriptor(
             name="protein_properties",
@@ -410,6 +455,25 @@ class DynamicToolRegistry:
             function=self._quantum_energy_levels,
             input_format="system_and_params",
             output_format="energy_levels"
+        ))
+
+        self.register_tool(ToolDescriptor(
+            name="rydberg_scaling_comparison",
+            domain="physics",
+            description="Compare hydrogen Rydberg inverse-square scaling with a quantum-defect perturbation. Input: '1,2,3,5,10;delta=0.05'",
+            function=self._rydberg_scaling_comparison,
+            input_format="quantum_number_series",
+            output_format="rydberg_model_comparison"
+        ))
+
+        # Astronomy tools
+        self.register_tool(ToolDescriptor(
+            name="cosmology_residual_comparison",
+            domain="astronomy",
+            description="Compare Planck18-parameter luminosity distances against low-redshift Hubble-law and second-order cosmographic approximations. Input: '0.01,0.1,0.5,1,2;threshold=5'",
+            function=self._cosmology_residual_comparison,
+            input_format="redshift_series_with_threshold",
+            output_format="cosmology_residual_table"
         ))
     
     def _register_service_tools(self):
@@ -2404,6 +2468,137 @@ a₀ coefficient: {a0}
                     f"  Most common gaps: {most_common}")
         except Exception as e:
             return f"Error: {str(e)}"
+
+    @staticmethod
+    def _parse_int_limit_series(query: str) -> List[int]:
+        """Extract a sorted, unique integer limit series from flexible input."""
+        cleaned = query.replace("_", "")
+        cleaned = re.sub(r"(?<=\d),(?=\d{3}(?:\D|$))", "", cleaned)
+        tokens = re.findall(r"\d+(?:\.\d+)?(?:[eE][+-]?\d+)?", cleaned)
+        limits = []
+        for token in tokens:
+            value = int(float(token))
+            if value not in limits:
+                limits.append(value)
+        return sorted(limits)
+
+    def _prime_gap_model_comparison(self, query: str) -> str:
+        """Compare finite prime-gap observations with logarithmic controls."""
+        try:
+            import bisect
+
+            requested_limits = self._parse_int_limit_series(query)
+            if len(requested_limits) < 3:
+                return (
+                    "Error: Provide at least three increasing limits, e.g. "
+                    "'10000,100000,1000000'."
+                )
+
+            HARD_CAP = 10_000_000
+            capped_limits = [min(n, HARD_CAP) for n in requested_limits if n >= 100]
+            limits = sorted(dict.fromkeys(capped_limits))
+            if len(limits) < 3:
+                return "Error: Need at least three unique limits >= 100 after applying the hard cap."
+            cap_notice = ""
+            if any(n > HARD_CAP for n in requested_limits):
+                cap_notice = (
+                    f"NOTE: requested limits above {HARD_CAP} were capped at {HARD_CAP}; "
+                    f"computed limits={limits}.\n"
+                )
+
+            primes = list(sympy.primerange(2, max(limits)))
+            if len(primes) < 2:
+                return "Error: limit series produced fewer than two primes."
+
+            rows = []
+            mean_gaps = []
+            max_gaps = []
+            log_values = []
+            log_sq_values = []
+            max_norm_values = []
+            mean_norm_values = []
+
+            for limit in limits:
+                count = bisect.bisect_left(primes, limit)
+                subset = primes[:count]
+                if len(subset) < 2:
+                    return f"Error: limit {limit} produced fewer than two primes."
+                gaps = np.diff(np.array(subset, dtype=np.int64))
+                mean_gap = float(np.mean(gaps))
+                max_gap = int(np.max(gaps))
+                max_gap_index = int(np.argmax(gaps))
+                max_gap_at = int(subset[max_gap_index])
+                log_n = float(math.log(limit))
+                log_n_sq = float(log_n ** 2)
+                mean_norm = float(mean_gap / log_n)
+                max_norm = float(max_gap / log_n_sq)
+
+                mean_gaps.append(mean_gap)
+                max_gaps.append(float(max_gap))
+                log_values.append(log_n)
+                log_sq_values.append(log_n_sq)
+                mean_norm_values.append(mean_norm)
+                max_norm_values.append(max_norm)
+                rows.append(
+                    {
+                        "limit": limit,
+                        "prime_count": len(subset),
+                        "mean_gap": mean_gap,
+                        "max_gap": max_gap,
+                        "max_gap_at": max_gap_at,
+                        "logN": log_n,
+                        "mean_gap_over_logN": mean_norm,
+                        "max_gap_over_logN_squared": max_norm,
+                    }
+                )
+
+            mean_fit = self._fit_line(log_values, mean_gaps)
+            max_log_fit = self._fit_line(log_values, max_gaps)
+            max_log_sq_fit = self._fit_line(log_sq_values, max_gaps)
+            normalized_trend = self._fit_line(log_values, max_norm_values)
+            best_model = (
+                "logN_squared"
+                if max_log_sq_fit["rmse"] <= max_log_fit["rmse"]
+                else "logN"
+            )
+
+            observation_lines = [
+                (
+                    f"    N={row['limit']}: prime_count={row['prime_count']}, "
+                    f"mean_gap={row['mean_gap']:.6f}, max_gap={row['max_gap']} "
+                    f"(after prime {row['max_gap_at']}), logN={row['logN']:.6f}, "
+                    f"mean_gap/logN={row['mean_gap_over_logN']:.6f}, "
+                    f"max_gap/logN^2={row['max_gap_over_logN_squared']:.6f}"
+                )
+                for row in rows
+            ]
+
+            return (
+                f"{cap_notice}"
+                "Prime gap scaling model comparison:\n"
+                "  Heuristic anchors: mean prime gap is compared with log(N); "
+                "maximal finite-range gaps are compared with log(N)^2 as a "
+                "Cramer-style scale diagnostic.\n"
+                f"  Limits: {limits}\n"
+                "  Observations:\n"
+                + "\n".join(observation_lines)
+                + "\n"
+                f"  mean_gap_vs_logN fit mean_gap = {mean_fit['slope']:.6f}*log(N) + {mean_fit['intercept']:.6f}; "
+                f"RMSE={mean_fit['rmse']:.6f}; R2={mean_fit['r2']:.6f}\n"
+                f"  max_gap_vs_logN fit max_gap = {max_log_fit['slope']:.6f}*log(N) + {max_log_fit['intercept']:.6f}; "
+                f"RMSE={max_log_fit['rmse']:.6f}; R2={max_log_fit['r2']:.6f}\n"
+                f"  max_gap_vs_logN_squared fit max_gap = {max_log_sq_fit['slope']:.6f}*log(N)^2 + {max_log_sq_fit['intercept']:.6f}; "
+                f"RMSE={max_log_sq_fit['rmse']:.6f}; R2={max_log_sq_fit['r2']:.6f}\n"
+                f"  normalized_max_gap trend max_gap/logN^2 = {normalized_trend['slope']:.6f}*log(N) + {normalized_trend['intercept']:.6f}; "
+                f"RMSE={normalized_trend['rmse']:.6f}; R2={normalized_trend['r2']:.6f}\n"
+                f"  Best max-gap model by RMSE: {best_model}\n"
+                "  Falsifiable next check: adding a larger N should keep the "
+                "reported max_gap/logN^2 value within the residual trend if this "
+                "finite-range diagnostic is stable.\n"
+                "  Caution: finite computations cannot prove asymptotic Cramer behavior."
+            )
+        except Exception as e:
+            return f"Error: {str(e)}"
     
     @staticmethod
     def _extract_two_arrays(payload: str):
@@ -2491,6 +2686,74 @@ a₀ coefficient: {a0}
                 return f"Unknown test type: {test_type}. Available: ttest, kstest, shapiro, pearson, spearman"
         except Exception as e:
             return f"Error: {str(e)}"
+
+    def _two_sample_effect_power(self, query: str) -> str:
+        """Report two-sample effect size, CI, bootstrap CI, and observed power."""
+        try:
+            from scipy import stats
+
+            data1, data2 = self._extract_two_arrays(query)
+            if len(data1) < 2 or len(data2) < 2:
+                return "Error: two_sample_effect_power requires at least two observations per group."
+
+            n1 = int(len(data1))
+            n2 = int(len(data2))
+            mean1 = float(np.mean(data1))
+            mean2 = float(np.mean(data2))
+            sd1 = float(np.std(data1, ddof=1))
+            sd2 = float(np.std(data2, ddof=1))
+            diff = mean2 - mean1
+            pooled_sd = float(np.sqrt(((n1 - 1) * sd1 ** 2 + (n2 - 1) * sd2 ** 2) / (n1 + n2 - 2)))
+            cohen_d = float(diff / pooled_sd) if pooled_sd else 0.0
+            hedges_correction = 1.0 - (3.0 / (4.0 * (n1 + n2) - 9.0))
+            hedges_g = float(cohen_d * hedges_correction)
+
+            se = float(np.sqrt(sd1 ** 2 / n1 + sd2 ** 2 / n2))
+            if se:
+                df_num = (sd1 ** 2 / n1 + sd2 ** 2 / n2) ** 2
+                df_den = ((sd1 ** 2 / n1) ** 2 / (n1 - 1)) + ((sd2 ** 2 / n2) ** 2 / (n2 - 1))
+                welch_df = float(df_num / df_den) if df_den else float(n1 + n2 - 2)
+                tcrit = float(stats.t.ppf(0.975, welch_df))
+                ci_low = diff - tcrit * se
+                ci_high = diff + tcrit * se
+            else:
+                welch_df = float(n1 + n2 - 2)
+                ci_low = diff
+                ci_high = diff
+
+            t_stat, p_value = stats.ttest_ind(data1, data2, equal_var=False)
+            seed = 12345
+            if not _REAL_TOOLS_AVAILABLE:
+                return "Error: core.atlas_real_tools is required for deterministic bootstrap CI."
+            boot_low, boot_high = _real.deterministic_bootstrap_mean_difference_ci(
+                data1,
+                data2,
+                seed=seed,
+                iterations=5000,
+                confidence=0.95,
+                order="second_minus_first",
+            )
+
+            alpha = 0.05
+            zcrit = float(stats.norm.ppf(1.0 - alpha / 2.0))
+            ncp = abs(cohen_d) * np.sqrt((n1 * n2) / (n1 + n2))
+            observed_power = float(stats.norm.cdf(-zcrit - ncp) + (1.0 - stats.norm.cdf(zcrit - ncp)))
+
+            return (
+                "Two-sample effect and power summary:\n"
+                f"  sample size n1={n1}, n2={n2}\n"
+                f"  group1 mean={mean1:.6f}, standard deviation={sd1:.6f}\n"
+                f"  group2 mean={mean2:.6f}, standard deviation={sd2:.6f}\n"
+                f"  mean_difference(group2-group1)={diff:.6f}\n"
+                f"  Welch t-statistic={float(t_stat):.6f}, p-value={float(p_value):.6f}, df={welch_df:.6f}\n"
+                f"  95% CI for mean_difference: [{ci_low:.6f}, {ci_high:.6f}]\n"
+                f"  Cohen's d={cohen_d:.6f}; Hedges g={hedges_g:.6f}; effect size interpretation=standardized mean difference\n"
+                f"  bootstrap_ci_seed={seed}; bootstrap 95% CI for mean_difference: [{float(boot_low):.6f}, {float(boot_high):.6f}]\n"
+                f"  observed_power={observed_power:.6f} using normal approximation, alpha={alpha:.2f}, two-sided\n"
+                "  Falsifiable next check: add new observations using the same measurement protocol; the group-difference claim is weakened if the 95% CI crosses 0 or the effect size shrinks toward 0."
+            )
+        except Exception as e:
+            return f"Error: {str(e)}"
     
     # Chemistry tool implementations
     def _molecular_orbital_energy(self, query: str) -> str:
@@ -2509,18 +2772,201 @@ a₀ coefficient: {a0}
             for k in range(1, n_atoms + 1):
                 E_k = alpha + 2 * beta * np.cos(k * np.pi / (n_atoms + 1))
                 energies.append(E_k)
+            sorted_energies = [float(e) for e in sorted(energies)]
             
             # Calculate delocalization energy
             E_isolated = 2 * alpha  # 2 electrons per pi bond
-            E_delocalized = sum(sorted(energies)[:n_atoms//2 + n_atoms % 2]) * 2  # Fill lowest orbitals
+            E_delocalized = sum(sorted_energies[:n_atoms//2 + n_atoms % 2]) * 2  # Fill lowest orbitals
             delocalization = E_delocalized - (n_atoms / 2) * E_isolated
+            homo = sorted_energies[n_atoms//2 - 1]
+            lumo = sorted_energies[n_atoms//2]
             
             return (f"Hückel MO Analysis ({n_atoms} carbon conjugated system):\n"
-                    f"  Energy levels (eV): {[round(e, 3) for e in sorted(energies)]}\n"
-                    f"  HOMO energy: {sorted(energies)[n_atoms//2 - 1]:.3f} eV\n"
-                    f"  LUMO energy: {sorted(energies)[n_atoms//2]:.3f} eV\n"
-                    f"  HOMO-LUMO gap: {sorted(energies)[n_atoms//2] - sorted(energies)[n_atoms//2 - 1]:.3f} eV\n"
+                    f"  Model parameters: alpha={alpha:.3f} eV, beta={beta:.3f} eV\n"
+                    f"  Energy levels (eV): {[round(e, 3) for e in sorted_energies]}\n"
+                    f"  HOMO energy: {homo:.3f} eV\n"
+                    f"  LUMO energy: {lumo:.3f} eV\n"
+                    f"  HOMO-LUMO gap: {lumo - homo:.3f} eV\n"
                     f"  Delocalization energy: {delocalization:.3f} eV")
+        except Exception as e:
+            return f"Error: {str(e)}"
+
+    @staticmethod
+    def _fit_line(x_values: List[float], y_values: List[float]) -> Dict[str, float]:
+        x = np.array(x_values, dtype=float)
+        y = np.array(y_values, dtype=float)
+        slope, intercept = np.polyfit(x, y, 1)
+        pred = slope * x + intercept
+        residual = y - pred
+        rmse = float(np.sqrt(np.mean(residual ** 2)))
+        denom = float(np.sum((y - np.mean(y)) ** 2))
+        r2 = 1.0 - float(np.sum(residual ** 2)) / denom if denom else 1.0
+        return {
+            "slope": float(slope),
+            "intercept": float(intercept),
+            "rmse": rmse,
+            "r2": r2,
+        }
+
+    def _huckel_polyene_scaling(self, query: str) -> str:
+        """Compare finite-chain Hückel HOMO-LUMO gap scaling laws."""
+        try:
+            atom_counts = [int(part.strip()) for part in re.split(r"[,;\s]+", query) if part.strip()]
+            atom_counts = list(dict.fromkeys(atom_counts))
+            if len(atom_counts) < 4:
+                return "Error: Provide at least four even atom counts, e.g. '4,6,8,10,12,16,20'"
+            invalid = [n for n in atom_counts if n < 2 or n % 2 != 0]
+            if invalid:
+                return f"Error: Hückel closed-shell linear polyene scaling requires even atom counts >= 2. Invalid: {invalid}"
+
+            alpha = -6.0
+            beta = -2.5
+            gaps = []
+            for n_atoms in atom_counts:
+                energies = [
+                    float(alpha + 2 * beta * np.cos(k * np.pi / (n_atoms + 1)))
+                    for k in range(1, n_atoms + 1)
+                ]
+                sorted_energies = sorted(energies)
+                homo = sorted_energies[n_atoms//2 - 1]
+                lumo = sorted_energies[n_atoms//2]
+                gaps.append(float(lumo - homo))
+
+            inverse_linear = self._fit_line([1 / (n + 1) for n in atom_counts], gaps)
+            inverse_quadratic = self._fit_line([1 / ((n + 1) ** 2) for n in atom_counts], gaps)
+            asymptotic_slope = float(-2 * np.pi * beta)
+            asymptotic_predictions = [
+                asymptotic_slope / (n + 1)
+                for n in atom_counts
+            ]
+            asymptotic_residual = np.array(gaps, dtype=float) - np.array(asymptotic_predictions, dtype=float)
+            asymptotic_rmse = float(np.sqrt(np.mean(asymptotic_residual ** 2)))
+            asymptotic_max_abs_error = float(np.max(np.abs(asymptotic_residual)))
+            residual_threshold = 0.01
+            small_angle_argument = float(np.pi / (2 * (min(atom_counts) + 1)))
+            log_fit = self._fit_line([float(np.log(n + 1)) for n in atom_counts], [float(np.log(g)) for g in gaps])
+            power_exponent = log_fit["slope"]
+            power_prefactor = float(np.exp(log_fit["intercept"]))
+            power_predictions = [
+                power_prefactor * ((n + 1) ** power_exponent)
+                for n in atom_counts
+            ]
+            residual = np.array(gaps, dtype=float) - np.array(power_predictions, dtype=float)
+            power_rmse = float(np.sqrt(np.mean(residual ** 2)))
+            denom = float(np.sum((np.array(gaps) - np.mean(gaps)) ** 2))
+            power_r2 = 1.0 - float(np.sum(residual ** 2)) / denom if denom else 1.0
+
+            models = {
+                "inverse_linear": inverse_linear["rmse"],
+                "inverse_quadratic": inverse_quadratic["rmse"],
+                "power_law": power_rmse,
+            }
+            best_model = min(models, key=models.get)
+            analytic_gaps = [
+                float(-4 * beta * np.sin(np.pi / (2 * (n + 1))))
+                for n in atom_counts
+            ]
+            max_formula_error = max(abs(a - b) for a, b in zip(gaps, analytic_gaps))
+            rejection = (
+                "inverse_quadratic rejected"
+                if inverse_quadratic["rmse"] > power_rmse * 10
+                else "inverse_quadratic not rejected"
+            )
+
+            rows = [
+                f"    n={n}: gap={gap:.6f} eV"
+                for n, gap in zip(atom_counts, gaps)
+            ]
+            return (
+                "Hückel polyene HOMO-LUMO gap scaling:\n"
+                "  Literature anchor: linear Hückel polyene levels use E_k = alpha + 2 beta cos(k*pi/(N+1)); "
+                "the frontier gap is -4 beta sin(pi/(2(N+1))).\n"
+                f"  Model parameters: alpha={alpha:.3f} eV, beta={beta:.3f} eV\n"
+                f"  Chain sizes (n atoms): {atom_counts}\n"
+                f"  Gaps (eV): {[round(g, 3) for g in gaps]}\n"
+                "  Observations:\n"
+                + "\n".join(rows)
+                + "\n"
+                f"  Formula check max_abs_error: {max_formula_error:.3e} eV\n"
+                f"  asymptotic_slope -2*pi*beta = {asymptotic_slope:.6f}\n"
+                f"  small_angle_argument_at_min_n = {small_angle_argument:.6f} rad\n"
+                f"  asymptotic_inverse_model gap = {asymptotic_slope:.6f}/(n+1); "
+                f"RMSE={asymptotic_rmse:.6f} eV; max_abs_error={asymptotic_max_abs_error:.6f} eV; "
+                f"residual_threshold={residual_threshold:.6f} eV\n"
+                f"  inverse_linear fit gap = {inverse_linear['slope']:.6f}/(n+1) + {inverse_linear['intercept']:.6f}; "
+                f"RMSE={inverse_linear['rmse']:.6f} eV; R2={inverse_linear['r2']:.6f}\n"
+                f"  inverse_quadratic fit gap = {inverse_quadratic['slope']:.6f}/(n+1)^2 + {inverse_quadratic['intercept']:.6f}; "
+                f"RMSE={inverse_quadratic['rmse']:.6f} eV; R2={inverse_quadratic['r2']:.6f}\n"
+                f"  power_law fit gap = {power_prefactor:.6f}*(n+1)^{power_exponent:.6f}; "
+                f"power exponent p={power_exponent:.3f}; RMSE={power_rmse:.6f} eV; R2={power_r2:.6f}\n"
+                f"  Best model by RMSE: {best_model}\n"
+                f"  Falsification result: {rejection}; its RMSE is {inverse_quadratic['rmse'] / power_rmse:.1f}x the power-law RMSE.\n"
+                "  Scaling conclusion: finite linear Hückel polyenes follow near-inverse-length HOMO-LUMO gap decay over this range, "
+                "not inverse-quadratic decay."
+            )
+        except Exception as e:
+            return f"Error: {str(e)}"
+
+    def _bond_alternated_polyene_scaling(self, query: str) -> str:
+        """Finite-chain tight-binding gaps with alternating bond couplings."""
+        try:
+            segments = [part.strip() for part in query.split(";") if part.strip()]
+            if not segments:
+                return "Error: Provide atom counts, e.g. '4,6,8,10;strong=-2.7;weak=-2.3'"
+            atom_counts = [int(part.strip()) for part in re.split(r"[,;\s]+", segments[0]) if part.strip()]
+            atom_counts = list(dict.fromkeys(atom_counts))
+            if len(atom_counts) < 4:
+                return "Error: Provide at least four even atom counts, e.g. '4,6,8,10,12,16'"
+            invalid = [n for n in atom_counts if n < 2 or n % 2 != 0]
+            if invalid:
+                return f"Error: Bond-alternated closed-shell chains require even atom counts >= 2. Invalid: {invalid}"
+
+            alpha = -6.0
+            beta_strong = -2.7
+            beta_weak = -2.3
+            for option in segments[1:]:
+                if "=" not in option:
+                    continue
+                key, value = [item.strip().lower() for item in option.split("=", 1)]
+                if key in {"alpha", "a"}:
+                    alpha = float(value)
+                elif key in {"strong", "beta_strong", "double"}:
+                    beta_strong = float(value)
+                elif key in {"weak", "beta_weak", "single"}:
+                    beta_weak = float(value)
+
+            gaps = []
+            for n_atoms in atom_counts:
+                hamiltonian = np.eye(n_atoms, dtype=float) * alpha
+                for idx in range(n_atoms - 1):
+                    beta = beta_strong if idx % 2 == 0 else beta_weak
+                    hamiltonian[idx, idx + 1] = beta
+                    hamiltonian[idx + 1, idx] = beta
+                energies = np.linalg.eigvalsh(hamiltonian)
+                gaps.append(float(energies[n_atoms//2] - energies[n_atoms//2 - 1]))
+
+            asymptotic_gap = float(2 * abs(beta_strong - beta_weak))
+            residuals = [gap - asymptotic_gap for gap in gaps]
+            max_residual = max(abs(value) for value in residuals)
+            rows = [
+                f"    n={n}: alternated_gap={gap:.6f} eV; excess_over_asymptote={residual:.6f} eV"
+                for n, gap, residual in zip(atom_counts, gaps, residuals)
+            ]
+            return (
+                "Bond-alternated polyene gap scaling:\n"
+                "  Method: explicit diagonalization of a nearest-neighbor tight-binding/Hückel matrix "
+                "with alternating strong and weak couplings.\n"
+                f"  Model parameters: alpha={alpha:.3f} eV, beta_strong={beta_strong:.3f} eV, beta_weak={beta_weak:.3f} eV\n"
+                f"  Chain sizes (n atoms): {atom_counts}\n"
+                f"  Alternated gaps (eV): {[round(g, 3) for g in gaps]}\n"
+                f"  asymptotic_gap_estimate = {asymptotic_gap:.6f} eV\n"
+                f"  max_excess_over_asymptote = {max_residual:.6f} eV\n"
+                "  Observations:\n"
+                + "\n".join(rows)
+                + "\n"
+                "  finite-gap conclusion: bond alternation prevents the zero-gap closure seen in the uniform-chain baseline; "
+                "the tested finite chains approach a nonzero gap set by the strong/weak coupling contrast."
+            )
         except Exception as e:
             return f"Error: {str(e)}"
     
@@ -2617,6 +3063,122 @@ a₀ coefficient: {a0}
                 f"  GC content: {gc_content:.1f}%\n"
                 f"  Estimated Tm: {tm}°C (Wallace rule)\n"
                 f"  Reverse complement: {rev_comp[:30]}{'...' if len(rev_comp) > 30 else ''}")
+
+    @staticmethod
+    def _parse_sequence_panels(query: str) -> tuple[list[str], list[str]]:
+        """Parse 'gc=SEQ,SEQ;at=SEQ,SEQ' or 'SEQ,SEQ;SEQ,SEQ' panels."""
+        panels: dict[str, list[str]] = {}
+        for chunk in query.split(";"):
+            chunk = chunk.strip()
+            if not chunk:
+                continue
+            if "=" in chunk:
+                key, value = chunk.split("=", 1)
+                key = key.strip().lower()
+            else:
+                key = "gc" if "gc" not in panels else "at"
+                value = chunk
+            seqs = [s.strip().upper() for s in value.split(",") if s.strip()]
+            if key in {"gc", "gcrich", "gc-rich", "rich"}:
+                panels["gc"] = seqs
+            elif key in {"at", "atrich", "at-rich", "control"}:
+                panels["at"] = seqs
+
+        gc_panel = panels.get("gc", [])
+        at_panel = panels.get("at", [])
+        valid = set("ATCG")
+        all_sequences = gc_panel + at_panel
+        if len(gc_panel) < 2 or len(at_panel) < 2:
+            raise ValueError("gc_at_panel_comparison requires at least two sequences per panel.")
+        for seq in all_sequences:
+            if not seq:
+                raise ValueError("empty sequence in panel")
+            if not all(base in valid for base in seq):
+                raise ValueError(f"invalid DNA sequence in panel: {seq[:20]}")
+        return gc_panel, at_panel
+
+    @staticmethod
+    def _orf_like(sequence: str) -> bool:
+        if not sequence.startswith("ATG"):
+            return False
+        stops = {"TAA", "TAG", "TGA"}
+        return any(sequence[i:i + 3] in stops for i in range(3, len(sequence) - 2, 3))
+
+    def _gc_at_panel_comparison(self, query: str) -> str:
+        """Compare GC-rich and AT-rich sequence panels with bounded statistics."""
+        try:
+            from scipy import stats
+
+            gc_panel, at_panel = self._parse_sequence_panels(query)
+            gc_fracs = np.array([
+                (seq.count("G") + seq.count("C")) / len(seq) for seq in gc_panel
+            ], dtype=float)
+            at_fracs = np.array([
+                (seq.count("G") + seq.count("C")) / len(seq) for seq in at_panel
+            ], dtype=float)
+            n_gc = int(len(gc_fracs))
+            n_at = int(len(at_fracs))
+            mean_gc = float(np.mean(gc_fracs))
+            mean_at = float(np.mean(at_fracs))
+            sd_gc = float(np.std(gc_fracs, ddof=1))
+            sd_at = float(np.std(at_fracs, ddof=1))
+            diff = mean_gc - mean_at
+            pooled_sd = float(np.sqrt(((n_gc - 1) * sd_gc ** 2 + (n_at - 1) * sd_at ** 2) / (n_gc + n_at - 2)))
+            cohen_d = float(diff / pooled_sd) if pooled_sd else 0.0
+            hedges_correction = 1.0 - (3.0 / (4.0 * (n_gc + n_at) - 9.0))
+            hedges_g = float(cohen_d * hedges_correction)
+
+            se = float(np.sqrt(sd_gc ** 2 / n_gc + sd_at ** 2 / n_at))
+            if se:
+                df_num = (sd_gc ** 2 / n_gc + sd_at ** 2 / n_at) ** 2
+                df_den = ((sd_gc ** 2 / n_gc) ** 2 / (n_gc - 1)) + ((sd_at ** 2 / n_at) ** 2 / (n_at - 1))
+                welch_df = float(df_num / df_den) if df_den else float(n_gc + n_at - 2)
+                tcrit = float(stats.t.ppf(0.975, welch_df))
+                ci_low = diff - tcrit * se
+                ci_high = diff + tcrit * se
+            else:
+                welch_df = float(n_gc + n_at - 2)
+                ci_low = diff
+                ci_high = diff
+
+            t_stat, p_value = stats.ttest_ind(gc_fracs, at_fracs, equal_var=False)
+            seed = 12345
+            if not _REAL_TOOLS_AVAILABLE:
+                return "Error: core.atlas_real_tools is required for deterministic bootstrap CI."
+            boot_low, boot_high = _real.deterministic_bootstrap_mean_difference_ci(
+                gc_fracs,
+                at_fracs,
+                seed=seed,
+                iterations=5000,
+                confidence=0.95,
+                order="first_minus_second",
+            )
+
+            lengths_gc = [len(seq) for seq in gc_panel]
+            lengths_at = [len(seq) for seq in at_panel]
+            gc_orf = sum(1 for seq in gc_panel if self._orf_like(seq))
+            at_orf = sum(1 for seq in at_panel if self._orf_like(seq))
+            motifs = ("TATAAT", "TTGACA", "ATG")
+            gc_motif_hits = sum(sum(seq.count(motif) for motif in motifs) for seq in gc_panel)
+            at_motif_hits = sum(sum(seq.count(motif) for motif in motifs) for seq in at_panel)
+
+            return (
+                "GC-rich versus AT-rich panel comparison:\n"
+                f"  sample size n_gc={n_gc}, n_at={n_at}\n"
+                f"  gc_panel fractions={','.join(f'{v:.6f}' for v in gc_fracs)}\n"
+                f"  at_panel fractions={','.join(f'{v:.6f}' for v in at_fracs)}\n"
+                f"  mean_gc_fraction={mean_gc:.6f}; mean_at_fraction={mean_at:.6f}\n"
+                f"  mean_gc_difference(gc-at)={diff:.6f}\n"
+                f"  Welch t-statistic={float(t_stat):.6f}, p-value={float(p_value):.6f}, df={welch_df:.6f}\n"
+                f"  95% CI for mean_gc_difference: [{ci_low:.6f}, {ci_high:.6f}]\n"
+                f"  Cohen's d={cohen_d:.6f}; Hedges g={hedges_g:.6f}; effect size interpretation=standardized GC-fraction difference\n"
+                f"  bootstrap_ci_seed={seed}; bootstrap 95% CI for mean_gc_difference: [{float(boot_low):.6f}, {float(boot_high):.6f}]\n"
+                f"  length_control: mean_length_gc={float(np.mean(lengths_gc)):.6f}, mean_length_at={float(np.mean(lengths_at)):.6f}, min_length={min(lengths_gc + lengths_at)}, max_length={max(lengths_gc + lengths_at)}\n"
+                f"  coding_context_control: gc_orf_like={gc_orf}/{n_gc}, at_orf_like={at_orf}/{n_at}, gc_motif_hits={gc_motif_hits}, at_motif_hits={at_motif_hits}\n"
+                "  Falsifiable next check: add matched-length sequences from an external source; weaken the GC-panel distinction if the 95% CI crosses 0, the bootstrap CI crosses 0, or coding-context controls become imbalanced."
+            )
+        except Exception as e:
+            return f"Error: {str(e)}"
     
     def _protein_properties(self, query: str) -> str:
         """Calculate protein properties from amino acid sequence."""
@@ -2699,6 +3261,210 @@ a₀ coefficient: {a0}
             
             else:
                 return f"Unknown system: {system}. Available: hydrogen, harmonic, particle_box"
+        except Exception as e:
+            return f"Error: {str(e)}"
+
+    def _rydberg_scaling_comparison(self, query: str) -> str:
+        """Compare hydrogen inverse-square scaling with a perturbation control."""
+        try:
+            fields = [part.strip() for part in query.split(";") if part.strip()]
+            n_values = [int(part.strip()) for part in re.split(r"[,:\s]+", fields[0]) if part.strip()]
+            n_values = list(dict.fromkeys(n_values))
+            if len(n_values) < 4:
+                return "Error: Provide at least four principal quantum numbers, e.g. '1,2,3,5,10;delta=0.05'"
+            invalid = [n for n in n_values if n < 1]
+            if invalid:
+                return f"Error: principal quantum numbers must be positive integers. Invalid: {invalid}"
+
+            delta = 0.05
+            for field in fields[1:]:
+                if field.lower().startswith("delta="):
+                    delta = float(field.split("=", 1)[1])
+            if any(n <= delta for n in n_values):
+                return "Error: quantum_defect delta must be smaller than every n in the input series."
+
+            rydberg_ev = 13.6
+            inverse_x = [1.0 / (n ** 2) for n in n_values]
+            energies = [-rydberg_ev / (n ** 2) for n in n_values]
+            inverse_fit = self._fit_line(inverse_x, energies)
+
+            inverse_predictions = [
+                inverse_fit["slope"] * x + inverse_fit["intercept"]
+                for x in inverse_x
+            ]
+            inverse_residuals = np.array(energies, dtype=float) - np.array(inverse_predictions, dtype=float)
+            inverse_max_abs_error = float(np.max(np.abs(inverse_residuals)))
+            inverse_residual_std = float(np.std(inverse_residuals))
+
+            defect_energies = [-rydberg_ev / ((n - delta) ** 2) for n in n_values]
+            defect_residuals = np.array(energies, dtype=float) - np.array(defect_energies, dtype=float)
+            defect_rmse = float(np.sqrt(np.mean(defect_residuals ** 2)))
+            defect_max_abs_error = float(np.max(np.abs(defect_residuals)))
+            rmse_effect_size = float(defect_rmse - inverse_fit["rmse"])
+            best_model = "inverse_square" if inverse_fit["rmse"] <= defect_rmse else "quantum_defect"
+
+            rows = [
+                (
+                    f"    n={n}: energy={energy:.6f} eV, inverse_square_prediction={pred:.6f} eV, "
+                    f"residual={residual:.6e} eV, quantum_defect_prediction={defect:.6f} eV"
+                )
+                for n, energy, pred, residual, defect in zip(
+                    n_values, energies, inverse_predictions, inverse_residuals, defect_energies
+                )
+            ]
+
+            return (
+                "Hydrogen Rydberg scaling comparison:\n"
+                "  Literature anchor: the nonrelativistic hydrogen model predicts E_n = -13.6/n^2 eV.\n"
+                f"  Principal quantum numbers: {n_values}\n"
+                "  Observations:\n"
+                + "\n".join(rows)
+                + "\n"
+                f"  inverse_square fit E = {inverse_fit['slope']:.6f}*(1/n^2) + {inverse_fit['intercept']:.6f}; "
+                f"RMSE={inverse_fit['rmse']:.6f} eV; R2={inverse_fit['r2']:.6f}; "
+                f"max_abs_error={inverse_max_abs_error:.6f} eV\n"
+                f"  quantum_defect_delta={delta:.6f}; quantum_defect model E = -13.600000/(n-delta)^2; "
+                f"RMSE={defect_rmse:.6f} eV; max_abs_error={defect_max_abs_error:.6f} eV\n"
+                f"  Best model by RMSE: {best_model}\n"
+                f"  Deterministic residual statistics: sample size n={len(n_values)}; "
+                f"residual standard deviation={inverse_residual_std:.6f} eV; "
+                f"effect size (quantum_defect_RMSE - inverse_square_RMSE)={rmse_effect_size:.6f} eV; "
+                "confidence interval: not estimated because this is a deterministic analytic control, "
+                "not a random sample.\n"
+                "  Falsifiable next check: introduce a documented non-hydrogenic atom or measured spectral series; "
+                "the inverse_square hydrogen control is rejected only if residuals exceed the recorded RMSE tolerance "
+                "under the same units and precision.\n"
+                "  Caution: the quantum-defect perturbation is a competing-model stress test, not a claim that "
+                "hydrogen has core-screening quantum defects."
+            )
+        except Exception as e:
+            return f"Error: {str(e)}"
+
+    def _cosmology_residual_comparison(self, query: str) -> str:
+        """Compare Planck18-parameter FLRW distances with low-z controls."""
+        try:
+            fields = [part.strip() for part in query.split(";") if part.strip()]
+            if not fields:
+                return "Error: Provide redshifts, e.g. '0.01,0.1,0.5,1,2;threshold=5'"
+
+            z_values = [
+                float(part.strip())
+                for part in re.split(r"[,:\s]+", fields[0])
+                if part.strip()
+            ]
+            z_values = list(dict.fromkeys(z_values))
+            if len(z_values) < 3:
+                return "Error: Provide at least three redshifts for a residual comparison."
+            if any(z <= 0 for z in z_values):
+                return "Error: redshifts must be positive."
+
+            threshold = 5.0
+            for field in fields[1:]:
+                if field.lower().startswith("threshold="):
+                    threshold = float(field.split("=", 1)[1])
+
+            c_km_s = 299792.458
+            h0 = 67.660
+            omega_m = 0.3097
+            omega_l = 0.6888
+            omega_k = 1.0 - omega_m - omega_l
+            q0 = 0.5 * omega_m - omega_l
+            hubble_distance = c_km_s / h0
+
+            try:
+                from scipy.integrate import quad
+
+                def integral_to(redshift: float) -> float:
+                    return float(quad(
+                        lambda x: 1.0 / math.sqrt(
+                            omega_m * (1.0 + x) ** 3
+                            + omega_k * (1.0 + x) ** 2
+                            + omega_l
+                        ),
+                        0.0,
+                        redshift,
+                        epsabs=1e-10,
+                        epsrel=1e-10,
+                    )[0])
+            except Exception:
+                def integral_to(redshift: float) -> float:
+                    grid = np.linspace(0.0, redshift, max(2048, int(4096 * redshift)))
+                    inv_e = 1.0 / np.sqrt(
+                        omega_m * (1.0 + grid) ** 3
+                        + omega_k * (1.0 + grid) ** 2
+                        + omega_l
+                    )
+                    return float(np.trapezoid(inv_e, grid))
+
+            planck_distances = []
+            hubble_distances = []
+            second_order_distances = []
+            for z in z_values:
+                comoving = hubble_distance * integral_to(z)
+                planck_distances.append((1.0 + z) * comoving)
+                hubble_distances.append(hubble_distance * z)
+                second_order_distances.append(
+                    hubble_distance * z * (1.0 + 0.5 * (1.0 - q0) * z)
+                )
+
+            planck = np.array(planck_distances, dtype=float)
+            hubble = np.array(hubble_distances, dtype=float)
+            second = np.array(second_order_distances, dtype=float)
+            hubble_residual = hubble - planck
+            second_residual = second - planck
+            hubble_percent = 100.0 * hubble_residual / planck
+            second_percent = 100.0 * second_residual / planck
+            hubble_rmse = float(np.sqrt(np.mean(hubble_residual ** 2)))
+            second_rmse = float(np.sqrt(np.mean(second_residual ** 2)))
+            hubble_residual_std = float(np.std(hubble_residual))
+            second_residual_std = float(np.std(second_residual))
+            hubble_fit = self._fit_line(list(planck), list(hubble))
+            second_fit = self._fit_line(list(planck), list(second))
+            max_abs_percent = float(np.max(np.abs(hubble_percent)))
+            second_max_abs_percent = float(np.max(np.abs(second_percent)))
+            rmse_effect_size = float(hubble_rmse - second_rmse)
+            crossings = [
+                z for z, pct in zip(z_values, np.abs(hubble_percent))
+                if float(pct) >= threshold
+            ]
+            first_crossing = f"{crossings[0]:.6f}" if crossings else "not_crossed"
+            best_model = "hubble_law" if hubble_rmse <= second_rmse else "cosmographic_second_order"
+
+            rows = [
+                (
+                    f"    z={z:.6f}: Planck18_luminosity_distance_Mpc={dl:.6f}, "
+                    f"hubble_law_distance_Mpc={hz:.6f}, "
+                    f"hubble_percent_residual={hpct:.6f}, "
+                    f"cosmographic_second_order_distance_Mpc={cz:.6f}, "
+                    f"cosmographic_percent_residual={cpct:.6f}"
+                )
+                for z, dl, hz, hpct, cz, cpct in zip(
+                    z_values, planck, hubble, hubble_percent, second, second_percent
+                )
+            ]
+
+            return (
+                "Planck18 versus low-redshift Hubble-law comparison:\n"
+                f"  Parameters: H0={h0:.3f} km/s/Mpc, Omega_m={omega_m:.4f}, "
+                f"Omega_Lambda={omega_l:.4f}, Omega_k={omega_k:.6f}, q0={q0:.6f}\n"
+                f"  sample size n={len(z_values)}\n"
+                "  Residual table where percent_residual = 100*(approximation-Planck18)/Planck18:\n"
+                + "\n".join(rows)
+                + "\n"
+                f"  hubble_law RMSE_Mpc={hubble_rmse:.6f}; R2_vs_Planck18={hubble_fit['r2']:.6f}; "
+                f"max_abs_percent_residual={max_abs_percent:.6f}; residual standard deviation_Mpc={hubble_residual_std:.6f}\n"
+                f"  cosmographic_second_order RMSE_Mpc={second_rmse:.6f}; R2_vs_Planck18={second_fit['r2']:.6f}; "
+                f"max_abs_percent_residual={second_max_abs_percent:.6f}; residual standard deviation_Mpc={second_residual_std:.6f}\n"
+                f"  Best approximation by RMSE_Mpc: {best_model}\n"
+                f"  Deterministic model-comparison effect size (hubble_law_RMSE_Mpc - cosmographic_second_order_RMSE_Mpc)={rmse_effect_size:.6f}\n"
+                f"  breakdown_redshift_threshold_percent={threshold:.6f}; first_threshold_crossing_z={first_crossing}\n"
+                "  Deterministic residual statistics: confidence interval not estimated because the calculation is a fixed "
+                "Planck18-parameter grid, not a random observational sample.\n"
+                "  Falsifiable next check: add an independently implemented FLRW integrator or a catalog-backed supernova "
+                "distance set; weaken the approximation claim if the threshold crossing or RMSE ordering changes under "
+                "the same redshift grid and units.\n"
+                "  Caution: this is not an observational Hubble-constant measurement and does not address Hubble tension."
+            )
         except Exception as e:
             return f"Error: {str(e)}"
     

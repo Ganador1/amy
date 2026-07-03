@@ -1,0 +1,166 @@
+{
+  "ok": true,
+  "domain": "astronomy",
+  "model": "glm-5.2",
+  "duration_seconds": 110.179,
+  "env_flags": {
+    "AMY_USE_LLM_ENHANCER": "1",
+    "AMY_USE_LLM_JUDGE": "1",
+    "AMY_USE_EVOLUTION": "1",
+    "AMY_ENHANCER_MODEL": "glm-5.2",
+    "AMY_RANKING_MODEL": "glm-5.2"
+  },
+  "tool_results": [
+    {
+      "tool": "cosmology_residual_comparison",
+      "tool_name": "cosmology_residual_comparison",
+      "input": "0.01,0.1,0.5,1,2;threshold=5",
+      "description": "Planck18 luminosity-distance residual table versus low-z approximations",
+      "result": "Planck18 versus low-redshift Hubble-law comparison:\n  Parameters: H0=67.660 km/s/Mpc, Omega_m=0.3097, Omega_Lambda=0.6888, Omega_k=0.001500, q0=-0.533950\n  sample size n=5\n  Residual table where percent_residual = 100*(approximation-Planck18)/Planck18:\n    z=0.010000: Planck18_luminosity_distance_Mpc=44.647268, hubble_law_distance_Mpc=44.308670, hubble_percent_residual=-0.758386, cosmographic_second_order_distance_Mpc=44.648506, cosmographic_percent_residual=0.002773\n    z=0.100000: Planck18_luminosity_distance_Mpc=475.840557, hubble_law_distance_Mpc=443.086695, hubble_percent_residual=-6.883369, cosmographic_second_order_distance_Mpc=477.070337, cosmographic_percent_residual=0.258444\n    z=0.500000: Planck18_luminosity_distance_Mpc=2920.266261, hubble_law_distance_Mpc=2215.433476, hubble_percent_residual=-24.135908, cosmographic_second_order_distance_Mpc=3065.024521, cosmographic_percent_residual=4.957023\n    z=1.000000: Planck18_luminosity_distance_Mpc=6794.266921, hubble_law_distance_Mpc=4430.866952, hubble_percent_residual=-34.785209, cosmographic_second_order_distance_Mpc=7829.231133, cosmographic_percent_residual=15.232905\n    z=2.000000: Planck18_luminosity_distance_Mpc=15936.694576, hubble_law_distance_Mpc=8861.733905, hubble_percent_residual=-44.394154, cosmographic_second_order_distance_Mpc=22455.190628, cosmographic_percent_residual=40.902434\n  hubble_law RMSE_Mpc=3350.778718; R2_vs_Planck18=0.992659; max_abs_percent_residual=44.394154; residual standard deviation_Mpc=2661.850154\n  cosmographic_second_order RMSE_Mpc=2952.385414; R2_vs_Planck18=0.993139; max_abs_percent_residual=40.902434; residual standard deviation_Mpc=2518.991604\n  Best approximation by RMSE_Mpc: cosmographic_second_order\n  Deterministic model-comparison effect size (hubble_law_RMSE_Mpc - cosmographic_second_order_RMSE_Mpc)=398.393304\n  breakdown_redshift_threshold_percent=5.000000; first_threshold_crossing_z=0.100000\n  Deterministic residual statistics: confidence interval not estimated because the calculation is a fixed Planck18-parameter grid, not a random observational sample.\n  Falsifiable next check: add an independently implemented FLRW integrator or a catalog-backed supernova distance set; weaken the approximation claim if the threshold crossing or RMSE ordering changes under the same redshift grid and units.\n  Caution: this is not an observational Hubble-constant measurement and does not address Hubble tension.",
+      "success": true,
+      "duration_seconds": 25.562,
+      "experiment_id": "astronomy_cosmology_residual_comparison_20260703_171235",
+      "provenance_path": "data/experiments/astronomy_cosmology_residual_comparison_20260703_171235/provenance.json",
+      "assessment": {
+        "usable": true,
+        "evidence_level": "strong",
+        "markers": [],
+        "warnings": [],
+        "preview": "Planck18 versus low-redshift Hubble-law comparison:\n  Parameters: H0=67.660 km/s/Mpc, Omega_m=0.3097, Omega_Lambda=0.6888, Omega_k=0.001500, q0=-0.533950\n  sample size n=5\n  Residual table where percent_residual = 100*(approximation-Planck18)/Planck18:\n    z=0.010000: Planck18_luminosity_distance_Mpc=44.647268, hubble_law_distance_Mpc=44.308670, hubble_percent_residual=-0.758386, cosmographic_second_order_distance_Mpc=44.648506, cosmographic_percent_residual=0.002773\n    z=0.100000: Planck18_lum"
+      }
+    },
+    {
+      "tool": "astropy_cosmology",
+      "tool_name": "astropy_cosmology",
+      "input": "luminosity_distance:1.0",
+      "description": "AstroPy Planck18 z=1 luminosity-distance endpoint control",
+      "result": "Planck18 cosmology, luminosity_distance at z=1.0:\n  6791.2689 Mpc\n  H_0 = 67.660 km / (Mpc s), Omega_m = 0.3097, Omega_L = 0.6888",
+      "success": true,
+      "duration_seconds": 0.743,
+      "experiment_id": "astronomy_astropy_cosmology_20260703_171235",
+      "provenance_path": "data/experiments/astronomy_astropy_cosmology_20260703_171235/provenance.json",
+      "assessment": {
+        "usable": true,
+        "evidence_level": "strong",
+        "markers": [],
+        "warnings": [],
+        "preview": "Planck18 cosmology, luminosity_distance at z=1.0:\n  6791.2689 Mpc\n  H_0 = 67.660 km / (Mpc s), Omega_m = 0.3097, Omega_L = 0.6888"
+      }
+    },
+    {
+      "tool": "astropy_blackbody",
+      "tool_name": "astropy_blackbody",
+      "input": "5778",
+      "description": "Solar blackbody calibration control",
+      "result": "Blackbody spectrum at T = 5778.0 K:\n  Wien peak wavelength: 501.56 nm\n  Wien peak frequency: 339.69 THz\n  Stefan-Boltzmann emittance: 6.3201e+07 W / m2",
+      "success": true,
+      "duration_seconds": 0.007,
+      "experiment_id": "astronomy_astropy_blackbody_20260703_171235",
+      "provenance_path": "data/experiments/astronomy_astropy_blackbody_20260703_171235/provenance.json",
+      "assessment": {
+        "usable": true,
+        "evidence_level": "strong",
+        "markers": [],
+        "warnings": [],
+        "preview": "Blackbody spectrum at T = 5778.0 K:\n  Wien peak wavelength: 501.56 nm\n  Wien peak frequency: 339.69 THz\n  Stefan-Boltzmann emittance: 6.3201e+07 W / m2"
+      }
+    },
+    {
+      "tool": "astropy_constants",
+      "tool_name": "astropy_constants",
+      "input": "c",
+      "description": "Speed-of-light constant calibration",
+      "result": "Constant c: 2.997925e+08 m / s\nReference: CODATA 2018\nUncertainty: 0.000e+00",
+      "success": true,
+      "duration_seconds": 0.006,
+      "experiment_id": "astronomy_astropy_constants_20260703_171235",
+      "provenance_path": "data/experiments/astronomy_astropy_constants_20260703_171235/provenance.json",
+      "assessment": {
+        "usable": true,
+        "evidence_level": "strong",
+        "markers": [],
+        "warnings": [],
+        "preview": "Constant c: 2.997925e+08 m / s\nReference: CODATA 2018\nUncertainty: 0.000e+00"
+      }
+    }
+  ],
+  "failed_results": [],
+  "experiment_ids": [
+    "astronomy_cosmology_residual_comparison_20260703_171235",
+    "astronomy_astropy_cosmology_20260703_171235",
+    "astronomy_astropy_blackbody_20260703_171235",
+    "astronomy_astropy_constants_20260703_171235"
+  ],
+  "provenance_hash_ok": {
+    "astronomy_cosmology_residual_comparison_20260703_171235": true,
+    "astronomy_astropy_cosmology_20260703_171235": true,
+    "astronomy_astropy_blackbody_20260703_171235": true,
+    "astronomy_astropy_constants_20260703_171235": true
+  },
+  "paper": {
+    "title": "E2E Validation: Planck18 luminosity-distance residuals against low-redshift Hubble-law controls",
+    "markdown_path": "/Volumes/Ganador disk/A.M.Y/experiments/e2e_validation/papers/E2E_Validation_Planck18_luminosity-distance_residuals_agains_20260703_131359.md",
+    "pdf_path": "/Volumes/Ganador disk/A.M.Y/experiments/e2e_validation/papers/E2E_Validation_Planck18_luminosity-distance_residuals_agains_20260703_131359.pdf",
+    "latex_path": "/Volumes/Ganador disk/A.M.Y/experiments/e2e_validation/papers/E2E_Validation_Planck18_luminosity-distance_residuals_agains_20260703_131359.tex",
+    "word_count": 2231,
+    "sections": 5,
+    "publication_status": "published",
+    "rejection_reasons": [],
+    "internal_review_path": "/Volumes/Ganador disk/A.M.Y/experiments/e2e_validation/papers/E2E_Validation_Planck18_luminosity-distance_residuals_agains_20260703_131359.review.json",
+    "grounding_repair": {
+      "repairs": 0,
+      "items": [],
+      "experiment_ids": [
+        "astronomy_cosmology_residual_comparison_20260703_171235",
+        "astronomy_astropy_cosmology_20260703_171235",
+        "astronomy_astropy_blackbody_20260703_171235",
+        "astronomy_astropy_constants_20260703_171235"
+      ],
+      "sections_checked": [
+        "Abstract",
+        "Discussion"
+      ]
+    }
+  },
+  "reflection": {
+    "pass_overall": true,
+    "score": 100.0,
+    "issues": [],
+    "suggestions": [],
+    "annotations": {
+      "n_issues": 0,
+      "n_high": 0,
+      "n_medium": 0,
+      "n_low": 0,
+      "experiment_ids": [
+        "astronomy_cosmology_residual_comparison_20260703_171235",
+        "astronomy_astropy_cosmology_20260703_171235",
+        "astronomy_astropy_blackbody_20260703_171235",
+        "astronomy_astropy_constants_20260703_171235"
+      ]
+    }
+  },
+  "rubric": {
+    "total": 98.0,
+    "per_dim": {
+      "provenance_integrity": 10.0,
+      "tool_diversity": 10.0,
+      "falsifiability": 15.0,
+      "explicit_limitations": 10.0,
+      "numerical_claims_grounded": 15.0,
+      "citation_accuracy": 10.0,
+      "abstract_uniqueness": 10.0,
+      "statistical_rigor": 8.0,
+      "reproducibility_info": 10.0
+    }
+  },
+  "discussion": {
+    "total": 83.075,
+    "word_count": 806,
+    "claim_grounding": 25.0,
+    "limitation_cover": 15.207,
+    "alternatives": 10.482,
+    "calibration": 14.207,
+    "reasoning_depth": 18.179
+  }
+}

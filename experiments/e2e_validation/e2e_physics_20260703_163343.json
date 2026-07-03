@@ -1,0 +1,166 @@
+{
+  "ok": true,
+  "domain": "physics",
+  "model": "glm-5.2",
+  "duration_seconds": 85.101,
+  "env_flags": {
+    "AMY_USE_LLM_ENHANCER": "1",
+    "AMY_USE_LLM_JUDGE": "1",
+    "AMY_USE_EVOLUTION": "1",
+    "AMY_ENHANCER_MODEL": "glm-5.2",
+    "AMY_RANKING_MODEL": "glm-5.2"
+  },
+  "tool_results": [
+    {
+      "tool": "rydberg_scaling_comparison",
+      "tool_name": "rydberg_scaling_comparison",
+      "input": "1,2,3,5,10,20;delta=0.05",
+      "description": "Hydrogen inverse-square Rydberg scaling model comparison",
+      "result": "Hydrogen Rydberg scaling comparison:\n  Literature anchor: the nonrelativistic hydrogen model predicts E_n = -13.6/n^2 eV.\n  Principal quantum numbers: [1, 2, 3, 5, 10, 20]\n  Observations:\n    n=1: energy=-13.600000 eV, inverse_square_prediction=-13.600000 eV, residual=-1.776357e-15 eV, quantum_defect_prediction=-15.069252 eV\n    n=2: energy=-3.400000 eV, inverse_square_prediction=-3.400000 eV, residual=4.440892e-16 eV, quantum_defect_prediction=-3.576594 eV\n    n=3: energy=-1.511111 eV, inverse_square_prediction=-1.511111 eV, residual=4.440892e-16 eV, quantum_defect_prediction=-1.562769 eV\n    n=5: energy=-0.544000 eV, inverse_square_prediction=-0.544000 eV, residual=6.661338e-16 eV, quantum_defect_prediction=-0.555045 eV\n    n=10: energy=-0.136000 eV, inverse_square_prediction=-0.136000 eV, residual=6.938894e-16 eV, quantum_defect_prediction=-0.137370 eV\n    n=20: energy=-0.034000 eV, inverse_square_prediction=-0.034000 eV, residual=7.216450e-16 eV, quantum_defect_prediction=-0.034171 eV\n  inverse_square fit E = -13.600000*(1/n^2) + -0.000000; RMSE=0.000000 eV; R2=1.000000; max_abs_error=0.000000 eV\n  quantum_defect_delta=0.050000; quantum_defect model E = -13.600000/(n-delta)^2; RMSE=0.604522 eV; max_abs_error=1.469252 eV\n  Best model by RMSE: inverse_square\n  Deterministic residual statistics: sample size n=6; residual standard deviation=0.000000 eV; effect size (quantum_defect_RMSE - inverse_square_RMSE)=0.604522 eV; confidence interval: not estimated because this is a deterministic analytic control, not a random sample.\n  Falsifiable next check: introduce a documented non-hydrogenic atom or measured spectral series; the inverse_square hydrogen control is rejected only if residuals exceed the recorded RMSE tolerance under the same units and precision.\n  Caution: the quantum-defect perturbation is a competing-model stress test, not a claim that hydrogen has core-screening quantum defects.",
+      "success": true,
+      "duration_seconds": 22.716,
+      "experiment_id": "physics_rydberg_scaling_comparison_20260703_163406",
+      "provenance_path": "data/experiments/physics_rydberg_scaling_comparison_20260703_163406/provenance.json",
+      "assessment": {
+        "usable": true,
+        "evidence_level": "strong",
+        "markers": [],
+        "warnings": [],
+        "preview": "Hydrogen Rydberg scaling comparison:\n  Literature anchor: the nonrelativistic hydrogen model predicts E_n = -13.6/n^2 eV.\n  Principal quantum numbers: [1, 2, 3, 5, 10, 20]\n  Observations:\n    n=1: energy=-13.600000 eV, inverse_square_prediction=-13.600000 eV, residual=-1.776357e-15 eV, quantum_defect_prediction=-15.069252 eV\n    n=2: energy=-3.400000 eV, inverse_square_prediction=-3.400000 eV, residual=4.440892e-16 eV, quantum_defect_prediction=-3.576594 eV\n    n=3: energy=-1.511111 eV, inverse_"
+      }
+    },
+    {
+      "tool": "quantum_energy_levels",
+      "tool_name": "quantum_energy_levels",
+      "input": "hydrogen:5",
+      "description": "Hydrogen endpoint/control energy level at n=5",
+      "result": "Hydrogen atom energy level n=5:\n  E_5 = -0.5440 eV\n  First 7 levels: [-13.6, -3.4, -1.5111, -0.85, -0.544, -0.3778, -0.2776] eV\n  Ionization energy from n=5: 0.5440 eV",
+      "success": true,
+      "duration_seconds": 0.011,
+      "experiment_id": "physics_quantum_energy_levels_20260703_163406",
+      "provenance_path": "data/experiments/physics_quantum_energy_levels_20260703_163406/provenance.json",
+      "assessment": {
+        "usable": true,
+        "evidence_level": "strong",
+        "markers": [],
+        "warnings": [],
+        "preview": "Hydrogen atom energy level n=5:\n  E_5 = -0.5440 eV\n  First 7 levels: [-13.6, -3.4, -1.5111, -0.85, -0.544, -0.3778, -0.2776] eV\n  Ionization energy from n=5: 0.5440 eV"
+      }
+    },
+    {
+      "tool": "quantum_energy_levels",
+      "tool_name": "quantum_energy_levels",
+      "input": "hydrogen:20",
+      "description": "Hydrogen endpoint/control energy level at n=20",
+      "result": "Hydrogen atom energy level n=20:\n  E_20 = -0.0340 eV\n  First 7 levels: [-13.6, -3.4, -1.5111, -0.85, -0.544, -0.3778, -0.2776] eV\n  Ionization energy from n=20: 0.0340 eV",
+      "success": true,
+      "duration_seconds": 0.007,
+      "experiment_id": "physics_quantum_energy_levels_20260703_163406_2",
+      "provenance_path": "data/experiments/physics_quantum_energy_levels_20260703_163406_2/provenance.json",
+      "assessment": {
+        "usable": true,
+        "evidence_level": "strong",
+        "markers": [],
+        "warnings": [],
+        "preview": "Hydrogen atom energy level n=20:\n  E_20 = -0.0340 eV\n  First 7 levels: [-13.6, -3.4, -1.5111, -0.85, -0.544, -0.3778, -0.2776] eV\n  Ionization energy from n=20: 0.0340 eV"
+      }
+    },
+    {
+      "tool": "quantum_circuit",
+      "tool_name": "quantum_circuit",
+      "input": "bell:2",
+      "description": "Bell-state circuit as an independent quantum-control check",
+      "result": "Quantum Bell State Simulation:\n- Circuit: H(q0) → CNOT(q0, q1)\n- Initial state: |00⟩\n- Final state: (|00⟩ + |11⟩)/√2\n- Entanglement entropy: 1.0 bit\n- Measurement probabilities: {|00⟩: 0.5, |11⟩: 0.5}\n- Fidelity: 1.0",
+      "success": true,
+      "duration_seconds": 0.007,
+      "experiment_id": "physics_quantum_circuit_20260703_163406",
+      "provenance_path": "data/experiments/physics_quantum_circuit_20260703_163406/provenance.json",
+      "assessment": {
+        "usable": true,
+        "evidence_level": "strong",
+        "markers": [],
+        "warnings": [],
+        "preview": "Quantum Bell State Simulation:\n- Circuit: H(q0) → CNOT(q0, q1)\n- Initial state: |00⟩\n- Final state: (|00⟩ + |11⟩)/√2\n- Entanglement entropy: 1.0 bit\n- Measurement probabilities: {|00⟩: 0.5, |11⟩: 0.5}\n- Fidelity: 1.0"
+      }
+    }
+  ],
+  "failed_results": [],
+  "experiment_ids": [
+    "physics_rydberg_scaling_comparison_20260703_163406",
+    "physics_quantum_energy_levels_20260703_163406",
+    "physics_quantum_energy_levels_20260703_163406_2",
+    "physics_quantum_circuit_20260703_163406"
+  ],
+  "provenance_hash_ok": {
+    "physics_rydberg_scaling_comparison_20260703_163406": true,
+    "physics_quantum_energy_levels_20260703_163406": true,
+    "physics_quantum_energy_levels_20260703_163406_2": true,
+    "physics_quantum_circuit_20260703_163406": true
+  },
+  "paper": {
+    "title": "E2E Validation: Hydrogen Rydberg inverse-square scaling against perturbation controls",
+    "markdown_path": "/Volumes/Ganador disk/A.M.Y/experiments/e2e_validation/papers/E2E_Validation_Hydrogen_Rydberg_inverse-square_scaling_again_20260703_123508.md",
+    "pdf_path": "/Volumes/Ganador disk/A.M.Y/experiments/e2e_validation/papers/E2E_Validation_Hydrogen_Rydberg_inverse-square_scaling_again_20260703_123508.pdf",
+    "latex_path": "/Volumes/Ganador disk/A.M.Y/experiments/e2e_validation/papers/E2E_Validation_Hydrogen_Rydberg_inverse-square_scaling_again_20260703_123508.tex",
+    "word_count": 2334,
+    "sections": 5,
+    "publication_status": "published",
+    "rejection_reasons": [],
+    "internal_review_path": "/Volumes/Ganador disk/A.M.Y/experiments/e2e_validation/papers/E2E_Validation_Hydrogen_Rydberg_inverse-square_scaling_again_20260703_123508.review.json",
+    "grounding_repair": {
+      "repairs": 0,
+      "items": [],
+      "experiment_ids": [
+        "physics_rydberg_scaling_comparison_20260703_163406",
+        "physics_quantum_energy_levels_20260703_163406",
+        "physics_quantum_energy_levels_20260703_163406_2",
+        "physics_quantum_circuit_20260703_163406"
+      ],
+      "sections_checked": [
+        "Abstract",
+        "Discussion"
+      ]
+    }
+  },
+  "reflection": {
+    "pass_overall": true,
+    "score": 100.0,
+    "issues": [],
+    "suggestions": [],
+    "annotations": {
+      "n_issues": 0,
+      "n_high": 0,
+      "n_medium": 0,
+      "n_low": 0,
+      "experiment_ids": [
+        "physics_rydberg_scaling_comparison_20260703_163406",
+        "physics_quantum_energy_levels_20260703_163406",
+        "physics_quantum_energy_levels_20260703_163406_2",
+        "physics_quantum_circuit_20260703_163406"
+      ]
+    }
+  },
+  "rubric": {
+    "total": 93.5,
+    "per_dim": {
+      "provenance_integrity": 10.0,
+      "tool_diversity": 8.5,
+      "falsifiability": 12.0,
+      "explicit_limitations": 10.0,
+      "numerical_claims_grounded": 15.0,
+      "citation_accuracy": 10.0,
+      "abstract_uniqueness": 10.0,
+      "statistical_rigor": 8.0,
+      "reproducibility_info": 10.0
+    }
+  },
+  "discussion": {
+    "total": 81.023,
+    "word_count": 736,
+    "claim_grounding": 25.0,
+    "limitation_cover": 16.398,
+    "alternatives": 11.972,
+    "calibration": 11.207,
+    "reasoning_depth": 16.446
+  }
+}

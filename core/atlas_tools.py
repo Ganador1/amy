@@ -33,7 +33,9 @@ UNUSABLE_TOOL_OUTPUT_MARKERS = (
     "tool not found",
     "not found. available:",
     "unknown operation",
+    "error:",
     "error executing",
+    "format should",
     "traceback",
     "not implemented",
     "placeholder",
@@ -132,6 +134,19 @@ def _blocked_message(decision: dict) -> str:
         return f"Blocked by safety policy: {reasons} (decision_id={decision.get('decision_id')})"
 
 
+def _primary_ollama_api_key() -> str:
+    try:
+        from core.ollama_client import get_primary_ollama_cloud_api_key
+
+        return get_primary_ollama_cloud_api_key()
+    except Exception:
+        return (
+            os.getenv("OLLAMA_CLOUD_API_KEY", "")
+            or os.getenv("OLLAMA_CLOUD_API_KEY_1", "")
+            or os.getenv("OLLAMA_CLOUD_API_KEY_2", "")
+        )
+
+
 def assess_tool_output(output: object, tool_name: str | None = None) -> dict:
     """
     Classify whether an Atlas tool output is safe to treat as a real result.
@@ -141,7 +156,13 @@ def assess_tool_output(output: object, tool_name: str | None = None) -> dict:
     """
     text = str(output or "")
     text_lower = text.lower()
-    markers = [marker for marker in UNUSABLE_TOOL_OUTPUT_MARKERS if marker in text_lower]
+    markers = [
+        marker
+        for marker in UNUSABLE_TOOL_OUTPUT_MARKERS
+        if marker != "error:" and marker in text_lower
+    ]
+    if re.search(r"(?im)^\s*error\s*:", text):
+        markers.append("error:")
     warnings = []
     evidence_level = "strong"
 
@@ -222,7 +243,7 @@ class AtlasTools:
                 "ENABLE_REDIS_CACHE": "false",
                 "MPLBACKEND": "Agg",
                 "OLLAMA_BASE_URL": "https://ollama.com",
-                "OLLAMA_API_KEY": os.getenv("OLLAMA_CLOUD_API_KEY_1", "") or os.getenv("OLLAMA_CLOUD_API_KEY_2", ""),
+                "OLLAMA_API_KEY": _primary_ollama_api_key(),
             },
         )
         # Verificar que el worker responda
@@ -501,11 +522,9 @@ class AtlasTools:
 
     def _run_subprocess(self, code: str, timeout: int = 120) -> str:
         """Ejecuta código Python en el venv de Atlas y retorna stdout."""
-        amy_key1 = os.getenv("OLLAMA_CLOUD_API_KEY_1", "")
-        amy_key2 = os.getenv("OLLAMA_CLOUD_API_KEY_2", "")
         env = os.environ.copy()
         env["OLLAMA_BASE_URL"] = "https://ollama.com"
-        env["OLLAMA_API_KEY"] = amy_key1 or amy_key2
+        env["OLLAMA_API_KEY"] = _primary_ollama_api_key()
         env["ENABLE_REDIS_CACHE"] = "false"
         env["MPLBACKEND"] = "Agg"
 

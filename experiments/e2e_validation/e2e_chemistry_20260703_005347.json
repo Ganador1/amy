@@ -1,0 +1,188 @@
+{
+  "ok": true,
+  "domain": "chemistry",
+  "model": "glm-5.2",
+  "duration_seconds": 106.771,
+  "env_flags": {
+    "AMY_USE_LLM_ENHANCER": "1",
+    "AMY_USE_LLM_JUDGE": "1",
+    "AMY_USE_EVOLUTION": "1",
+    "AMY_ENHANCER_MODEL": "glm-5.2",
+    "AMY_RANKING_MODEL": "glm-5.2"
+  },
+  "tool_results": [
+    {
+      "tool": "huckel_polyene_scaling",
+      "tool_name": "huckel_polyene_scaling",
+      "input": "4,6,8,10,12,16,20,30,40,50,80,100",
+      "description": "Huckel HOMO-LUMO gap scaling model comparison for linear polyenes",
+      "result": "Hückel polyene HOMO-LUMO gap scaling:\n  Literature anchor: linear Hückel polyene levels use E_k = alpha + 2 beta cos(k*pi/(N+1)); the frontier gap is -4 beta sin(pi/(2(N+1))).\n  Model parameters: alpha=-6.000 eV, beta=-2.500 eV\n  Chain sizes (n atoms): [4, 6, 8, 10, 12, 16, 20, 30, 40, 50, 80, 100]\n  Gaps (eV): [3.09, 2.225, 1.736, 1.423, 1.205, 0.923, 0.747, 0.506, 0.383, 0.308, 0.194, 0.156]\n  Observations:\n    n=4: gap=3.090170 eV\n    n=6: gap=2.225209 eV\n    n=8: gap=1.736482 eV\n    n=10: gap=1.423148 eV\n    n=12: gap=1.205367 eV\n    n=16: gap=0.922684 eV\n    n=20: gap=0.747301 eV\n    n=30: gap=0.506492 eV\n    n=40: gap=0.383027 eV\n    n=50: gap=0.307951 eV\n    n=80: gap=0.193913 eV\n    n=100: gap=0.155518 eV\n  Formula check max_abs_error: 1.388e-15 eV\n  asymptotic_slope -2*pi*beta = 15.707963\n  small_angle_argument_at_min_n = 0.314159 rad\n  asymptotic_inverse_model gap = 15.707963/(n+1); RMSE=0.016098 eV; max_abs_error=0.051423 eV; residual_threshold=0.010000 eV\n  inverse_linear fit gap = 15.481724/(n+1) + 0.008151; RMSE=0.006472 eV; R2=0.999945\n  inverse_quadratic fit gap = 73.461186/(n+1)^2 + 0.493610; RMSE=0.256926 eV; R2=0.912976\n  power_law fit gap = 15.469521*(n+1)^-0.996063; power exponent p=-0.996; RMSE=0.007021 eV; R2=0.999935\n  Best model by RMSE: inverse_linear\n  Falsification result: inverse_quadratic rejected; its RMSE is 36.6x the power-law RMSE.\n  Scaling conclusion: finite linear Hückel polyenes follow near-inverse-length HOMO-LUMO gap decay over this range, not inverse-quadratic decay.",
+      "success": true,
+      "duration_seconds": 12.488,
+      "experiment_id": "chemistry_huckel_polyene_scaling_20260703_005400",
+      "provenance_path": "data/experiments/chemistry_huckel_polyene_scaling_20260703_005400/provenance.json",
+      "assessment": {
+        "usable": true,
+        "evidence_level": "strong",
+        "markers": [],
+        "warnings": [],
+        "preview": "Hückel polyene HOMO-LUMO gap scaling:\n  Literature anchor: linear Hückel polyene levels use E_k = alpha + 2 beta cos(k*pi/(N+1)); the frontier gap is -4 beta sin(pi/(2(N+1))).\n  Model parameters: alpha=-6.000 eV, beta=-2.500 eV\n  Chain sizes (n atoms): [4, 6, 8, 10, 12, 16, 20, 30, 40, 50, 80, 100]\n  Gaps (eV): [3.09, 2.225, 1.736, 1.423, 1.205, 0.923, 0.747, 0.506, 0.383, 0.308, 0.194, 0.156]\n  Observations:\n    n=4: gap=3.090170 eV\n    n=6: gap=2.225209 eV\n    n=8: gap=1.736482 eV\n    n=10: ga"
+      }
+    },
+    {
+      "tool": "bond_alternated_polyene_scaling",
+      "tool_name": "bond_alternated_polyene_scaling",
+      "input": "4,6,8,10,12,16,20,30,40,50,80,100;strong=-2.7;weak=-2.3",
+      "description": "Bond-alternated tight-binding gap scaling for the same finite chain lengths",
+      "result": "Bond-alternated polyene gap scaling:\n  Method: explicit diagonalization of a nearest-neighbor tight-binding/Hückel matrix with alternating strong and weak couplings.\n  Model parameters: alpha=-6.000 eV, beta_strong=-2.700 eV, beta_weak=-2.300 eV\n  Chain sizes (n atoms): [4, 6, 8, 10, 12, 16, 20, 30, 40, 50, 80, 100]\n  Alternated gaps (eV): [3.569, 2.733, 2.261, 1.959, 1.751, 1.483, 1.32, 1.106, 1.003, 0.945, 0.868, 0.847]\n  asymptotic_gap_estimate = 0.800000 eV\n  max_excess_over_asymptote = 2.769412 eV\n  Observations:\n    n=4: alternated_gap=3.569412 eV; excess_over_asymptote=2.769412 eV\n    n=6: alternated_gap=2.733328 eV; excess_over_asymptote=1.933328 eV\n    n=8: alternated_gap=2.260871 eV; excess_over_asymptote=1.460871 eV\n    n=10: alternated_gap=1.959087 eV; excess_over_asymptote=1.159087 eV\n    n=12: alternated_gap=1.750598 eV; excess_over_asymptote=0.950598 eV\n    n=16: alternated_gap=1.483116 eV; excess_over_asymptote=0.683116 eV\n    n=20: alternated_gap=1.320481 eV; excess_over_asymptote=0.520481 eV\n    n=30: alternated_gap=1.105803 eV; excess_over_asymptote=0.305803 eV\n    n=40: alternated_gap=1.003212 eV; excess_over_asymptote=0.203212 eV\n    n=50: alternated_gap=0.945313 eV; excess_over_asymptote=0.145313 eV\n    n=80: alternated_gap=0.868191 eV; excess_over_asymptote=0.068191 eV\n    n=100: alternated_gap=0.846601 eV; excess_over_asymptote=0.046601 eV\n  finite-gap conclusion: bond alternation prevents the zero-gap closure seen in the uniform-chain baseline; the tested finite chains approach a nonzero gap set by the strong/weak coupling contrast.",
+      "success": true,
+      "duration_seconds": 0.01,
+      "experiment_id": "chemistry_bond_alternated_polyene_scaling_20260703_005400",
+      "provenance_path": "data/experiments/chemistry_bond_alternated_polyene_scaling_20260703_005400/provenance.json",
+      "assessment": {
+        "usable": true,
+        "evidence_level": "strong",
+        "markers": [],
+        "warnings": [],
+        "preview": "Bond-alternated polyene gap scaling:\n  Method: explicit diagonalization of a nearest-neighbor tight-binding/Hückel matrix with alternating strong and weak couplings.\n  Model parameters: alpha=-6.000 eV, beta_strong=-2.700 eV, beta_weak=-2.300 eV\n  Chain sizes (n atoms): [4, 6, 8, 10, 12, 16, 20, 30, 40, 50, 80, 100]\n  Alternated gaps (eV): [3.569, 2.733, 2.261, 1.959, 1.751, 1.483, 1.32, 1.106, 1.003, 0.945, 0.868, 0.847]\n  asymptotic_gap_estimate = 0.800000 eV\n  max_excess_over_asymptote = 2.76"
+      }
+    },
+    {
+      "tool": "pyscf_polyene_hf_gap",
+      "tool_name": "pyscf_polyene_hf_gap",
+      "input": "4,6;basis=sto-3g",
+      "description": "Small-polyene RHF/STO-3G HOMO-LUMO gap control for C4H6 and C6H8",
+      "result": "PySCF polyene RHF/STO-3G HOMO-LUMO gap controls:\n  Geometry: rough planar all-trans C_n H_(n+2), alternating C-C distances 1.34/1.46 A, C-H=1.09 A.\n  Basis: sto-3g\n  Carbon counts: [4, 6]\n  Observations:\n    n=4: formula=C4H6; total_energy=-152.46858270 Ha; HOMO=-0.238701 Ha; LUMO=0.237409 Ha; HF_gap=12.9556 eV; converged=True\n    n=6: formula=C6H8; total_energy=-228.13039888 Ha; HOMO=-0.195717 Ha; LUMO=0.188743 Ha; HF_gap=10.4617 eV; converged=True\n  HF trend over tested counts: decreases\n  Interpretation: RHF/STO-3G orbital gaps are method-dependent and not optical gaps, but they provide an independent ab initio control on the sign of the length trend.",
+      "success": true,
+      "duration_seconds": 0.238,
+      "experiment_id": "chemistry_pyscf_polyene_hf_gap_20260703_005400",
+      "provenance_path": "data/experiments/chemistry_pyscf_polyene_hf_gap_20260703_005400/provenance.json",
+      "assessment": {
+        "usable": true,
+        "evidence_level": "strong",
+        "markers": [],
+        "warnings": [],
+        "preview": "PySCF polyene RHF/STO-3G HOMO-LUMO gap controls:\n  Geometry: rough planar all-trans C_n H_(n+2), alternating C-C distances 1.34/1.46 A, C-H=1.09 A.\n  Basis: sto-3g\n  Carbon counts: [4, 6]\n  Observations:\n    n=4: formula=C4H6; total_energy=-152.46858270 Ha; HOMO=-0.238701 Ha; LUMO=0.237409 Ha; HF_gap=12.9556 eV; converged=True\n    n=6: formula=C6H8; total_energy=-228.13039888 Ha; HOMO=-0.195717 Ha; LUMO=0.188743 Ha; HF_gap=10.4617 eV; converged=True\n  HF trend over tested counts: decreases\n  Int"
+      }
+    },
+    {
+      "tool": "molecular_orbital_energy",
+      "tool_name": "molecular_orbital_energy",
+      "input": "4:1.4",
+      "description": "Four-site Huckel endpoint/control calculation",
+      "result": "Hückel MO Analysis (4 carbon conjugated system):\n  Model parameters: alpha=-6.000 eV, beta=-2.500 eV\n  Energy levels (eV): [-10.045, -7.545, -4.455, -1.955]\n  HOMO energy: -7.545 eV\n  LUMO energy: -4.455 eV\n  HOMO-LUMO gap: 3.090 eV\n  Delocalization energy: -11.180 eV",
+      "success": true,
+      "duration_seconds": 0.008,
+      "experiment_id": "chemistry_molecular_orbital_energy_20260703_005400",
+      "provenance_path": "data/experiments/chemistry_molecular_orbital_energy_20260703_005400/provenance.json",
+      "assessment": {
+        "usable": true,
+        "evidence_level": "strong",
+        "markers": [],
+        "warnings": [],
+        "preview": "Hückel MO Analysis (4 carbon conjugated system):\n  Model parameters: alpha=-6.000 eV, beta=-2.500 eV\n  Energy levels (eV): [-10.045, -7.545, -4.455, -1.955]\n  HOMO energy: -7.545 eV\n  LUMO energy: -4.455 eV\n  HOMO-LUMO gap: 3.090 eV\n  Delocalization energy: -11.180 eV"
+      }
+    },
+    {
+      "tool": "molecular_orbital_energy",
+      "tool_name": "molecular_orbital_energy",
+      "input": "20:1.4",
+      "description": "Twenty-site Huckel endpoint/control calculation",
+      "result": "Hückel MO Analysis (20 carbon conjugated system):\n  Model parameters: alpha=-6.000 eV, beta=-2.500 eV\n  Energy levels (eV): [-10.944, -10.778, -10.505, -10.131, -9.665, -9.117, -8.5, -7.827, -7.113, -6.374, -5.626, -4.887, -4.173, -3.5, -2.883, -2.335, -1.869, -1.495, -1.222, -1.056]\n  HOMO energy: -6.374 eV\n  LUMO energy: -5.626 eV\n  HOMO-LUMO gap: 0.747 eV\n  Delocalization energy: -61.907 eV",
+      "success": true,
+      "duration_seconds": 0.007,
+      "experiment_id": "chemistry_molecular_orbital_energy_20260703_005400_2",
+      "provenance_path": "data/experiments/chemistry_molecular_orbital_energy_20260703_005400_2/provenance.json",
+      "assessment": {
+        "usable": true,
+        "evidence_level": "strong",
+        "markers": [],
+        "warnings": [],
+        "preview": "Hückel MO Analysis (20 carbon conjugated system):\n  Model parameters: alpha=-6.000 eV, beta=-2.500 eV\n  Energy levels (eV): [-10.944, -10.778, -10.505, -10.131, -9.665, -9.117, -8.5, -7.827, -7.113, -6.374, -5.626, -4.887, -4.173, -3.5, -2.883, -2.335, -1.869, -1.495, -1.222, -1.056]\n  HOMO energy: -6.374 eV\n  LUMO energy: -5.626 eV\n  HOMO-LUMO gap: 0.747 eV\n  Delocalization energy: -61.907 eV"
+      }
+    }
+  ],
+  "failed_results": [],
+  "experiment_ids": [
+    "chemistry_huckel_polyene_scaling_20260703_005400",
+    "chemistry_bond_alternated_polyene_scaling_20260703_005400",
+    "chemistry_pyscf_polyene_hf_gap_20260703_005400",
+    "chemistry_molecular_orbital_energy_20260703_005400",
+    "chemistry_molecular_orbital_energy_20260703_005400_2"
+  ],
+  "provenance_hash_ok": {
+    "chemistry_huckel_polyene_scaling_20260703_005400": true,
+    "chemistry_bond_alternated_polyene_scaling_20260703_005400": true,
+    "chemistry_pyscf_polyene_hf_gap_20260703_005400": true,
+    "chemistry_molecular_orbital_energy_20260703_005400": true,
+    "chemistry_molecular_orbital_energy_20260703_005400_2": true
+  },
+  "paper": {
+    "title": "E2E Validation: Uniform versus bond-alternated polyene HOMO-LUMO gap scaling",
+    "markdown_path": "/Volumes/Ganador disk/A.M.Y/experiments/e2e_validation/papers/E2E_Validation_Uniform_versus_bond-alternated_polyene_HOMO-L_20260702_205533.md",
+    "pdf_path": "/Volumes/Ganador disk/A.M.Y/experiments/e2e_validation/papers/E2E_Validation_Uniform_versus_bond-alternated_polyene_HOMO-L_20260702_205533.pdf",
+    "latex_path": "/Volumes/Ganador disk/A.M.Y/experiments/e2e_validation/papers/E2E_Validation_Uniform_versus_bond-alternated_polyene_HOMO-L_20260702_205533.tex",
+    "word_count": 3194,
+    "sections": 5,
+    "publication_status": "published",
+    "rejection_reasons": [],
+    "internal_review_path": "/Volumes/Ganador disk/A.M.Y/experiments/e2e_validation/papers/E2E_Validation_Uniform_versus_bond-alternated_polyene_HOMO-L_20260702_205533.review.json",
+    "grounding_repair": {
+      "repairs": 0,
+      "items": [],
+      "experiment_ids": [
+        "chemistry_huckel_polyene_scaling_20260703_005400",
+        "chemistry_bond_alternated_polyene_scaling_20260703_005400",
+        "chemistry_pyscf_polyene_hf_gap_20260703_005400",
+        "chemistry_molecular_orbital_energy_20260703_005400",
+        "chemistry_molecular_orbital_energy_20260703_005400_2"
+      ],
+      "sections_checked": [
+        "Abstract",
+        "Discussion"
+      ]
+    }
+  },
+  "reflection": {
+    "pass_overall": true,
+    "score": 100.0,
+    "issues": [],
+    "suggestions": [],
+    "annotations": {
+      "n_issues": 0,
+      "n_high": 0,
+      "n_medium": 0,
+      "n_low": 0,
+      "experiment_ids": [
+        "chemistry_huckel_polyene_scaling_20260703_005400",
+        "chemistry_bond_alternated_polyene_scaling_20260703_005400",
+        "chemistry_pyscf_polyene_hf_gap_20260703_005400",
+        "chemistry_molecular_orbital_energy_20260703_005400",
+        "chemistry_molecular_orbital_energy_20260703_005400_2"
+      ]
+    }
+  },
+  "rubric": {
+    "total": 94.3,
+    "per_dim": {
+      "provenance_integrity": 10.0,
+      "tool_diversity": 8.8,
+      "falsifiability": 15.0,
+      "explicit_limitations": 8.0,
+      "numerical_claims_grounded": 15.0,
+      "citation_accuracy": 10.0,
+      "abstract_uniqueness": 10.0,
+      "statistical_rigor": 7.5,
+      "reproducibility_info": 10.0
+    }
+  },
+  "discussion": {
+    "total": 81.333,
+    "word_count": 867,
+    "claim_grounding": 25.0,
+    "limitation_cover": 13.622,
+    "alternatives": 10.482,
+    "calibration": 15.293,
+    "reasoning_depth": 16.936
+  }
+}

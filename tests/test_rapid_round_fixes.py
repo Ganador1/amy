@@ -10,7 +10,10 @@ import time
 import pytest
 
 from cognition.curiosity import CuriosityModule
+from cognition.reasoning import ReasoningEngine, _parse_json_robust
+from core.heartbeat import Heartbeat, _action_details
 from skills.library import SkillLibrary
+from skills.code_experiment import CodeExperimentSkill
 from core.ollama_client import OllamaCloudClient
 
 
@@ -82,6 +85,36 @@ def _client_stub(n_keys=2):
     return c
 
 
+def test_ollama_client_prefers_primary_key_over_legacy_key(monkeypatch):
+    monkeypatch.setenv("OLLAMA_CLOUD_API_KEY", "new-primary")
+    monkeypatch.setenv("OLLAMA_CLOUD_API_KEY_1", "old-legacy")
+    monkeypatch.setenv("OLLAMA_CLOUD_API_KEY_2", "backup")
+
+    client = OllamaCloudClient({"base_url": "https://ollama.com/api"})
+
+    assert client._keys == ["new-primary", "backup"]
+
+
+def test_ollama_client_deduplicates_key_aliases(monkeypatch):
+    monkeypatch.setenv("OLLAMA_CLOUD_API_KEY", "same-key")
+    monkeypatch.setenv("OLLAMA_CLOUD_API_KEY_1", "same-key")
+    monkeypatch.setenv("OLLAMA_CLOUD_API_KEY_2", "backup")
+
+    client = OllamaCloudClient({"base_url": "https://ollama.com/api"})
+
+    assert client._keys == ["same-key", "backup"]
+
+
+def test_ollama_client_uses_legacy_key_when_primary_missing(monkeypatch):
+    monkeypatch.delenv("OLLAMA_CLOUD_API_KEY", raising=False)
+    monkeypatch.setenv("OLLAMA_CLOUD_API_KEY_1", "legacy-only")
+    monkeypatch.setenv("OLLAMA_CLOUD_API_KEY_2", "backup")
+
+    client = OllamaCloudClient({"base_url": "https://ollama.com/api"})
+
+    assert client._keys == ["legacy-only", "backup"]
+
+
 def test_parse_retry_after():
     assert OllamaCloudClient._parse_retry_after("30") == 30.0
     assert OllamaCloudClient._parse_retry_after(None) is None
@@ -126,3 +159,120 @@ async def test_embed_fails_over_across_keys(monkeypatch):
     out = await c.embed("model", "text")
     assert out == [[0.1, 0.2]]
     assert calls["n"] == 2  # it retried the second key
+
+
+def test_reasoning_parser_recovers_unclosed_markdown_json_fence():
+    raw = '```json\n{"action_type": "think_more", "content": "partial but usable"'
+
+    parsed = _parse_json_robust(raw)
+
+    assert parsed["action_type"] == "think_more"
+    assert parsed["content"] == "partial but usable"
+
+
+def test_heartbeat_treats_null_action_details_as_empty_dict():
+    assert _action_details({"action_details": None}) == {}
+
+    hb = Heartbeat.__new__(Heartbeat)
+    result = hb._safety_block_for_thought(
+        "think_more",
+        {"action_type": "think_more", "action_details": None, "content": "benign"},
+    )
+
+    assert result is None
+
+
+async def test_reasoning_treats_null_action_details_as_empty_dict():
+    class FakeClient:
+        async def chat(self, **kwargs):
+            return {
+                "message": {
+                    "content": (
+                        '{"action_type": "experiment", "action_details": null, '
+                        '"content": "run an experiment"}'
+                    )
+                }
+            }
+
+    engine = ReasoningEngine.__new__(ReasoningEngine)
+    engine.config = {"reasoner": {"temperature": 0.7, "max_tokens": 256}}
+    engine.client = FakeClient()
+    engine.reasoner_model = "test-model"
+    engine.reasoner_ctx = 2048
+
+    thought = await engine.reason(
+        focus={"content": "focus", "source": "test"},
+        context={"cycle": 7},
+    )
+
+    assert thought["action_type"] == "experiment"
+    assert thought["content"] == "run an experiment"
+    assert thought["cycle"] == 7
+
+
+def test_reasoning_prompt_forces_pivot_after_repeated_literature_searches():
+    engine = ReasoningEngine.__new__(ReasoningEngine)
+
+    messages = engine._build_reasoning_prompt(
+        focus={"content": "open curiosity", "source": "curiosity", "type": "open"},
+        context={
+            "current_goal": "free exploration",
+            "cycle": 5,
+            "recent_thoughts": [
+                {"action_type": "search_literature", "content": "searched topic A"},
+                {"action_type": "search_literature", "content": "searched topic A again"},
+            ],
+            "recent_queries": ["topic A", "topic A mechanism"],
+        },
+        world_model=None,
+    )
+
+    prompt = messages[-1]["content"]
+    assert "LITERATURE SEARCH LOOP" in prompt
+    assert "DO NOT choose 'search_literature'" in prompt
+
+
+async def test_search_literature_records_recent_query():
+    class FakeAtlas:
+        async def search_literature(self, query, domain="medicine"):
+            return {"papers": [], "support_score": 0.0}
+
+    class FakeMemory:
+        async def record(self, **kwargs):
+            self.kwargs = kwargs
+
+    hb = Heartbeat.__new__(Heartbeat)
+    hb._atlas_tools = FakeAtlas()
+    hb._recent_queries = []
+    hb.world_model = None
+    hb.episodic_memory = FakeMemory()
+
+    await hb._act_search_literature(
+        {"research_query": "CaMKII synaptic memory turnover", "domain": "neuroscience"}
+    )
+
+    assert hb._recent_queries == ["CaMKII synaptic memory turnover"]
+
+
+async def test_code_experiment_retries_recoverable_float_integer_format_error():
+    skill = CodeExperimentSkill({"max_execution_time": 30})
+    result = await skill.run_experiment(
+        hypothesis="formatting repair smoke",
+        code="value = 154.0\nprint(f'gap={value:d}')\n",
+    )
+
+    assert result["success"] is True
+    assert "gap=154" in result["stdout"]
+    assert result["repair"]["attempted"] is True
+
+
+async def test_code_experiment_repairs_misaligned_function_docstring_indent():
+    skill = CodeExperimentSkill({"max_execution_time": 30})
+    result = await skill.run_experiment(
+        hypothesis="docstring indentation repair smoke",
+        code='def f():\n   """\n    docs\n    """\n    return 1\nprint(f())\n',
+    )
+
+    assert result["success"] is True
+    assert result["stdout"].strip() == "1"
+    assert result["repair"]["reason"] == "misaligned_docstring_indent"

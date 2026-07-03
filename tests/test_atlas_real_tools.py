@@ -20,6 +20,7 @@ from core.atlas_real_tools import (
     collatz_sequence,
     correlation_analysis,
     correlation_analysis_from_query,
+    deterministic_bootstrap_mean_difference_ci,
     deterministic_sample,
     dnabert2_batch_analysis,
     dnabert2_motifs,
@@ -401,6 +402,22 @@ class TestDeterministicSample:
     def test_normal_std_must_be_positive(self):
         out = deterministic_sample("normal", 100, 0.0, -1.0, seed=0)
         assert out.startswith("Error:")
+
+    def test_bootstrap_mean_difference_ci_is_seeded(self):
+        a = deterministic_bootstrap_mean_difference_ci(
+            [1.0, 2.0, 3.0, 4.0],
+            [2.0, 3.0, 4.0, 5.0],
+            seed=123,
+            iterations=250,
+        )
+        b = deterministic_bootstrap_mean_difference_ci(
+            [1.0, 2.0, 3.0, 4.0],
+            [2.0, 3.0, 4.0, 5.0],
+            seed=123,
+            iterations=250,
+        )
+        assert a == b
+        assert a[0] <= 1.0 <= a[1]
 
 
 # ─── Anti-regression: NO module-level non-determinism ─────────────────────────

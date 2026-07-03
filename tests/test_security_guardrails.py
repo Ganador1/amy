@@ -6,6 +6,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
 from core.atlas_bridge import AtlasBridge
 from core.atlas_tools import AtlasTools
 from core.heartbeat import Heartbeat
@@ -14,7 +16,27 @@ from sandbox.executor import SandboxExecutor
 
 
 ROOT = Path(__file__).resolve().parent.parent
-ATLAS_PYTHON = ROOT / "atlas" / ".venv_new" / "bin" / "python3"
+
+
+def _resolve_atlas_python() -> Path | None:
+    """Find an interpreter that can import Atlas's registry.
+
+    Prefers a dedicated Atlas venv if present, then the current interpreter.
+    Returns None when no candidate exists (e.g. minimal CI checkout) so the
+    Atlas-subprocess test can skip instead of failing on a hardcoded path.
+    """
+    candidates = [
+        ROOT / "atlas" / ".venv_new" / "bin" / "python3",
+        ROOT / "atlas" / ".venv" / "bin" / "python3",
+        Path(sys.executable),
+    ]
+    for c in candidates:
+        if c.exists():
+            return c
+    return None
+
+
+ATLAS_PYTHON = _resolve_atlas_python()
 
 
 def test_core_safety_blocks_chemical_weaponization():
@@ -113,6 +135,8 @@ async def test_amy_atlas_tools_allow_benign_and_block_dangerous():
 
 
 def test_direct_atlas_registry_blocks_dangerous_input():
+    if ATLAS_PYTHON is None or not (ROOT / "atlas" / "run_agent_with_tools.py").exists():
+        pytest.skip("Atlas interpreter/registry not available in this checkout")
     code = """
 import asyncio
 import os

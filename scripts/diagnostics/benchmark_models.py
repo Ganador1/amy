@@ -41,16 +41,16 @@ from core.ollama_client import OllamaCloudClient  # noqa: E402
 # A representative slice of the 41 cloud models, chosen for the agentic loop:
 # fast non-thinking coders + a few strong reasoners for comparison.
 DEFAULT_MODELS = [
+    "glm-5.2",
+    "kimi-k2.7-code",
     "gpt-oss:20b",
     "gpt-oss:120b",
     "qwen3-coder-next",
     "qwen3-coder:480b",
-    "qwen3-next:80b",
     "gemini-3-flash-preview",
     "minimax-m2.7",
-    "deepseek-v3.1:671b",
-    "glm-5.1",
     "minimax-m3",
+    "deepseek-v3.1:671b",
 ]
 
 # The real reasoning prompt shape (condensed but same structure/size class).
