@@ -4,26 +4,32 @@ Self-Retrain — Autonomous improvement of A.M.Y's internal models.
 A.M.Y improves itself through two complementary, *implemented* mechanisms,
 each grounded in the architectures the project cites:
 
-1. **Belief-weight update (real parameter update).** The world model's beliefs
-   carry confidence values that are literally the model's learned parameters —
-   ``generate_predictions`` and ``get_uncertainty_map`` read them directly.
-   ``retrain_world_model`` recomputes every belief's confidence from its
-   accumulated confirm/contradict evidence (its empirical reliability) and
-   writes the updated values back into both the world model and the persistent
-   semantic knowledge graph. This is a genuine Bayesian re-estimation of model
-   weights from new signal — not a placeholder.
+1. **Belief-weight recalibration (heuristic, measured-null).** The world
+   model's beliefs carry confidence values that ``generate_predictions`` and
+   ``get_uncertainty_map`` read directly. ``retrain_world_model`` nudges each
+   belief's confidence toward its empirical reliability
+   (confirmations / observations) with a fixed scalar moving average
+   (``new = 0.5*old + 0.5*reliability``) and persists the result to the
+   semantic knowledge graph. This is a heuristic recalibration of an existing
+   scalar — *not* a full Bayesian posterior and not a neural-net parameter
+   update. The project's own ablation
+   (``experiments/learning_ablation/FINDINGS.md``) found this update "adds
+   nothing measurable" to downstream paper quality, so it is kept for
+   bookkeeping/transparency, not because it demonstrably improves outputs.
 
-2. **Meta-review feedback propagation.** Following the Google AI Co-Scientist
-   Meta-review agent (arXiv:2502.18864, §3.3.6) — which the paper states
-   "enables feedback propagation and learning *without* back-propagation
-   techniques (e.g., fine-tuning or reinforcement learning)" — A.M.Y
-   synthesizes recurring weaknesses from accumulated reviews and exposes them
-   as a feedback digest to be appended to the next cycle's prompts. See
-   ``cognition.meta_review_agent``.
+2. **Meta-review feedback propagation (the part that actually moves outputs).**
+   Following the Google AI Co-Scientist Meta-review agent
+   (arXiv:2502.18864, §3.3.6) — which the paper states "enables feedback
+   propagation and learning *without* back-propagation techniques (e.g.,
+   fine-tuning or reinforcement learning)" — A.M.Y synthesizes recurring
+   weaknesses from accumulated reviews and exposes them as a feedback digest
+   appended to the next cycle's prompts. See ``cognition.meta_review_agent``.
 
-Together these are the substance behind "learns for real": one updates the
-parameters of the model that actually exists, the other closes the
-review→improvement loop the way the cited multi-agent system does.
+The substance behind "learns for real" is mechanism (2) — the
+review→improvement loop the cited multi-agent system uses — together with the
+Evolution agent that the same ablation found *does* produce better hypotheses.
+Mechanism (1) is honest bookkeeping with no measured effect; A.M.Y does not
+fine-tune a large neural network on-device.
 """
 import structlog
 
@@ -78,13 +84,15 @@ class SelfRetrainModule:
         return self.meta_review.synthesize().as_prompt_suffix()
 
     async def retrain_world_model(self, world_model, episodic_memory, semantic_memory):
-        """Re-estimate belief confidences from accumulated evidence.
+        """Recalibrate belief confidences from accumulated evidence (heuristic).
 
-        This is a real parameter update: for each belief, the confidence is
-        moved toward its empirical reliability (confirmations / total
-        observations), which is exactly the signal the belief has accrued. The
-        updated confidences are persisted to the semantic knowledge graph so the
-        change survives restarts and is visible to every downstream consumer.
+        For each belief, the confidence is nudged toward its empirical
+        reliability (confirmations / total observations) via a fixed scalar
+        moving average, and persisted to the semantic knowledge graph so the
+        change survives restarts. This is a heuristic recalibration, not a full
+        Bayesian update; the project's ablation
+        (``experiments/learning_ablation/FINDINGS.md``) measured no downstream
+        effect, so treat it as bookkeeping rather than a quality lever.
 
         Returns a dict describing what changed (or ``False`` on error).
         """

@@ -271,6 +271,9 @@ async def test_paper_quality_across_domains():
         print(f"\n⚠️  PAPER QUALITY TEST NEEDS ATTENTION")
         print(f"   Calidad promedio: {avg_overall:.1f}/10")
 
+    # Real assertion (pytest ignores returned tuples). This test calls the
+    # live LLM, so it is not part of the hermetic CI set.
+    assert avg_overall >= 6.0, f"avg paper quality {avg_overall:.1f}/10 below 6.0 threshold"
     return passed, all_results
 
 

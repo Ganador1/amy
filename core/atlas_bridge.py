@@ -80,6 +80,19 @@ def _blocked_research_result(decision: dict) -> dict:
     }
 
 
+def _primary_ollama_api_key() -> str:
+    try:
+        from core.ollama_client import get_primary_ollama_cloud_api_key
+
+        return get_primary_ollama_cloud_api_key()
+    except Exception:
+        return (
+            os.getenv("OLLAMA_CLOUD_API_KEY", "")
+            or os.getenv("OLLAMA_CLOUD_API_KEY_1", "")
+            or os.getenv("OLLAMA_CLOUD_API_KEY_2", "")
+        )
+
+
 class AtlasBridge:
     """
     Bridge entre A.M.Y y Atlas.
@@ -243,8 +256,7 @@ class AtlasBridge:
 
         out_path = payload_path + ".result.json"
 
-        amy_key1 = os.getenv("OLLAMA_CLOUD_API_KEY_1", "")
-        amy_key2 = os.getenv("OLLAMA_CLOUD_API_KEY_2", "")
+        amy_key = _primary_ollama_api_key()
 
         runner_code = f"""
 import sys, os, json, asyncio
@@ -254,7 +266,7 @@ os.chdir({repr(str(self.atlas_root))})
 # Point Atlas at Ollama Cloud (same as A.M.Y) and disable Redis
 # OllamaProvider appends /api/generate itself, so base_url NO debe tener /api
 os.environ["OLLAMA_BASE_URL"] = "https://ollama.com"
-os.environ["OLLAMA_API_KEY"] = {repr(amy_key1 or amy_key2)}
+os.environ["OLLAMA_API_KEY"] = {repr(amy_key)}
 os.environ["ENABLE_REDIS_CACHE"] = "false"
 
 # Cargar .env de Atlas (sin sobrescribir vars ya seteadas)
@@ -289,7 +301,7 @@ json.dump(result if result else {{"success": False, "error": "no result"}}, open
         try:
             env = os.environ.copy()
             env["OLLAMA_BASE_URL"] = "https://ollama.com"
-            env["OLLAMA_API_KEY"] = os.getenv("OLLAMA_CLOUD_API_KEY_1", "")
+            env["OLLAMA_API_KEY"] = _primary_ollama_api_key()
             env["ENABLE_REDIS_CACHE"] = "false"
 
             proc = subprocess.run(

@@ -26,6 +26,12 @@ import structlog
 log = structlog.get_logger()
 
 
+def _action_details(thought: dict) -> dict:
+    """Return nested action details only when the model supplied a JSON object."""
+    details = thought.get("action_details", {}) if isinstance(thought, dict) else {}
+    return details if isinstance(details, dict) else {}
+
+
 class CognitiveState(Enum):
     PERCEIVING = "perceiving"
     ATTENDING = "attending"
@@ -498,7 +504,7 @@ class Heartbeat:
         try:
             from core.safety_kernel import blocked_message, evaluate_safety
 
-            action_details = thought.get("action_details", {})
+            action_details = _action_details(thought)
             content = json.dumps(
                 {
                     "content": thought.get("content", ""),
@@ -571,8 +577,11 @@ class Heartbeat:
         if self._atlas_tools is None:
             self._atlas_tools = get_atlas_tools()
 
-        query = thought.get("research_query", thought.get("hypothesis", thought.get("content", "")))
+        query = str(thought.get("research_query", thought.get("hypothesis", thought.get("content", ""))))
         domain = thought.get("domain", "medicine")
+        self._recent_queries.append(str(query)[:100])
+        if len(self._recent_queries) > 20:
+            self._recent_queries = self._recent_queries[-20:]
 
         log.info("heartbeat.atlas_literature_search", query=query[:80], domain=domain)
         result = await self._atlas_tools.search_literature(query, domain=domain)
@@ -700,7 +709,7 @@ class Heartbeat:
             return blocked
         from communication.paper_generator import PaperGenerator
 
-        action_details = thought.get("action_details", {})
+        action_details = _action_details(thought)
         topic = thought.get("paper_topic", action_details.get("paper_topic", self.ctx.current_goal))
         log.info("heartbeat.writing_paper", topic=topic[:80])
 
@@ -860,7 +869,7 @@ class Heartbeat:
             self._atlas_tools = get_atlas_tools()
 
         # Support both direct fields and nested action_details
-        action_details = thought.get("action_details", {})
+        action_details = _action_details(thought)
         tool_name = thought.get("tool_name", action_details.get("tool_name", ""))
         tool_input = thought.get("tool_input", action_details.get("tool_input", ""))
         domain = thought.get("domain", action_details.get("domain", "mathematics"))

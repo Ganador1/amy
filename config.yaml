@@ -7,7 +7,7 @@ mission:
   description: "Disenar experimentos computacionales para caracterizar la distribucion de gaps primos y evaluar hipotesis de normalidad"
   urgency: medium  # low, medium, high — affects heartbeat frequency
 
-# LLM Backend — Ollama Cloud with GLM 5.1
+# LLM Backend — Ollama Cloud with GLM 5.2
 llm:
   # Provider: ollama_cloud (uses https://ollama.com/api)
   provider: "ollama_cloud"
@@ -15,14 +15,14 @@ llm:
 
   # Main reasoning model (for deep thinking, reflection, hypothesis generation)
   reasoner:
-    model: "glm-5.1"
+    model: "glm-5.2"
     temperature: 0.7
     max_tokens: 4096
     num_ctx: 8192  # Reduced context for faster response under rate limits
 
   # Fast model (for quick classifications, summaries, routine tasks)
   fast:
-    model: "glm-5.1"
+    model: "glm-5.2"
     temperature: 0.3
     max_tokens: 1024
     num_ctx: 8192
@@ -49,6 +49,12 @@ heartbeat:
   idle_interval_seconds: 120
   # Maximum cycles before forced reflection
   max_cycles_before_reflection: 20
+  # When a mission is declared complete:
+  #   continuous_mission: true  → A.M.Y generates the next, deeper mission
+  #     from what it learned and keeps going (the "never sleeps" behaviour).
+  #   continuous_mission: false → "Satisfaction Mode": stop and hibernate to
+  #     bound API usage. Safe default for unattended single-mission runs.
+  continuous_mission: false
 
 # Memory
 memory:
@@ -105,11 +111,27 @@ communication:
 # Sandbox (for running experiments safely)
 sandbox:
   enabled: true
-  # Docker is available and should be used for real isolation.
+  # Isolation tier for LLM-generated experiment code:
+  #   use_docker: true  → strongest. Runs each experiment in an ephemeral
+  #     container with --network=none and a memory cap. REQUIRES the Docker
+  #     daemon running and the `amy-sandbox:latest` image built
+  #     (see sandbox/Dockerfile). Recommended for unattended/24-7 operation.
+  #   use_docker: false → hardened-subprocess fallback. The child now runs in
+  #     a throwaway working directory (so a script cannot write into the repo)
+  #     under a CPU rlimit. NOT a security boundary against a determined
+  #     attacker, but bounds runaway CPU and accidental repo writes.
+  #     NOTE: on macOS the per-process MEMORY cap is NOT enforceable in this
+  #     tier (Darwin ignores RLIMIT_AS) — only Docker (--memory) caps memory
+  #     on macOS. On Linux the subprocess tier caps memory too.
   use_docker: false
-  # Maximum execution time per experiment (seconds)
+  # When true, refuse to run code if the requested Docker tier is unavailable
+  # instead of silently downgrading to the weaker subprocess. Defaults to the
+  # value of use_docker. Set explicitly to true for fail-closed operation.
+  require_isolation: false
+  # Maximum execution time per experiment (seconds) — also the CPU rlimit.
   max_execution_time: 300
-  # Maximum memory per experiment
+  # Maximum memory per experiment — enforced via rlimit (subprocess) or
+  # --memory (docker).
   max_memory_mb: 2048
   # Allowed languages in sandbox
   allowed_languages:

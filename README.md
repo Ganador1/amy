@@ -6,7 +6,7 @@
 
 ---
 
-## Status (June 2026)
+## Status (July 2026)
 
 | Component | Status | Notes |
 |---|---|---|
@@ -19,7 +19,7 @@
 | Senses (web, time, file, api) | ✅ Functional | — |
 | Communication (paper generator + LLM enhancer + Reflection gate) | ✅ Functional | LLM enhancer/evolution opt-in via env flags |
 
-**Multi-domain coverage:** Atlas domains produce papers end-to-end, with provenance integrity verified by SHA-256. New-pipeline papers (LLM enhancer + evolution) score meaningfully higher than prior versions on the project's own rubric and win a blind head-to-head against them 9/12 (a marginal result — 95% CI lower bound just under 0.5) — see [Quality](#paper-quality-vs-prior-versions).
+**Multi-domain coverage:** Atlas domains produce papers end-to-end, with provenance integrity verified by SHA-256. The July 2026 E2E validation loop now has six focused scientific branches at target quality with `grounding_repair.repairs = 0`: astronomy, biology, chemistry, mathematics, physics, and statistics. New-pipeline papers (LLM enhancer + evolution) score meaningfully higher than prior versions on the project's own rubric and win a blind head-to-head against them 9/12 (a marginal result — 95% CI lower bound just under 0.5) — see [Quality](#paper-quality-vs-prior-versions).
 
 ---
 
@@ -64,6 +64,21 @@ A.M.Y is not a chatbot. It is not an agent that waits for your question. It is a
 > The reflection score is a **deterministic structural-conformity check**, not a quality grade or independent peer review. It verifies the draft satisfies a fixed six-item format checklist (numbers traceable to provenance, a limitations sentence, a Testable-Predictions block, etc.); the paper generator inserts boilerplate that satisfies the same regexes, so the 100/100 is uniform across the batch even where rubric novelty is 0. Read it as "the template was filled in correctly," not "the science is sound."
 
 See [`experiments/all_domains/REVIEW.json`](experiments/all_domains/REVIEW.json) for the full breakdown and [`experiments/flagship/papers/`](experiments/flagship/papers/) for a deep-dive paper modelled on the arXiv:2511.16072 case-study format (rubric 71, reflection 100, 14 verifiable tool calls).
+
+## Recent E2E branch validation (July 2026)
+
+The latest focused E2E loop used GLM-5.2 with the LLM enhancer, LLM judge, and Evolution agent enabled. Instead of broad exploration, each branch was forced into a single falsifiable scientific contract: baseline, perturbation/alternative, independent control, explicit limitations, and provenance-grounded numerical claims. The loop controller is [`scripts/run/branch_quality.py`](scripts/run/branch_quality.py); the production harness is [`scripts/run/run_e2e_validation.py`](scripts/run/run_e2e_validation.py).
+
+| Domain | Scientific target | Rubric | Discussion | Grounding repairs | Artifact |
+|---|---|---:|---:|---:|---|
+| Astronomy | Planck18 luminosity-distance residuals vs low-z Hubble-law controls | **98.0** | 83.075 | 0 | [`e2e_astronomy_20260703_171209.json`](experiments/e2e_validation/e2e_astronomy_20260703_171209.json) |
+| Biology | GC-rich vs AT-rich sequence panels with coding-context controls | **100.0** | 86.611 | 0 | [`e2e_biology_20260703_165642.json`](experiments/e2e_validation/e2e_biology_20260703_165642.json) |
+| Chemistry | Uniform vs bond-alternated polyene HOMO-LUMO gap scaling | **94.3** | 81.333 | 0 | [`e2e_chemistry_20260703_005347.json`](experiments/e2e_validation/e2e_chemistry_20260703_005347.json) |
+| Mathematics | Prime-gap scaling against logarithmic and Cramer-style baselines | **97.5** | 84.370 | 0 | [`e2e_mathematics_20260703_012240.json`](experiments/e2e_validation/e2e_mathematics_20260703_012240.json) |
+| Physics | Hydrogen Rydberg inverse-square scaling against perturbation controls | **93.5** | 81.023 | 0 | [`e2e_physics_20260703_163343.json`](experiments/e2e_validation/e2e_physics_20260703_163343.json) |
+| Statistics | Two-sample inference with effect size and uncertainty controls | **100.0** | 84.241 | 0 | [`e2e_statistics_20260703_164519.json`](experiments/e2e_validation/e2e_statistics_20260703_164519.json) |
+
+The important change is not just the higher scores. Earlier failures were mostly caused by broad branch objectives, missing competing models, and LLM Discussion sections that introduced unsupported numbers. The new branch loop adds deterministic tools such as `cosmology_residual_comparison`, `gc_at_panel_comparison`, `two_sample_effect_power`, `rydberg_scaling_comparison`, and explicit model-comparison controls, then filters unsupported evolved hypotheses before the paper is written. In the final branch-quality pass, all six domains report `status=target`, `reflection.score=100`, and zero failed tool calls.
 
 ## How A.M.Y thinks — the cognitive cycle in depth
 
@@ -172,21 +187,21 @@ The full surface area (FastAPI app, multi-agent orchestrator, peer review pipeli
 
 ### The tool registry, by domain
 
-The registry counts ~94 callable tools at runtime once dynamic registration (`_register_service_tools`, `evidence_corroborate_<domain>`) is included. Of these, **9 carry the static tag `evidence_grade='real_local'`** (the AstroPy, PySCF, ASE, and PyMatGen tools listed above — genuine, reproducible library calls); the rest are heuristic, tabulated, or demo. SymPy/SciPy run real code too and are promoted to real-evidence grade at runtime by `tool_evidence_orchestrator.py`, but are not part of the static tag set. To exercise the whole registry, run `scripts/diagnostics/test_all_94_tools.py`: it discovers the live tool list from the Atlas worker itself (and caches it to `data/diagnostics/worker_tools.json`), so it runs from a fresh clone with no author-specific setup. The counts below are the static registry by domain.
+The registry exposes 100+ callable tools at runtime once dynamic registration (`_register_service_tools`, `evidence_corroborate_<domain>`) is included. Of these, **9 carry the static tag `evidence_grade='real_local'`** (the AstroPy, PySCF, ASE, and PyMatGen tools listed above — genuine, reproducible library calls); the rest are heuristic, tabulated, or demo. SymPy/SciPy run real code too and are promoted to real-evidence grade at runtime by `tool_evidence_orchestrator.py`, but are not part of the static tag set. To exercise the whole registry, run `scripts/diagnostics/test_all_94_tools.py`: it discovers the live tool list from the Atlas worker itself (and caches it to `data/diagnostics/worker_tools.json`), so it runs from a fresh clone with no author-specific setup. The counts below are the static registry by domain.
 
 | Domain | Count | Notable tools |
 |---|---:|---|
 | Mathematics | 20 | `sympy_solve_equation`, `sympy_derivative`, `sympy_integrate`, `sympy_simplify`, `sympy_prime_analysis`, `prime_gap_analysis`, `number_theory_advanced`, `mathematical_discovery`, `conjecture_engine`, `automated_prover`, `z3_prover`, `z3_verify_theorem`, `graph_theory`, `topology_invariants`, `symbolic_calculus`, `calculus_engine` |
-| Chemistry | 18 | `molecular_weight_calc`, `bond_energy_analyzer`, `molecular_orbital_energy`, `computational_chemistry`, `pyscf_hf_energy`, `pyscf_dft_energy`, `ase_optimize`, `ase_thermochemistry`, plus 6 service-backed adapters (advanced NMR, computational chemistry, ChemML, molecular dynamics, X-ray crystallography, differential scanning calorimetry) |
-| Physics | 12 | `quantum_energy_levels`, `quantum_circuit`, `astropy_constants`, `astropy_blackbody`, `calculus_engine`, plus services for plasma physics, particle physics, solid-state physics, quantum physics, gravitational lensing, physics-informed neural networks |
-| Biology | 7 | `dna_analyzer`, `sequence_analyzer`, `protein_properties`, `dnabert2_analysis`, plus services for genomics, computational biology, alphafold3 protein structure |
-| Statistics | 5 | `numpy_statistics`, `numpy_distribution`, `numpy_correlation`, `correlation_analysis`, `hypothesis_tester` |
-| Astronomy | 4 | `astropy_cosmology`, `astropy_blackbody`, plus astronomical ML and gravitational lensing services |
+| Chemistry | 20 | `molecular_weight_calc`, `bond_energy_analyzer`, `molecular_orbital_energy`, `huckel_polyene_scaling`, `bond_alternated_polyene_scaling`, `computational_chemistry`, `pyscf_hf_energy`, `pyscf_dft_energy`, `ase_optimize`, `ase_thermochemistry`, plus service-backed adapters |
+| Physics | 13 | `quantum_energy_levels`, `rydberg_scaling_comparison`, `quantum_circuit`, `astropy_constants`, `astropy_blackbody`, `calculus_engine`, plus services for plasma physics, particle physics, solid-state physics, quantum physics, gravitational lensing, physics-informed neural networks |
+| Biology | 8 | `dna_analyzer`, `gc_at_panel_comparison`, `sequence_analyzer`, `protein_properties`, `dnabert2_analysis`, plus services for genomics, computational biology, alphafold3 protein structure |
+| Statistics | 6 | `numpy_statistics`, `numpy_distribution`, `numpy_correlation`, `correlation_analysis`, `hypothesis_tester`, `two_sample_effect_power` |
+| Astronomy | 5 | `cosmology_residual_comparison`, `astropy_cosmology`, `astropy_blackbody`, plus astronomical ML and gravitational lensing services |
 | Medicine | 4 | ClinicalBERT NER (keyword fallback in `services/`; real NER in `personalized/`), AlphaFold 3 (mock in `services/`; real in `personalized/`), advanced medical imaging, evidence corroboration |
 | Materials | 3 | `gnome_materials`, `pymatgen_structure`, materials discovery service |
 | Engineering | 3 | additive manufacturing, synthesis equipment, evidence corroboration |
 | Neuroscience | 2 | light EEG band-power service, evidence corroboration |
-| Number theory | 2 | `number_theory_advanced`, `prime_gap_hpc` |
+| Number theory | 3 | `number_theory_advanced`, `prime_gap_model_comparison`, `prime_gap_hpc` |
 | Materials science | 2 | `gnome_materials`, evidence corroboration |
 | Research / meta | 3 | `literature_search`, `literature_verify_hypothesis_plus`, `validate_hypothesis` |
 | Evidence corroboration | 15 | `evidence_corroborate_<domain>` for all 15 corroboration domains, each running a multi-tool orchestrator that mixes real, heuristic, and remote evidence sources |
@@ -284,6 +299,7 @@ The full 23-domain batch lives in `experiments/all_domains/papers/` and is repro
 - **`multimodel/`** — same topic run across seven model configurations. In the original run the spread across models was small (50-52 rubric) because the enhancer was template-driven at the time and the model only affected ranking judgements when LLM-judge was on. The LLM-backed write-up (`AMY_USE_LLM_ENHANCER=1`) now makes the Discussion model-dependent; re-running this harness with the flag on is the intended way to measure whether the rubric rises and varies across models.
 - **`novelty_hunt/`** — eight papers on diverse cross-scale topics designed to surface novelty signals.
 - **`learning_ablation/`** — does adding belief-weight updates beat the Co-Scientist's feedback-only design? Across four escalating runs and five adversarial-verification panels (which rejected three flawed analyses before the valid instrument was found), the answer: belief-weight updates add nothing measurable, while the Evolution-agent engine produces genuinely better hypotheses in a blind head-to-head. Full write-up in [`experiments/learning_ablation/FINDINGS.md`](experiments/learning_ablation/FINDINGS.md).
+- **`e2e_validation/`** — focused production-path branch validation. The latest GLM-5.2 run drives six scientific branches to target quality with zero grounding repairs, using the same `PaperGenerator`, Reflection gate, LLM enhancer, Ranking/Evolution path, and SHA-256 provenance used by A.M.Y.
 
 Every harness emits a re-scoreable JSON. Nothing in this README is unverifiable from the repository.
 
@@ -292,6 +308,7 @@ Every harness emits a re-scoreable JSON. Nothing in this README is unverifiable 
 The upgraded pipeline (LLM enhancer + Evolution agent + working LLM judge) produces measurably better papers than earlier A.M.Y versions, validated end-to-end with real Atlas tool calls and adversarial verification (`experiments/e2e_v2/`):
 
 - **Rubric.** Fresh papers across five domains score ~76–88 on the project's deterministic 9-dimension rubric (`experiments/ab_test/scoring/score_paper.py`), vs a prior-version baseline of ~71 (curated showcase) and ~40 (legacy flat corpus). Provenance integrity (SHA-256 re-hash) is intact on every audited paper.
+- **Focused branch loop.** The July 2026 E2E branch loop now reaches target status across six domains: astronomy 98.0, biology 100.0, chemistry 94.3, mathematics 97.5, physics 93.5, and statistics 100.0. Every final branch has `grounding_repair.repairs = 0`, `reflection.score = 100`, and no failed tool calls.
 - **Longitudinal corpus.** Scoring the historical paper corpus by era (`experiments/e2e_v2/mine_corpus.py`): the new pipeline roughly **doubles** the legacy mean rubric and **halves its variance**.
 - **Blind head-to-head.** Under an independent LLM judge, the reproducible result (three byte-identical runs, 40-paper prior pool) is **9/12** wins for the new papers — win rate 0.75, 95% CI **[0.468, 0.911]**. The lower bound dips just below 0.5, so this is **marginal / not statistically significant at 95%**: it points the right way but does not clear the bar. One additional run with a different (42-paper) prior pool reached 10/12 (CI [0.552, 0.953], which would clear it); we report the dominant reproducible figure rather than the single most favorable run.
 

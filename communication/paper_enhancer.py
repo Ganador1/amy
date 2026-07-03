@@ -43,6 +43,7 @@ DOMAIN_INSIGHTS = {
     "mathematics": {
         "patterns": {
             "prime_gap_analysis": "The distribution of prime gaps reveals a non-normal pattern consistent with the Cramér conjecture framework. The predominance of small gaps (2, 4, 6) reflects the density of twin primes and the influence of modular arithmetic constraints on prime spacing.",
+            "prime_gap_model_comparison": "The prime-gap model-comparison control compares finite observations against log(N) and log(N)^2 baselines, reporting RMSE and normalized residual trends. This is stronger than another descriptive prime-gap run because it states an explicit competing model and a measurable failure criterion, but it remains finite-range evidence rather than an asymptotic proof.",
             "sympy_prime_analysis": "The primality checks confirm known prime-index facts or candidate primality for the tested integers. These results are verification data, not evidence about prime-gap distributions unless paired with an explicit gap enumeration experiment.",
             "sympy_solve_equation": "The algebraic solutions obtained confirm the fundamental theorem of algebra for polynomial equations. The symmetry of roots around zero suggests underlying parity invariants that merit further investigation.",
             "sympy_derivative": "The computed derivatives reveal the rate of change structure of the function. Critical points identified through derivative analysis correspond to local extrema, providing insight into the function's global behavior.",
@@ -65,6 +66,7 @@ DOMAIN_INSIGHTS = {
     },
     "physics": {
         "patterns": {
+            "rydberg_scaling_comparison": "The Rydberg scaling comparison is a model-calibration control: the nonrelativistic hydrogen series should follow E_n = -13.6/n² eV exactly under the simplified assumptions used here. The quantum-defect comparison is a deliberate perturbation/stress test, not a physical claim about hydrogen core screening. Scientific value comes from the explicit residual table, RMSE, and falsification criterion rather than from novelty.",
             "quantum_energy_levels": "The computed energy levels reproduce the Rydberg formula E_n = -13.6/n² eV for hydrogen, a result known since 1888 and derivable from first principles in quantum mechanics. The convergence of energy levels toward zero as n→∞ reflects the ionization threshold. Any reported deviations at high n must be distinguished from floating-point rounding artifacts before being classified as novel. For hydrogen (single electron), quantum defect theory does not apply — deviations arise from reduced-mass corrections, fine structure, or QED effects, not core electron screening.",
             "wave_interference": "The interference pattern demonstrates the wave-particle duality principle. Constructive and destructive interference at predictable angles confirms the superposition principle and provides evidence for the wave nature of quantum objects.",
             "thermodynamics": "The thermodynamic calculations confirm the second law's predictions for entropy changes. The relationship between free energy and equilibrium constants provides quantitative support for statistical mechanical models.",
@@ -84,6 +86,7 @@ DOMAIN_INSIGHTS = {
     "chemistry": {
         "patterns": {
             "molecular_orbital_energy": "The Hückel molecular orbital analysis computes π-electron energy levels for conjugated systems. The HOMO-LUMO gap scaling with conjugation length (approximately 1/n for linear polyenes) is a well-known analytical result from Hückel theory, derivable from the particle-in-a-box model. Cyclic systems (e.g., benzene) exhibit characteristic degenerate orbital pairs absent in linear polyenes, reflecting their higher symmetry (D_nh vs. C_2h). The total π-electron energy quantifies aromatic stabilization relative to isolated double bonds. Any reported scaling law should be compared against the known analytical solution before being classified as novel.",
+            "huckel_polyene_scaling": "The Hückel polyene scaling series is a falsifiable model-comparison control: linear finite-chain Hückel theory predicts a frontier gap proportional to sin(pi/(2(N+1))), which is nearly inverse-length over moderate N. Autschbach's particle-in-a-box analysis warns that real polyenes with bond-length alternation approach a finite absorption limit, so this computation should be framed as a baseline Hückel model test rather than a quantitative prediction of experimental spectra.",
             "molecular_weight_calc": "The computed molecular weights confirm standard atomic mass contributions and stoichiometric ratios. The precision of these calculations enables verification of empirical formulas and distinction between isomeric compounds with identical mass ratios.",
             "bond_energy_analyzer": "Bond energy analysis reveals the thermodynamic stability hierarchy of molecular interactions. The C-C bond energy (347 kJ/mol) compared to C=C (614 kJ/mol) and C≡C (839 kJ/mol) demonstrates the relationship between bond order and bond strength, consistent with molecular orbital theory predictions.",
             "reaction_predictor": "The predicted reaction pathways follow established mechanistic principles including Markovnikov's rule and Zaitsev's orientation. The thermodynamic favorability of products correlates with stability of the transition state.",
@@ -94,6 +97,8 @@ DOMAIN_INSIGHTS = {
             "The bond energy ratios suggest potential catalytic pathways for selective bond activation in complex organic molecules.",
         ],
         "references": [
+            "Hückel, E. (1931). Quantentheoretische Beiträge zum Benzolproblem. Zeitschrift für Physik, 70, 204-286.",
+            "Autschbach, J. (2007). Why the particle-in-a-box model works well for cyanine dyes but not for conjugated polyenes. Journal of Chemical Education, 84(11), 1840-1845. doi:10.1021/ed084p1840.",
             "Atkins, P. & de Paula, J. (2014). Atkins' Physical Chemistry. Oxford University Press.",
             "Clayden, J. et al. (2012). Organic Chemistry. Oxford University Press.",
             "Pauling, L. (1960). The Nature of the Chemical Bond. Cornell University Press.",
@@ -102,7 +107,8 @@ DOMAIN_INSIGHTS = {
     },
     "biology": {
         "patterns": {
-            "dna_analyzer": "The DNA sequence analysis reveals compositional biases that reflect evolutionary constraints. A GC content of 50% suggests a thermophilic origin or high-temperature adaptation, as GC bonds (3 hydrogen bonds) provide greater thermal stability than AT pairs (2 hydrogen bonds). The reverse complement symmetry confirms the palindromic nature of the sequence.",
+            "dna_analyzer": "The DNA sequence analysis reports a bounded composition control: length, base counts, GC fraction, melting-temperature estimate, and reverse complement. These values support sequence-level auditing, but they do not by themselves establish taxonomy, thermal adaptation, or biological function.",
+            "gc_at_panel_comparison": "The GC/AT panel comparison converts sequence composition into a falsifiable finite-panel contrast by reporting sample size, GC-fraction difference, Welch confidence interval, deterministic bootstrap interval, standardized effect size, length controls, and coding-context controls.",
             "protein_properties": "The protein properties analysis reveals structural insights from the amino acid composition. The GRAVY index (hydropathy score) indicates the protein's likely subcellular localization: positive values suggest membrane association, while negative values indicate soluble, cytoplasmic proteins. The net charge distribution affects protein-protein interaction specificity.",
         },
         "novelty_templates": [
@@ -122,6 +128,7 @@ DOMAIN_INSIGHTS = {
             "numpy_statistics": "The descriptive statistics reveal the central tendency and dispersion of the dataset. The relationship between mean and median indicates distribution symmetry (or skewness if they diverge). The standard deviation quantifies the typical deviation from the mean, enabling confidence interval construction.",
             "numpy_distribution": "The generated distribution confirms theoretical predictions for the specified parameters. The sample statistics (mean, std) should approximate the population parameters within expected sampling error, validating the random number generator's statistical properties.",
             "hypothesis_tester": "The hypothesis test provides quantitative evidence for or against the null hypothesis. The p-value indicates the probability of observing the data assuming the null hypothesis is true, while the test statistic measures the effect size in standardized units.",
+            "two_sample_effect_power": "The two-sample effect/power summary turns the t-test into an interpretable inference by reporting sample size, mean difference, Welch confidence interval, deterministic bootstrap interval, standardized effect size, and observed power. This supports a bounded finite-sample claim, while the confidence interval and power estimate define when the group-difference interpretation should be weakened.",
         },
         "novelty_templates": [
             "The distributional properties suggest potential applications in anomaly detection, where deviations from expected statistical behavior indicate novel phenomena.",
@@ -137,6 +144,10 @@ DOMAIN_INSIGHTS = {
     },
     "astronomy": {
         "patterns": {
+            "cosmology_residual_comparison": "The cosmology residual comparison evaluates a finite Planck18-parameter luminosity-distance grid against low-redshift Hubble-law and second-order cosmographic approximations. RMSE, percent residuals, model-comparison effect size, and a threshold-crossing redshift define a falsifiable numerical approximation claim without invoking observational cosmology.",
+            "astropy_cosmology": "The AstroPy cosmology output is an endpoint calibration for Planck18 distance calculations. It is useful for checking units and implementation consistency, but it is not an independent observational dataset.",
+            "astropy_blackbody": "The blackbody output is a textbook calibration control based on Wien and Stefan-Boltzmann relations, useful for checking physical-units tooling rather than supporting cosmological inference.",
+            "astropy_constants": "The constants lookup is a calibration control for physical units and reference values, not evidence for an astrophysical model by itself.",
             "quantum_energy_levels": "The hydrogen energy-level calculations reproduce the Rydberg scaling used in stellar spectroscopy. These runs are calibration controls for spectral-line reasoning rather than novel astrophysical discoveries.",
             "numpy_correlation": "The temperature-luminosity correlation is a finite illustrative calculation consistent with the qualitative Hertzsprung-Russell relation. It should be reported as a toy computational check unless paired with a real stellar catalog and uncertainty model.",
             "numpy_statistics": "The stellar summary statistics describe the sampled values only. Scientific interpretation requires explicit catalog provenance, selection criteria, and observational uncertainty estimates.",
@@ -147,6 +158,8 @@ DOMAIN_INSIGHTS = {
             "A catalog-backed replication could test whether the observed finite-sample trend remains stable after controlling for stellar class and measurement uncertainty.",
         ],
         "references": [
+            "Planck Collaboration. (2020). Planck 2018 results. VI. Cosmological parameters. Astronomy & Astrophysics, 641, A6.",
+            "Astropy Collaboration. (2022). The Astropy Project: Sustaining and Growing a Community-oriented Open-source Project and the Latest Major Release (v5.0). The Astrophysical Journal, 935, 167.",
             "Carroll, B.W. & Ostlie, D.A. (2017). An Introduction to Modern Astrophysics. Cambridge University Press.",
             "Gray, D.F. (2005). The Observation and Analysis of Stellar Photospheres. Cambridge University Press.",
             "Morgan, W.W. & Keenan, P.C. (1973). Spectral classification. Annual Review of Astronomy and Astrophysics, 11, 29-50.",
@@ -235,6 +248,314 @@ def _hypothesis(
     }
 
 
+def _tool_category(tool: str) -> str:
+    """Return a stable category for de-duplicating related tool outputs."""
+    if tool == "prime_gap_model_comparison":
+        return "prime_gap_model"
+    tool_words = tool.split("_")
+    return "_".join(tool_words[:2]) if len(tool_words) >= 2 else tool
+
+
+def _decimal_claims(text: str) -> list[str]:
+    return [
+        raw.replace("−", "-")
+        for raw in re.findall(r"[-−]?\d+\.\d+(?:[eE][+-]?\d+)?", text or "")
+    ]
+
+
+def _evidence_decimal_values(results: list[dict]) -> tuple[str, list[float]]:
+    evidence_text = "\n".join(str(r.get("result", "")) for r in results)
+    values: list[float] = []
+    for token in _decimal_claims(evidence_text):
+        try:
+            values.append(float(token))
+        except ValueError:
+            continue
+    return evidence_text, values
+
+
+def _decimal_is_grounded(token: str, evidence_text: str, evidence_values: list[float]) -> bool:
+    if token in evidence_text:
+        return True
+    if re.search(re.escape(token) + r"\d*", evidence_text):
+        return True
+    try:
+        value = float(token)
+    except ValueError:
+        return False
+    return any(math.isclose(value, known, rel_tol=5e-4, abs_tol=5e-6) for known in evidence_values)
+
+
+def _filter_ungrounded_hypotheses(hypotheses: list[dict], results: list[dict]) -> list[dict]:
+    """Drop hypothesis candidates that introduce decimal claims absent from evidence."""
+    evidence_text, evidence_values = _evidence_decimal_values(results)
+    if not evidence_text:
+        return hypotheses
+
+    kept = []
+    dropped = []
+    for hypothesis in hypotheses:
+        claim_text = " ".join(
+            str(hypothesis.get(key, ""))
+            for key in ("hypothesis", "method", "test_procedure")
+        )
+        unsupported = [
+            token
+            for token in _decimal_claims(claim_text)
+            if not _decimal_is_grounded(token, evidence_text, evidence_values)
+        ]
+        if unsupported:
+            dropped.append({
+                "hypothesis": str(hypothesis.get("hypothesis", ""))[:120],
+                "unsupported": unsupported[:8],
+            })
+            continue
+        kept.append(hypothesis)
+
+    if dropped:
+        log.info("paper_enhancer.hypotheses_grounding_filtered",
+                 dropped=len(dropped), kept=len(kept), examples=dropped[:3])
+    return kept
+
+
+def _strengthen_branch_contract(
+    domain: str,
+    discussion: str,
+    hypotheses: list[dict],
+    results: list[dict],
+) -> tuple[str, list[dict]]:
+    """Add deterministic branch-loop scaffolding when the evidence warrants it."""
+    tools = {str(r.get("tool", "")) for r in results}
+    if domain != "mathematics" or "prime_gap_model_comparison" not in tools:
+        if domain != "physics" or "rydberg_scaling_comparison" not in tools:
+            if domain == "astronomy" and "cosmology_residual_comparison" in tools:
+                strengthened = list(hypotheses)
+                additions = [
+                    _hypothesis(
+                        "The redshift at which the low-z Hubble-law approximation crosses the recorded residual threshold is falsifiable by extending the same Planck18-parameter grid and recomputing the threshold decision.",
+                        0.58,
+                        "Rerun cosmology_residual_comparison with a denser redshift grid; weaken the approximation claim if the first threshold crossing or RMSE ordering changes under the same units.",
+                        novelty_status="finite_computational_observation",
+                        evidence_level="model_comparison",
+                    ),
+                    _hypothesis(
+                        "The second-order cosmographic approximation should reduce residual error relative to the linear Hubble-law baseline over the recorded finite grid if the low-redshift expansion is behaving as expected.",
+                        0.55,
+                        "Compare RMSE_Mpc and max_abs_percent_residual for the linear and second-order approximations; reject this finite-grid statement if the second-order approximation is not better on the same grid.",
+                        novelty_status="known_control",
+                        evidence_level="model_comparison",
+                    ),
+                    _hypothesis(
+                        "The AstroPy distance, blackbody, and constants calls are calibration controls and should not be used as observational evidence for the residual table without an external catalog or independent integrator.",
+                        0.50,
+                        "Repeat the distance table with an independent FLRW integrator or a catalog-backed supernova sample; reject observational interpretations until such external evidence is present.",
+                        novelty_status="known_control",
+                        evidence_level="verification",
+                    ),
+                ]
+                existing = {str(h.get("hypothesis", ""))[:80] for h in strengthened}
+                for addition in additions:
+                    if len(existing) >= 5:
+                        break
+                    key = addition["hypothesis"][:80]
+                    if key not in existing:
+                        strengthened.append(addition)
+                        existing.add(key)
+
+                non_claims = (
+                    "**Scope and non-claims.** This study does not claim a new "
+                    "cosmological parameter fit, does not measure Hubble tension, "
+                    "and does not use observational supernova or galaxy-catalog "
+                    "data. The residual table is a finite Planck18-parameter "
+                    "model-comparison control with calibration checks, without "
+                    "asserting novelty."
+                )
+                if "does not claim" not in discussion.lower():
+                    discussion = discussion.rstrip() + "\n\n" + non_claims
+
+                return discussion, strengthened
+
+            if domain == "biology" and "gc_at_panel_comparison" in tools:
+                strengthened = list(hypotheses)
+                additions = [
+                    _hypothesis(
+                        "The GC-rich panel distinction is falsifiable by adding matched-length external sequences and requiring the recorded confidence-interval decision for mean GC difference to remain directionally stable.",
+                        0.58,
+                        "Add matched-length GC-rich and AT-rich sequence panels from an external source; weaken the claim if the 95% confidence interval or bootstrap CI for mean GC difference crosses zero.",
+                        novelty_status="finite_computational_observation",
+                        evidence_level="statistical_inference",
+                    ),
+                    _hypothesis(
+                        "The composition contrast is confounded if coding-context controls become imbalanced, so ORF-like and motif-control counts must be recomputed before interpreting GC fraction as a panel-level signal.",
+                        0.55,
+                        "Rerun the panel comparison after balancing sequence length, ORF-like status, and motif counts; weaken the interpretation if the GC signal depends on those controls.",
+                        novelty_status="finite_computational_observation",
+                        evidence_level="controlled_comparison",
+                    ),
+                    _hypothesis(
+                        "The representative DNA and protein outputs are verification controls rather than evidence for taxonomic identity or molecular function unless external homologous sequences and experimental annotations are added.",
+                        0.50,
+                        "Treat sequence and protein summaries as controls; reject any functional or taxonomic interpretation unless independent annotated sequences reproduce the same result.",
+                        novelty_status="known_control",
+                        evidence_level="verification",
+                    ),
+                ]
+                existing = {str(h.get("hypothesis", ""))[:80] for h in strengthened}
+                for addition in additions:
+                    if len(existing) >= 5:
+                        break
+                    key = addition["hypothesis"][:80]
+                    if key not in existing:
+                        strengthened.append(addition)
+                        existing.add(key)
+
+                non_claims = (
+                    "**Scope and non-claims.** This study does not claim "
+                    "taxonomic identity, thermal adaptation, evolutionary "
+                    "selection, or protein function. The GC-rich/AT-rich "
+                    "comparison is a finite sequence-panel control with "
+                    "length, uncertainty, and coding-context checks, without "
+                    "asserting novelty."
+                )
+                if "does not claim" not in discussion.lower():
+                    discussion = discussion.rstrip() + "\n\n" + non_claims
+
+                return discussion, strengthened
+
+            if domain == "statistics" and "two_sample_effect_power" in tools:
+                strengthened = list(hypotheses)
+                additions = [
+                    _hypothesis(
+                        "The finite-sample group-difference claim is falsifiable by adding observations under the same protocol and recomputing the recorded confidence-interval decision rule.",
+                        0.58,
+                        "Add observations under the same protocol; weaken the claim if the 95% confidence interval or bootstrap CI crosses zero.",
+                        novelty_status="finite_computational_observation",
+                        evidence_level="statistical_inference",
+                    ),
+                    _hypothesis(
+                        "The standardized-effect interpretation is falsifiable by checking whether the effect size remains directionally stable rather than shrinking toward zero after additional data.",
+                        0.55,
+                        "Recompute Cohen's d and Hedges g after adding observations; weaken the interpretation if the standardized effect size shrinks toward zero.",
+                        novelty_status="finite_computational_observation",
+                        evidence_level="statistical_inference",
+                    ),
+                    _hypothesis(
+                        "The bootstrap-interval interpretation is falsifiable by rerunning the resampling control and checking whether the interval decision remains consistent with the Welch interval decision.",
+                        0.53,
+                        "Repeat the bootstrap CI calculation under the same protocol and compare its zero-crossing decision with the Welch confidence interval decision; weaken the interpretation if the decisions disagree.",
+                        novelty_status="finite_computational_observation",
+                        evidence_level="statistical_inference",
+                    ),
+                ]
+                existing = {str(h.get("hypothesis", ""))[:80] for h in strengthened}
+                for addition in additions:
+                    if len(existing) >= 5:
+                        break
+                    key = addition["hypothesis"][:80]
+                    if key not in existing:
+                        strengthened.append(addition)
+                        existing.add(key)
+
+                non_claims = (
+                    "**Scope and non-claims.** This study does not claim a "
+                    "population-level effect, does not assert external validity, "
+                    "and should not be treated as a preregistered experiment. "
+                    "The t-test, bootstrap CI, and power calculation are "
+                    "single-protocol finite-sample controls without asserting novelty."
+                )
+                if "does not claim" not in discussion.lower():
+                    discussion = discussion.rstrip() + "\n\n" + non_claims
+
+                return discussion, strengthened
+
+            return discussion, hypotheses
+
+        strengthened = list(hypotheses)
+        additions = [
+            _hypothesis(
+                "The inverse-square hydrogen control is falsifiable by replacing the analytic source with an independently implemented numerical Schrodinger solver and checking whether the RMSE remains at the recorded tolerance.",
+                0.56,
+                "Run an independent numerical solver on the same n grid; reject the control claim if the residual RMSE exceeds the recorded tolerance under the same units and precision.",
+                novelty_status="known_control",
+                evidence_level="model_comparison",
+            ),
+            _hypothesis(
+                "The quantum-defect perturbation should remain rejected for the recorded hydrogen control unless its RMSE becomes lower than the inverse-square RMSE on the same n grid.",
+                0.54,
+                "Rerun the comparison on the recorded hydrogen grid; reject this control statement only if the quantum-defect model is selected as Best model by RMSE.",
+                novelty_status="known_control",
+                evidence_level="model_comparison",
+            ),
+            _hypothesis(
+                "The Bell-state circuit result is an instrumentation control that should not be used as evidence for the Rydberg residuals without an explicit coupling experiment.",
+                0.50,
+                "Run a coupled experiment that links energy-level precision to circuit fidelity; reject this boundary statement only if the coupling experiment is present and quantitatively relates both outputs.",
+                novelty_status="known_control",
+                evidence_level="verification",
+            ),
+        ]
+        existing = {str(h.get("hypothesis", ""))[:80] for h in strengthened}
+        for addition in additions:
+            if len(strengthened) >= 5:
+                break
+            key = addition["hypothesis"][:80]
+            if key not in existing:
+                strengthened.append(addition)
+                existing.add(key)
+
+        non_claims = (
+            "**Scope and non-claims.** This study does not claim a new hydrogen "
+            "spectrum, does not assert a physical quantum-defect effect in "
+            "hydrogen, and should not be treated as experimental spectroscopy. "
+            "The quantum-defect comparison is a perturbation control, the Bell "
+            "circuit is a verification control, and the Rydberg fit is a "
+            "finite-grid analytic check without asserting novelty."
+        )
+        if "does not claim" not in discussion.lower():
+            discussion = discussion.rstrip() + "\n\n" + non_claims
+
+        return discussion, strengthened
+
+    strengthened = list(hypotheses)
+    additions = [
+        _hypothesis(
+            "The max-gap model ordering is falsifiable by adding a larger limit to the same prime-gap model comparison and checking whether the recorded best-by-RMSE ordering changes.",
+            0.58,
+            "Rerun prime_gap_model_comparison with one larger limit; reject the finite-range stability claim if the best max-gap model by RMSE changes or the normalized residual trend no longer contains the new observed point.",
+            novelty_status="finite_computational_observation",
+            evidence_level="model_comparison",
+        ),
+        _hypothesis(
+            "The gap-enumeration result is a toolchain-control claim that is falsifiable by an independent prime enumeration backend reproducing the same prime counts and max-gap locations.",
+            0.52,
+            "Compute the same limit series with an independent enumeration implementation; reject the control claim if prime counts or max-gap locations disagree with the recorded outputs.",
+            novelty_status="known_control",
+            evidence_level="verification",
+        ),
+    ]
+    existing = {str(h.get("hypothesis", ""))[:80] for h in strengthened}
+    for addition in additions:
+        if len(strengthened) >= 5:
+            break
+        key = addition["hypothesis"][:80]
+        if key not in existing:
+            strengthened.append(addition)
+            existing.add(key)
+
+    non_claims = (
+        "**Scope and non-claims.** This study does not claim a proof of "
+        "Cramer-style asymptotic behavior, does not assert a novel theorem, "
+        "and should not be treated as methodological independence of the gap "
+        "statistics. The SymPy result is a verification control and calibration "
+        "control for prime counts, while the gap fits are finite-range, "
+        "single-method observations without asserting novelty."
+    )
+    if "does not claim" not in discussion.lower():
+        discussion = discussion.rstrip() + "\n\n" + non_claims
+
+    return discussion, strengthened
+
+
 def generate_hypothesis(domain: str, results: list[dict]) -> list[dict]:
     """Generate novel hypotheses from computational results.
     
@@ -248,11 +569,9 @@ def generate_hypothesis(domain: str, results: list[dict]) -> list[dict]:
         tool = r.get("tool", "")
         result_text = r.get("result", "")
         
-        # Extract a tool category (e.g., "prime" from "prime_gap_analysis")
-        # to avoid generating the same hypothesis for multiple runs of same tool
-        tool_words = tool.split("_")
-        # Use first meaningful word as category
-        category = "_".join(tool_words[:2]) if len(tool_words) >= 2 else tool
+        # Extract a tool category to avoid generating the same hypothesis for
+        # repeated parameter sweeps while keeping distinct model controls.
+        category = _tool_category(tool)
         
         if category in seen_tool_categories:
             continue
@@ -262,7 +581,15 @@ def generate_hypothesis(domain: str, results: list[dict]) -> list[dict]:
         numbers = re.findall(r'[-+]?\d*\.\d+|\d+', result_text)
         
         if domain == "mathematics":
-            if "prime_gap" in tool:
+            if "prime_gap_model_comparison" in tool:
+                hypotheses.append(_hypothesis(
+                    "Finite-range prime-gap observations can be tested against explicit log(N) and log(N)^2 controls; the reported RMSE and max_gap/log(N)^2 trend determine whether the model-comparison diagnostic is stable over the sampled limits.",
+                    0.64,
+                    "Extend the limit grid by at least one decade and require the max_gap/log(N)^2 value to remain within the recorded residual trend; compare RMSE for log(N) versus log(N)^2 before claiming any finite-range pattern.",
+                    novelty_status="finite_computational_observation",
+                    evidence_level="model_comparison",
+                ))
+            elif "prime_gap" in tool:
                 hypotheses.append(_hypothesis(
                     "Finite-range prime-gap data may exhibit a measurable correction to simple Cramér-style geometric predictions when gaps are normalized by local log(p).",
                     0.62,
@@ -302,7 +629,15 @@ def generate_hypothesis(domain: str, results: list[dict]) -> list[dict]:
                 ))
                 
         elif domain == "physics":
-            if "quantum" in tool or "energy" in tool:
+            if "rydberg_scaling_comparison" in tool:
+                hypotheses.append(_hypothesis(
+                    "The hydrogen Rydberg series is a precision-control dataset in which inverse-square scaling should outperform a quantum-defect perturbation under the recorded RMSE comparison.",
+                    0.58,
+                    "Extend the n grid or replace the dataset with a documented non-hydrogenic spectral series; reject the inverse-square control only if the recorded RMSE tolerance is exceeded under the same units and precision.",
+                    novelty_status="known_control",
+                    evidence_level="model_comparison",
+                ))
+            elif "quantum" in tool or "energy" in tool:
                 hypotheses.append(_hypothesis(
                     "The computed hydrogen energy levels provide a precision-control dataset for Rydberg scaling; apparent high-n deviations must be treated as rounding artifacts unless full-precision residuals exceed numerical tolerance.",
                     0.55,
@@ -312,7 +647,29 @@ def generate_hypothesis(domain: str, results: list[dict]) -> list[dict]:
                 ))
                 
         elif domain == "chemistry":
-            if "molecular_orbital" in tool:
+            if "bond_alternated_polyene_scaling" in tool:
+                asymptotic_match = re.search(
+                    r"asymptotic_gap_estimate\s*=\s*([0-9.]+)\s*eV",
+                    result_text,
+                    flags=re.IGNORECASE,
+                )
+                asymptotic_gap = asymptotic_match.group(1) if asymptotic_match else "the recorded finite"
+                hypotheses.append(_hypothesis(
+                    f"Bond alternation changes the limiting behavior of the tested polyene model from uniform-chain gap closure to a finite gap near {asymptotic_gap} eV.",
+                    0.70,
+                    "Extend the alternating-coupling series to larger n and vary beta_strong/beta_weak; the hypothesis is weakened if the fitted finite-gap intercept does not track the recorded asymptotic_gap_estimate.",
+                    novelty_status="finite_computational_observation",
+                    evidence_level="model_comparison",
+                ))
+            elif "huckel_polyene_scaling" in tool:
+                hypotheses.append(_hypothesis(
+                    "Uniform finite-chain Hückel polyenes show near-inverse-length HOMO-LUMO gap decay over the tested range, consistent with the sine-derived analytical baseline.",
+                    0.70,
+                    "Compare inverse-linear, inverse-quadratic, and power-law fits against the recorded Hückel gap series; the finite-range claim is weakened if an alternative fit reduces RMSE without adding unsupported parameters.",
+                    novelty_status="finite_computational_observation",
+                    evidence_level="model_fit",
+                ))
+            elif "molecular_orbital" in tool:
                 hypotheses.append(_hypothesis(
                     "The HOMO-LUMO gap of the tested linear conjugated systems follows an inverse-length trend that can be modeled as gap(n) = a/n + b over the sampled range.",
                     0.70,
@@ -336,34 +693,64 @@ def generate_hypothesis(domain: str, results: list[dict]) -> list[dict]:
                 ))
                 
         elif domain == "biology":
-            if "dna" in tool:
+            if "gc_at_panel_comparison" in tool:
                 hypotheses.append(_hypothesis(
-                    "The GC content and compositional bias of the analyzed sequence suggest evolutionary selection pressure consistent with thermal adaptation, potentially useful for phylogenetic classification.",
-                    0.74,
-                    "Compare GC content across homologous sequences from thermophilic vs. mesophilic organisms using chi-squared test.",
+                    "The tested GC-rich panel should remain distinguishable from the AT-rich control panel only while the recorded confidence intervals exclude zero and the coding-context controls remain balanced.",
+                    0.62,
+                    "Add matched-length sequences under the same protocol; weaken the panel-distinction claim if the 95% CI crosses zero, the bootstrap CI crosses zero, or ORF/motif controls become imbalanced.",
+                    novelty_status="finite_computational_observation",
+                    evidence_level="statistical_inference",
+                ))
+            elif "dna" in tool:
+                hypotheses.append(_hypothesis(
+                    "The representative DNA sequence provides a composition and reverse-complement control for the panel analysis, but any thermal, taxonomic, or evolutionary interpretation requires external homologous sequences.",
+                    0.52,
+                    "Compare the recorded composition against independently sourced homologous panels; reject sequence-level biological interpretation if the external panels do not reproduce the GC contrast.",
+                    novelty_status="known_control",
+                    evidence_level="verification",
                 ))
             elif "protein" in tool:
                 hypotheses.append(_hypothesis(
-                    "The protein's hydropathy profile indicates membrane-binding potential, suggesting a role in signal transduction that could be validated through fluorescence microscopy.",
-                    0.66,
-                    "Express GFP-tagged protein in cell culture and observe localization patterns using confocal microscopy.",
+                    "The protein hydropathy and charge summary is a context control for sequence-derived claims and should not be promoted to localization or function without annotated homologs or experimental assays.",
+                    0.50,
+                    "Compare the sequence against annotated homologous proteins and validate localization or function experimentally before making any biological-function claim.",
+                    novelty_status="known_control",
+                    evidence_level="verification",
                 ))
                 
         elif domain == "statistics":
-            hypotheses.append(_hypothesis(
-                "The observed statistical properties suggest an underlying generative process that could be modeled using Bayesian inference, enabling prediction of future observations with quantified uncertainty.",
-                0.70,
-                "Fit candidate distributions using maximum likelihood estimation and compare using AIC/BIC model selection.",
-            ))
+            if "two_sample_effect_power" in tool:
+                hypotheses.append(_hypothesis(
+                    "The two-group difference should remain interpretable only while the recorded confidence intervals exclude zero and the standardized effect size remains stable under additional observations.",
+                    0.62,
+                    "Add new observations under the same measurement protocol; weaken the group-difference claim if the 95% CI crosses zero, bootstrap CI crosses zero, or Cohen's d shrinks toward zero.",
+                    novelty_status="finite_computational_observation",
+                    evidence_level="statistical_inference",
+                ))
+            else:
+                hypotheses.append(_hypothesis(
+                    "The observed statistical properties suggest an underlying generative process that could be modeled using Bayesian inference, enabling prediction of future observations with quantified uncertainty.",
+                    0.70,
+                    "Fit candidate distributions using maximum likelihood estimation and compare using AIC/BIC model selection.",
+                ))
 
         elif domain == "astronomy":
-            hypotheses.append(_hypothesis(
-                "The reported astronomy calculations should be treated as calibration controls until replicated against catalog-backed stellar data with observational uncertainties.",
-                0.50,
-                "Repeat the analysis using a documented stellar catalog, stratify by spectral class, and compare against established astrophysical scaling relations.",
-                novelty_status="known_control",
-                evidence_level="verification",
-            ))
+            if "cosmology_residual_comparison" in tool:
+                hypotheses.append(_hypothesis(
+                    "The recorded Planck18-parameter residual table should identify a finite redshift range where the linear Hubble-law approximation remains acceptable before crossing the specified percent-residual threshold.",
+                    0.62,
+                    "Rerun the residual comparison on a denser redshift grid; weaken the finite-range approximation claim if the threshold crossing or RMSE ordering changes.",
+                    novelty_status="finite_computational_observation",
+                    evidence_level="model_comparison",
+                ))
+            else:
+                hypotheses.append(_hypothesis(
+                    "The reported astronomy calculations should be treated as calibration controls until replicated against catalog-backed data with observational uncertainties.",
+                    0.50,
+                    "Repeat the analysis using a documented astronomy catalog or an independent physical implementation, include uncertainty estimates, and compare against established astrophysical scaling relations.",
+                    novelty_status="known_control",
+                    evidence_level="verification",
+                ))
 
         elif domain == "climate":
             hypotheses.append(_hypothesis(
@@ -425,6 +812,9 @@ def generate_references(domain: str, results: list[dict]) -> list[str]:
             tool_refs.append("Pomerance, C. (2009). Prime Numbers. Springer Berlin Heidelberg.")
         elif "quantum" in tool or "energy" in tool:
             tool_refs.append("Griffiths, D.J. (2018). Introduction to Quantum Mechanics. Cambridge University Press.")
+        elif "huckel" in tool or "polyene" in tool:
+            tool_refs.append("Coulson, C.A., O'Leary, B. & Mallion, R.B. (1978). Hückel Theory for Organic Chemists. Academic Press.")
+            tool_refs.append("Autschbach, J. (2007). Why the particle-in-a-box model works well for cyanine dyes but not for conjugated polyenes. Journal of Chemical Education, 84(11), 1840-1845. doi:10.1021/ed084p1840.")
         elif "dna" in tool:
             tool_refs.append("Cock, P.J.A. et al. (2009). Biopython: freely available Python tools for computational molecular biology. Bioinformatics, 25(11), 1422-1423.")
         elif "protein" in tool:
@@ -747,6 +1137,8 @@ class PaperEnhancer:
             except Exception as exc:
                 log.warning("paper_enhancer.evolution_failed", error=str(exc))
 
+        hypotheses = _filter_ungrounded_hypotheses(hypotheses, successful)
+
         # 2. ENHANCE DISCUSSION
         #    Preferred path (AMY_USE_LLM_ENHANCER=1): an LLM writes the Discussion
         #    grounded in the real tool outputs + provenance — this is the Sakana
@@ -778,6 +1170,10 @@ class PaperEnhancer:
             enhanced_discussion = self._build_discussion(
                 domain_key, successful, domain_data, hypotheses
             )
+
+        enhanced_discussion, hypotheses = _strengthen_branch_contract(
+            domain_key, enhanced_discussion, hypotheses, successful
+        )
         
         # 3. GENERATE REFERENCES — Real academic citations
         references = generate_references(domain_key, successful)
@@ -1084,8 +1480,7 @@ class PaperEnhancer:
         tool_groups = {}
         for r in results:
             tool = r.get("tool", "")
-            # Extract tool category (first 2 words of tool name)
-            tool_cat = "_".join(tool.split("_")[:2])
+            tool_cat = _tool_category(tool)
             if tool_cat not in tool_groups:
                 tool_groups[tool_cat] = []
             tool_groups[tool_cat].append(r)

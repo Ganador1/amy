@@ -51,6 +51,16 @@ OPEN_ENDED_DESC = (
 )
 
 
+def _new_tool_results(history, start_index: int) -> list[dict]:
+    """Return tool results appended after start_index for list/deque histories."""
+    items = list(history)
+    if start_index < 0:
+        start_index = 0
+    if start_index > len(items):
+        return []
+    return items[start_index:]
+
+
 def _summarize_result(res) -> str:
     if res is None:
         return "(none)"
@@ -120,7 +130,7 @@ async def probe(cycles: int, goal: str | None, open_ended: bool, verbose: bool,
         action = getattr(hb, "_last_action_type", "?")
 
         # Any new tool results this cycle?
-        new_tools = hb._tool_results_history[n_tools_before:]
+        new_tools = _new_tool_results(hb._tool_results_history, n_tools_before)
         for tr in new_tools:
             tname = tr.get("tool") or tr.get("tool_name") or "?"
             tout = str(tr.get("result") or tr.get("output") or tr.get("raw") or tr)[:120]

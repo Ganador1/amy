@@ -1,0 +1,188 @@
+{
+  "ok": true,
+  "domain": "biology",
+  "model": "glm-5.2",
+  "duration_seconds": 180.776,
+  "env_flags": {
+    "AMY_USE_LLM_ENHANCER": "1",
+    "AMY_USE_LLM_JUDGE": "1",
+    "AMY_USE_EVOLUTION": "1",
+    "AMY_ENHANCER_MODEL": "glm-5.2",
+    "AMY_RANKING_MODEL": "glm-5.2"
+  },
+  "tool_results": [
+    {
+      "tool": "gc_at_panel_comparison",
+      "tool_name": "gc_at_panel_comparison",
+      "input": "gc=ATGGCGGCGGCGGCGGCGGCGGCGGCGTAA,ATGGCGGCGGCGGCGGCGGCGGCGGCATGA,ATGGCGGCGGCGGCGGCGGCGGCAGAATAG,ATGGCGGCGGCGGCGGCGGCGGCCGATTGA;at=ATGATAATAATAATAATAATAATAATATAA,ATGATTATTATTATTATTATTATTATATAG,ATGAATAATAATAATAATAATAATATTTGA,ATGTATTATTATTATTATTATTATTATTAA",
+      "description": "GC-rich versus AT-rich panel effect size, CI, bootstrap, and coding-context controls",
+      "result": "GC-rich versus AT-rich panel comparison:\n  sample size n_gc=4, n_at=4\n  gc_panel fractions=0.833333,0.833333,0.766667,0.800000\n  at_panel fractions=0.033333,0.066667,0.066667,0.033333\n  mean_gc_fraction=0.808333; mean_at_fraction=0.050000\n  mean_gc_difference(gc-at)=0.758333\n  Welch t-statistic=40.696437, p-value=0.000000, df=4.927007\n  95% CI for mean_gc_difference: [0.710219, 0.806448]\n  Cohen's d=28.776727; Hedges g=25.023241; effect size interpretation=standardized GC-fraction difference\n  bootstrap_ci_seed=12345; bootstrap 95% CI for mean_gc_difference: [0.725000, 0.791667]\n  length_control: mean_length_gc=30.000000, mean_length_at=30.000000, min_length=30, max_length=30\n  coding_context_control: gc_orf_like=4/4, at_orf_like=4/4, gc_motif_hits=5, at_motif_hits=4\n  Falsifiable next check: add matched-length sequences from an external source; weaken the GC-panel distinction if the 95% CI crosses 0, the bootstrap CI crosses 0, or coding-context controls become imbalanced.",
+      "success": true,
+      "duration_seconds": 25.199,
+      "experiment_id": "biology_gc_at_panel_comparison_20260703_165708",
+      "provenance_path": "data/experiments/biology_gc_at_panel_comparison_20260703_165708/provenance.json",
+      "assessment": {
+        "usable": true,
+        "evidence_level": "strong",
+        "markers": [],
+        "warnings": [],
+        "preview": "GC-rich versus AT-rich panel comparison:\n  sample size n_gc=4, n_at=4\n  gc_panel fractions=0.833333,0.833333,0.766667,0.800000\n  at_panel fractions=0.033333,0.066667,0.066667,0.033333\n  mean_gc_fraction=0.808333; mean_at_fraction=0.050000\n  mean_gc_difference(gc-at)=0.758333\n  Welch t-statistic=40.696437, p-value=0.000000, df=4.927007\n  95% CI for mean_gc_difference: [0.710219, 0.806448]\n  Cohen's d=28.776727; Hedges g=25.023241; effect size interpretation=standardized GC-fraction difference\n  b"
+      }
+    },
+    {
+      "tool": "dna_analyzer",
+      "tool_name": "dna_analyzer",
+      "input": "ATGGCGGCGGCGGCGGCGGCGGCGGCGTAA",
+      "description": "Representative GC-rich DNA composition control",
+      "result": "DNA Sequence Analysis:\n  Length: 30 bp\n  Composition: A=3, T=2, G=17, C=8\n  GC content: 83.3%\n  Estimated Tm: 110°C (Wallace rule)\n  Reverse complement: TTACGCCGCCGCCGCCGCCGCCGCCGCCAT",
+      "success": true,
+      "duration_seconds": 0.009,
+      "experiment_id": "biology_dna_analyzer_20260703_165708",
+      "provenance_path": "data/experiments/biology_dna_analyzer_20260703_165708/provenance.json",
+      "assessment": {
+        "usable": true,
+        "evidence_level": "strong",
+        "markers": [],
+        "warnings": [],
+        "preview": "DNA Sequence Analysis:\n  Length: 30 bp\n  Composition: A=3, T=2, G=17, C=8\n  GC content: 83.3%\n  Estimated Tm: 110°C (Wallace rule)\n  Reverse complement: TTACGCCGCCGCCGCCGCCGCCGCCGCCAT"
+      }
+    },
+    {
+      "tool": "dnabert2_analysis",
+      "tool_name": "dnabert2_analysis",
+      "input": "motifs:TATAATAAATTGACA",
+      "description": "DNABERT2-style motif positive-control calibration",
+      "result": "DNABERT2 motif analysis (deterministic, no model inference):\n  length: 15 bp\n  base composition: A=8 T=5 G=1 C=1\n  GC content: 13.3%\n  estimated Tm: 25.5 °C  (Marmur (50 mM Na+))\n  motifs detected: 3\n    TATAAT  (−10 box (Pribnow); transcription initiation)  at [0]\n    TATA  (TATA-like (−10 weak); transcription initiation)  at [0]\n    TTGACA  (−35 box (σ70); RNA polymerase recruitment)  at [9]\n  call: likely σ70 prokaryotic promoter (−10 + −35 boxes present)",
+      "success": true,
+      "duration_seconds": 0.007,
+      "experiment_id": "biology_dnabert2_analysis_20260703_165708",
+      "provenance_path": "data/experiments/biology_dnabert2_analysis_20260703_165708/provenance.json",
+      "assessment": {
+        "usable": true,
+        "evidence_level": "strong",
+        "markers": [],
+        "warnings": [],
+        "preview": "DNABERT2 motif analysis (deterministic, no model inference):\n  length: 15 bp\n  base composition: A=8 T=5 G=1 C=1\n  GC content: 13.3%\n  estimated Tm: 25.5 °C  (Marmur (50 mM Na+))\n  motifs detected: 3\n    TATAAT  (−10 box (Pribnow); transcription initiation)  at [0]\n    TATA  (TATA-like (−10 weak); transcription initiation)  at [0]\n    TTGACA  (−35 box (σ70); RNA polymerase recruitment)  at [9]\n  call: likely σ70 prokaryotic promoter (−10 + −35 boxes present)"
+      }
+    },
+    {
+      "tool": "hypothesis_tester",
+      "tool_name": "hypothesis_tester",
+      "input": "ttest:[0.833333,0.833333,0.766667,0.800000]:[0.033333,0.066667,0.066667,0.033333]",
+      "description": "Independent t-test on GC-fraction panels",
+      "result": "T-test: t-statistic=40.6965, p-value=0.0000",
+      "success": true,
+      "duration_seconds": 0.008,
+      "experiment_id": "biology_hypothesis_tester_20260703_165708",
+      "provenance_path": "data/experiments/biology_hypothesis_tester_20260703_165708/provenance.json",
+      "assessment": {
+        "usable": true,
+        "evidence_level": "strong",
+        "markers": [],
+        "warnings": [],
+        "preview": "T-test: t-statistic=40.6965, p-value=0.0000"
+      }
+    },
+    {
+      "tool": "protein_properties",
+      "tool_name": "protein_properties",
+      "input": "MKTAYIAKQRQISFVKSHFSRQLEERLGLIEVQ",
+      "description": "Protein property context control",
+      "result": "Protein Properties (33 residues):\n  Molecular weight: 3936.4 Da\n  Avg hydropathy (GRAVY): -0.40\n  Charged residues: +7, -3, net=4\n  Classification: Hydrophilic",
+      "success": true,
+      "duration_seconds": 0.006,
+      "experiment_id": "biology_protein_properties_20260703_165708",
+      "provenance_path": "data/experiments/biology_protein_properties_20260703_165708/provenance.json",
+      "assessment": {
+        "usable": true,
+        "evidence_level": "strong",
+        "markers": [],
+        "warnings": [],
+        "preview": "Protein Properties (33 residues):\n  Molecular weight: 3936.4 Da\n  Avg hydropathy (GRAVY): -0.40\n  Charged residues: +7, -3, net=4\n  Classification: Hydrophilic"
+      }
+    }
+  ],
+  "failed_results": [],
+  "experiment_ids": [
+    "biology_gc_at_panel_comparison_20260703_165708",
+    "biology_dna_analyzer_20260703_165708",
+    "biology_dnabert2_analysis_20260703_165708",
+    "biology_hypothesis_tester_20260703_165708",
+    "biology_protein_properties_20260703_165708"
+  ],
+  "provenance_hash_ok": {
+    "biology_gc_at_panel_comparison_20260703_165708": true,
+    "biology_dna_analyzer_20260703_165708": true,
+    "biology_dnabert2_analysis_20260703_165708": true,
+    "biology_hypothesis_tester_20260703_165708": true,
+    "biology_protein_properties_20260703_165708": true
+  },
+  "paper": {
+    "title": "E2E Validation: GC-rich versus AT-rich sequence panels with coding-context controls",
+    "markdown_path": "/Volumes/Ganador disk/A.M.Y/experiments/e2e_validation/papers/E2E_Validation_GC-rich_versus_AT-rich_sequence_panels_with_c_20260703_125943.md",
+    "pdf_path": "/Volumes/Ganador disk/A.M.Y/experiments/e2e_validation/papers/E2E_Validation_GC-rich_versus_AT-rich_sequence_panels_with_c_20260703_125943.pdf",
+    "latex_path": "/Volumes/Ganador disk/A.M.Y/experiments/e2e_validation/papers/E2E_Validation_GC-rich_versus_AT-rich_sequence_panels_with_c_20260703_125943.tex",
+    "word_count": 2534,
+    "sections": 5,
+    "publication_status": "published",
+    "rejection_reasons": [],
+    "internal_review_path": "/Volumes/Ganador disk/A.M.Y/experiments/e2e_validation/papers/E2E_Validation_GC-rich_versus_AT-rich_sequence_panels_with_c_20260703_125943.review.json",
+    "grounding_repair": {
+      "repairs": 0,
+      "items": [],
+      "experiment_ids": [
+        "biology_gc_at_panel_comparison_20260703_165708",
+        "biology_dna_analyzer_20260703_165708",
+        "biology_dnabert2_analysis_20260703_165708",
+        "biology_hypothesis_tester_20260703_165708",
+        "biology_protein_properties_20260703_165708"
+      ],
+      "sections_checked": [
+        "Abstract",
+        "Discussion"
+      ]
+    }
+  },
+  "reflection": {
+    "pass_overall": true,
+    "score": 100.0,
+    "issues": [],
+    "suggestions": [],
+    "annotations": {
+      "n_issues": 0,
+      "n_high": 0,
+      "n_medium": 0,
+      "n_low": 0,
+      "experiment_ids": [
+        "biology_gc_at_panel_comparison_20260703_165708",
+        "biology_dna_analyzer_20260703_165708",
+        "biology_dnabert2_analysis_20260703_165708",
+        "biology_hypothesis_tester_20260703_165708",
+        "biology_protein_properties_20260703_165708"
+      ]
+    }
+  },
+  "rubric": {
+    "total": 100.0,
+    "per_dim": {
+      "provenance_integrity": 10.0,
+      "tool_diversity": 10.0,
+      "falsifiability": 15.0,
+      "explicit_limitations": 10.0,
+      "numerical_claims_grounded": 15.0,
+      "citation_accuracy": 10.0,
+      "abstract_uniqueness": 10.0,
+      "statistical_rigor": 10.0,
+      "reproducibility_info": 10.0
+    }
+  },
+  "discussion": {
+    "total": 86.611,
+    "word_count": 861,
+    "claim_grounding": 25.0,
+    "limitation_cover": 17.293,
+    "alternatives": 12.97,
+    "calibration": 13.478,
+    "reasoning_depth": 17.87
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "ok": true,
+  "domain": "statistics",
+  "model": "glm-5.2",
+  "duration_seconds": 113.879,
+  "env_flags": {
+    "AMY_USE_LLM_ENHANCER": "1",
+    "AMY_USE_LLM_JUDGE": "1",
+    "AMY_USE_EVOLUTION": "1",
+    "AMY_ENHANCER_MODEL": "glm-5.2",
+    "AMY_RANKING_MODEL": "glm-5.2"
+  },
+  "tool_results": [
+    {
+      "tool": "numpy_statistics",
+      "tool_name": "numpy_statistics",
+      "input": "summary:[12.1,11.8,12.4,12.0,11.9,12.3,12.2]",
+      "description": "Series A descriptive statistics",
+      "result": "Mean: 12.1000, Std: 0.2000, Min: 11.8000, Max: 12.4000",
+      "success": true,
+      "duration_seconds": 25.769,
+      "experiment_id": "statistics_numpy_statistics_20260703_164544",
+      "provenance_path": "data/experiments/statistics_numpy_statistics_20260703_164544/provenance.json",
+      "assessment": {
+        "usable": true,
+        "evidence_level": "strong",
+        "markers": [],
+        "warnings": [],
+        "preview": "Mean: 12.1000, Std: 0.2000, Min: 11.8000, Max: 12.4000"
+      }
+    },
+    {
+      "tool": "hypothesis_tester",
+      "tool_name": "hypothesis_tester",
+      "input": "ttest:[12.1,11.8,12.4,12.0]:[12.9,13.1,12.7,13.0]",
+      "description": "Two-sample t-test",
+      "result": "T-test: t-statistic=-5.6149, p-value=0.0014",
+      "success": true,
+      "duration_seconds": 0.013,
+      "experiment_id": "statistics_hypothesis_tester_20260703_164544",
+      "provenance_path": "data/experiments/statistics_hypothesis_tester_20260703_164544/provenance.json",
+      "assessment": {
+        "usable": true,
+        "evidence_level": "strong",
+        "markers": [],
+        "warnings": [],
+        "preview": "T-test: t-statistic=-5.6149, p-value=0.0014"
+      }
+    },
+    {
+      "tool": "two_sample_effect_power",
+      "tool_name": "two_sample_effect_power",
+      "input": "[12.1,11.8,12.4,12.0];[12.9,13.1,12.7,13.0]",
+      "description": "Two-sample effect size, confidence interval, bootstrap CI, and observed power",
+      "result": "Two-sample effect and power summary:\n  sample size n1=4, n2=4\n  group1 mean=12.075000, standard deviation=0.250000\n  group2 mean=12.925000, standard deviation=0.170783\n  mean_difference(group2-group1)=0.850000\n  Welch t-statistic=-5.614915, p-value=0.002055, df=5.299270\n  95% CI for mean_difference: [0.467377, 1.232623]\n  Cohen's d=3.970345; Hedges g=3.452474; effect size interpretation=standardized mean difference\n  bootstrap_ci_seed=12345; bootstrap 95% CI for mean_difference: [0.600000, 1.100000]\n  observed_power=0.999871 using normal approximation, alpha=0.05, two-sided\n  Falsifiable next check: add new observations using the same measurement protocol; the group-difference claim is weakened if the 95% CI crosses 0 or the effect size shrinks toward 0.",
+      "success": true,
+      "duration_seconds": 0.083,
+      "experiment_id": "statistics_two_sample_effect_power_20260703_164544",
+      "provenance_path": "data/experiments/statistics_two_sample_effect_power_20260703_164544/provenance.json",
+      "assessment": {
+        "usable": true,
+        "evidence_level": "strong",
+        "markers": [],
+        "warnings": [],
+        "preview": "Two-sample effect and power summary:\n  sample size n1=4, n2=4\n  group1 mean=12.075000, standard deviation=0.250000\n  group2 mean=12.925000, standard deviation=0.170783\n  mean_difference(group2-group1)=0.850000\n  Welch t-statistic=-5.614915, p-value=0.002055, df=5.299270\n  95% CI for mean_difference: [0.467377, 1.232623]\n  Cohen's d=3.970345; Hedges g=3.452474; effect size interpretation=standardized mean difference\n  bootstrap_ci_seed=12345; bootstrap 95% CI for mean_difference: [0.600000, 1.100"
+      }
+    },
+    {
+      "tool": "numpy_correlation",
+      "tool_name": "numpy_correlation",
+      "input": "correlation:[1,2,3,4,5]:[2,4,6,8,10]",
+      "description": "Positive-control Pearson correlation",
+      "result": "Pearson correlation coefficient: 1.000000 (n=5)",
+      "success": true,
+      "duration_seconds": 0.007,
+      "experiment_id": "statistics_numpy_correlation_20260703_164544",
+      "provenance_path": "data/experiments/statistics_numpy_correlation_20260703_164544/provenance.json",
+      "assessment": {
+        "usable": true,
+        "evidence_level": "strong",
+        "markers": [],
+        "warnings": [],
+        "preview": "Pearson correlation coefficient: 1.000000 (n=5)"
+      }
+    }
+  ],
+  "failed_results": [],
+  "experiment_ids": [
+    "statistics_numpy_statistics_20260703_164544",
+    "statistics_hypothesis_tester_20260703_164544",
+    "statistics_two_sample_effect_power_20260703_164544",
+    "statistics_numpy_correlation_20260703_164544"
+  ],
+  "provenance_hash_ok": {
+    "statistics_numpy_statistics_20260703_164544": true,
+    "statistics_hypothesis_tester_20260703_164544": true,
+    "statistics_two_sample_effect_power_20260703_164544": true,
+    "statistics_numpy_correlation_20260703_164544": true
+  },
+  "paper": {
+    "title": "E2E Validation: Two-sample inference with effect size and uncertainty controls",
+    "markdown_path": "/Volumes/Ganador disk/A.M.Y/experiments/e2e_validation/papers/E2E_Validation_Two-sample_inference_with_effect_size_and_unc_20260703_124712.md",
+    "pdf_path": "/Volumes/Ganador disk/A.M.Y/experiments/e2e_validation/papers/E2E_Validation_Two-sample_inference_with_effect_size_and_unc_20260703_124712.pdf",
+    "latex_path": "/Volumes/Ganador disk/A.M.Y/experiments/e2e_validation/papers/E2E_Validation_Two-sample_inference_with_effect_size_and_unc_20260703_124712.tex",
+    "word_count": 2372,
+    "sections": 5,
+    "publication_status": "published",
+    "rejection_reasons": [],
+    "internal_review_path": "/Volumes/Ganador disk/A.M.Y/experiments/e2e_validation/papers/E2E_Validation_Two-sample_inference_with_effect_size_and_unc_20260703_124712.review.json",
+    "grounding_repair": {
+      "repairs": 0,
+      "items": [],
+      "experiment_ids": [
+        "statistics_numpy_statistics_20260703_164544",
+        "statistics_hypothesis_tester_20260703_164544",
+        "statistics_two_sample_effect_power_20260703_164544",
+        "statistics_numpy_correlation_20260703_164544"
+      ],
+      "sections_checked": [
+        "Abstract",
+        "Discussion"
+      ]
+    }
+  },
+  "reflection": {
+    "pass_overall": true,
+    "score": 100.0,
+    "issues": [],
+    "suggestions": [],
+    "annotations": {
+      "n_issues": 0,
+      "n_high": 0,
+      "n_medium": 0,
+      "n_low": 0,
+      "experiment_ids": [
+        "statistics_numpy_statistics_20260703_164544",
+        "statistics_hypothesis_tester_20260703_164544",
+        "statistics_two_sample_effect_power_20260703_164544",
+        "statistics_numpy_correlation_20260703_164544"
+      ]
+    }
+  },
+  "rubric": {
+    "total": 100.0,
+    "per_dim": {
+      "provenance_integrity": 10.0,
+      "tool_diversity": 10.0,
+      "falsifiability": 15.0,
+      "explicit_limitations": 10.0,
+      "numerical_claims_grounded": 15.0,
+      "citation_accuracy": 10.0,
+      "abstract_uniqueness": 10.0,
+      "statistical_rigor": 10.0,
+      "reproducibility_info": 10.0
+    }
+  },
+  "discussion": {
+    "total": 84.241,
+    "word_count": 928,
+    "claim_grounding": 25.0,
+    "limitation_cover": 16.398,
+    "alternatives": 8.26,
+    "calibration": 16.02,
+    "reasoning_depth": 18.563
+  }
+}

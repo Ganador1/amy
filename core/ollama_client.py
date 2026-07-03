@@ -38,6 +38,37 @@ def _load_env():
     _env_loaded = True
 
 
+def get_ollama_cloud_api_keys() -> list[str]:
+    """Return Ollama Cloud keys in documented priority order.
+
+    ``OLLAMA_CLOUD_API_KEY`` is the primary key documented in README/.env.
+    ``OLLAMA_CLOUD_API_KEY_1`` is retained only as a legacy alias when the
+    primary key is absent, and ``OLLAMA_CLOUD_API_KEY_2`` is the documented
+    failover key. Duplicates are removed while preserving order.
+    """
+    _load_env()
+    primary = os.environ.get("OLLAMA_CLOUD_API_KEY", "")
+    legacy_primary = os.environ.get("OLLAMA_CLOUD_API_KEY_1", "")
+    ordered = [
+        primary or legacy_primary,
+        os.environ.get("OLLAMA_CLOUD_API_KEY_2", ""),
+    ]
+    keys: list[str] = []
+    seen: set[str] = set()
+    for key in ordered:
+        key = key.strip()
+        if key and key not in seen:
+            keys.append(key)
+            seen.add(key)
+    return keys
+
+
+def get_primary_ollama_cloud_api_key() -> str:
+    """Return the first configured Ollama Cloud key, or an empty string."""
+    keys = get_ollama_cloud_api_keys()
+    return keys[0] if keys else ""
+
+
 class OllamaCloudClient:
     """
     Async client for Ollama Cloud API with dual-key round-robin.
@@ -52,15 +83,12 @@ class OllamaCloudClient:
         self.base_url = config.get("base_url", "https://ollama.com/api")
         self.config = config
 
-        # Load API keys (supports single or dual key config)
-        key1 = os.environ.get("OLLAMA_CLOUD_API_KEY_1", "") or os.environ.get("OLLAMA_CLOUD_API_KEY", "")
-        key2 = os.environ.get("OLLAMA_CLOUD_API_KEY_2", "")
-
-        self._keys = [k for k in [key1, key2] if k]
+        # Load API keys (primary + legacy alias + optional failover).
+        self._keys = get_ollama_cloud_api_keys()
         if not self._keys:
             raise ValueError(
                 "No Ollama Cloud API keys found. "
-                "Set OLLAMA_CLOUD_API_KEY_1 and/or OLLAMA_CLOUD_API_KEY_2 in .env"
+                "Set OLLAMA_CLOUD_API_KEY and/or OLLAMA_CLOUD_API_KEY_2 in .env"
             )
 
         self._key_cycle = cycle(range(len(self._keys)))

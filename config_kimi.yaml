@@ -1,0 +1,75 @@
+# A.M.Y Configuration — Kimi K2.7 (code-tuned) backend
+# Generated from config.yaml; edit the llm block here, keep the rest in sync with config.yaml.
+mission:
+  goal: Investigar propiedades estadísticas y distribucionales de los gaps entre números
+    primos
+  description: Disenar experimentos computacionales para caracterizar la distribucion
+    de gaps primos y evaluar hipotesis de normalidad
+  urgency: medium
+llm:
+  provider: ollama_cloud
+  base_url: https://ollama.com/api
+  reasoner:
+    model: kimi-k2.7-code
+    temperature: 0.7
+    max_tokens: 4096
+    num_ctx: 8192
+  fast:
+    model: kimi-k2.7-code
+    temperature: 0.3
+    max_tokens: 1024
+    num_ctx: 8192
+hardware:
+  device: mps
+  dtype: float16
+  platform: darwin_arm64
+  mps_fallback_to_cpu: true
+heartbeat:
+  base_interval_seconds: 30
+  focused_interval_seconds: 5
+  idle_interval_seconds: 120
+  max_cycles_before_reflection: 20
+  continuous_mission: false
+memory:
+  vector_db_path: ./data/chromadb
+  knowledge_graph_path: ./data/knowledge_graph.json
+  episodic_log_path: ./data/episodic_memory.jsonl
+  max_episodic_before_consolidation: 1000
+  belief_confidence_threshold: 0.3
+skills:
+  library_path: ./data/skill_library
+  max_retrieval: 5
+research:
+  max_papers_per_search: 10
+  sources:
+  - arxiv
+  - pubmed
+  - semantic_scholar
+  download_pdfs: false
+curiosity:
+  epistemic_weight: 0.4
+  surprise_threshold: 0.7
+  novelty_decay: 0.95
+communication:
+  method: file
+  breakthrough_threshold: 0.5
+  report_path: ./reports/
+  max_reports_per_day: 10
+sandbox:
+  enabled: true
+  use_docker: false
+  require_isolation: false
+  max_execution_time: 300
+  max_memory_mb: 2048
+  allowed_languages:
+  - python
+  - r
+atlas_quality_gate:
+  min_support_score: 0.35
+  min_tool_realism_score: 0.6
+  max_failure_count: 5
+  verify_citations: true
+logging:
+  level: INFO
+  thought_log_path: ./logs/stream_of_consciousness.jsonl
+  action_log_path: ./logs/actions.jsonl

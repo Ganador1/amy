@@ -52,11 +52,16 @@ def _clean_json(text: str) -> str:
         # Verify it looks like JSON
         if candidate.startswith('{'):
             return candidate
+    # Some models start a ```json fence but run out of tokens before closing it.
+    # Drop the opening fence so the repair step can close strings/braces.
+    text = re.sub(r'^```(?:json)?\s*\n?', '', text, flags=re.IGNORECASE).strip()
     # Strategy 2: find first { ... last } block
     start = text.find('{')
     end = text.rfind('}')
     if start >= 0 and end > start:
         return text[start:end + 1]
+    if start >= 0:
+        return text[start:]
     return text
 
 
@@ -166,6 +171,13 @@ def _first_balanced_object(text: str) -> str | None:
             if depth == 0:
                 return text[start:i + 1]
     return None
+
+
+def _action_details(thought: dict) -> dict:
+    """Return nested action details only when the model supplied a JSON object."""
+    details = thought.get("action_details", {}) if isinstance(thought, dict) else {}
+    return details if isinstance(details, dict) else {}
+
 
 REASONING_SYSTEM_PROMPT = """You are A.M.Y (Autonomous Mind Yield) — an insatiably curious autonomous research mind.
 You explore science with the restlessness of a great scientist: you form hypotheses, try to BREAK them,
@@ -320,6 +332,7 @@ class ReasoningEngine:
                 max_tokens=self.config["reasoner"].get("max_tokens", 4096),
                 format_json=True,
                 num_ctx=self.reasoner_ctx,
+                think=False,
             )
 
             content = _extract_content(response)
@@ -335,7 +348,7 @@ class ReasoningEngine:
                 thought["action_type"] = "think_more"
 
             # Copy action details to top level for heartbeat
-            details = thought.get("action_details", {})
+            details = _action_details(thought)
             thought.update(details)
 
             log.info(
@@ -495,6 +508,22 @@ class ReasoningEngine:
         loop_warning = ""
         consecutive_same = context.get("consecutive_same_action", 0)
         last_action = context.get("last_action_type", "")
+        trailing_literature = 0
+        for item in reversed(recent_thoughts):
+            if item.get("action_type") == "search_literature":
+                trailing_literature += 1
+            else:
+                break
+        literature_loop_warning = ""
+        if trailing_literature >= 2:
+            literature_loop_warning = (
+                f"\n## LITERATURE SEARCH LOOP — {trailing_literature} consecutive literature searches\n"
+                "You have enough literature context for the current thread. "
+                "DO NOT choose 'search_literature' this cycle. Choose one of:\n"
+                "- 'experiment' to turn the literature claim into a computational test\n"
+                "- 'decompose_goal' to split the topic into new sub-questions\n"
+                "- 'think_more' to synthesize and pivot to a clearly different frontier\n"
+            )
         if consecutive_same >= 5:
             loop_warning = (
                 f"\n## ⚠ LOOP DETECTED — {consecutive_same} consecutive '{last_action}' actions\n"
@@ -533,6 +562,7 @@ class ReasoningEngine:
             f"{queries_block}"
             f"{hyp_block}"
             f"{meta_block}"
+            f"{literature_loop_warning}"
             f"{loop_warning}"
             f"## Cycle\n#{context.get('cycle', 0)}\n\n"
             "What is your next cognitive step?"

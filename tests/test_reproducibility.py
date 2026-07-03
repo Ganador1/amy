@@ -39,8 +39,12 @@ print(f"KURTOSIS: {stats.kurtosis(data):.6f}")
 '''
 
 
-async def test_reproducibility(n_runs: int = 3) -> dict:
-    """Run the same experiment multiple times and verify identical results."""
+async def _run_reproducibility(n_runs: int = 3) -> dict:
+    """Run the same experiment multiple times and verify identical results.
+
+    Worker function (not collected by pytest — it takes a non-fixture arg).
+    The collectable test is ``test_reproducibility`` below.
+    """
     print("=" * 60)
     print("REPRODUCIBILITY TEST")
     print("=" * 60)
@@ -101,6 +105,12 @@ async def test_reproducibility(n_runs: int = 3) -> dict:
         return {"success": False, "runs": n_runs}
 
 
+async def test_reproducibility():
+    """Hermetic: the same fixed-seed experiment must produce identical output."""
+    result = await _run_reproducibility(n_runs=3)
+    assert result["success"], f"experiment was not reproducible across runs: {result}"
+
+
 async def test_syntax_validation() -> dict:
     """Test that syntax errors are caught before execution."""
     print("\n" + "=" * 60)
@@ -130,6 +140,7 @@ async def test_syntax_validation() -> dict:
     print(f"Missing paren caught: {'✅ PASS' if test3 else '❌ FAIL'}")
 
     all_pass = test1 and test2 and test3
+    assert all_pass, f"syntax validation failed: valid={test1} invalid={test2} missing_paren={test3}"
     return {"success": all_pass}
 
 
@@ -138,7 +149,7 @@ async def main():
     print("\n🔬 A.M.Y SCIENTIFIC VALIDATION SUITE\n")
 
     # Test 1: Reproducibility
-    repro_result = await test_reproducibility(n_runs=3)
+    repro_result = await _run_reproducibility(n_runs=3)
 
     # Test 2: Syntax validation
     syntax_result = await test_syntax_validation()

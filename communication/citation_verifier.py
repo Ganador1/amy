@@ -6,6 +6,7 @@ to confirm that cited papers exist and are retrievable.
 """
 import re
 import urllib.request
+import urllib.parse
 import json
 from typing import Optional
 
@@ -70,10 +71,43 @@ class CitationVerifier:
             if e.code in (301, 302, 303, 307, 308):
                 return {"verified": True, "url": e.headers.get("Location", url)}
             log.warning("citation_verifier.doi_http_error", doi=doi, code=e.code)
+            if e.code != 404:
+                crossref = self._verify_doi_crossref(doi)
+                if crossref.get("verified"):
+                    return crossref
         except Exception as e:
             log.warning("citation_verifier.doi_error", doi=doi, error=str(e))
+            crossref = self._verify_doi_crossref(doi)
+            if crossref.get("verified"):
+                return crossref
 
         return {"verified": False, "url": None}
+
+    def _verify_doi_crossref(self, doi: str) -> dict:
+        """Verify DOI existence through CrossRef metadata without following publisher redirects."""
+        encoded = urllib.parse.quote(doi, safe="")
+        url = f"https://api.crossref.org/works/{encoded}"
+        req = urllib.request.Request(
+            url,
+            headers={"User-Agent": "AMY-CitationVerifier/1.0 (mailto:contact@amy.ai)"},
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=15) as resp:
+                if resp.getcode() != 200:
+                    return {"verified": False, "url": None, "source": "crossref"}
+                data = json.loads(resp.read())
+                message = data.get("message", {}) if isinstance(data, dict) else {}
+                returned_doi = str(message.get("DOI", "")).lower()
+                if returned_doi == doi.lower():
+                    return {
+                        "verified": True,
+                        "url": f"https://doi.org/{doi}",
+                        "source": "crossref",
+                        "title": (message.get("title") or [""])[0],
+                    }
+        except Exception as e:
+            log.warning("citation_verifier.crossref_error", doi=doi, error=str(e))
+        return {"verified": False, "url": None, "source": "crossref"}
 
     def verify_pmid(self, pmid: str) -> dict:
         """Verify a PubMed ID via E-utilities."""

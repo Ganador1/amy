@@ -1,0 +1,166 @@
+{
+  "ok": true,
+  "domain": "mathematics",
+  "model": "glm-5.2",
+  "duration_seconds": 82.473,
+  "env_flags": {
+    "AMY_USE_LLM_ENHANCER": "1",
+    "AMY_USE_LLM_JUDGE": "1",
+    "AMY_USE_EVOLUTION": "1",
+    "AMY_ENHANCER_MODEL": "glm-5.2",
+    "AMY_RANKING_MODEL": "glm-5.2"
+  },
+  "tool_results": [
+    {
+      "tool": "prime_gap_analysis",
+      "tool_name": "prime_gap_analysis",
+      "input": "100000",
+      "description": "Prime gap analysis up to 1e5",
+      "result": "Prime gap analysis up to 100000:\n  Number of primes: 9592\n  Mean gap: 10.4253\n  Std dev: 8.0236\n  Max gap: 72 (after prime 31397)\n  Most common gaps: [(6, 1940), (2, 1224), (4, 1215), (12, 964), (10, 916)]",
+      "success": true,
+      "duration_seconds": 19.365,
+      "experiment_id": "mathematics_prime_gap_analysis_20260703_012259",
+      "provenance_path": "data/experiments/mathematics_prime_gap_analysis_20260703_012259/provenance.json",
+      "assessment": {
+        "usable": true,
+        "evidence_level": "strong",
+        "markers": [],
+        "warnings": [],
+        "preview": "Prime gap analysis up to 100000:\n  Number of primes: 9592\n  Mean gap: 10.4253\n  Std dev: 8.0236\n  Max gap: 72 (after prime 31397)\n  Most common gaps: [(6, 1940), (2, 1224), (4, 1215), (12, 964), (10, 916)]"
+      }
+    },
+    {
+      "tool": "prime_gap_analysis",
+      "tool_name": "prime_gap_analysis",
+      "input": "1000000",
+      "description": "Prime gap analysis up to 1e6",
+      "result": "Prime gap analysis up to 1000000:\n  Number of primes: 78498\n  Mean gap: 12.7391\n  Std dev: 10.2824\n  Max gap: 114 (after prime 492113)\n  Most common gaps: [(6, 13549), (2, 8169), (4, 8143), (12, 8005), (10, 7079)]",
+      "success": true,
+      "duration_seconds": 0.418,
+      "experiment_id": "mathematics_prime_gap_analysis_20260703_012300",
+      "provenance_path": "data/experiments/mathematics_prime_gap_analysis_20260703_012300/provenance.json",
+      "assessment": {
+        "usable": true,
+        "evidence_level": "strong",
+        "markers": [],
+        "warnings": [],
+        "preview": "Prime gap analysis up to 1000000:\n  Number of primes: 78498\n  Mean gap: 12.7391\n  Std dev: 10.2824\n  Max gap: 114 (after prime 492113)\n  Most common gaps: [(6, 13549), (2, 8169), (4, 8143), (12, 8005), (10, 7079)]"
+      }
+    },
+    {
+      "tool": "prime_gap_model_comparison",
+      "tool_name": "prime_gap_model_comparison",
+      "input": "10000,100000,1000000",
+      "description": "Prime-gap model comparison against log(N) and log(N)^2 controls",
+      "result": "Prime gap scaling model comparison:\n  Heuristic anchors: mean prime gap is compared with log(N); maximal finite-range gaps are compared with log(N)^2 as a Cramer-style scale diagnostic.\n  Limits: [10000, 100000, 1000000]\n  Observations:\n    N=10000: prime_count=1229, mean_gap=8.119707, max_gap=36 (after prime 9551), logN=9.210340, mean_gap/logN=0.881586, max_gap/logN^2=0.424376\n    N=100000: prime_count=9592, mean_gap=10.425295, max_gap=72 (after prime 31397), logN=11.512925, mean_gap/logN=0.905530, max_gap/logN^2=0.543202\n    N=1000000: prime_count=78498, mean_gap=12.739098, max_gap=114 (after prime 492113), logN=13.815511, mean_gap/logN=0.922087, max_gap/logN^2=0.597270\n  mean_gap_vs_logN fit mean_gap = 1.003088*log(N) + -1.120445; RMSE=0.001937; R2=0.999999\n  max_gap_vs_logN fit max_gap = 16.937485*log(N) + -121.000000; RMSE=1.414214; R2=0.998031\n  max_gap_vs_logN_squared fit max_gap = 0.735022*log(N)^2 + -26.023256; RMSE=0.423559; R2=0.999823\n  normalized_max_gap trend max_gap/logN^2 = 0.037543*log(N) + 0.089381; RMSE=0.015263; R2=0.955328\n  Best max-gap model by RMSE: logN_squared\n  Falsifiable next check: adding a larger N should keep the reported max_gap/logN^2 value within the residual trend if this finite-range diagnostic is stable.\n  Caution: finite computations cannot prove asymptotic Cramer behavior.",
+      "success": true,
+      "duration_seconds": 0.435,
+      "experiment_id": "mathematics_prime_gap_model_comparison_20260703_012300",
+      "provenance_path": "data/experiments/mathematics_prime_gap_model_comparison_20260703_012300/provenance.json",
+      "assessment": {
+        "usable": true,
+        "evidence_level": "strong",
+        "markers": [],
+        "warnings": [],
+        "preview": "Prime gap scaling model comparison:\n  Heuristic anchors: mean prime gap is compared with log(N); maximal finite-range gaps are compared with log(N)^2 as a Cramer-style scale diagnostic.\n  Limits: [10000, 100000, 1000000]\n  Observations:\n    N=10000: prime_count=1229, mean_gap=8.119707, max_gap=36 (after prime 9551), logN=9.210340, mean_gap/logN=0.881586, max_gap/logN^2=0.424376\n    N=100000: prime_count=9592, mean_gap=10.425295, max_gap=72 (after prime 31397), logN=11.512925, mean_gap/logN=0.905"
+      }
+    },
+    {
+      "tool": "sympy_prime_analysis",
+      "tool_name": "sympy_prime_analysis",
+      "input": "prime_count:1000000",
+      "description": "SymPy prime-count control at 1e6",
+      "result": "Number of primes up to 1000000: 78498",
+      "success": true,
+      "duration_seconds": 0.015,
+      "experiment_id": "mathematics_sympy_prime_analysis_20260703_012300",
+      "provenance_path": "data/experiments/mathematics_sympy_prime_analysis_20260703_012300/provenance.json",
+      "assessment": {
+        "usable": true,
+        "evidence_level": "strong",
+        "markers": [],
+        "warnings": [],
+        "preview": "Number of primes up to 1000000: 78498"
+      }
+    }
+  ],
+  "failed_results": [],
+  "experiment_ids": [
+    "mathematics_prime_gap_analysis_20260703_012259",
+    "mathematics_prime_gap_analysis_20260703_012300",
+    "mathematics_prime_gap_model_comparison_20260703_012300",
+    "mathematics_sympy_prime_analysis_20260703_012300"
+  ],
+  "provenance_hash_ok": {
+    "mathematics_prime_gap_analysis_20260703_012259": true,
+    "mathematics_prime_gap_analysis_20260703_012300": true,
+    "mathematics_prime_gap_model_comparison_20260703_012300": true,
+    "mathematics_sympy_prime_analysis_20260703_012300": true
+  },
+  "paper": {
+    "title": "E2E Validation: Prime gap scaling against logarithmic model controls",
+    "markdown_path": "/Volumes/Ganador disk/A.M.Y/experiments/e2e_validation/papers/E2E_Validation_Prime_gap_scaling_against_logarithmic_model_c_20260702_212402.md",
+    "pdf_path": "/Volumes/Ganador disk/A.M.Y/experiments/e2e_validation/papers/E2E_Validation_Prime_gap_scaling_against_logarithmic_model_c_20260702_212402.pdf",
+    "latex_path": "/Volumes/Ganador disk/A.M.Y/experiments/e2e_validation/papers/E2E_Validation_Prime_gap_scaling_against_logarithmic_model_c_20260702_212402.tex",
+    "word_count": 2366,
+    "sections": 5,
+    "publication_status": "published",
+    "rejection_reasons": [],
+    "internal_review_path": "/Volumes/Ganador disk/A.M.Y/experiments/e2e_validation/papers/E2E_Validation_Prime_gap_scaling_against_logarithmic_model_c_20260702_212402.review.json",
+    "grounding_repair": {
+      "repairs": 0,
+      "items": [],
+      "experiment_ids": [
+        "mathematics_prime_gap_analysis_20260703_012259",
+        "mathematics_prime_gap_analysis_20260703_012300",
+        "mathematics_prime_gap_model_comparison_20260703_012300",
+        "mathematics_sympy_prime_analysis_20260703_012300"
+      ],
+      "sections_checked": [
+        "Abstract",
+        "Discussion"
+      ]
+    }
+  },
+  "reflection": {
+    "pass_overall": true,
+    "score": 100.0,
+    "issues": [],
+    "suggestions": [],
+    "annotations": {
+      "n_issues": 0,
+      "n_high": 0,
+      "n_medium": 0,
+      "n_low": 0,
+      "experiment_ids": [
+        "mathematics_prime_gap_analysis_20260703_012259",
+        "mathematics_prime_gap_analysis_20260703_012300",
+        "mathematics_prime_gap_model_comparison_20260703_012300",
+        "mathematics_sympy_prime_analysis_20260703_012300"
+      ]
+    }
+  },
+  "rubric": {
+    "total": 97.5,
+    "per_dim": {
+      "provenance_integrity": 10.0,
+      "tool_diversity": 8.5,
+      "falsifiability": 15.0,
+      "explicit_limitations": 10.0,
+      "numerical_claims_grounded": 15.0,
+      "citation_accuracy": 10.0,
+      "abstract_uniqueness": 10.0,
+      "statistical_rigor": 9.0,
+      "reproducibility_info": 10.0
+    }
+  },
+  "discussion": {
+    "total": 84.37,
+    "word_count": 841,
+    "claim_grounding": 25.0,
+    "limitation_cover": 18.471,
+    "alternatives": 8.26,
+    "calibration": 14.804,
+    "reasoning_depth": 17.835
+  }
+}

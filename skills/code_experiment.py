@@ -6,6 +6,7 @@ with the sandbox executor to ensure isolation and provenance.
 """
 import hashlib
 import json
+import re
 import time
 from pathlib import Path
 
@@ -47,6 +48,28 @@ class CodeExperimentSkill:
         log.info("experiment.starting", experiment_id=experiment_id, hypothesis=hypothesis[:80])
 
         result = await self.executor.execute(code, language=language)
+        executed_code = code
+        repair = {
+            "attempted": False,
+            "succeeded": False,
+            "reason": None,
+            "original_stderr": result.get("stderr", ""),
+        }
+        attempts = [{"success": result.get("success"), "stderr": result.get("stderr", "")}]
+        if language == "python" and not result.get("success"):
+            repaired = self._repair_python_code(code, result.get("stderr", ""))
+            if repaired is not None and repaired["code"] != code:
+                repair["attempted"] = True
+                repair["reason"] = repaired["reason"]
+                repaired_result = await self.executor.execute(repaired["code"], language=language)
+                attempts.append({
+                    "success": repaired_result.get("success"),
+                    "stderr": repaired_result.get("stderr", ""),
+                })
+                if repaired_result.get("success"):
+                    result = repaired_result
+                    executed_code = repaired["code"]
+                    repair["succeeded"] = True
 
         provenance = {
             "experiment_id": experiment_id,
@@ -54,12 +77,15 @@ class CodeExperimentSkill:
             "timestamp": time.time(),
             "language": language,
             "code": code,
+            "executed_code": executed_code,
             "inputs": inputs or {},
             "success": result.get("success"),
             "stdout": result.get("stdout", ""),
             "stderr": result.get("stderr", ""),
             "return_code": result.get("return_code"),
             "result_files": result.get("result_files", {}),
+            "repair": repair,
+            "attempts": attempts,
         }
 
         prov_path = EXPERIMENTS_DIR / f"{experiment_id}.json"
@@ -76,11 +102,71 @@ class CodeExperimentSkill:
             "experiment_id": experiment_id,
             **result,
             "provenance_path": str(prov_path),
+            "repair": repair,
         }
 
     def _compute_id(self, code: str, inputs: dict | None) -> str:
         payload = json.dumps({"code": code, "inputs": inputs or {}}, sort_keys=True)
         return hashlib.sha256(payload.encode("utf-8")).hexdigest()[:32]
+
+    def _repair_python_code(self, code: str, stderr: str) -> dict | None:
+        """Repair narrow, common LLM code-generation errors and re-run once."""
+        if "Unknown format code 'd' for object of type 'float'" in stderr:
+            repaired = re.sub(r"\{([^{}\n:]+):(?:\d*)d\}", r"{\1:.0f}", code)
+            return {"code": repaired, "reason": "float_integer_format"}
+
+        if "unterminated f-string literal" in stderr:
+            line_match = re.search(r"Line\s+(\d+):", stderr)
+            if not line_match:
+                return None
+            line_no = int(line_match.group(1))
+            lines = code.splitlines()
+            idx = line_no - 1
+            if idx < 0 or idx >= len(lines):
+                return None
+            bad_line = lines[idx]
+            if "f'" not in bad_line and 'f"' not in bad_line:
+                return None
+            indent = bad_line[: len(bad_line) - len(bad_line.lstrip())]
+            lines[idx] = indent + "print('[repair] omitted unterminated generated f-string output line')"
+            return {"code": "\n".join(lines) + "\n", "reason": "unterminated_fstring_line"}
+
+        if "unexpected indent" in stderr:
+            repaired = self._repair_misaligned_docstring_indent(code)
+            if repaired is not None:
+                return {"code": repaired, "reason": "misaligned_docstring_indent"}
+
+        return None
+
+    @staticmethod
+    def _repair_misaligned_docstring_indent(code: str) -> str | None:
+        lines = code.splitlines()
+        for i, line in enumerate(lines[:-1]):
+            stripped = line.strip()
+            if not (stripped.startswith("def ") and stripped.endswith(":")):
+                continue
+            def_indent_len = len(line) - len(line.lstrip())
+            expected_indent = " " * (def_indent_len + 4)
+            j = i + 1
+            while j < len(lines) and not lines[j].strip():
+                j += 1
+            if j >= len(lines):
+                continue
+            body = lines[j]
+            body_stripped = body.lstrip()
+            if not (body_stripped.startswith('"""') or body_stripped.startswith("'''")):
+                continue
+            if body.startswith(expected_indent):
+                continue
+            candidate_lines = list(lines)
+            candidate_lines[j] = expected_indent + body_stripped
+            candidate = "\n".join(candidate_lines) + "\n"
+            try:
+                compile(candidate, "<repaired_experiment>", "exec")
+            except SyntaxError:
+                continue
+            return candidate
+        return None
 
     def build_ode_simulation(
         self,

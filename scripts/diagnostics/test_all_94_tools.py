@@ -209,25 +209,38 @@ async def main():
     print("      AXIOM/Atlas 94-Tool Diagnostics Runner (Sequential)")
     print("=" * 80)
     
-    # Read the tools we fetched
-    tools_path = "/Users/giovanniarangio/.gemini/antigravity/brain/22194a6c-6687-431e-8cb6-a39159d29ba1/scratch/worker_tools.json"
-    if not os.path.exists(tools_path):
-        print(f"Error: {tools_path} does not exist. Run fetch_all_worker_tools.py first.")
-        sys.exit(1)
-        
-    with open(tools_path, "r") as f:
-        tools = json.load(f)
-        
-    print(f"Loaded {len(tools)} tools from registry. Initializing Atlas worker...")
-    
+    # Resolve a writable location for the tool registry snapshot. Prefer the
+    # repo-local scratch dir (works for anyone who clones the repo); allow an
+    # override via AMY_WORKER_TOOLS_PATH for custom setups.
+    repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+    scratch_dir = os.path.join(repo_root, "data", "diagnostics")
+    os.makedirs(scratch_dir, exist_ok=True)
+    tools_path = os.environ.get(
+        "AMY_WORKER_TOOLS_PATH", os.path.join(scratch_dir, "worker_tools.json")
+    )
+
     atlas = AtlasTools()
-    
+
     # Pre-initialize worker with a ping so the first tool doesn't pay startup overhead
     try:
         await atlas._ensure_worker()
         print("Atlas worker successfully initialized.")
     except Exception as e:
         print(f"Warning: worker initialization failed: {e}")
+
+    # Self-generate the tool registry from the live worker. This makes the
+    # diagnostic reproducible from a fresh clone — no pre-fetched author file.
+    if os.path.exists(tools_path):
+        with open(tools_path, "r") as f:
+            tools = json.load(f)
+        print(f"Loaded {len(tools)} tools from {tools_path}.")
+    else:
+        print("Fetching tool registry from the live Atlas worker (describe_tools)...")
+        described = await atlas.describe_tools(domain=None)
+        tools = [{"name": t["name"], "domain": t.get("domain", "")} for t in described]
+        with open(tools_path, "w") as f:
+            json.dump(tools, f, indent=2)
+        print(f"Discovered {len(tools)} tools and cached them to {tools_path}.")
         
     print(f"Beginning sequential tests of {len(tools)} tools...")
     
@@ -245,8 +258,10 @@ async def main():
     # Sort results by name
     results.sort(key=lambda x: x["name"])
     
-    # Save the raw results
-    out_path = "/Users/giovanniarangio/.gemini/antigravity/brain/22194a6c-6687-431e-8cb6-a39159d29ba1/scratch/tools_test_results.json"
+    # Save the raw results next to the registry snapshot (repo-local).
+    out_path = os.environ.get(
+        "AMY_TOOLS_TEST_RESULTS_PATH", os.path.join(scratch_dir, "tools_test_results.json")
+    )
     with open(out_path, "w") as f:
         json.dump(results, f, indent=2)
         

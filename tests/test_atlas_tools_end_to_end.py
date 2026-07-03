@@ -116,6 +116,18 @@ CASES = [
      ["Prime gap analysis up to 100000"], "LLM 'max_prime:N' form"),
     ("prime_gap_analysis", "primes up to 50000",
      ["Prime gap analysis up to 50000"], "natural-language limit"),
+    (
+        "prime_gap_model_comparison",
+        "10000,100000,1000000",
+        [
+            "Prime gap scaling model comparison",
+            "mean_gap/logN",
+            "max_gap/logN^2",
+            "Best max-gap model by RMSE",
+            "finite computations cannot prove asymptotic",
+        ],
+        "prime gap model comparison",
+    ),
     # Sequences / provers
     ("sequence_analyzer", "generate:fibonacci:10", ["55"], "Fibonacci 10"),
     ("conjecture_engine", "evaluate:collatz:27", ["111", "9232"], "Collatz 27"),
@@ -134,23 +146,116 @@ CASES = [
      ["t-statistic=-5.0000", "p-value=0.0011"], "t-test colon"),
     ("hypothesis_tester", "ttest:[1,2,3,4,5];[6,7,8,9,10]",
      ["t-statistic=-5.0000"], "t-test semicolon"),
+    (
+        "two_sample_effect_power",
+        "[12.1,11.8,12.4,12.0];[12.9,13.1,12.7,13.0]",
+        [
+            "Two-sample effect and power summary",
+            "Cohen's d",
+            "95% CI",
+            "bootstrap_ci_seed=12345",
+            "observed_power",
+            "sample size n1=4, n2=4",
+        ],
+        "two-sample effect/power",
+    ),
     ("correlation_analysis", "[1,2,3,4,5];[2,4,6,8,10]", ["+1.000000"], "corr r=1"),
     # Chemistry / materials
     ("molecular_weight_calc", "H2O", ["18.015"], "M(H₂O)"),
     ("molecular_weight_calc", "C6H12O6", ["180.156"], "M(glucose)"),
     ("molecular_orbital_energy", "6", ["HOMO-LUMO gap: 2.225 eV"], "Hückel C₆"),
+    (
+        "huckel_polyene_scaling",
+        "4,6,8,10,12,16,20",
+        [
+            "Best model by RMSE: power_law",
+            "power exponent p=-0.990",
+            "asymptotic_slope -2*pi*beta = 15.707963",
+            "small_angle_argument_at_min_n = 0.314159 rad",
+            "residual_threshold=0.010000 eV",
+            "inverse_quadratic rejected",
+        ],
+        "Hückel scaling series",
+    ),
+    (
+        "bond_alternated_polyene_scaling",
+        "4,6,8,10,12,16,20,30,40,50,80,100;strong=-2.7;weak=-2.3",
+        [
+            "Bond-alternated polyene gap scaling",
+            "asymptotic_gap_estimate = 0.800000 eV",
+            "n=100: alternated_gap=0.846601 eV",
+            "finite-gap conclusion",
+        ],
+        "bond-alternated polyene scaling",
+    ),
     ("bond_energy_analyzer", "C-H", ["413 kJ/mol"], "E(C-H)"),
     ("computational_chemistry", "analyze_molecule:C6H6", ["78.11", "Heavy atoms: 6"], "C₆H₆"),
     ("gnome_materials", "stability:TiO2", ["TABULATED"], "TiO₂ labelled"),
     # Physics / quantum
     ("quantum_energy_levels", "hydrogen:1", ["-13.6"], "H ground"),
     ("quantum_energy_levels", "hydrogen:2", ["-3.4"], "H n=2"),
+    (
+        "rydberg_scaling_comparison",
+        "1,2,3,5,10,20;delta=0.05",
+        [
+            "Hydrogen Rydberg scaling comparison",
+            "inverse_square fit",
+            "RMSE=0.000000 eV",
+            "quantum_defect_delta=0.050000",
+            "Best model by RMSE: inverse_square",
+            "sample size n=6",
+            "residual standard deviation=0.000000 eV",
+            "effect size",
+            "confidence interval: not estimated",
+            "Falsifiable next check",
+        ],
+        "Rydberg scaling comparison",
+    ),
     ("quantum_circuit", "bell:2", ["Entanglement entropy: 1.0 bit"], "Bell"),
     ("quantum_circuit", "grover:4", ["Search space: 16", "Optimal iterations: 3"], "Grover"),
     ("quantum_circuit", "qft:3", ["Total gates: 9"], "QFT"),
     ("quantum_circuit", "vqe:H2", ["TABULATED", "-1.137"], "VQE labelled"),
+    # Astronomy
+    (
+        "cosmology_residual_comparison",
+        "0.01,0.1,0.5,1,2;threshold=5",
+        [
+            "Planck18 versus low-redshift Hubble-law comparison",
+            "sample size n=5",
+            "z=0.010000",
+            "Planck18_luminosity_distance_Mpc",
+            "hubble_law_distance_Mpc",
+            "percent_residual",
+            "RMSE_Mpc",
+            "max_abs_percent_residual",
+            "effect size",
+            "residual standard deviation",
+            "breakdown_redshift_threshold_percent=5.000000",
+            "Falsifiable next check",
+        ],
+        "cosmology residual comparison",
+    ),
     # Biology
     ("dna_analyzer", "GC_content:ATGCATGC", ["GC content: 50.0%", "GCATGCAT"], "DNA"),
+    (
+        "gc_at_panel_comparison",
+        "gc=ATGGCGGCGGCGGCGGCGGCGGCGGCGTAA,ATGGCGGCGGCGGCGGCGGCGGCGGCATGA,"
+        "ATGGCGGCGGCGGCGGCGGCGGCAGAATAG,ATGGCGGCGGCGGCGGCGGCGGCCGATTGA;"
+        "at=ATGATAATAATAATAATAATAATAATATAA,ATGATTATTATTATTATTATTATTATATAG,"
+        "ATGAATAATAATAATAATAATAATATTTGA,ATGTATTATTATTATTATTATTATTATTAA",
+        [
+            "GC-rich versus AT-rich panel comparison",
+            "sample size n_gc=4, n_at=4",
+            "mean_gc_difference",
+            "Welch t-statistic",
+            "95% CI for mean_gc_difference",
+            "Cohen's d",
+            "bootstrap_ci_seed=12345",
+            "coding_context_control",
+            "Falsifiable next check",
+        ],
+        "GC/AT panel comparison",
+    ),
     ("protein_properties", "MKVL", ["489.7 Da"], "peptide MW"),
     ("dnabert2_analysis", "motifs:TATAATAAATTGACA", ["TATAAT", "TTGACA"], "DNABERT2 motifs"),
 ]
@@ -166,6 +271,14 @@ def test_tool_produces_expected_value(registry, name, payload, expected, label):
         assert sub in out, (
             f"{name}({payload}) missing {sub!r}.\n  label: {label}\n  got: {out[:300]}"
         )
+
+
+def test_huckel_tool_formats_native_float_list(registry):
+    out = _run(registry, "molecular_orbital_energy", "4:1.4")
+
+    assert "np.float64" not in out
+    assert "Model parameters: alpha=-6.000 eV, beta=-2.500 eV" in out
+    assert "Energy levels (eV): [-10.045, -7.545, -4.455, -1.955]" in out
 
 
 @pytest.mark.parametrize("name,payload,expected,label", CASES, ids=[c[3] for c in CASES])

@@ -382,6 +382,9 @@ async def test_full_cognitive_cycle():
         json.dump(report, f, indent=2)
     print(f"\nReport saved to: {report_path}")
 
+    # Real assertion so pytest fails when the cognitive cycle regresses,
+    # instead of silently passing on a returned bool that pytest ignores.
+    assert passed == total, f"cognitive cycle: only {passed}/{total} checks passed"
     return passed == total
 
 

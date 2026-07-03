@@ -16,6 +16,7 @@ from pathlib import Path
 import structlog
 
 from communication.citation_verifier import CitationVerifier
+from communication.grounding_repair import repair_unsupported_decimal_claims
 from communication.numeric_verifier import NumericVerifier
 from communication.paper_enhancer import PaperEnhancer
 
@@ -118,6 +119,14 @@ class PaperGenerator:
         tex_path = self.papers_dir / f"{slug}_{timestamp}.tex"
 
         md_content = self._build_markdown(title, abstract, sections, references, knowledge_facts, experiment_ids, tool_results)
+        grounding_repair = {"repairs": 0, "items": []}
+        if experiment_ids:
+            md_content, grounding_repair = repair_unsupported_decimal_claims(
+                md_content,
+                experiment_ids=experiment_ids,
+            )
+            if grounding_repair.get("repairs"):
+                log.info("paper_generator.grounding_repaired", repairs=grounding_repair["repairs"])
 
         # Run factual verifiers before saving
         citation_v = CitationVerifier()
@@ -144,6 +153,7 @@ class PaperGenerator:
                 "sections": len(sections),
                 "publication_status": "rejected",
                 "rejection_reasons": gate["reasons"],
+                "grounding_repair": grounding_repair,
             }
             log.warning("paper_generator.prepublication_rejected", **result)
             return result
@@ -199,6 +209,7 @@ class PaperGenerator:
             "publication_status": "published",
             "rejection_reasons": [],
             "internal_review_path": str(review_path) if review_path else None,
+            "grounding_repair": grounding_repair,
         }
         log.info("paper_generator.paper_complete", **result)
         return result

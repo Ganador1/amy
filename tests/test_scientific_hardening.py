@@ -8,12 +8,22 @@ import hashlib
 import asyncio
 import json
 import shutil
+import urllib.error
 from pathlib import Path
 
 import audit_papers
-from communication.paper_enhancer import DOMAIN_INSIGHTS, PeerReviewer, PaperEnhancer, generate_hypothesis
+from communication.paper_enhancer import (
+    DOMAIN_INSIGHTS,
+    PeerReviewer,
+    PaperEnhancer,
+    _filter_ungrounded_hypotheses,
+    _strengthen_branch_contract,
+    generate_hypothesis,
+    generate_references,
+)
 from communication.paper_generator import PaperGenerator
 from communication.citation_verifier import CitationVerifier
+from communication.llm_enhancer import _drop_unsupported_numeric_sentences
 from core.atlas_tools import assess_tool_output
 from core.provenance import ProvenanceManager
 from run_amy_novelty import (
@@ -337,6 +347,38 @@ def test_citation_verifier_strips_trailing_doi_punctuation():
     assert citations == [{"type": "doi", "raw": "10.1038/s41586-026-10265-5"}]
 
 
+def test_citation_verifier_falls_back_to_crossref_when_publisher_blocks_doi(monkeypatch):
+    class FakeResponse:
+        url = "https://api.crossref.org/works/10.1021%2Fed084p1840"
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            return False
+
+        def getcode(self):
+            return 200
+
+        def read(self):
+            return b'{"status":"ok","message":{"DOI":"10.1021/ed084p1840"}}'
+
+    def fake_urlopen(req, timeout=15):
+        url = req.full_url
+        if url.startswith("https://doi.org/"):
+            raise urllib.error.HTTPError(url, 403, "Forbidden", hdrs=None, fp=None)
+        if url.startswith("https://api.crossref.org/works/"):
+            return FakeResponse()
+        raise AssertionError(f"unexpected URL {url}")
+
+    monkeypatch.setattr("urllib.request.urlopen", fake_urlopen)
+
+    result = CitationVerifier().verify_doi("10.1021/ed084p1840")
+
+    assert result["verified"] is True
+    assert result["source"] == "crossref"
+
+
 def test_unknown_operation_output_is_not_scientific_evidence():
     assessment = assess_tool_output("Unknown operation: derivative. Available: limit, taylor")
 
@@ -344,11 +386,63 @@ def test_unknown_operation_output_is_not_scientific_evidence():
     assert "unknown operation" in assessment["markers"]
 
 
+def test_error_output_is_not_scientific_evidence():
+    assessment = assess_tool_output(
+        "Error: Format should be 'operation:arg'. Received: '1000003'",
+        tool_name="sympy_prime_analysis",
+    )
+
+    assert assessment["usable"] is False
+    assert "error:" in assessment["markers"]
+
+
+def test_metric_names_containing_error_are_scientific_evidence():
+    assessment = assess_tool_output(
+        "Formula check max_abs_error: 6.661e-16 eV\nBest model by RMSE: power_law",
+        tool_name="huckel_polyene_scaling",
+    )
+
+    assert assessment["usable"] is True
+    assert assessment["markers"] == []
+
+
 def test_zero_molecular_weight_output_is_not_scientific_evidence():
     assessment = assess_tool_output("Molecular weight of He: 0.000 g/mol\nComposition:")
 
     assert assessment["usable"] is False
     assert "zero molecular weight" in assessment["markers"]
+
+
+def test_chemistry_polyene_scaling_references_include_huckel_sources():
+    refs = generate_references(
+        "chemistry",
+        [{"tool": "huckel_polyene_scaling", "success": True}],
+    )
+
+    assert any("Hückel" in ref or "Huckel" in ref for ref in refs)
+    assert any("Autschbach" in ref for ref in refs)
+
+
+def test_bond_alternated_polyene_hypothesis_uses_recorded_gap_not_generic_bond_claim():
+    hypotheses = generate_hypothesis(
+        "chemistry",
+        [
+            {
+                "tool": "bond_alternated_polyene_scaling",
+                "result": (
+                    "Bond-alternated polyene gap scaling:\n"
+                    "  asymptotic_gap_estimate = 0.800000 eV\n"
+                    "  n=100: alternated_gap=0.846601 eV\n"
+                ),
+                "success": True,
+            }
+        ],
+    )
+    combined = "\n".join(h["hypothesis"] + " " + h["method"] for h in hypotheses)
+
+    assert "0.800000 eV" in combined
+    assert "catalysis" not in combined.lower()
+    assert "4|" not in combined
 
 
 def test_provenance_manager_does_not_overwrite_same_second_tool_runs():
@@ -486,6 +580,29 @@ def test_quantum_rounded_rydberg_results_are_observations_not_novelty():
     assert all(h.get("novelty_status") != "candidate_novelty" for h in hypotheses)
 
 
+def test_rydberg_scaling_comparison_gets_control_hypothesis():
+    hypotheses = generate_hypothesis(
+        "physics",
+        [
+            {
+                "tool": "rydberg_scaling_comparison",
+                "input": "1,2,3,5,10,20;delta=0.05",
+                "result": (
+                    "Hydrogen Rydberg scaling comparison:\n"
+                    "inverse_square fit E = -13.600000*(1/n^2) + 0.000000; RMSE=0.000000 eV\n"
+                    "Best model by RMSE: inverse_square"
+                ),
+                "success": True,
+            }
+        ],
+    )
+
+    assert hypotheses
+    assert hypotheses[0]["novelty_status"] == "known_control"
+    assert "inverse-square" in hypotheses[0]["hypothesis"]
+    assert "RMSE" in hypotheses[0]["method"]
+
+
 def test_conclusion_does_not_call_known_controls_novel():
     from communication.paper_enhancer import PaperEnhancer
 
@@ -561,6 +678,219 @@ def test_discussion_prefers_exact_prime_gap_pattern_over_fuzzy_sympy_match():
 
     assert "distribution of prime gaps" in discussion.lower()
     assert "primality checks" not in discussion.lower()
+
+
+def test_prime_gap_model_comparison_gets_conservative_hypothesis():
+    hypotheses = generate_hypothesis(
+        "mathematics",
+        [
+            {
+                "tool": "prime_gap_model_comparison",
+                "result": (
+                    "Prime gap scaling model comparison:\n"
+                    "max_gap_vs_logN_squared fit max_gap = 0.42*log(N)^2 + 1.0; RMSE=2.1"
+                ),
+            }
+        ],
+    )
+
+    assert hypotheses
+    assert hypotheses[0]["novelty_status"] == "finite_computational_observation"
+    assert "log(N)^2" in hypotheses[0]["hypothesis"]
+    assert "RMSE" in hypotheses[0]["method"]
+
+
+def test_discussion_separates_prime_gap_model_comparison_from_gap_distribution():
+    enhancer = PaperEnhancer()
+    discussion = enhancer._build_discussion(
+        "mathematics",
+        [
+            {
+                "tool": "prime_gap_analysis",
+                "description": "Prime gaps up to 1000",
+                "result": "Prime gap analysis up to 1000:\nMean gap: 5.9581",
+            },
+            {
+                "tool": "prime_gap_model_comparison",
+                "description": "Logarithmic model comparison",
+                "result": "Prime gap scaling model comparison:\nBest max-gap model by RMSE: logN_squared",
+            },
+        ],
+        DOMAIN_INSIGHTS["mathematics"],
+    )
+
+    assert "distribution of prime gaps" in discussion.lower()
+    assert "model-comparison control" in discussion.lower()
+    assert "rmse" in discussion.lower()
+
+
+def test_ungrounded_hypothesis_filter_drops_evolved_decimal_hallucinations():
+    results = [
+        {
+            "tool": "prime_gap_model_comparison",
+            "result": (
+                "N=100000: mean_gap/logN=0.905530, max_gap/logN^2=0.543202\n"
+                "N=1000000: mean_gap/logN=0.922087, max_gap/logN^2=0.597270\n"
+                "RMSE=0.423559"
+            ),
+        }
+    ]
+    hypotheses = [
+        {
+            "hypothesis": "The supported trend uses max_gap/logN^2=0.543202.",
+            "method": "Compare against RMSE=0.423559.",
+            "confidence": 0.6,
+        },
+        {
+            "hypothesis": "An evolved hypothesis claims a baseline of 0.780.",
+            "method": "Expect ratios 1.13 and 1.11.",
+            "confidence": 0.6,
+        },
+    ]
+
+    kept = _filter_ungrounded_hypotheses(hypotheses, results)
+
+    assert len(kept) == 1
+    assert "0.543202" in kept[0]["hypothesis"]
+
+
+def test_llm_discussion_sanitizer_removes_unsupported_decimal_sentences():
+    results = [
+        {
+            "tool": "prime_gap_model_comparison",
+            "result": (
+                "mean_gap/logN=0.905530\n"
+                "max_gap/logN^2=0.597270\n"
+                "RMSE=0.015263"
+            ),
+        }
+    ]
+    content = (
+        "The grounded ratio is 0.597270 and the RMSE is 0.015263. "
+        "A speculative extrapolation predicts 0.67 at logN 16.1. "
+        "The next test should extend the limit grid without treating that prediction as evidence."
+    )
+
+    cleaned, removed = _drop_unsupported_numeric_sentences(content, results)
+
+    assert "0.597270" in cleaned
+    assert "0.015263" in cleaned
+    assert "0.67" not in cleaned
+    assert "16.1" not in cleaned
+    assert removed == ["0.67", "16.1"]
+
+
+def test_math_branch_contract_adds_grounded_predictions_and_non_claims():
+    discussion, hypotheses = _strengthen_branch_contract(
+        "mathematics",
+        "Existing discussion.",
+        [
+            {
+                "hypothesis": f"Existing grounded hypothesis {i}",
+                "method": "Testable via extending the recorded computation.",
+                "confidence": 0.5,
+                "novelty_status": "finite_computational_observation",
+            }
+            for i in range(3)
+        ],
+        [{"tool": "prime_gap_model_comparison", "result": "Best max-gap model by RMSE: logN_squared"}],
+    )
+
+    assert len(hypotheses) >= 5
+    assert "does not claim" in discussion
+    assert "verification control" in discussion
+    assert "without asserting novelty" in discussion
+
+
+def test_physics_branch_contract_adds_grounded_predictions_and_non_claims():
+    discussion, hypotheses = _strengthen_branch_contract(
+        "physics",
+        "Existing discussion.",
+        [
+            {
+                "hypothesis": f"Existing physics control {i}",
+                "method": "Testable via repeating the recorded RMSE comparison.",
+                "confidence": 0.5,
+                "novelty_status": "known_control",
+            }
+            for i in range(2)
+        ],
+        [{"tool": "rydberg_scaling_comparison", "result": "Best model by RMSE: inverse_square"}],
+    )
+
+    assert len(hypotheses) >= 5
+    assert "does not claim" in discussion
+    assert "quantum-defect" in discussion
+    assert "without asserting novelty" in discussion
+
+
+def test_statistics_branch_contract_adds_grounded_predictions_and_non_claims():
+    discussion, hypotheses = _strengthen_branch_contract(
+        "statistics",
+        "Existing discussion.",
+        [
+            {
+                "hypothesis": "Existing statistics hypothesis with shared leading text " + str(i),
+                "method": "Testable via adding observations under the same protocol.",
+                "confidence": 0.5,
+                "novelty_status": "finite_computational_observation",
+            }
+            for i in range(3)
+        ],
+        [{"tool": "two_sample_effect_power", "result": "95% CI for mean_difference"}],
+    )
+
+    assert len(hypotheses) >= 5
+    assert len({h["hypothesis"][:80] for h in hypotheses}) >= 5
+    assert "does not claim" in discussion
+    assert "single-protocol" in discussion
+    assert "without asserting novelty" in discussion
+
+
+def test_biology_branch_contract_adds_grounded_predictions_and_non_claims():
+    discussion, hypotheses = _strengthen_branch_contract(
+        "biology",
+        "Existing discussion.",
+        [
+            {
+                "hypothesis": f"Existing biology hypothesis {i}",
+                "method": "Testable via adding matched sequence panels.",
+                "confidence": 0.5,
+                "novelty_status": "finite_computational_observation",
+            }
+            for i in range(2)
+        ],
+        [{"tool": "gc_at_panel_comparison", "result": "95% CI for mean_gc_difference"}],
+    )
+
+    assert len(hypotheses) >= 5
+    assert len({h["hypothesis"][:80] for h in hypotheses}) >= 5
+    assert "does not claim" in discussion
+    assert "taxonomic" in discussion
+    assert "without asserting novelty" in discussion
+
+
+def test_astronomy_branch_contract_adds_grounded_predictions_and_non_claims():
+    discussion, hypotheses = _strengthen_branch_contract(
+        "astronomy",
+        "Existing discussion.",
+        [
+            {
+                "hypothesis": f"Existing astronomy hypothesis {i}",
+                "method": "Testable via extending the redshift grid.",
+                "confidence": 0.5,
+                "novelty_status": "finite_computational_observation",
+            }
+            for i in range(2)
+        ],
+        [{"tool": "cosmology_residual_comparison", "result": "max_abs_percent_residual"}],
+    )
+
+    assert len(hypotheses) >= 5
+    assert len({h["hypothesis"][:80] for h in hypotheses}) >= 5
+    assert "does not claim" in discussion
+    assert "Hubble tension" in discussion
+    assert "without asserting novelty" in discussion
 
 
 def test_peer_review_reproducibility_uses_real_experiment_ids_without_rendered_data_section():
