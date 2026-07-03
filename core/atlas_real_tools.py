@@ -630,6 +630,50 @@ def deterministic_sample(distribution: str, n: int, *params: float, seed: int = 
     )
 
 
+def deterministic_bootstrap_mean_difference_ci(
+    first: Sequence[float],
+    second: Sequence[float],
+    *,
+    seed: int = 0,
+    iterations: int = 5000,
+    confidence: float = 0.95,
+    order: str = "second_minus_first",
+) -> tuple[float, float]:
+    """Return a seeded bootstrap CI for the difference between two means.
+
+    This centralizes seeded resampling so legacy Atlas tools do not call
+    ``np.random`` directly while still producing reproducible bootstrap
+    intervals for scientific reports.
+    """
+    if iterations <= 0:
+        raise ValueError(f"iterations must be > 0, got {iterations}")
+    if not 0.0 < confidence < 1.0:
+        raise ValueError(f"confidence must be between 0 and 1, got {confidence}")
+
+    first_arr = np.asarray(first, dtype=float)
+    second_arr = np.asarray(second, dtype=float)
+    if first_arr.size == 0 or second_arr.size == 0:
+        raise ValueError("both samples must contain at least one observation")
+
+    rng = np.random.default_rng(int(seed))
+    boot_diffs = np.empty(int(iterations), dtype=float)
+    for idx in range(int(iterations)):
+        sample_first = rng.choice(first_arr, size=first_arr.size, replace=True)
+        sample_second = rng.choice(second_arr, size=second_arr.size, replace=True)
+        if order == "second_minus_first":
+            boot_diffs[idx] = float(np.mean(sample_second) - np.mean(sample_first))
+        elif order == "first_minus_second":
+            boot_diffs[idx] = float(np.mean(sample_first) - np.mean(sample_second))
+        else:
+            raise ValueError(
+                "order must be 'second_minus_first' or 'first_minus_second'"
+            )
+
+    alpha = (1.0 - confidence) / 2.0
+    low, high = np.percentile(boot_diffs, [100.0 * alpha, 100.0 * (1.0 - alpha)])
+    return float(low), float(high)
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 # String-protocol shims — match the colon-delimited input contract Atlas uses.
 # ─────────────────────────────────────────────────────────────────────────────

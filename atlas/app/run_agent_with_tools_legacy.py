@@ -2723,13 +2723,16 @@ a₀ coefficient: {a0}
 
             t_stat, p_value = stats.ttest_ind(data1, data2, equal_var=False)
             seed = 12345
-            rng = np.random.default_rng(seed)
-            boot_diffs = []
-            for _ in range(5000):
-                sample1 = rng.choice(data1, size=n1, replace=True)
-                sample2 = rng.choice(data2, size=n2, replace=True)
-                boot_diffs.append(float(np.mean(sample2) - np.mean(sample1)))
-            boot_low, boot_high = np.percentile(np.array(boot_diffs), [2.5, 97.5])
+            if not _REAL_TOOLS_AVAILABLE:
+                return "Error: core.atlas_real_tools is required for deterministic bootstrap CI."
+            boot_low, boot_high = _real.deterministic_bootstrap_mean_difference_ci(
+                data1,
+                data2,
+                seed=seed,
+                iterations=5000,
+                confidence=0.95,
+                order="second_minus_first",
+            )
 
             alpha = 0.05
             zcrit = float(stats.norm.ppf(1.0 - alpha / 2.0))
@@ -3140,13 +3143,16 @@ a₀ coefficient: {a0}
 
             t_stat, p_value = stats.ttest_ind(gc_fracs, at_fracs, equal_var=False)
             seed = 12345
-            rng = np.random.default_rng(seed)
-            boot_diffs = []
-            for _ in range(5000):
-                sample_gc = rng.choice(gc_fracs, size=n_gc, replace=True)
-                sample_at = rng.choice(at_fracs, size=n_at, replace=True)
-                boot_diffs.append(float(np.mean(sample_gc) - np.mean(sample_at)))
-            boot_low, boot_high = np.percentile(np.array(boot_diffs), [2.5, 97.5])
+            if not _REAL_TOOLS_AVAILABLE:
+                return "Error: core.atlas_real_tools is required for deterministic bootstrap CI."
+            boot_low, boot_high = _real.deterministic_bootstrap_mean_difference_ci(
+                gc_fracs,
+                at_fracs,
+                seed=seed,
+                iterations=5000,
+                confidence=0.95,
+                order="first_minus_second",
+            )
 
             lengths_gc = [len(seq) for seq in gc_panel]
             lengths_at = [len(seq) for seq in at_panel]
