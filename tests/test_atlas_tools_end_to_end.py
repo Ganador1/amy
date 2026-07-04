@@ -113,6 +113,24 @@ def test_ssh_polyene_gap_map_identifiability_contract(registry):
     assert "smallest_identifiable_n" in out
 
 
+def test_ssh_edge_localization_map_reports_frontier_state_localization(registry):
+    out = _run(
+        registry,
+        "ssh_edge_localization_map",
+        "20,40,60;deltas=0.05,0.1;orientations=trivial,topological;"
+        "beta=-2.5;edge_sites=2;localization_threshold=0.25",
+    )
+
+    assert "SSH/polyene edge-state localization map" in out
+    assert "frontier_splitting_eV" in out
+    assert "frontier_pair_edge_weight" in out
+    assert "frontier_pair_ipr" in out
+    assert "participation_sites" in out
+    assert "localization_onset_n" in out
+    assert "delta=0.100000; orientation=topological" in out
+    assert "localized_edge_state=true" in out
+
+
 # (name, input, list-of-substrings-that-must-all-appear, human label)
 CASES = [
     # SymPy

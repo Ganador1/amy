@@ -87,6 +87,8 @@ DOMAIN_INSIGHTS = {
         "patterns": {
             "molecular_orbital_energy": "The Hückel molecular orbital analysis computes π-electron energy levels for conjugated systems. The HOMO-LUMO gap scaling with conjugation length (approximately 1/n for linear polyenes) is a well-known analytical result from Hückel theory, derivable from the particle-in-a-box model. Cyclic systems (e.g., benzene) exhibit characteristic degenerate orbital pairs absent in linear polyenes, reflecting their higher symmetry (D_nh vs. C_2h). The total π-electron energy quantifies aromatic stabilization relative to isolated double bonds. Any reported scaling law should be compared against the known analytical solution before being classified as novel.",
             "huckel_polyene_scaling": "The Hückel polyene scaling series is a falsifiable model-comparison control: linear finite-chain Hückel theory predicts a frontier gap proportional to sin(pi/(2(N+1))), which is nearly inverse-length over moderate N. Autschbach's particle-in-a-box analysis warns that real polyenes with bond-length alternation approach a finite absorption limit, so this computation should be framed as a baseline Hückel model test rather than a quantitative prediction of experimental spectra.",
+            "ssh_polyene_gap_map": "The SSH/polyene gap map is a boundary-condition stress test for gap-only inference. Trivial termination estimates the Peierls-like bulk opening, while topological termination can compress the frontier gap through in-gap boundary states. The useful claim is therefore not that Peierls physics is new, but that finite-chain HOMO-LUMO gaps are not identifiable without recording boundary orientation and threshold sensitivity.",
+            "ssh_edge_localization_map": "The SSH edge-localization map tests the gap-only interpretation with eigenvectors rather than eigenvalues alone. Edge weight, inverse participation ratio, and participation-sites diagnostics distinguish boundary-localized frontier states from delocalized bulk frontier states. This is the stronger control for the candidate claim: a small topological frontier gap supports edge-state contamination only if the corresponding frontier eigenvectors also concentrate at the chain ends.",
             "molecular_weight_calc": "The computed molecular weights confirm standard atomic mass contributions and stoichiometric ratios. The precision of these calculations enables verification of empirical formulas and distinction between isomeric compounds with identical mass ratios.",
             "bond_energy_analyzer": "Bond energy analysis reveals the thermodynamic stability hierarchy of molecular interactions. The C-C bond energy (347 kJ/mol) compared to C=C (614 kJ/mol) and C≡C (839 kJ/mol) demonstrates the relationship between bond order and bond strength, consistent with molecular orbital theory predictions.",
             "reaction_predictor": "The predicted reaction pathways follow established mechanistic principles including Markovnikov's rule and Zaitsev's orientation. The thermodynamic favorability of products correlates with stability of the transition state.",
@@ -756,7 +758,36 @@ def generate_hypothesis(domain: str, results: list[dict]) -> list[dict]:
                 ))
                 
         elif domain == "chemistry":
-            if "ssh_polyene_gap_map" in tool:
+            if "ssh_edge_localization_map" in tool:
+                localization_match = re.search(
+                    r"delta=([0-9.]+);\s*orientation=topological;\s*"
+                    r"localization_onset_n=([0-9]+|not_observed);\s*"
+                    r"max_pair_edge_weight=([0-9.]+);\s*"
+                    r"max_pair_ipr=([0-9.]+);\s*"
+                    r"min_participation_sites=([0-9.]+)",
+                    result_text,
+                    flags=re.IGNORECASE,
+                )
+                if localization_match:
+                    delta_value = localization_match.group(1)
+                    onset_n = localization_match.group(2)
+                    edge_weight = localization_match.group(3)
+                    ipr = localization_match.group(4)
+                    participation = localization_match.group(5)
+                else:
+                    delta_value = "the tested nonzero"
+                    onset_n = "the recorded"
+                    edge_weight = "the recorded"
+                    ipr = "the recorded"
+                    participation = "the recorded"
+                hypotheses.append(_hypothesis(
+                    f"The SSH/polyene edge-state interpretation is directly testable by eigenvector localization: for delta={delta_value}, localization_onset_n={onset_n}, max_pair_edge_weight={edge_weight}, max_pair_ipr={ipr}, and min_participation_sites={participation} should co-occur with the small topological frontier gap rather than with the trivial Peierls gap.",
+                    0.66,
+                    f"Rerun ssh_edge_localization_map with denser chain lengths and require the topological edge weight/IPR signal at delta={delta_value} to remain localized at or before localization_onset_n={onset_n}; reject the gap-only edge-state interpretation if frontier eigenvectors delocalize while the small gap remains.",
+                    novelty_status="candidate_novelty",
+                    evidence_level="eigenvector_diagnostic",
+                ))
+            elif "ssh_polyene_gap_map" in tool:
                 summary_row = _select_ssh_gap_summary_row(result_text)
                 if summary_row:
                     delta_value = summary_row["delta"]
@@ -950,7 +981,7 @@ def generate_references(domain: str, results: list[dict]) -> list[str]:
             tool_refs.append("Pomerance, C. (2009). Prime Numbers. Springer Berlin Heidelberg.")
         elif "quantum" in tool or "energy" in tool:
             tool_refs.append("Griffiths, D.J. (2018). Introduction to Quantum Mechanics. Cambridge University Press.")
-        elif "ssh_polyene_gap_map" in tool:
+        elif "ssh_polyene_gap_map" in tool or "ssh_edge_localization_map" in tool:
             tool_refs.append("Su, W.P., Schrieffer, J.R. & Heeger, A.J. (1979). Solitons in polyacetylene. Physical Review Letters, 42(25), 1698-1701. doi:10.1103/PhysRevLett.42.1698.")
             tool_refs.append("Valli, A. & Tomczak, J.M. (2023). Resistance saturation in semi-conducting polyacetylene molecular wires. Journal of Computational Electronics, 22, 1363-1376. doi:10.1007/s10825-023-02043-7.")
             tool_refs.append("Nokelainen, J., Barbiellini, B. & Bansil, A. (2025). Magnetic properties of polyacetylene: Exploring electronic correlation effects through first-principles modeling. arXiv:2408.15382.")
@@ -1531,6 +1562,17 @@ class PaperEnhancer:
         """Build a domain-specific introduction."""
         refs = domain_data.get("references", [])
         ref_citations = "; ".join([r.split("(")[0].strip().rstrip(".") for r in refs[:3]]) if refs else "established literature"
+        unique_tools = {r.get("tool", "unknown") for r in results}
+        n_unique = len(unique_tools)
+        n_total = len(results)
+        if n_unique == 1 and n_total > 1:
+            methods_desc = f"a single computational method applied across {n_total} parameter configurations"
+        elif n_unique > 1 and n_total > n_unique:
+            methods_desc = f"{n_unique} distinct computational methods across {n_total} total analyses"
+        elif n_unique > 1:
+            methods_desc = f"{n_unique} distinct computational methods"
+        else:
+            methods_desc = "a computational analysis"
         
         intro = (
             f"The study of {topic.lower()} represents a fundamental challenge in {domain}, "
@@ -1538,7 +1580,7 @@ class PaperEnhancer:
             f"({ref_citations}). "
             f"Recent advances in computational tools have enabled systematic verification of "
             f"theoretical predictions at unprecedented scale and precision.\n\n"
-            f"In this work, we employ {len(results)} computational methods to analyze "
+            f"In this work, we employ {methods_desc} to analyze "
             f"{topic.lower()}, verifying established results while separating finite-range "
             f"candidate patterns from novelty claims. Our approach combines symbolic computation, "
             f"numerical analysis, and statistical verification to provide a comprehensive "

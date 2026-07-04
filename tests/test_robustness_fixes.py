@@ -65,6 +65,34 @@ def test_deterministic_evolve_combination_normal_case():
     assert "moreover" in out["hypothesis"]
 
 
+def test_deterministic_evolve_keeps_ssh_tests_deterministic():
+    parent = {
+        "hypothesis": (
+            "The SSH edge-state interpretation is directly testable by "
+            "eigenvector localization: for delta=0.025000, "
+            "localization_onset_n=16, max_pair_edge_weight=0.271313, "
+            "max_pair_ipr=0.094124, and min_participation_sites=10.624256 "
+            "should co-occur with the small topological frontier gap."
+        ),
+        "method": (
+            "Rerun ssh_edge_localization_map with denser chain lengths and "
+            "require the edge weight/IPR signal to remain localized."
+        ),
+        "novelty_status": "candidate_novelty",
+        "confidence": 0.66,
+    }
+
+    out = deterministic_evolve(parent, "grounding", domain="chemistry")
+    combined = out["hypothesis"] + " " + out.get("method", "")
+
+    assert "ssh_edge_localization_map" in combined
+    assert "denser chain lengths" in combined
+    assert "edge weight/ipr" in combined.lower()
+    assert "confidence interval" not in combined.lower()
+    assert "standard error" not in combined.lower()
+    assert "p-value" not in combined.lower()
+
+
 # ── _escape_latex escapes the full special set ───────────────────────────────
 
 def test_escape_latex_handles_subscripts_and_specials():

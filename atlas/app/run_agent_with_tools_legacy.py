@@ -412,6 +412,19 @@ class DynamicToolRegistry:
             input_format="atom_count_series_with_deltas_and_orientations",
             output_format="ssh_polyene_gap_map"
         ))
+
+        self.register_tool(ToolDescriptor(
+            name="ssh_edge_localization_map",
+            domain="chemistry",
+            description=(
+                "Measure SSH/polyene frontier-state localization from eigenvectors. "
+                "Input: '20,40,60;deltas=0.05,0.1;orientations=trivial,topological;"
+                "beta=-2.5;edge_sites=2;localization_threshold=0.25'"
+            ),
+            function=self._ssh_edge_localization_map,
+            input_format="atom_count_series_with_localization_options",
+            output_format="ssh_edge_localization_map"
+        ))
         
         self.register_tool(ToolDescriptor(
             name="bond_energy_analyzer",
@@ -2988,7 +3001,7 @@ a₀ coefficient: {a0}
             raise ValueError(f"{option_name} must contain at least one value")
         return list(dict.fromkeys(values))
 
-    def _ssh_gap_for_chain(
+    def _ssh_hamiltonian_for_chain(
         self,
         n_atoms: int,
         *,
@@ -3010,9 +3023,64 @@ a₀ coefficient: {a0}
             coupling = t_strong if use_strong else t_weak
             hamiltonian[idx, idx + 1] = -coupling
             hamiltonian[idx + 1, idx] = -coupling
+        return hamiltonian
 
+    def _ssh_gap_for_chain(
+        self,
+        n_atoms: int,
+        *,
+        beta: float,
+        delta: float,
+        orientation: str,
+        alpha: float = 0.0,
+    ) -> float:
+        hamiltonian = self._ssh_hamiltonian_for_chain(
+            n_atoms,
+            beta=beta,
+            delta=delta,
+            orientation=orientation,
+            alpha=alpha,
+        )
         energies = np.linalg.eigvalsh(hamiltonian)
         return float(energies[n_atoms // 2] - energies[n_atoms // 2 - 1])
+
+    def _ssh_frontier_localization_for_chain(
+        self,
+        n_atoms: int,
+        *,
+        beta: float,
+        delta: float,
+        orientation: str,
+        edge_sites: int,
+    ) -> dict[str, float]:
+        hamiltonian = self._ssh_hamiltonian_for_chain(
+            n_atoms,
+            beta=beta,
+            delta=delta,
+            orientation=orientation,
+        )
+        energies, eigenvectors = np.linalg.eigh(hamiltonian)
+        frontier_indices = [n_atoms // 2 - 1, n_atoms // 2]
+        edge_weights = []
+        iprs = []
+        for index in frontier_indices:
+            probabilities = np.square(np.abs(eigenvectors[:, index]))
+            edge_weight = float(
+                probabilities[:edge_sites].sum() + probabilities[-edge_sites:].sum()
+            )
+            ipr = float(np.square(probabilities).sum())
+            edge_weights.append(edge_weight)
+            iprs.append(ipr)
+
+        pair_edge_weight = float(sum(edge_weights) / len(edge_weights))
+        pair_ipr = float(sum(iprs) / len(iprs))
+        participation_sites = float(1.0 / pair_ipr) if pair_ipr > 0 else float("inf")
+        return {
+            "frontier_splitting_eV": float(energies[frontier_indices[1]] - energies[frontier_indices[0]]),
+            "frontier_pair_edge_weight": pair_edge_weight,
+            "frontier_pair_ipr": pair_ipr,
+            "participation_sites": participation_sites,
+        }
 
     def _ssh_polyene_gap_map(self, query: str) -> str:
         """Map finite-chain SSH identifiability across length and orientation."""
@@ -3146,6 +3214,146 @@ a₀ coefficient: {a0}
                 + "\n".join(rows)
                 + "\n"
                 "  Interpretation: trivial-orientation gaps estimate Peierls-like bulk opening, while topological-orientation frontier gaps can be dominated by edge states; gap-only evidence is therefore insufficient unless boundary orientation is controlled."
+            )
+        except Exception as e:
+            return f"Error: {str(e)}"
+
+    def _ssh_edge_localization_map(self, query: str) -> str:
+        """Map frontier-state edge localization for finite SSH chains."""
+        try:
+            segments = [part.strip() for part in query.split(";") if part.strip()]
+            if not segments:
+                return (
+                    "Error: Provide atom counts, e.g. "
+                    "'20,40,60;deltas=0.05;orientations=trivial,topological'"
+                )
+
+            atom_counts = [
+                int(part.strip())
+                for part in re.split(r"[,;\s]+", segments[0])
+                if part.strip()
+            ]
+            atom_counts = list(dict.fromkeys(atom_counts))
+            if len(atom_counts) < 2:
+                return "Error: Provide at least two even atom counts, e.g. '20,40'"
+            invalid = [n for n in atom_counts if n < 2 or n % 2 != 0]
+            if invalid:
+                return f"Error: SSH closed-shell chains require even atom counts >= 2. Invalid: {invalid}"
+
+            deltas = [0.05, 0.1, 0.2]
+            orientations = ["trivial", "topological"]
+            beta = -2.5
+            edge_sites = 2
+            localization_threshold = 0.25
+            min_localization_n = 16
+            for option in segments[1:]:
+                if "=" not in option:
+                    continue
+                key, value = [item.strip().lower() for item in option.split("=", 1)]
+                if key == "deltas":
+                    deltas = self._parse_float_series_option(value, key)
+                elif key == "orientations":
+                    orientations = [
+                        part.strip().lower()
+                        for part in value.split(",")
+                        if part.strip()
+                    ]
+                elif key in {"beta", "b"}:
+                    beta = float(value)
+                elif key == "edge_sites":
+                    edge_sites = int(value)
+                elif key in {"localization_threshold", "edge_weight_threshold"}:
+                    localization_threshold = float(value)
+                elif key == "min_localization_n":
+                    min_localization_n = int(value)
+
+            bad_deltas = [delta for delta in deltas if delta < 0 or delta > 1]
+            if bad_deltas:
+                return f"Error: deltas must be in [0, 1]. Invalid: {bad_deltas}"
+            bad_orientations = [
+                orientation for orientation in orientations
+                if orientation not in {"trivial", "topological"}
+            ]
+            if bad_orientations:
+                return f"Error: unknown orientations: {bad_orientations}. Available: trivial, topological"
+            if edge_sites < 1:
+                return f"Error: edge_sites must be >= 1, got {edge_sites}"
+            if localization_threshold < 0 or localization_threshold > 1:
+                return (
+                    "Error: localization_threshold must be in [0, 1], "
+                    f"got {localization_threshold}"
+                )
+            too_short = [n for n in atom_counts if edge_sites * 2 >= n]
+            if too_short:
+                return (
+                    "Error: edge_sites covers the whole chain for "
+                    f"{too_short}; choose fewer edge sites or larger chains"
+                )
+
+            rows: list[str] = []
+            summaries: list[str] = []
+            for delta in deltas:
+                for orientation in orientations:
+                    metrics_by_n = []
+                    localization_onset = None
+                    for n in atom_counts:
+                        metrics = self._ssh_frontier_localization_for_chain(
+                            n,
+                            beta=beta,
+                            delta=delta,
+                            orientation=orientation,
+                            edge_sites=edge_sites,
+                        )
+                        localized = (
+                            n >= min_localization_n
+                            and orientation == "topological"
+                            and delta > 0
+                            and metrics["frontier_pair_edge_weight"] >= localization_threshold
+                        )
+                        if localized and localization_onset is None:
+                            localization_onset = n
+                        metrics_by_n.append(metrics)
+                        rows.append(
+                            f"    delta={delta:.6f}; orientation={orientation}; n={n}; "
+                            f"frontier_splitting_eV={metrics['frontier_splitting_eV']:.6f}; "
+                            f"frontier_pair_edge_weight={metrics['frontier_pair_edge_weight']:.6f}; "
+                            f"frontier_pair_ipr={metrics['frontier_pair_ipr']:.6f}; "
+                            f"participation_sites={metrics['participation_sites']:.6f}; "
+                            f"localized_edge_state={str(localized).lower()}"
+                        )
+
+                    max_edge_weight = max(
+                        metric["frontier_pair_edge_weight"] for metric in metrics_by_n
+                    )
+                    max_ipr = max(metric["frontier_pair_ipr"] for metric in metrics_by_n)
+                    min_participation = min(
+                        metric["participation_sites"] for metric in metrics_by_n
+                    )
+                    terminal = metrics_by_n[-1]
+                    summaries.append(
+                        f"  delta={delta:.6f}; orientation={orientation}; "
+                        f"localization_onset_n={localization_onset if localization_onset is not None else 'not_observed'}; "
+                        f"max_pair_edge_weight={max_edge_weight:.6f}; "
+                        f"max_pair_ipr={max_ipr:.6f}; "
+                        f"min_participation_sites={min_participation:.6f}; "
+                        f"terminal_frontier_splitting_eV={terminal['frontier_splitting_eV']:.6f}"
+                    )
+
+            return (
+                "SSH/polyene edge-state localization map:\n"
+                "  Method: exact diagonalization of open-boundary nearest-neighbor SSH/Hückel chains with frontier eigenvector diagnostics.\n"
+                f"  Chain sizes (n atoms): {atom_counts}\n"
+                f"  beta={beta:.6f} eV; deltas={','.join(f'{d:.6f}' for d in deltas)}; "
+                f"orientations={','.join(orientations)}; edge_sites={edge_sites}; "
+                f"localization_threshold={localization_threshold:.6f}; "
+                f"min_localization_n={min_localization_n}\n"
+                "  Localization summary:\n"
+                + "\n".join(summaries)
+                + "\n"
+                "  Frontier-state observations:\n"
+                + "\n".join(rows)
+                + "\n"
+                "  Interpretation: high frontier_pair_edge_weight together with elevated IPR and low participation_sites directly tests whether the small topological frontier gap is caused by boundary-localized states rather than a bulk Peierls gap."
             )
         except Exception as e:
             return f"Error: {str(e)}"

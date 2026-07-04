@@ -146,6 +146,7 @@ def test_e2e_chemistry_plan_targets_polyene_scaling():
         "SSH polyene finite-chain identifiability: Peierls gaps versus edge-state contamination"
     )
     assert any(tool == "ssh_polyene_gap_map" for tool, _, _ in calls)
+    assert any(tool == "ssh_edge_localization_map" for tool, _, _ in calls)
 
     ssh_calls = [
         tool_input
@@ -156,6 +157,15 @@ def test_e2e_chemistry_plan_targets_polyene_scaling():
     assert "deltas=" in ssh_calls[0]
     assert "orientations=trivial,topological" in ssh_calls[0]
     assert "threshold=0.05" in ssh_calls[0]
+
+    localization_calls = [
+        tool_input
+        for tool, tool_input, _ in calls
+        if tool == "ssh_edge_localization_map"
+    ]
+    assert localization_calls
+    assert "edge_sites=2" in localization_calls[0]
+    assert "localization_threshold=0.25" in localization_calls[0]
 
     scaling_calls = [
         tool_input
