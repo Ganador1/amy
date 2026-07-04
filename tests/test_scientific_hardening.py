@@ -526,6 +526,83 @@ def test_ssh_polyene_gap_map_hypothesis_ignores_zero_delta_control_rows():
     assert "edge_state_onset_n=not_observed" not in combined
 
 
+def test_ssh_edge_localization_hypothesis_uses_ipr_and_edge_weight_evidence():
+    hypotheses = generate_hypothesis(
+        "chemistry",
+        [
+            {
+                "tool": "ssh_edge_localization_map",
+                "result": (
+                    "SSH/polyene edge-state localization map:\n"
+                    "  delta=0.100000; orientation=topological; "
+                    "localization_onset_n=16; "
+                    "max_pair_edge_weight=0.330600; "
+                    "max_pair_ipr=0.099000; "
+                    "min_participation_sites=10.100000\n"
+                ),
+                "success": True,
+            }
+        ],
+    )
+    combined = "\n".join(h["hypothesis"] + " " + h["method"] for h in hypotheses)
+
+    assert "delta=0.100000" in combined
+    assert "localization_onset_n=16" in combined
+    assert "edge weight" in combined.lower()
+    assert "ipr" in combined.lower()
+    assert "gap-only" in combined.lower()
+    assert "catalysis" not in combined.lower()
+
+
+def test_ssh_edge_localization_discussion_uses_eigenvector_diagnostic_pattern():
+    enhancer = PaperEnhancer()
+    discussion = enhancer._build_discussion(
+        "chemistry",
+        [
+            {
+                "tool": "ssh_edge_localization_map",
+                "description": "SSH frontier-state localization map",
+                "result": (
+                    "delta=0.100000; orientation=topological; "
+                    "frontier_pair_edge_weight=0.385269; "
+                    "frontier_pair_ipr=0.125048"
+                ),
+            }
+        ],
+        DOMAIN_INSIGHTS["chemistry"],
+    )
+
+    assert "eigenvectors" in discussion.lower()
+    assert "edge weight" in discussion.lower()
+    assert "inverse participation ratio" in discussion.lower()
+    assert "gap-only" in discussion.lower()
+    assert "computed value of -2.500000" not in discussion
+
+
+def test_introduction_does_not_count_repeated_tool_runs_as_independent_methods():
+    enhancer = PaperEnhancer()
+    intro = enhancer._build_introduction(
+        "chemistry",
+        "Repeated Huckel endpoint controls",
+        [
+            {
+                "tool": "molecular_orbital_energy",
+                "description": "Four-site Huckel endpoint",
+                "result": "HOMO-LUMO gap: 3.090 eV",
+            },
+            {
+                "tool": "molecular_orbital_energy",
+                "description": "Twenty-site Huckel endpoint",
+                "result": "HOMO-LUMO gap: 0.747 eV",
+            },
+        ],
+        DOMAIN_INSIGHTS["chemistry"],
+    )
+
+    assert "2 computational methods" not in intro
+    assert "single computational method applied across 2 parameter configurations" in intro
+
+
 def test_provenance_manager_does_not_overwrite_same_second_tool_runs():
     _reset_tmp()
     manager = ProvenanceManager(base_dir=TMP_DIR)

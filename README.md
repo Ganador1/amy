@@ -67,18 +67,18 @@ See [`experiments/all_domains/REVIEW.json`](experiments/all_domains/REVIEW.json)
 
 ## Recent E2E branch validation (July 2026)
 
-The latest focused E2E loop used GLM-5.2 with the LLM enhancer, LLM judge, and Evolution agent enabled. Instead of broad exploration, each branch was forced into a single falsifiable scientific contract: baseline, perturbation/alternative, independent control, explicit limitations, and provenance-grounded numerical claims. The loop controller is [`scripts/run/branch_quality.py`](scripts/run/branch_quality.py); the production harness is [`scripts/run/run_e2e_validation.py`](scripts/run/run_e2e_validation.py).
+The latest focused E2E loop uses the same production harness under either GLM-5.2/Ollama or the deterministic fallback, depending on available credentials. Instead of broad exploration, each branch is forced into a single falsifiable scientific contract: baseline, perturbation/alternative, independent control, explicit limitations, and provenance-grounded numerical claims. The loop controller is [`scripts/run/branch_quality.py`](scripts/run/branch_quality.py); the production harness is [`scripts/run/run_e2e_validation.py`](scripts/run/run_e2e_validation.py).
 
 | Domain | Scientific target | Rubric | Discussion | Grounding repairs | Artifact |
 |---|---|---:|---:|---:|---|
 | Astronomy | Planck18 luminosity-distance residuals vs low-z Hubble-law controls | **98.0** | 83.075 | 0 | [`e2e_astronomy_20260703_171209.json`](experiments/e2e_validation/e2e_astronomy_20260703_171209.json) |
 | Biology | GC-rich vs AT-rich sequence panels with coding-context controls | **100.0** | 86.611 | 0 | [`e2e_biology_20260703_165642.json`](experiments/e2e_validation/e2e_biology_20260703_165642.json) |
-| Chemistry | SSH polyene finite-chain identifiability vs edge-state contamination | **99.0** | 84.866 | 0 | [`e2e_chemistry_20260704_012718.json`](experiments/e2e_validation/e2e_chemistry_20260704_012718.json) |
+| Chemistry | SSH polyene finite-chain identifiability with eigenvector edge-localization controls | **100.0** | 80.530 | 0 | [`e2e_chemistry_20260704_150913.json`](experiments/e2e_validation/e2e_chemistry_20260704_150913.json) |
 | Mathematics | Prime-gap scaling against logarithmic and Cramer-style baselines | **97.5** | 84.370 | 0 | [`e2e_mathematics_20260703_012240.json`](experiments/e2e_validation/e2e_mathematics_20260703_012240.json) |
 | Physics | Hydrogen Rydberg inverse-square scaling against perturbation controls | **93.5** | 81.023 | 0 | [`e2e_physics_20260703_163343.json`](experiments/e2e_validation/e2e_physics_20260703_163343.json) |
 | Statistics | Two-sample inference with effect size and uncertainty controls | **100.0** | 84.241 | 0 | [`e2e_statistics_20260703_164519.json`](experiments/e2e_validation/e2e_statistics_20260703_164519.json) |
 
-The important change is not just the higher scores. Earlier failures were mostly caused by broad branch objectives, missing competing models, and LLM Discussion sections that introduced unsupported numbers. The new branch loop adds deterministic tools such as `cosmology_residual_comparison`, `gc_at_panel_comparison`, `two_sample_effect_power`, `rydberg_scaling_comparison`, `ssh_polyene_gap_map`, and explicit model-comparison controls, then filters unsupported evolved hypotheses before the paper is written. In the final branch-quality pass, all six domains report `status=target`, `reflection.score=100`, and zero failed tool calls.
+The important change is not just the higher scores. Earlier failures were mostly caused by broad branch objectives, missing competing models, and LLM Discussion sections that introduced unsupported numbers. The new branch loop adds deterministic tools such as `cosmology_residual_comparison`, `gc_at_panel_comparison`, `two_sample_effect_power`, `rydberg_scaling_comparison`, `ssh_polyene_gap_map`, `ssh_edge_localization_map`, and explicit model-comparison controls, then filters unsupported evolved hypotheses before the paper is written. In chemistry, the final pass now tests frontier-pair edge weight, inverse participation ratio, and participation-site localization directly instead of relying on gap-only SSH inference. In the final branch-quality pass, all six domains report `status=target`, `reflection.score=100`, and zero failed tool calls.
 
 ## How A.M.Y thinks — the cognitive cycle in depth
 
@@ -179,7 +179,7 @@ A.M.Y does not call SymPy or PySCF directly. It speaks JSON over stdin / stdout 
 
 AXIOM Atlas is a scientific research platform with three layers:
 
-- **Tool registry** (`atlas/app/run_agent_with_tools_legacy.py`, `atlas/app/extended_science_tools.py`) — 94 callable tools organised by domain. Each tool has a `name`, `domain`, `description`, `input_format`, and a callable. Adding a new tool is one `register_tool(ToolDescriptor(...))` call.
+- **Tool registry** (`atlas/app/run_agent_with_tools_legacy.py`, `atlas/app/extended_science_tools.py`) — 95 callable tools organised by domain. Each tool has a `name`, `domain`, `description`, `input_format`, and a callable. Adding a new tool is one `register_tool(ToolDescriptor(...))` call.
 - **Service layer** (`atlas/app/services/`, `atlas/app/domains/`) — services for heavier capabilities: GNoME materials discovery, additive manufacturing process configuration, gravitational lensing, light EEG band-power analysis, climate evidence orchestration, and more. **Maturity varies** — some are real, some heuristic, and a few (AlphaFold 3, ClinicalBERT in the `services/` path) are mock/keyword-only; see [Honest scope](#honest-scope-what-is-real-vs-heuristic) before relying on any service's numbers.
 - **Safety kernel** (`atlas/app/security/`) — the misuse guard, the actor-tracking risk policy, and the safety wrapper that every tool call must pass through. Fails closed by design.
 
@@ -192,7 +192,7 @@ The registry exposes 100+ callable tools at runtime once dynamic registration (`
 | Domain | Count | Notable tools |
 |---|---:|---|
 | Mathematics | 20 | `sympy_solve_equation`, `sympy_derivative`, `sympy_integrate`, `sympy_simplify`, `sympy_prime_analysis`, `prime_gap_analysis`, `number_theory_advanced`, `mathematical_discovery`, `conjecture_engine`, `automated_prover`, `z3_prover`, `z3_verify_theorem`, `graph_theory`, `topology_invariants`, `symbolic_calculus`, `calculus_engine` |
-| Chemistry | 21 | `molecular_weight_calc`, `bond_energy_analyzer`, `molecular_orbital_energy`, `huckel_polyene_scaling`, `bond_alternated_polyene_scaling`, `ssh_polyene_gap_map`, `computational_chemistry`, `pyscf_hf_energy`, `pyscf_dft_energy`, `ase_optimize`, `ase_thermochemistry`, plus service-backed adapters |
+| Chemistry | 22 | `molecular_weight_calc`, `bond_energy_analyzer`, `molecular_orbital_energy`, `huckel_polyene_scaling`, `bond_alternated_polyene_scaling`, `ssh_polyene_gap_map`, `ssh_edge_localization_map`, `computational_chemistry`, `pyscf_hf_energy`, `pyscf_dft_energy`, `ase_optimize`, `ase_thermochemistry`, plus service-backed adapters |
 | Physics | 13 | `quantum_energy_levels`, `rydberg_scaling_comparison`, `quantum_circuit`, `astropy_constants`, `astropy_blackbody`, `calculus_engine`, plus services for plasma physics, particle physics, solid-state physics, quantum physics, gravitational lensing, physics-informed neural networks |
 | Biology | 8 | `dna_analyzer`, `gc_at_panel_comparison`, `sequence_analyzer`, `protein_properties`, `dnabert2_analysis`, plus services for genomics, computational biology, alphafold3 protein structure |
 | Statistics | 6 | `numpy_statistics`, `numpy_distribution`, `numpy_correlation`, `correlation_analysis`, `hypothesis_tester`, `two_sample_effect_power` |
@@ -308,7 +308,7 @@ Every harness emits a re-scoreable JSON. Nothing in this README is unverifiable 
 The upgraded pipeline (LLM enhancer + Evolution agent + working LLM judge) produces measurably better papers than earlier A.M.Y versions, validated end-to-end with real Atlas tool calls and adversarial verification (`experiments/e2e_v2/`):
 
 - **Rubric.** Fresh papers across five domains score ~76–88 on the project's deterministic 9-dimension rubric (`experiments/ab_test/scoring/score_paper.py`), vs a prior-version baseline of ~71 (curated showcase) and ~40 (legacy flat corpus). Provenance integrity (SHA-256 re-hash) is intact on every audited paper.
-- **Focused branch loop.** The July 2026 E2E branch loop now reaches target status across six domains: astronomy 98.0, biology 100.0, chemistry 99.0, mathematics 97.5, physics 93.5, and statistics 100.0. Every final branch has `grounding_repair.repairs = 0`, `reflection.score = 100`, and no failed tool calls.
+- **Focused branch loop.** The July 2026 E2E branch loop now reaches target status across six domains: astronomy 98.0, biology 100.0, chemistry 100.0, mathematics 97.5, physics 93.5, and statistics 100.0. Every final branch has `grounding_repair.repairs = 0`, `reflection.score = 100`, and no failed tool calls.
 - **Longitudinal corpus.** Scoring the historical paper corpus by era (`experiments/e2e_v2/mine_corpus.py`): the new pipeline roughly **doubles** the legacy mean rubric and **halves its variance**.
 - **Blind head-to-head.** Under an independent LLM judge, the reproducible result (three byte-identical runs, 40-paper prior pool) is **9/12** wins for the new papers — win rate 0.75, 95% CI **[0.468, 0.911]**. The lower bound dips just below 0.5, so this is **marginal / not statistically significant at 95%**: it points the right way but does not clear the bar. One additional run with a different (42-paper) prior pool reached 10/12 (CI [0.552, 0.953], which would clear it); we report the dominant reproducible figure rather than the single most favorable run.
 
@@ -375,7 +375,7 @@ A.M.Y/
 ├── sandbox/                     # Isolated experiment execution
 ├── evolution/                   # Curriculum + self-retrain
 │
-├── atlas/                       # 94 scientific tools, 23 domains
+├── atlas/                       # 95 scientific tools, 23 domains
 │   ├── app/extended_science_tools.py  # NEW — AstroPy/PySCF/ASE/PyMatGen
 │   ├── app/run_agent_with_tools_legacy.py
 │   └── ...

@@ -132,7 +132,8 @@ def _resolve_model() -> str:
 
 
 def deterministic_evolve(parent: dict, strategy: str, second_parent: dict | None = None,
-                         feedback: str | None = None) -> dict:
+                         feedback: str | None = None, domain: str = "",
+                         results: list[dict] | None = None) -> dict:
     """LLM-free fallback: sharpen the parent with a concrete test procedure.
 
     This genuinely raises falsifiability/specificity (the tournament judge's
@@ -169,15 +170,41 @@ def deterministic_evolve(parent: dict, strategy: str, second_parent: dict | None
         "and compare against the published baseline; predict the deviation "
         "exceeds 2 standard errors in the largest range."
     )
+    context = " ".join(
+        [
+            domain.lower(),
+            new_text.lower(),
+            str(parent.get("method", "")).lower(),
+            " ".join(str(r.get("tool", "")).lower() for r in (results or [])),
+        ]
+    )
+    if "chemistry" in context and ("ssh_" in context or "edge-state" in context or "polyene" in context):
+        test_clause = (
+            ". Testable via: rerun ssh_edge_localization_map and "
+            "ssh_polyene_gap_map on denser chain lengths and a denser delta "
+            "grid; require the topological edge weight/IPR localization signal, "
+            "localization_onset_n, and edge_state_onset_n to remain ordered "
+            "relative to the trivial-orientation controls."
+        )
     # Feedback-driven sharpening (causal consumption of the meta-review digest):
     if "falsifia" in fb or "test procedure" in fb:
-        test_clause = (
-            ". Testable via: pre-register the predicted direction and magnitude, "
-            "measure the named quantity across at least 5 parameter ranges with a "
-            "fixed analysis script, report effect size with 95% confidence "
-            "intervals against the published baseline, and reject the hypothesis "
-            "if the deviation is below 2 standard errors in every range."
-        )
+        if "chemistry" in context and ("ssh_" in context or "edge-state" in context or "polyene" in context):
+            test_clause = (
+                ". Testable via: pre-register the SSH chain lengths, delta grid, "
+                "edge_sites, and localization_threshold; rerun "
+                "ssh_edge_localization_map with the fixed script, and reject the "
+                "hypothesis if topological frontier states do not retain higher "
+                "edge weight/IPR and lower participation_sites than the matched "
+                "trivial controls."
+            )
+        else:
+            test_clause = (
+                ". Testable via: pre-register the predicted direction and magnitude, "
+                "measure the named quantity across at least 5 parameter ranges with a "
+                "fixed analysis script, report effect size with 95% confidence "
+                "intervals against the published baseline, and reject the hypothesis "
+                "if the deviation is below 2 standard errors in every range."
+            )
     if ("vague" in fb or "quantities" in fb) and not re.search(r"\d", new_text):
         new_text += " (predicted effect: a monotonic shift exceeding 5% across one decade of scale)"
     if "known control" in fb or "textbook" in fb:
@@ -221,7 +248,14 @@ async def evolve_hypothesis(
         try:
             client = _build_client()
         except Exception:
-            return deterministic_evolve(parent, strategy, second_parent, feedback=feedback)
+            return deterministic_evolve(
+                parent,
+                strategy,
+                second_parent,
+                feedback=feedback,
+                domain=domain,
+                results=results,
+            )
 
     second_block = ""
     if strategy == "combination" and second_parent:
@@ -300,4 +334,11 @@ async def evolve_hypothesis(
                 await asyncio.sleep(2.0)
 
     log.warning("evolution_agent.fallback", strategy=strategy, error=str(last_err)[:120])
-    return deterministic_evolve(parent, strategy, second_parent, feedback=feedback)
+    return deterministic_evolve(
+        parent,
+        strategy,
+        second_parent,
+        feedback=feedback,
+        domain=domain,
+        results=results,
+    )

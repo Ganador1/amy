@@ -74,6 +74,11 @@ DOMAIN_PLANS: dict[str, dict[str, Any]] = {
                 "SSH finite-chain gap identifiability map across Peierls alternation and boundary orientation",
             ),
             (
+                "ssh_edge_localization_map",
+                "16,20,30,40,60,80,100;deltas=0.025,0.05,0.1,0.2,0.4;orientations=trivial,topological;beta=-2.5;edge_sites=2;localization_threshold=0.25;min_localization_n=16",
+                "SSH frontier-state localization map using edge weights and inverse participation ratio",
+            ),
+            (
                 "huckel_polyene_scaling",
                 "4,6,8,10,12,16,20,30,40,50,80,100",
                 "Huckel HOMO-LUMO gap scaling model comparison for linear polyenes",
