@@ -400,6 +400,18 @@ class DynamicToolRegistry:
             input_format="atom_count_series_with_betas",
             output_format="bond_alternation_gap_series"
         ))
+
+        self.register_tool(ToolDescriptor(
+            name="ssh_polyene_gap_map",
+            domain="chemistry",
+            description=(
+                "Map finite-chain SSH/polyene gaps across length, bond alternation, and boundary orientation. "
+                "Input: '4,6,8;deltas=0,0.05,0.1;orientations=trivial,topological;beta=-2.5;threshold=0.05'"
+            ),
+            function=self._ssh_polyene_gap_map,
+            input_format="atom_count_series_with_deltas_and_orientations",
+            output_format="ssh_polyene_gap_map"
+        ))
         
         self.register_tool(ToolDescriptor(
             name="bond_energy_analyzer",
@@ -2966,6 +2978,174 @@ a₀ coefficient: {a0}
                 + "\n"
                 "  finite-gap conclusion: bond alternation prevents the zero-gap closure seen in the uniform-chain baseline; "
                 "the tested finite chains approach a nonzero gap set by the strong/weak coupling contrast."
+            )
+        except Exception as e:
+            return f"Error: {str(e)}"
+
+    def _parse_float_series_option(self, raw: str, option_name: str) -> list[float]:
+        values = [float(part.strip()) for part in raw.split(",") if part.strip()]
+        if not values:
+            raise ValueError(f"{option_name} must contain at least one value")
+        return list(dict.fromkeys(values))
+
+    def _ssh_gap_for_chain(
+        self,
+        n_atoms: int,
+        *,
+        beta: float,
+        delta: float,
+        orientation: str,
+        alpha: float = 0.0,
+    ) -> float:
+        t0 = abs(float(beta))
+        t_strong = t0 * (1.0 + delta)
+        t_weak = t0 * (1.0 - delta)
+        if t_weak < 0:
+            raise ValueError("delta must be <= 1.0 so weak coupling remains non-negative")
+
+        hamiltonian = np.eye(n_atoms, dtype=float) * alpha
+        for idx in range(n_atoms - 1):
+            starts_with_strong = orientation == "trivial"
+            use_strong = (idx % 2 == 0) if starts_with_strong else (idx % 2 == 1)
+            coupling = t_strong if use_strong else t_weak
+            hamiltonian[idx, idx + 1] = -coupling
+            hamiltonian[idx + 1, idx] = -coupling
+
+        energies = np.linalg.eigvalsh(hamiltonian)
+        return float(energies[n_atoms // 2] - energies[n_atoms // 2 - 1])
+
+    def _ssh_polyene_gap_map(self, query: str) -> str:
+        """Map finite-chain SSH identifiability across length and orientation."""
+        try:
+            segments = [part.strip() for part in query.split(";") if part.strip()]
+            if not segments:
+                return (
+                    "Error: Provide atom counts, e.g. "
+                    "'4,6,8;deltas=0,0.05;orientations=trivial,topological'"
+                )
+
+            atom_counts = [
+                int(part.strip())
+                for part in re.split(r"[,;\s]+", segments[0])
+                if part.strip()
+            ]
+            atom_counts = list(dict.fromkeys(atom_counts))
+            if len(atom_counts) < 4:
+                return "Error: Provide at least four even atom counts, e.g. '4,6,8,10'"
+            invalid = [n for n in atom_counts if n < 2 or n % 2 != 0]
+            if invalid:
+                return f"Error: SSH closed-shell chains require even atom counts >= 2. Invalid: {invalid}"
+
+            deltas = [0.0, 0.05, 0.1, 0.2]
+            orientations = ["trivial", "topological"]
+            beta = -2.5
+            threshold = 0.05
+            for option in segments[1:]:
+                if "=" not in option:
+                    continue
+                key, value = [item.strip().lower() for item in option.split("=", 1)]
+                if key == "deltas":
+                    deltas = self._parse_float_series_option(value, key)
+                elif key == "orientations":
+                    orientations = [
+                        part.strip().lower()
+                        for part in value.split(",")
+                        if part.strip()
+                    ]
+                elif key in {"beta", "b"}:
+                    beta = float(value)
+                elif key in {"threshold", "identifiability_threshold"}:
+                    threshold = float(value)
+
+            if threshold < 0:
+                return f"Error: threshold must be non-negative, got {threshold}"
+            bad_deltas = [delta for delta in deltas if delta < 0 or delta > 1]
+            if bad_deltas:
+                return f"Error: deltas must be in [0, 1]. Invalid: {bad_deltas}"
+            bad_orientations = [
+                orientation for orientation in orientations
+                if orientation not in {"trivial", "topological"}
+            ]
+            if bad_orientations:
+                return f"Error: unknown orientations: {bad_orientations}. Available: trivial, topological"
+
+            uniform_gaps = {
+                n: self._ssh_gap_for_chain(n, beta=beta, delta=0.0, orientation="trivial")
+                for n in atom_counts
+            }
+            rows: list[str] = []
+            summaries: list[str] = []
+            warnings: list[str] = []
+            t0 = abs(beta)
+
+            for delta in deltas:
+                peierls_bulk_gap = float(4.0 * t0 * delta)
+                for orientation in orientations:
+                    gaps = [
+                        self._ssh_gap_for_chain(
+                            n,
+                            beta=beta,
+                            delta=delta,
+                            orientation=orientation,
+                        )
+                        for n in atom_counts
+                    ]
+                    smallest_identifiable = None
+                    edge_state_onset = None
+                    for n, gap in zip(atom_counts, gaps):
+                        difference = abs(gap - uniform_gaps[n])
+                        if delta > 0 and difference >= threshold and smallest_identifiable is None:
+                            smallest_identifiable = n
+                        edge_warning = (
+                            orientation == "topological"
+                            and peierls_bulk_gap > 0
+                            and gap < 0.5 * peierls_bulk_gap
+                        )
+                        if edge_warning and edge_state_onset is None:
+                            edge_state_onset = n
+                        if edge_warning:
+                            warnings.append(
+                                f"orientation=topological delta={delta:.6f} n={n}: "
+                                f"edge_state_warning=true; frontier_gap={gap:.6f} eV; "
+                                f"peierls_bulk_gap_estimate={peierls_bulk_gap:.6f} eV"
+                            )
+                        rows.append(
+                            f"    delta={delta:.6f}; orientation={orientation}; n={n}; "
+                            f"frontier_gap={gap:.6f} eV; uniform_gap={uniform_gaps[n]:.6f} eV; "
+                            f"gap_minus_uniform={gap - uniform_gaps[n]:.6f} eV; "
+                            f"peierls_bulk_gap_estimate={peierls_bulk_gap:.6f} eV; "
+                            f"edge_state_warning={str(edge_warning).lower()}"
+                        )
+                    summaries.append(
+                        f"  delta={delta:.6f}; orientation={orientation}; "
+                        f"smallest_identifiable_n={smallest_identifiable if smallest_identifiable is not None else 'not_identified'}; "
+                        f"edge_state_onset_n={edge_state_onset if edge_state_onset is not None else 'not_observed'}; "
+                        f"terminal_gap_n{atom_counts[-1]}={gaps[-1]:.6f} eV; "
+                        f"peierls_bulk_gap_estimate={peierls_bulk_gap:.6f} eV"
+                    )
+
+            warning_text = "\n".join(f"  {warning}" for warning in warnings[:12])
+            if not warning_text:
+                warning_text = "  edge_state_warning=false for all tested nonzero-delta conditions"
+
+            return (
+                "SSH/polyene finite-chain gap map:\n"
+                "  Method: exact diagonalization of open-boundary nearest-neighbor SSH/Hückel chains.\n"
+                f"  Chain sizes (n atoms): {atom_counts}\n"
+                f"  beta={beta:.6f} eV; deltas={','.join(f'{d:.6f}' for d in deltas)}; "
+                f"orientations={','.join(orientations)}\n"
+                f"  identifiability_threshold_eV={threshold:.6f}\n"
+                "  Uniform baseline uses delta=0 and trivial orientation; gap-only identifiability compares each condition against that finite-size baseline.\n"
+                "  Identifiability summary:\n"
+                + "\n".join(summaries)
+                + "\n"
+                "  Edge-state diagnostics:\n"
+                + warning_text
+                + "\n"
+                "  Gap map observations:\n"
+                + "\n".join(rows)
+                + "\n"
+                "  Interpretation: trivial-orientation gaps estimate Peierls-like bulk opening, while topological-orientation frontier gaps can be dominated by edge states; gap-only evidence is therefore insufficient unless boundary orientation is controlled."
             )
         except Exception as e:
             return f"Error: {str(e)}"

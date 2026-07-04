@@ -97,6 +97,22 @@ def _run(reg, name: str, payload: str) -> str:
     return str(out)
 
 
+def test_ssh_polyene_gap_map_identifiability_contract(registry):
+    out = _run(
+        registry,
+        "ssh_polyene_gap_map",
+        "4,6,8,10,12,20,40;deltas=0,0.05,0.1,0.2;"
+        "orientations=trivial,topological;beta=-2.5",
+    )
+
+    assert "SSH/polyene finite-chain gap map" in out
+    assert "identifiability_threshold_eV" in out
+    assert "orientation=topological" in out
+    assert "edge_state_warning" in out
+    assert "edge_state_onset_n" in out
+    assert "smallest_identifiable_n" in out
+
+
 # (name, input, list-of-substrings-that-must-all-appear, human label)
 CASES = [
     # SymPy

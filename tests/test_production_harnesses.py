@@ -142,6 +142,21 @@ def test_e2e_chemistry_plan_targets_polyene_scaling():
     from scripts.run.run_e2e_validation import DOMAIN_PLANS
 
     calls = DOMAIN_PLANS["chemistry"]["calls"]
+    assert DOMAIN_PLANS["chemistry"]["topic"] == (
+        "SSH polyene finite-chain identifiability: Peierls gaps versus edge-state contamination"
+    )
+    assert any(tool == "ssh_polyene_gap_map" for tool, _, _ in calls)
+
+    ssh_calls = [
+        tool_input
+        for tool, tool_input, _ in calls
+        if tool == "ssh_polyene_gap_map"
+    ]
+    assert ssh_calls
+    assert "deltas=" in ssh_calls[0]
+    assert "orientations=trivial,topological" in ssh_calls[0]
+    assert "threshold=0.05" in ssh_calls[0]
+
     scaling_calls = [
         tool_input
         for tool, tool_input, _ in calls
