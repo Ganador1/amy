@@ -318,6 +318,58 @@ def _filter_ungrounded_hypotheses(hypotheses: list[dict], results: list[dict]) -
     return kept
 
 
+def _ssh_gap_summary_rows(result_text: str) -> list[dict[str, str]]:
+    rows: list[dict[str, str]] = []
+    pattern = re.compile(
+        r"delta=(?P<delta>[0-9]+(?:\.[0-9]+)?);\s*"
+        r"orientation=(?P<orientation>[a-z_]+);\s*"
+        r"smallest_identifiable_n=(?P<identifiable_n>[0-9]+|not_identified);\s*"
+        r"edge_state_onset_n=(?P<edge_onset>[0-9]+|not_observed)",
+        flags=re.IGNORECASE,
+    )
+    for match in pattern.finditer(result_text):
+        row = match.groupdict()
+        row["orientation"] = row["orientation"].lower()
+        rows.append(row)
+    return rows
+
+
+def _select_ssh_gap_summary_row(result_text: str) -> dict[str, str] | None:
+    rows = _ssh_gap_summary_rows(result_text)
+
+    def _delta(row: dict[str, str]) -> float:
+        try:
+            return float(row["delta"])
+        except (KeyError, ValueError):
+            return math.inf
+
+    nonzero = [row for row in rows if _delta(row) > 0.0]
+    topological_with_onset = [
+        row
+        for row in nonzero
+        if row.get("orientation") == "topological"
+        and row.get("edge_onset") != "not_observed"
+    ]
+    if topological_with_onset:
+        return min(topological_with_onset, key=lambda row: (_delta(row), int(row["edge_onset"])))
+
+    topological = [row for row in nonzero if row.get("orientation") == "topological"]
+    if topological:
+        return min(topological, key=_delta)
+
+    identifiable = [
+        row
+        for row in nonzero
+        if row.get("identifiable_n") != "not_identified"
+    ]
+    if identifiable:
+        return min(identifiable, key=_delta)
+
+    if nonzero:
+        return min(nonzero, key=_delta)
+    return rows[0] if rows else None
+
+
 def _strengthen_branch_contract(
     domain: str,
     discussion: str,
@@ -328,6 +380,63 @@ def _strengthen_branch_contract(
     tools = {str(r.get("tool", "")) for r in results}
     if domain != "mathematics" or "prime_gap_model_comparison" not in tools:
         if domain != "physics" or "rydberg_scaling_comparison" not in tools:
+            if domain == "chemistry" and "ssh_polyene_gap_map" in tools:
+                strengthened = list(hypotheses)
+                additions = [
+                    _hypothesis(
+                        "The SSH boundary-orientation effect is falsifiable by extending the finite chain-length grid and checking whether the recorded edge-state onset remains ordered across the same alternation sweep.",
+                        0.58,
+                        "Rerun ssh_polyene_gap_map with denser chain lengths and an independent diagonalization backend; weaken the claim if the edge-state onset row disappears or changes ordering under the same Hamiltonian.",
+                        novelty_status="finite_computational_observation",
+                        evidence_level="model_comparison",
+                    ),
+                    _hypothesis(
+                        "The gap-only identifiability boundary is threshold-dependent and should remain stable only under a sensitivity sweep over the recorded finite SSH grid.",
+                        0.55,
+                        "Repeat the SSH map with stricter and looser threshold rules; reject a robust identifiability interpretation if the nonzero alternation rows change classification under small threshold changes.",
+                        novelty_status="finite_computational_observation",
+                        evidence_level="controlled_comparison",
+                    ),
+                    _hypothesis(
+                        "The uniform Huckel, molecular-orbital endpoint, and small-chain PySCF outputs are controls for directionality and implementation behavior rather than quantitative validation of topological edge splitting.",
+                        0.50,
+                        "Treat these outputs as controls; require an independent SSH implementation or higher-level electronic-structure calculation before promoting the edge-state interpretation beyond the finite model.",
+                        novelty_status="known_control",
+                        evidence_level="verification",
+                    ),
+                ]
+                existing = {str(h.get("hypothesis", ""))[:80] for h in strengthened}
+                for addition in additions:
+                    if len(strengthened) >= 5:
+                        break
+                    key = addition["hypothesis"][:80]
+                    if key not in existing:
+                        strengthened.append(addition)
+                        existing.add(key)
+
+                non_claims = (
+                    "**Scope, limitations, and statistical interpretation.** "
+                    "This study has an explicit limitation: it does not claim "
+                    "a new molecule, does not assert an experimental measurement, "
+                    "and should not be treated as DFT, spectroscopy, or STM "
+                    "evidence. The uniform Huckel calls are a calibration control "
+                    "and the PySCF/molecular-orbital endpoint checks are a "
+                    "verification control; the SSH grid is a finite Hamiltonian "
+                    "sweep without asserting novelty. Before being classified as "
+                    "a novelty claim, the boundary-orientation effect must be "
+                    "quantified with denser length and alternation grids and "
+                    "should be compared against independent diagonalization or "
+                    "DFT-based controls. Because this is a deterministic grid "
+                    "rather than sampled experimental data, no p-value or "
+                    "confidence interval is estimated; the relevant effect size "
+                    "is the recorded gap contrast, and the sample size is the "
+                    "enumerated chain-length, alternation, and orientation grid."
+                )
+                if "does not claim" not in discussion.lower():
+                    discussion = discussion.rstrip() + "\n\n" + non_claims
+
+                return discussion, strengthened
+
             if domain == "astronomy" and "cosmology_residual_comparison" in tools:
                 strengthened = list(hypotheses)
                 additions = [
@@ -648,27 +757,29 @@ def generate_hypothesis(domain: str, results: list[dict]) -> list[dict]:
                 
         elif domain == "chemistry":
             if "ssh_polyene_gap_map" in tool:
-                identifiable_match = re.search(
-                    r"delta=([0-9.]+);\s*orientation=trivial;\s*smallest_identifiable_n=([0-9]+|not_identified)",
-                    result_text,
-                    flags=re.IGNORECASE,
-                )
-                if not identifiable_match:
+                summary_row = _select_ssh_gap_summary_row(result_text)
+                if summary_row:
+                    delta_value = summary_row["delta"]
+                    orientation = summary_row["orientation"]
+                    identifiable_n = summary_row["identifiable_n"]
+                    edge_onset = summary_row["edge_onset"]
+                else:
                     identifiable_match = re.search(
                         r"delta=([0-9.]+):\s*smallest_identifiable_n=([0-9]+|not_identified)",
                         result_text,
                         flags=re.IGNORECASE,
                     )
-                delta_value = identifiable_match.group(1) if identifiable_match else "the tested nonzero"
-                identifiable_n = identifiable_match.group(2) if identifiable_match else "the recorded"
-                edge_onset_match = re.search(
-                    r"edge_state_onset_n=([0-9]+|not_observed)",
-                    result_text,
-                    flags=re.IGNORECASE,
-                )
-                edge_onset = edge_onset_match.group(1) if edge_onset_match else "the recorded"
+                    delta_value = identifiable_match.group(1) if identifiable_match else "the tested nonzero"
+                    identifiable_n = identifiable_match.group(2) if identifiable_match else "the recorded"
+                    orientation = "topological"
+                    edge_onset_match = re.search(
+                        r"edge_state_onset_n=([0-9]+|not_observed)",
+                        result_text,
+                        flags=re.IGNORECASE,
+                    )
+                    edge_onset = edge_onset_match.group(1) if edge_onset_match else "the recorded"
                 hypotheses.append(_hypothesis(
-                    f"Finite SSH/polyene gap-only evidence has an identifiability boundary: for delta={delta_value}, smallest_identifiable_n={identifiable_n} and edge_state_onset_n={edge_onset} under the recorded threshold, while topological boundary orientation can introduce edge-state frontier gaps that decouple from the Peierls bulk gap.",
+                    f"Finite SSH/polyene gap-only evidence has an identifiability boundary: for delta={delta_value} in the {orientation} orientation, smallest_identifiable_n={identifiable_n} and edge_state_onset_n={edge_onset} under the recorded threshold, while topological boundary orientation can introduce edge-state frontier gaps that decouple from the Peierls bulk gap.",
                     0.68,
                     f"Rerun ssh_polyene_gap_map with denser lengths and swapped boundary orientation; reject the identifiability claim if smallest_identifiable_n={identifiable_n} or edge_state_onset_n={edge_onset} shifts outside the recorded threshold rule under the same delta grid.",
                     novelty_status="candidate_novelty",

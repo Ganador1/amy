@@ -482,6 +482,50 @@ def test_ssh_polyene_gap_map_hypothesis_targets_identifiability_not_generic_gap(
     assert "catalysis" not in combined.lower()
 
 
+def test_ssh_polyene_gap_map_hypothesis_ignores_zero_delta_control_rows():
+    hypotheses = generate_hypothesis(
+        "chemistry",
+        [
+            {
+                "tool": "ssh_polyene_gap_map",
+                "result": (
+                    "SSH/polyene finite-chain gap map:\n"
+                    "  identifiability_threshold_eV=0.050000\n"
+                    "  Identifiability summary:\n"
+                    "  delta=0.000000; orientation=trivial; "
+                    "smallest_identifiable_n=not_identified; "
+                    "edge_state_onset_n=not_observed; "
+                    "terminal_gap_n100=0.155518 eV; "
+                    "peierls_bulk_gap_estimate=0.000000 eV\n"
+                    "  delta=0.000000; orientation=topological; "
+                    "smallest_identifiable_n=not_identified; "
+                    "edge_state_onset_n=not_observed; "
+                    "terminal_gap_n100=0.155518 eV; "
+                    "peierls_bulk_gap_estimate=0.000000 eV\n"
+                    "  delta=0.025000; orientation=trivial; "
+                    "smallest_identifiable_n=4; "
+                    "edge_state_onset_n=not_observed; "
+                    "terminal_gap_n100=0.343804 eV; "
+                    "peierls_bulk_gap_estimate=0.250000 eV\n"
+                    "  delta=0.025000; orientation=topological; "
+                    "smallest_identifiable_n=4; "
+                    "edge_state_onset_n=60; "
+                    "terminal_gap_n100=0.041140 eV; "
+                    "peierls_bulk_gap_estimate=0.250000 eV\n"
+                ),
+                "success": True,
+            }
+        ],
+    )
+    combined = "\n".join(h["hypothesis"] + " " + h["method"] for h in hypotheses)
+
+    assert "delta=0.025000" in combined
+    assert "smallest_identifiable_n=4" in combined
+    assert "edge_state_onset_n=60" in combined
+    assert "delta=0.000000, smallest_identifiable_n=not_identified" not in combined
+    assert "edge_state_onset_n=not_observed" not in combined
+
+
 def test_provenance_manager_does_not_overwrite_same_second_tool_runs():
     _reset_tmp()
     manager = ProvenanceManager(base_dir=TMP_DIR)
@@ -905,6 +949,44 @@ def test_biology_branch_contract_adds_grounded_predictions_and_non_claims():
     assert "does not claim" in discussion
     assert "taxonomic" in discussion
     assert "without asserting novelty" in discussion
+
+
+def test_chemistry_ssh_branch_contract_adds_non_claims_and_statistical_scope():
+    discussion, hypotheses = _strengthen_branch_contract(
+        "chemistry",
+        "Existing discussion.",
+        [
+            {
+                "hypothesis": f"Existing chemistry hypothesis {i}",
+                "method": "Testable via extending the recorded SSH grid.",
+                "confidence": 0.5,
+                "novelty_status": "finite_computational_observation",
+            }
+            for i in range(2)
+        ],
+        [
+            {
+                "tool": "ssh_polyene_gap_map",
+                "result": (
+                    "delta=0.025000; orientation=topological; "
+                    "smallest_identifiable_n=4; edge_state_onset_n=60"
+                ),
+            }
+        ],
+    )
+
+    assert len(hypotheses) >= 5
+    assert len({h["hypothesis"][:80] for h in hypotheses}) >= 5
+    assert "does not claim" in discussion
+    assert "does not assert" in discussion
+    assert "should not be treated" in discussion
+    assert "calibration control" in discussion
+    assert "verification control" in discussion
+    assert "without asserting novelty" in discussion
+    assert "p-value" in discussion
+    assert "confidence interval" in discussion
+    assert "effect size" in discussion
+    assert "sample size" in discussion
 
 
 def test_astronomy_branch_contract_adds_grounded_predictions_and_non_claims():
