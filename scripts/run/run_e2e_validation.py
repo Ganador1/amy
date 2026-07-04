@@ -66,8 +66,13 @@ DOMAIN_PLANS: dict[str, dict[str, Any]] = {
         ],
     },
     "chemistry": {
-        "topic": "Uniform versus bond-alternated polyene HOMO-LUMO gap scaling",
+        "topic": "SSH polyene finite-chain identifiability: Peierls gaps versus edge-state contamination",
         "calls": [
+            (
+                "ssh_polyene_gap_map",
+                "4,6,8,10,12,16,20,30,40,60,80,100;deltas=0,0.025,0.05,0.1,0.2,0.4;orientations=trivial,topological;beta=-2.5;threshold=0.05",
+                "SSH finite-chain gap identifiability map across Peierls alternation and boundary orientation",
+            ),
             (
                 "huckel_polyene_scaling",
                 "4,6,8,10,12,16,20,30,40,50,80,100",

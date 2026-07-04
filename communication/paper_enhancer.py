@@ -647,7 +647,34 @@ def generate_hypothesis(domain: str, results: list[dict]) -> list[dict]:
                 ))
                 
         elif domain == "chemistry":
-            if "bond_alternated_polyene_scaling" in tool:
+            if "ssh_polyene_gap_map" in tool:
+                identifiable_match = re.search(
+                    r"delta=([0-9.]+);\s*orientation=trivial;\s*smallest_identifiable_n=([0-9]+|not_identified)",
+                    result_text,
+                    flags=re.IGNORECASE,
+                )
+                if not identifiable_match:
+                    identifiable_match = re.search(
+                        r"delta=([0-9.]+):\s*smallest_identifiable_n=([0-9]+|not_identified)",
+                        result_text,
+                        flags=re.IGNORECASE,
+                    )
+                delta_value = identifiable_match.group(1) if identifiable_match else "the tested nonzero"
+                identifiable_n = identifiable_match.group(2) if identifiable_match else "the recorded"
+                edge_onset_match = re.search(
+                    r"edge_state_onset_n=([0-9]+|not_observed)",
+                    result_text,
+                    flags=re.IGNORECASE,
+                )
+                edge_onset = edge_onset_match.group(1) if edge_onset_match else "the recorded"
+                hypotheses.append(_hypothesis(
+                    f"Finite SSH/polyene gap-only evidence has an identifiability boundary: for delta={delta_value}, smallest_identifiable_n={identifiable_n} and edge_state_onset_n={edge_onset} under the recorded threshold, while topological boundary orientation can introduce edge-state frontier gaps that decouple from the Peierls bulk gap.",
+                    0.68,
+                    f"Rerun ssh_polyene_gap_map with denser lengths and swapped boundary orientation; reject the identifiability claim if smallest_identifiable_n={identifiable_n} or edge_state_onset_n={edge_onset} shifts outside the recorded threshold rule under the same delta grid.",
+                    novelty_status="candidate_novelty",
+                    evidence_level="model_comparison",
+                ))
+            elif "bond_alternated_polyene_scaling" in tool:
                 asymptotic_match = re.search(
                     r"asymptotic_gap_estimate\s*=\s*([0-9.]+)\s*eV",
                     result_text,
@@ -812,6 +839,10 @@ def generate_references(domain: str, results: list[dict]) -> list[str]:
             tool_refs.append("Pomerance, C. (2009). Prime Numbers. Springer Berlin Heidelberg.")
         elif "quantum" in tool or "energy" in tool:
             tool_refs.append("Griffiths, D.J. (2018). Introduction to Quantum Mechanics. Cambridge University Press.")
+        elif "ssh_polyene_gap_map" in tool:
+            tool_refs.append("Su, W.P., Schrieffer, J.R. & Heeger, A.J. (1979). Solitons in polyacetylene. Physical Review Letters, 42(25), 1698-1701. doi:10.1103/PhysRevLett.42.1698.")
+            tool_refs.append("Valli, A. & Tomczak, J.M. (2023). Resistance saturation in semi-conducting polyacetylene molecular wires. Journal of Computational Electronics, 22, 1363-1376. doi:10.1007/s10825-023-02043-7.")
+            tool_refs.append("Nokelainen, J., Barbiellini, B. & Bansil, A. (2025). Magnetic properties of polyacetylene: Exploring electronic correlation effects through first-principles modeling. arXiv:2408.15382.")
         elif "huckel" in tool or "polyene" in tool:
             tool_refs.append("Coulson, C.A., O'Leary, B. & Mallion, R.B. (1978). Hückel Theory for Organic Chemists. Academic Press.")
             tool_refs.append("Autschbach, J. (2007). Why the particle-in-a-box model works well for cyanine dyes but not for conjugated polyenes. Journal of Chemical Education, 84(11), 1840-1845. doi:10.1021/ed084p1840.")

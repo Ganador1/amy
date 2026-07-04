@@ -423,6 +423,16 @@ def test_chemistry_polyene_scaling_references_include_huckel_sources():
     assert any("Autschbach" in ref for ref in refs)
 
 
+def test_chemistry_ssh_gap_map_references_include_ssh_sources():
+    refs = generate_references(
+        "chemistry",
+        [{"tool": "ssh_polyene_gap_map", "success": True}],
+    )
+
+    assert any("Su" in ref and "Schrieffer" in ref and "Heeger" in ref for ref in refs)
+    assert any("polyacetylene" in ref.lower() for ref in refs)
+
+
 def test_bond_alternated_polyene_hypothesis_uses_recorded_gap_not_generic_bond_claim():
     hypotheses = generate_hypothesis(
         "chemistry",
@@ -443,6 +453,33 @@ def test_bond_alternated_polyene_hypothesis_uses_recorded_gap_not_generic_bond_c
     assert "0.800000 eV" in combined
     assert "catalysis" not in combined.lower()
     assert "4|" not in combined
+
+
+def test_ssh_polyene_gap_map_hypothesis_targets_identifiability_not_generic_gap():
+    hypotheses = generate_hypothesis(
+        "chemistry",
+        [
+            {
+                "tool": "ssh_polyene_gap_map",
+                "result": (
+                    "SSH/polyene finite-chain gap map:\n"
+                    "  identifiability_threshold_eV=0.050000\n"
+                    "  delta=0.050000: smallest_identifiable_n=20\n"
+                    "  orientation=topological; edge_state_warning=true; "
+                    "edge_state_onset_n=40; "
+                    "frontier_gap=0.012000 eV; peierls_bulk_gap_estimate=0.500000 eV\n"
+                ),
+                "success": True,
+            }
+        ],
+    )
+    combined = "\n".join(h["hypothesis"] + " " + h["method"] for h in hypotheses)
+
+    assert "smallest_identifiable_n=20" in combined
+    assert "edge_state_onset_n=40" in combined
+    assert "edge-state" in combined.lower() or "edge state" in combined.lower()
+    assert "identifiability" in combined.lower()
+    assert "catalysis" not in combined.lower()
 
 
 def test_provenance_manager_does_not_overwrite_same_second_tool_runs():
