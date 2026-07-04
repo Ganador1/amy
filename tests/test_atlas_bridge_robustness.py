@@ -15,6 +15,7 @@ import json
 
 import pytest
 
+from core import atlas_tools
 from core.atlas_tools import AtlasTools
 
 
@@ -74,6 +75,17 @@ def test_next_id_is_monotonic():
     ids = [t._next_id() for _ in range(5)]
     assert ids == [1, 2, 3, 4, 5]
     assert len(set(ids)) == 5
+
+
+def test_atlas_path_helpers_honor_env_overrides(monkeypatch):
+    monkeypatch.setenv("AMY_ATLAS_ROOT", "/tmp/custom-atlas")
+    monkeypatch.setenv("AMY_ATLAS_PYTHON", "/tmp/custom-atlas-python")
+
+    root = atlas_tools._resolve_atlas_root()
+    python = atlas_tools._resolve_atlas_python(root)
+
+    assert str(root) == "/tmp/custom-atlas"
+    assert str(python) == "/tmp/custom-atlas-python"
 
 
 async def test_send_request_matches_by_id():

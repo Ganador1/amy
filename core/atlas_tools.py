@@ -24,8 +24,22 @@ import structlog
 
 log = structlog.get_logger()
 
-ATLAS_ROOT = Path(__file__).parent.parent / "atlas"
-ATLAS_VENV_PYTHON = ATLAS_ROOT / ".venv_new" / "bin" / "python3"
+def _resolve_atlas_root() -> Path:
+    override = os.getenv("AMY_ATLAS_ROOT")
+    if override:
+        return Path(override).expanduser()
+    return Path(__file__).parent.parent / "atlas"
+
+
+def _resolve_atlas_python(atlas_root: Path) -> Path:
+    override = os.getenv("AMY_ATLAS_PYTHON")
+    if override:
+        return Path(override).expanduser()
+    return atlas_root / ".venv_new" / "bin" / "python3"
+
+
+ATLAS_ROOT = _resolve_atlas_root()
+ATLAS_VENV_PYTHON = _resolve_atlas_python(ATLAS_ROOT)
 ATLAS_RESULT_MARKER = "__ATLAS_RESULT__"
 
 UNUSABLE_TOOL_OUTPUT_MARKERS = (
