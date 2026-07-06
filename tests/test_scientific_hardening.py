@@ -21,11 +21,12 @@ from communication.paper_enhancer import (
     generate_hypothesis,
     generate_references,
 )
-from communication.paper_generator import PaperGenerator
+from communication.paper_generator import PaperGenerator, _safe_para
 from communication.citation_verifier import CitationVerifier
 from communication.llm_enhancer import _drop_unsupported_numeric_sentences
 from core.atlas_tools import assess_tool_output
 from core.provenance import ProvenanceManager
+import run_amy_autonomous as amy_autonomous
 from run_amy_novelty import (
     molecular_orbital_novelty,
     prime_gap_novelty,
@@ -330,6 +331,156 @@ def test_paper_generator_prepublication_gate_rejects_plain_unusable_output():
     assert "unusable tool output in manuscript" in gate["reasons"]
 
 
+def test_paper_generator_rejects_failed_reflection_gate(monkeypatch):
+    def fake_reflection(_md_content):
+        return {
+            "annotated_md": _md_content + "\n\n## Self-Review\nhigh issue",
+            "score": 99.5,
+            "pass_overall": False,
+            "n_high": 1,
+            "n_medium": 0,
+            "n_low": 0,
+            "issues": [{"severity": "high", "message": "unsupported number"}],
+        }
+
+    monkeypatch.setattr(PaperGenerator, "_run_reflection_gate", staticmethod(fake_reflection))
+
+    result = asyncio.run(
+        PaperGenerator(enhance=False).generate_paper(
+            title="Test Reflection Gate",
+            abstract="Abstract.",
+            sections=[{"heading": "Discussion", "content": "A conservative discussion."}],
+            references=[],
+            knowledge_facts=[],
+            experiment_ids=[],
+        )
+    )
+
+    path = Path(result["markdown_path"])
+    try:
+        assert result["publication_status"] == "rejected"
+        assert "reflection gate failed" in result["rejection_reasons"]
+        assert "reflection high-severity issues" in result["rejection_reasons"]
+        assert path.parent.name == "rejected"
+        assert result["pdf_path"] is None
+    finally:
+        path.unlink(missing_ok=True)
+
+
+def test_paper_generator_rejects_low_peer_review_score(monkeypatch):
+    async def fake_enhance_paper(**_kwargs):
+        return {
+            "sections": [{"heading": "Discussion", "content": "A low-evidence draft."}],
+            "references": [],
+            "abstract": "Abstract.",
+            "knowledge_facts": [],
+            "hypotheses": [{"hypothesis": "weak claim"}],
+            "peer_review": {"overall_score": 6.8},
+        }
+
+    generator = PaperGenerator(enhance=True, include_literature_audit=False)
+    monkeypatch.setattr(generator._enhancer, "enhance_paper", fake_enhance_paper)
+
+    result = asyncio.run(
+        generator.generate_paper(
+            title="Test Peer Review Gate",
+            abstract="Abstract.",
+            sections=[{"heading": "Discussion", "content": "Draft."}],
+            references=[],
+            knowledge_facts=[],
+            experiment_ids=[],
+            domain="statistics",
+            tool_results=[{"tool": "numpy_statistics", "result": "mean: 1.0", "success": True}],
+        )
+    )
+
+    path = Path(result["markdown_path"])
+    try:
+        assert result["publication_status"] == "rejected"
+        assert any("peer review score below publication threshold" in reason for reason in result["rejection_reasons"])
+        assert path.parent.name == "rejected"
+        assert result["pdf_path"] is None
+    finally:
+        path.unlink(missing_ok=True)
+
+
+def test_paper_generator_rejects_pdf_render_failure(monkeypatch):
+    async def fake_render_pdf(*_args, **_kwargs):
+        return False
+
+    async def fake_render_latex(*_args, **_kwargs):
+        return True
+
+    monkeypatch.setattr(PaperGenerator, "_render_pdf", fake_render_pdf)
+    monkeypatch.setattr(PaperGenerator, "_render_latex", fake_render_latex)
+    monkeypatch.setattr(PaperGenerator, "_run_reflection_gate", staticmethod(lambda _md_content: None))
+
+    result = asyncio.run(
+        PaperGenerator(enhance=False).generate_paper(
+            title="Test PDF Render Gate",
+            abstract="Abstract.",
+            sections=[{"heading": "Discussion", "content": "A conservative discussion."}],
+            references=[],
+            knowledge_facts=[],
+            experiment_ids=[],
+        )
+    )
+
+    path = Path(result["markdown_path"])
+    try:
+        assert result["publication_status"] == "rejected"
+        assert "pdf render failed" in result["rejection_reasons"]
+        assert path.parent.name == "rejected"
+        assert result["pdf_path"] is None
+    finally:
+        path.unlink(missing_ok=True)
+
+
+def test_safe_para_does_not_treat_math_asterisks_as_reportlab_markup():
+    from reportlab.lib.styles import getSampleStyleSheet
+    from reportlab.platypus import Paragraph
+
+    text = (
+        "**Symbolic differentiation as a tool-validation result.** "
+        "E3 returns the derivative 3*x**2, which is the textbook derivative of x^3. "
+        "The evidence consists solely of the expression 3*x**2; no optimization computation was performed."
+    )
+
+    rendered = _safe_para(text)
+
+    assert "3*x**2" in rendered
+    Paragraph(rendered, getSampleStyleSheet()["Normal"])
+
+
+def test_autonomous_runner_stops_when_remaining_time_is_below_mission_budget(monkeypatch):
+    clock = {"now": 0.0}
+    amy = amy_autonomous.AutonomousAMY.__new__(amy_autonomous.AutonomousAMY)
+    amy.duration = 100
+    amy.fixed_domain = None
+    amy.model = "test-model"
+    amy.mission_count = 0
+    amy.tool_count = 0
+    amy.paper_count = 0
+    amy.start_time = 0.0
+    amy.log = lambda _message: None
+
+    async def fake_run_mission():
+        amy.mission_count += 1
+        clock["now"] += 45.0
+        return {"domain": "test"}
+
+    async def fake_sleep(_seconds):
+        return None
+
+    monkeypatch.setattr(amy_autonomous.time, "time", lambda: clock["now"])
+    monkeypatch.setattr(amy_autonomous.asyncio, "sleep", fake_sleep)
+    monkeypatch.setattr(amy, "run_mission", fake_run_mission)
+
+    asyncio.run(amy.run())
+
+    assert amy.mission_count == 1
+
+
 def test_audit_does_not_treat_sha256_chunks_as_experiment_ids():
     text = (
         "- exp_real: `data/experiments/exp_real/provenance.json`\n"
@@ -394,6 +545,16 @@ def test_error_output_is_not_scientific_evidence():
 
     assert assessment["usable"] is False
     assert "error:" in assessment["markers"]
+
+
+def test_embedded_symbolic_calculus_error_is_not_scientific_evidence():
+    assessment = assess_tool_output(
+        "Climate sensitivity doubling: Symbolic Calculus Error: Sympify of expression failed",
+        tool_name="climate_calculus_engine",
+    )
+
+    assert assessment["usable"] is False
+    assert "symbolic calculus error" in assessment["markers"]
 
 
 def test_metric_names_containing_error_are_scientific_evidence():
@@ -912,6 +1073,69 @@ def test_ungrounded_hypothesis_filter_drops_evolved_decimal_hallucinations():
     assert "0.543202" in kept[0]["hypothesis"]
 
 
+def test_hypothesis_filter_drops_ssh_llm_overclaims_with_reused_numbers():
+    results = [
+        {
+            "tool": "ssh_edge_localization_map",
+            "result": (
+                "delta=0.025000; orientation=topological; "
+                "localization_onset_n=16; max_pair_edge_weight=0.271313; "
+                "max_pair_ipr=0.094124; min_participation_sites=10.624256; "
+                "terminal_frontier_splitting_eV=0.041140\n"
+                "delta=0.100000; orientation=topological; "
+                "max_pair_ipr=0.125048\n"
+                "delta=0.100000; orientation=trivial; "
+                "max_pair_edge_weight=0.158225; max_pair_ipr=0.077895\n"
+                "delta=0.400000; orientation=topological; "
+                "max_pair_ipr=0.344838"
+            ),
+        },
+        {
+            "tool": "ssh_polyene_gap_map",
+            "result": (
+                "delta=0.050000; orientation=topological; "
+                "peierls_bulk_gap_estimate=0.500000 eV"
+            ),
+        },
+    ]
+    hypotheses = [
+        {
+            "hypothesis": (
+                "The supported edge-state interpretation uses "
+                "max_pair_ipr=0.094124 and remains a finite-chain diagnostic."
+            ),
+            "method": "Rerun ssh_edge_localization_map on denser chain lengths.",
+            "confidence": 0.66,
+        },
+        {
+            "hypothesis": (
+                "This proves a true topological bulk gap with IPR > 0.500000 "
+                "despite only finite SSH evidence."
+            ),
+            "method": "Accept the threshold as fully decoupled edge states.",
+            "confidence": 0.68,
+        },
+        {
+            "hypothesis": (
+                "The crossover is verified when the frontier-state inverse "
+                "participation ratio (IPR) exceeds 0.40 at n=40."
+            ),
+            "method": "Assume the frontier gap fully separates from the Peierls alternation energy.",
+            "confidence": 0.68,
+        },
+        {
+            "hypothesis": "The IPR stabilizes above 0.15 in the topological branch.",
+            "method": "Use a rounded threshold that does not appear in provenance.",
+            "confidence": 0.68,
+        },
+    ]
+
+    kept = _filter_ungrounded_hypotheses(hypotheses, results)
+
+    assert len(kept) == 1
+    assert "finite-chain diagnostic" in kept[0]["hypothesis"]
+
+
 def test_llm_discussion_sanitizer_removes_unsupported_decimal_sentences():
     results = [
         {
@@ -1064,6 +1288,92 @@ def test_chemistry_ssh_branch_contract_adds_non_claims_and_statistical_scope():
     assert "confidence interval" in discussion
     assert "effect size" in discussion
     assert "sample size" in discussion
+
+
+def _ssh_methodology_results():
+    return [
+        {"tool": "ssh_polyene_gap_map", "description": "SSH gap map", "result": "delta=0.025 terminal_gap_n100=0.094 peierls_bulk_gap_estimate=0.158"},
+        {"tool": "ssh_edge_localization_map", "description": "SSH edge localization", "result": "delta=0.025 max_pair_edge_weight=0.271313 max_pair_ipr=0.094124"},
+        {"tool": "huckel_polyene_scaling", "description": "Huckel scaling", "result": "n=4 gap=3.090170 RMSE=0.006472"},
+        {"tool": "bond_alternated_polyene_scaling", "description": "Bond alternated scaling", "result": "n=40 alternated_gap=0.802000"},
+        {"tool": "pyscf_polyene_hf_gap", "description": "PySCF RHF control", "result": "n=4 HF_gap=0.450000 total_energy=-153.0"},
+        {"tool": "molecular_orbital_energy", "description": "Huckel endpoint control", "result": "n=20 gap=0.747301"},
+        {"tool": "molecular_orbital_energy", "description": "Huckel endpoint control", "result": "n=4 gap=3.090170"},
+    ]
+
+
+def test_peer_review_counts_methodological_frameworks_not_tool_names():
+    review = PeerReviewer().review_paper(
+        "chemistry",
+        "SSH finite-chain identifiability",
+        _ssh_methodology_results(),
+        [{"heading": "Discussion", "content": "A long discussion " * 20}],
+        [
+            {
+                "hypothesis": "A finite SSH diagnostic should be benchmarked externally.",
+                "confidence": 0.50,
+                "novelty_status": "finite_computational_observation",
+            }
+        ],
+        ["Su, Schrieffer and Heeger (1979). Solitons in polyacetylene."],
+    )
+
+    feedback = "\n".join(review["feedback"])
+
+    assert review["scores"]["methodology"] <= 6.5
+    assert "2 methodologically distinct frameworks" in feedback
+    assert "3+ distinct computational tools" not in feedback
+
+
+def test_paper_enhancer_method_text_reports_frameworks_not_distinct_methods():
+    enhancer = PaperEnhancer()
+    results = _ssh_methodology_results()
+    hypotheses = [
+        {
+            "hypothesis": "Finite SSH/polyene gap-only evidence has an identifiability boundary.",
+            "confidence": 0.50,
+            "novelty_status": "finite_computational_observation",
+            "method": "Compare against DFT or an independent SSH implementation.",
+        }
+    ]
+
+    abstract = enhancer._build_abstract("chemistry", "SSH finite-chain identifiability", results, hypotheses)
+    intro = enhancer._build_introduction("chemistry", "SSH finite-chain identifiability", results, DOMAIN_INSIGHTS["chemistry"])
+    methods = enhancer._build_methods("chemistry", results)
+    conclusion = enhancer._build_conclusion("chemistry", "SSH finite-chain identifiability", hypotheses, results)
+    combined = "\n".join([abstract, intro, methods, conclusion])
+
+    assert "2 methodologically distinct frameworks" in combined
+    assert "7 total analyses" in combined
+    assert "6 distinct computational methods" not in combined
+    assert "Su, Schrieffer and Heeger (1979)" in intro
+
+
+def test_ssh_candidate_novelty_is_downgraded_without_external_benchmark():
+    discussion, hypotheses = _strengthen_branch_contract(
+        "chemistry",
+        "Existing discussion.",
+        [
+            {
+                "hypothesis": "Finite SSH/polyene gap-only evidence has an identifiability boundary.",
+                "method": "Rerun exact diagonalization.",
+                "confidence": 0.68,
+                "novelty_status": "candidate_novelty",
+            },
+            {
+                "hypothesis": "The SSH edge-state interpretation is directly testable by eigenvector localization.",
+                "method": "Rerun edge localization.",
+                "confidence": 0.66,
+                "novelty_status": "candidate_novelty",
+            },
+        ],
+        _ssh_methodology_results(),
+    )
+
+    assert "external benchmark" in discussion.lower()
+    assert all(h["novelty_status"] != "candidate_novelty" for h in hypotheses)
+    assert max(h["confidence"] for h in hypotheses) <= 0.50
+    assert any(h["novelty_status"] == "candidate_methodological_observation" for h in hypotheses)
 
 
 def test_astronomy_branch_contract_adds_grounded_predictions_and_non_claims():
@@ -1321,6 +1631,40 @@ def test_learned_belief_confidence_changes_the_discussion_prompt():
     assert "Calibration:" not in junk
 
 
+def test_llm_discussion_strips_process_preamble():
+    from communication import llm_enhancer
+
+    class _PreambleClient:
+        async def chat(self, model, messages, temperature, max_tokens, **kwargs):
+            return {
+                "message": {
+                    "content": (
+                        "Let me carefully analyze the evidence and write a rigorous Discussion section.\n\n"
+                        "**Finite-range interpretation.** The result reports value=1.0 directly "
+                        "from the evidence, so the discussion should treat it as a bounded "
+                        "computational observation rather than a novelty claim. The limitation is "
+                        "that this is a single controlled tool output and needs independent replication."
+                    )
+                }
+            }
+
+    result = asyncio.run(
+        llm_enhancer.generate_discussion_llm(
+            "chemistry",
+            "preamble cleanup",
+            [{"tool": "demo", "description": "demo", "result": "value=1.0"}],
+            hypotheses=[],
+            client=_PreambleClient(),
+            model="fake",
+        )
+    )
+
+    assert result is not None
+    assert not result.startswith("Let me")
+    assert "carefully analyze the evidence" not in result
+    assert "**Finite-range interpretation.**" in result
+
+
 def main():
     tests = [
         test_audit_recognizes_modern_provenance_paths_and_hashes,
@@ -1351,6 +1695,7 @@ def main():
         test_quantum_detector_treats_rounded_high_n_deviation_as_precision_control,
         test_molecular_orbital_detector_reports_gap_fit_as_observation_or_candidate,
         test_learned_belief_confidence_changes_the_discussion_prompt,
+        test_llm_discussion_strips_process_preamble,
     ]
     try:
         for test in tests:

@@ -9,6 +9,7 @@ Abstract → Introduction → Methods → Results → Discussion → Conclusion 
 """
 import asyncio
 import json
+import os
 import re
 from datetime import datetime
 from pathlib import Path
@@ -18,6 +19,7 @@ import structlog
 from communication.citation_verifier import CitationVerifier
 from communication.grounding_repair import repair_unsupported_decimal_claims
 from communication.numeric_verifier import NumericVerifier
+from communication.publication_artifacts import PublicationArtifactBuilder
 from communication.paper_enhancer import PaperEnhancer
 
 try:
@@ -32,6 +34,7 @@ PAPERS_DIR = Path("papers")
 PAPERS_DIR.mkdir(exist_ok=True)
 REJECTED_PAPERS_DIR = PAPERS_DIR / "rejected"
 EXPERIMENTS_DIR = Path("data/experiments")
+MIN_PUBLICATION_PEER_REVIEW_SCORE = 7.0
 
 
 def _sanitize_filename(title: str) -> str:
@@ -62,11 +65,19 @@ class PaperGenerator:
         reasoning_engine=None,
         enhance: bool = True,
         include_internal_review: bool = False,
+        include_literature_audit: bool | None = None,
+        literature_search=None,
         output_dir: Path | str | None = None,
     ):
         self.reasoning = reasoning_engine
         self.enhance = enhance
         self.include_internal_review = include_internal_review
+        self.include_literature_audit = (
+            include_literature_audit
+            if include_literature_audit is not None
+            else os.getenv("AMY_PUBLICATION_LITERATURE_AUDIT", "0").lower() in {"1", "true", "yes", "on"}
+        )
+        self.literature_search = literature_search
         self._enhancer = PaperEnhancer()
         # Where generated papers (and their rejected counterparts) are written.
         # Defaults to the package-level PAPERS_DIR; pass output_dir to give a
@@ -90,6 +101,8 @@ class PaperGenerator:
         Generate an academic paper from structured content.
         Returns paths to generated files.
         """
+        enhanced_peer_review = None
+
         # Enhance paper if domain and tool_results are provided
         if self.enhance and domain and tool_results:
             try:
@@ -106,9 +119,10 @@ class PaperGenerator:
                 references = enhanced["references"]
                 abstract = enhanced["abstract"]
                 knowledge_facts = enhanced["knowledge_facts"]
+                enhanced_peer_review = enhanced.get("peer_review") or {}
                 log.info("paper_generator.enhanced",
                          hypotheses=len(enhanced.get("hypotheses", [])),
-                         review_score=enhanced.get("peer_review", {}).get("overall_score", 0))
+                         review_score=enhanced_peer_review.get("overall_score", 0))
             except Exception as e:
                 log.warning("paper_generator.enhance_failed", error=str(e))
 
@@ -118,7 +132,21 @@ class PaperGenerator:
         pdf_path = self.papers_dir / f"{slug}_{timestamp}.pdf"
         tex_path = self.papers_dir / f"{slug}_{timestamp}.tex"
 
-        md_content = self._build_markdown(title, abstract, sections, references, knowledge_facts, experiment_ids, tool_results)
+        publication_artifacts = {"tables": [], "figures": []}
+        render_sections = list(sections)
+        if tool_results or self.include_literature_audit:
+            publication_artifacts = await PublicationArtifactBuilder().build_async(
+                title=title,
+                tool_results=tool_results,
+                output_dir=self.papers_dir,
+                literature_search=self.literature_search,
+                include_literature_audit=self.include_literature_audit,
+            )
+            artifact_section = publication_artifacts.get("section")
+            if artifact_section:
+                render_sections.append(artifact_section)
+
+        md_content = self._build_markdown(title, abstract, render_sections, references, knowledge_facts, experiment_ids, tool_results)
         grounding_repair = {"repairs": 0, "items": []}
         if experiment_ids:
             md_content, grounding_repair = repair_unsupported_decimal_claims(
@@ -141,22 +169,27 @@ class PaperGenerator:
 
         gate = self._prepublication_gate(md_content, experiment_ids or [])
         if not gate["passed"]:
-            self.rejected_dir.mkdir(parents=True, exist_ok=True)
-            md_path = self.rejected_dir / md_path.name
-            md_content = self._annotate_rejected_draft(md_content, gate["reasons"])
-            md_path.write_text(md_content, encoding="utf-8")
-            result = {
-                "title": title,
-                "markdown_path": str(md_path),
-                "pdf_path": None,
-                "word_count": len(md_content.split()),
-                "sections": len(sections),
-                "publication_status": "rejected",
-                "rejection_reasons": gate["reasons"],
-                "grounding_repair": grounding_repair,
-            }
-            log.warning("paper_generator.prepublication_rejected", **result)
-            return result
+            return self._reject_draft(
+                title=title,
+                md_path=md_path,
+                md_content=md_content,
+                section_count=len(render_sections),
+                reasons=gate["reasons"],
+                grounding_repair=grounding_repair,
+                publication_artifacts=publication_artifacts,
+            )
+
+        peer_review_gate = self._peer_review_gate(enhanced_peer_review)
+        if not peer_review_gate["passed"]:
+            return self._reject_draft(
+                title=title,
+                md_path=md_path,
+                md_content=md_content,
+                section_count=len(render_sections),
+                reasons=peer_review_gate["reasons"],
+                grounding_repair=grounding_repair,
+                publication_artifacts=publication_artifacts,
+            )
 
         reflection_summary = self._run_reflection_gate(md_content)
         if reflection_summary is not None:
@@ -166,11 +199,45 @@ class PaperGenerator:
                      score=reflection_summary["score"],
                      pass_overall=reflection_summary["pass_overall"],
                      n_high=reflection_summary["n_high"])
+            if not reflection_summary["pass_overall"]:
+                reasons = ["reflection gate failed"]
+                if reflection_summary["n_high"] > 0:
+                    reasons.append("reflection high-severity issues")
+                return self._reject_draft(
+                    title=title,
+                    md_path=md_path,
+                    md_content=reflection_summary["annotated_md"],
+                    section_count=len(render_sections),
+                    reasons=reasons,
+                    grounding_repair=grounding_repair,
+                    publication_artifacts=publication_artifacts,
+                )
 
         md_content = self._append_watermark(
             md_content,
             title,
             includes_internal_review=self.include_internal_review,
+        )
+
+        pdf_ok = await self._render_pdf(md_content, pdf_path, title, abstract, render_sections, references)
+        if not pdf_ok:
+            return self._reject_draft(
+                title=title,
+                md_path=md_path,
+                md_content=md_content,
+                section_count=len(render_sections),
+                reasons=["pdf render failed"],
+                grounding_repair=grounding_repair,
+                publication_artifacts=publication_artifacts,
+            )
+
+        tex_ok = await self._render_latex(
+            tex_path,
+            title,
+            abstract,
+            render_sections,
+            references,
+            publication_artifacts=publication_artifacts,
         )
 
         md_path.write_text(md_content, encoding="utf-8")
@@ -196,20 +263,18 @@ class PaperGenerator:
             )
             log.info("paper_generator.review_sidecar_written", path=str(review_path))
 
-        pdf_ok = await self._render_pdf(md_content, pdf_path, title, abstract, sections, references)
-        tex_ok = await self._render_latex(tex_path, title, abstract, sections, references)
-
         result = {
             "title": title,
             "markdown_path": str(md_path),
-            "pdf_path": str(pdf_path) if pdf_ok else None,
+            "pdf_path": str(pdf_path),
             "latex_path": str(tex_path) if tex_ok else None,
             "word_count": len(md_content.split()),
-            "sections": len(sections),
+            "sections": len(render_sections),
             "publication_status": "published",
             "rejection_reasons": [],
             "internal_review_path": str(review_path) if review_path else None,
             "grounding_repair": grounding_repair,
+            "publication_artifacts": publication_artifacts,
         }
         log.info("paper_generator.paper_complete", **result)
         return result
@@ -241,6 +306,54 @@ class PaperGenerator:
             reasons.append("unusable tool output in manuscript")
 
         return {"passed": not reasons, "reasons": reasons}
+
+    @staticmethod
+    def _peer_review_gate(peer_review: dict | None) -> dict:
+        """Reject enhanced drafts whose own reviewer score is below paper quality."""
+        if not peer_review:
+            return {"passed": True, "reasons": []}
+        try:
+            score = float(peer_review.get("overall_score"))
+        except (TypeError, ValueError):
+            return {"passed": False, "reasons": ["peer review score missing or invalid"]}
+        if score < MIN_PUBLICATION_PEER_REVIEW_SCORE:
+            return {
+                "passed": False,
+                "reasons": [
+                    "peer review score below publication threshold "
+                    f"({score:.1f} < {MIN_PUBLICATION_PEER_REVIEW_SCORE:.1f})"
+                ],
+            }
+        return {"passed": True, "reasons": []}
+
+    def _reject_draft(
+        self,
+        *,
+        title: str,
+        md_path: Path,
+        md_content: str,
+        section_count: int,
+        reasons: list[str],
+        grounding_repair: dict,
+        publication_artifacts: dict,
+    ) -> dict:
+        self.rejected_dir.mkdir(parents=True, exist_ok=True)
+        rejected_path = self.rejected_dir / md_path.name
+        rejected_content = self._annotate_rejected_draft(md_content, reasons)
+        rejected_path.write_text(rejected_content, encoding="utf-8")
+        result = {
+            "title": title,
+            "markdown_path": str(rejected_path),
+            "pdf_path": None,
+            "word_count": len(rejected_content.split()),
+            "sections": section_count,
+            "publication_status": "rejected",
+            "rejection_reasons": reasons,
+            "grounding_repair": grounding_repair,
+            "publication_artifacts": publication_artifacts,
+        }
+        log.warning("paper_generator.prepublication_rejected", **result)
+        return result
 
     @staticmethod
     def _append_watermark(
@@ -551,7 +664,7 @@ class PaperGenerator:
         ]
         
         # Standard IMRaD sections only
-        standard_sections = ["introduction", "methods", "results", "discussion", "conclusion"]
+        standard_sections = ["introduction", "methods", "results", "discussion", "conclusion", "publication artifacts"]
         for sec in sections:
             heading = sec.get("heading", "Section")
             content = sec.get("content", "")
@@ -857,6 +970,7 @@ class PaperGenerator:
         abstract: str,
         sections: list[dict],
         references: list[str] | None,
+        publication_artifacts: dict | None = None,
     ) -> bool:
         """Render paper to LaTeX format."""
         try:
@@ -916,6 +1030,19 @@ class PaperGenerator:
                     lines.append("\\end{itemize}")
                     lines.append("")
                 lines.append("")
+
+            for figure in (publication_artifacts or {}).get("figures", []):
+                figure_path = str(figure.get("display_path") or figure.get("path", ""))
+                caption = str(figure.get("caption", ""))
+                if figure_path:
+                    lines += [
+                        "\\begin{figure}[htbp]",
+                        "\\centering",
+                        f"\\includegraphics[width=0.95\\linewidth]{{\\detokenize{{{figure_path}}}}}",
+                        f"\\caption{{{self._escape_latex(caption)}}}",
+                        "\\end{figure}",
+                        "",
+                    ]
 
             if references:
                 lines.append("\\begin{thebibliography}{99}")
@@ -1199,8 +1326,11 @@ class PaperGenerator:
 def _safe_para(text: str) -> str:
     """Escape special chars for ReportLab paragraphs."""
     text = text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-    # Bold: **text** → <b>text</b>
-    text = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", text)
-    # Italic: *text* → <i>text</i>
-    text = re.sub(r"\*(.+?)\*", r"<i>\1</i>", text)
+    # Keep Python/math operators such as 3*x**2 literal; ReportLab accepts a
+    # small XML subset, so over-eager Markdown conversion can create crossed tags.
+    text = re.sub(
+        r"(?<![A-Za-z0-9])\*\*(\S(?:.*?\S)?)\*\*(?![A-Za-z0-9])",
+        r"<b>\1</b>",
+        text,
+    )
     return text

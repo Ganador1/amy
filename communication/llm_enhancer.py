@@ -178,6 +178,24 @@ def _drop_unsupported_numeric_sentences(content: str, results: list[dict]) -> tu
     return cleaned, list(dict.fromkeys(unsupported))
 
 
+_PROCESS_PREAMBLE_RE = re.compile(
+    r"^\s*(?:let me|i(?:'ll| will| need to)|we need to)\b"
+    r".*\b(?:analy[sz]e|write|draft|craft|produce|prepare|discuss)\b",
+    re.IGNORECASE,
+)
+
+
+def _strip_process_preamble(content: str) -> tuple[str, list[str]]:
+    """Remove model process chatter that does not belong in manuscript prose."""
+    lines = content.strip().splitlines()
+    removed = []
+    while lines and _PROCESS_PREAMBLE_RE.search(lines[0].strip()):
+        removed.append(lines.pop(0).strip())
+        while lines and not lines[0].strip():
+            lines.pop(0)
+    return "\n".join(lines).strip(), removed
+
+
 DISCUSSION_SYSTEM = (
     "You are a careful computational scientist writing the Discussion section "
     "of a research paper. You write in precise, sober academic prose. You are "
@@ -337,6 +355,13 @@ async def generate_discussion_llm(
                 content = content.strip("`")
                 if content.lower().startswith("markdown"):
                     content = content[len("markdown"):].lstrip()
+            content, removed_preamble = _strip_process_preamble(content)
+            if removed_preamble:
+                log.info(
+                    "llm_enhancer.process_preamble_removed",
+                    count=len(removed_preamble),
+                    examples=removed_preamble[:2],
+                )
             if len(content) < 120:
                 log.info("llm_enhancer.too_short", length=len(content), attempt=attempt)
                 if attempt == 0:
