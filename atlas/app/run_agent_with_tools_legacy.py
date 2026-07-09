@@ -33,6 +33,12 @@ from app.services.llm_providers.ollama_provider import ollama_provider
 import sympy
 import numpy as np
 
+from app.ssh_disorder_benchmark import (
+    BenchmarkConfig as SSHDisorderBenchmarkConfig,
+    format_benchmark_report as format_ssh_disorder_benchmark_report,
+    run_benchmark as run_ssh_disorder_benchmark,
+)
+
 # MATH DOMAIN SERVICES (Lazy loaded to avoid circular deps if possible, but safe here)
 try:
     from app.domains.mathematics.services.calculus_service import CalculusService, CalculusRequest
@@ -424,6 +430,21 @@ class DynamicToolRegistry:
             function=self._ssh_edge_localization_map,
             input_format="atom_count_series_with_localization_options",
             output_format="ssh_edge_localization_map"
+        ))
+
+        self.register_tool(ToolDescriptor(
+            name="ssh_disorder_diagnostic_benchmark",
+            domain="chemistry",
+            description=(
+                "Benchmark gap-only versus joint gap/edge-weight/IPR diagnostics "
+                "on paired finite SSH chains with off-diagonal and diagonal disorder. "
+                "Input: '20,40;deltas=0.1;strengths=0,0.2;"
+                "disorders=off_diagonal,diagonal;orientations=trivial,topological;"
+                "realizations=8;namespace=study;protocol_sha256=<64 hex>'"
+            ),
+            function=self._ssh_disorder_diagnostic_benchmark,
+            input_format="ssh_disorder_benchmark_protocol",
+            output_format="ssh_disorder_diagnostic_benchmark"
         ))
         
         self.register_tool(ToolDescriptor(
@@ -3354,6 +3375,93 @@ a₀ coefficient: {a0}
                 + "\n".join(rows)
                 + "\n"
                 "  Interpretation: high frontier_pair_edge_weight together with elevated IPR and low participation_sites directly tests whether the small topological frontier gap is caused by boundary-localized states rather than a bulk Peierls gap."
+            )
+        except Exception as e:
+            return f"Error: {str(e)}"
+
+    def _ssh_disorder_diagnostic_benchmark(self, query: str) -> str:
+        """Run the deterministic, paired SSH disorder diagnostic benchmark."""
+        try:
+            segments = [part.strip() for part in query.split(";") if part.strip()]
+            if not segments:
+                return (
+                    "Error: Provide chain lengths and protocol options, e.g. "
+                    "'20,40;deltas=0.1;strengths=0,0.2;"
+                    "disorders=off_diagonal,diagonal;realizations=8;"
+                    "namespace=study'"
+                )
+            lengths = tuple(
+                dict.fromkeys(
+                    int(part.strip())
+                    for part in re.split(r"[,\s]+", segments[0])
+                    if part.strip()
+                )
+            )
+            options = {
+                "deltas": (0.05, 0.1, 0.2),
+                "strengths": (0.0, 0.05, 0.1, 0.2, 0.4),
+                "disorder_types": ("off_diagonal", "diagonal"),
+                "orientations": ("trivial", "topological"),
+                "realizations": 128,
+                "namespace": "amy-ssh-disorder-v1",
+                "beta": -2.5,
+                "edge_sites": 2,
+                "gap_threshold": 0.20,
+                "edge_threshold": 0.50,
+                "ipr_threshold": 2.50,
+                "protocol_sha256": "",
+            }
+            for option in segments[1:]:
+                if "=" not in option:
+                    raise ValueError(f"protocol option lacks '=': {option}")
+                key, value = [item.strip() for item in option.split("=", 1)]
+                key = key.lower()
+                if key == "deltas":
+                    options["deltas"] = tuple(
+                        dict.fromkeys(self._parse_float_series_option(value, key))
+                    )
+                elif key in {"strengths", "disorder_strengths", "w"}:
+                    options["strengths"] = tuple(
+                        dict.fromkeys(self._parse_float_series_option(value, key))
+                    )
+                elif key in {"disorders", "disorder_types"}:
+                    options["disorder_types"] = tuple(
+                        dict.fromkeys(
+                            part.strip().lower()
+                            for part in value.split(",")
+                            if part.strip()
+                        )
+                    )
+                elif key == "orientations":
+                    options["orientations"] = tuple(
+                        dict.fromkeys(
+                            part.strip().lower()
+                            for part in value.split(",")
+                            if part.strip()
+                        )
+                    )
+                elif key == "realizations":
+                    options["realizations"] = int(value)
+                elif key == "namespace":
+                    options["namespace"] = value
+                elif key in {"beta", "b"}:
+                    options["beta"] = float(value)
+                elif key == "edge_sites":
+                    options["edge_sites"] = int(value)
+                elif key == "gap_threshold":
+                    options["gap_threshold"] = float(value)
+                elif key == "edge_threshold":
+                    options["edge_threshold"] = float(value)
+                elif key in {"ipr_threshold", "normalized_ipr_threshold"}:
+                    options["ipr_threshold"] = float(value)
+                elif key in {"protocol_sha256", "preregistration_sha256"}:
+                    options["protocol_sha256"] = value.lower()
+                else:
+                    raise ValueError(f"unknown benchmark option: {key}")
+
+            config = SSHDisorderBenchmarkConfig(lengths=lengths, **options)
+            return format_ssh_disorder_benchmark_report(
+                run_ssh_disorder_benchmark(config)
             )
         except Exception as e:
             return f"Error: {str(e)}"

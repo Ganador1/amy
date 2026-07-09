@@ -131,6 +131,27 @@ def test_ssh_edge_localization_map_reports_frontier_state_localization(registry)
     assert "localized_edge_state=true" in out
 
 
+def test_ssh_disorder_diagnostic_benchmark_contract(registry):
+    out = _run(
+        registry,
+        "ssh_disorder_diagnostic_benchmark",
+        "20,40;deltas=0.1;strengths=0,0.2;"
+        "disorders=off_diagonal,diagonal;"
+        "orientations=trivial,topological;realizations=8;"
+        "namespace=atlas-contract;protocol_sha256=" + "a" * 64,
+    )
+
+    assert "SSH disorder diagnostic benchmark" in out
+    assert "seed_derivation=sha256" in out
+    assert "paired_orientations=true" in out
+    assert "primary_estimand=error_gap_minus_error_joint" in out
+    assert "disorder_type=off_diagonal" in out
+    assert "disorder_type=diagonal" in out
+    assert "reference_label=not_defined" in out
+    assert "protocol_sha256=" in out
+    assert f"preregistration_sha256={'a' * 64}" in out
+
+
 # (name, input, list-of-substrings-that-must-all-appear, human label)
 CASES = [
     # SymPy
