@@ -107,6 +107,7 @@ def test_write_condition_tables_combines_labeled_runs(tmp_path):
     rows = json.loads(paths["json"].read_text(encoding="utf-8"))
     with paths["csv"].open(newline="", encoding="utf-8") as handle:
         csv_rows = list(csv.DictReader(handle))
+    assert b"\r\n" not in paths["csv"].read_bytes()
     assert len(rows) == 4
     assert {row["run"] for row in rows} == {"primary", "replication"}
     assert len(csv_rows) == 4

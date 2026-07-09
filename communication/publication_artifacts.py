@@ -214,7 +214,7 @@ class PublicationArtifactBuilder:
         manifest_path = artifact_dir / "manifest.json"
 
         with csv_path.open("w", newline="", encoding="utf-8") as fh:
-            writer = csv.DictWriter(fh, fieldnames=columns)
+            writer = csv.DictWriter(fh, fieldnames=columns, lineterminator="\n")
             writer.writeheader()
             for row in rows:
                 writer.writerow({col: row.get(col, "") for col in columns})

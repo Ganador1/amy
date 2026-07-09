@@ -64,6 +64,7 @@ def test_paper_generator_creates_publication_artifacts_from_numeric_tool_results
     assert table_json.exists()
     assert figure.exists()
     assert manifest.exists()
+    assert b"\r\n" not in table_csv.read_bytes()
 
     rows = json.loads(table_json.read_text(encoding="utf-8"))
     assert rows[0]["delta"] == 0.02
