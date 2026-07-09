@@ -664,7 +664,20 @@ class PaperGenerator:
         ]
         
         # Standard IMRaD sections only
-        standard_sections = ["introduction", "methods", "results", "discussion", "conclusion", "publication artifacts"]
+        standard_sections = [
+            "introduction",
+            "methods",
+            "results",
+            "discussion",
+            "testable predictions",
+            "limitations",
+            "reproducibility",
+            "data availability",
+            "declarations",
+            "ai disclosure",
+            "conclusion",
+            "publication artifacts",
+        ]
         for sec in sections:
             heading = sec.get("heading", "Section")
             content = sec.get("content", "")

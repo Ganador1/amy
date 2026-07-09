@@ -127,6 +127,7 @@ experiments/e2e_v2/audits/
 experiments/e2e_v2/corpus_dataset.json
 experiments/e2e_v2/compare_vs_prior_*.json
 experiments/**/RESULTS.json
+experiments/ssh_disorder_study/smoke/
 
 # Stray analysis artifacts at repo root
 /*.png

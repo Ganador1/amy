@@ -1,0 +1,160 @@
+{
+  "schema_version": "1.0",
+  "registered_at_utc": "2026-07-09T00:00:00Z",
+  "study_id": "amy-ssh-disorder-diagnostic-benchmark-v1",
+  "title": "Paired finite-chain SSH diagnostic reliability under quenched disorder",
+  "status": "preregistered_before_production_execution",
+  "research_question": "Does a fixed two-of-three joint diagnostic using frontier splitting, edge weight, and inverse participation ratio reduce classification error relative to a frontier-gap-only diagnostic on paired finite SSH chains with chiral-symmetry-preserving off-diagonal disorder?",
+  "hypotheses": {
+    "H1_primary": {
+      "statement": "The pooled joint-rule error is lower than the pooled gap-only error under off-diagonal disorder.",
+      "estimand": "error_gap_only_minus_error_joint",
+      "test": "two-sided exact McNemar test",
+      "alpha": 0.05,
+      "support_rule": "estimand > 0 and p_value < 0.05"
+    },
+    "H2_replication": {
+      "statement": "The sign and H1 support decision reproduce under an independently hash-seeded namespace.",
+      "support_rule": "replication estimand > 0 and replication H1 decision equals primary H1 decision"
+    },
+    "H3_negative_control": {
+      "statement": "Diagonal disorder is analyzed only as a symmetry-breaking negative control.",
+      "test": "descriptive positive rates with Wilson 95% confidence intervals",
+      "topological_accuracy_is_defined": false
+    }
+  },
+  "model": {
+    "family": "finite open Su-Schrieffer-Heeger nearest-neighbor tight-binding chain",
+    "beta_eV": -2.5,
+    "lengths_sites": [
+      20,
+      40,
+      80
+    ],
+    "dimerization_delta": [
+      0.05,
+      0.1,
+      0.2
+    ],
+    "disorder_strength_W": [
+      0.0,
+      0.05,
+      0.1,
+      0.2,
+      0.4
+    ],
+    "orientations": [
+      "trivial",
+      "topological"
+    ],
+    "disorder_types": {
+      "off_diagonal": "clean hopping multiplied by exp(W*z_i), z_i uniform on [-1,1]",
+      "diagonal": "onsite energy set to W*abs(beta)*z_i, z_i uniform on [-1,1]"
+    },
+    "realizations_per_nonzero_condition_per_orientation": 128,
+    "realizations_at_W_zero_per_orientation": 1,
+    "edge_sites_per_end": 2
+  },
+  "randomization": {
+    "generator": "numpy.random.default_rng",
+    "seed_formula": "first unsigned 64 bits of SHA256(namespace|disorder_type|N|delta|W|realization_index)",
+    "orientation_excluded_from_seed": true,
+    "purpose": "pair identical random vectors across trivial and topological boundary orientations",
+    "primary_namespace": "amy-ssh-disorder-v1-primary",
+    "replication_namespace": "amy-ssh-disorder-v1-replication"
+  },
+  "reference_labels": {
+    "off_diagonal": "mean(log(intercell hopping)) > mean(log(intracell hopping))",
+    "diagonal": null,
+    "diagonal_reason": "onsite disorder breaks the chiral symmetry required by the preregistered random-SSH reference criterion"
+  },
+  "diagnostics": {
+    "gap_vote": "frontier_splitting / (4*abs(beta)*delta) <= 0.20",
+    "edge_vote": "mean frontier-pair probability in first and last two sites >= 0.50",
+    "ipr_vote": "N * mean frontier-pair IPR >= 2.50",
+    "gap_only_prediction": "gap_vote",
+    "joint_prediction": "at least two of gap_vote, edge_vote, and ipr_vote"
+  },
+  "analysis_plan": {
+    "primary_population": "all off-diagonal-disorder realization-orientation records across the frozen grid",
+    "primary_statistics": [
+      "gap-only and joint accuracy",
+      "gap-only and joint false-positive rate",
+      "gap-only and joint false-negative rate",
+      "paired error difference",
+      "deterministic percentile-bootstrap 95% confidence interval for paired error difference",
+      "two-sided exact McNemar p-value"
+    ],
+    "secondary_statistics": [
+      "condition-level Wilson 95% confidence intervals",
+      "reference-label flips relative to clean parent termination",
+      "diagonal-disorder diagnostic-positive rates"
+    ],
+    "confirmatory_p_values": 1,
+    "multiple_testing_adjustment": "not applicable because only the pooled H1 p-value is confirmatory",
+    "bootstrap_resamples": 5000,
+    "exclusions": "none",
+    "missing_data": "a failed Atlas call invalidates the run; no imputation",
+    "threshold_tuning_after_execution": false
+  },
+  "falsification_rules": [
+    "H1 is not supported if the pooled error difference is nonpositive or the exact McNemar p-value is at least 0.05.",
+    "H2 is not supported if the replication error difference is nonpositive or its H1 support decision differs from the primary decision.",
+    "No result from diagonal disorder may be described as topological accuracy.",
+    "Observed thresholds and hypotheses will not be changed after production execution."
+  ],
+  "planned_outputs": [
+    "raw primary Atlas text",
+    "raw replication Atlas text",
+    "condition-level CSV and JSON",
+    "pooled primary and replication JSON",
+    "literature search JSON",
+    "figures with uncertainty intervals",
+    "Markdown manuscript",
+    "LaTeX manuscript",
+    "PDF manuscript",
+    "Atlas provenance records",
+    "SHA-256 release manifest"
+  ],
+  "novelty_policy": {
+    "claim": "candidate methodological novelty: an auditable paired condition-level error benchmark for fixed finite-chain SSH diagnostics",
+    "prohibited_claims": [
+      "new topological phase",
+      "new material",
+      "experimental observation",
+      "proof of global literature novelty"
+    ],
+    "automated_search_limitation": "absence of a direct match is not proof of novelty; external peer review remains required"
+  },
+  "reporting_requirements": [
+    "model equations and all fixed thresholds",
+    "sample counts and effective W=0 handling",
+    "effect sizes and uncertainty intervals",
+    "exact p-value and discordant McNemar counts",
+    "confirmatory versus descriptive distinction",
+    "all exclusions",
+    "software and hardware context",
+    "data and code availability",
+    "conflicts and funding statements",
+    "contribution and AI-generation disclosure",
+    "preregistration and provenance SHA-256 hashes"
+  ],
+  "literature_anchors": [
+    {
+      "citation": "Su, Schrieffer, and Heeger (1979), Physical Review Letters 42, 1698-1701",
+      "doi": "10.1103/PhysRevLett.42.1698"
+    },
+    {
+      "citation": "Pérez-González et al. (2019), Physical Review B 99, 035146",
+      "doi": "10.1103/PhysRevB.99.035146"
+    },
+    {
+      "citation": "Yao et al. (2021), Physical Review A 104, 012216",
+      "doi": "10.1103/PhysRevA.104.012216"
+    },
+    {
+      "citation": "Kvande, Hill, and Blume (2023), finite SSH chains with onsite disorder",
+      "arxiv": "2307.05824"
+    }
+  ]
+}

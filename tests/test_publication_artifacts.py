@@ -238,3 +238,40 @@ def test_paper_generator_can_attach_literature_audit_with_search_callback(tmp_pa
     assert audit_path.exists()
     assert "Literature novelty audit" in markdown
     assert "needs_manual_review" in markdown
+
+
+def test_markdown_keeps_scientific_audit_sections(tmp_path):
+    generator = PaperGenerator(enhance=False, output_dir=tmp_path)
+
+    markdown = generator._build_markdown(
+        "Audit Section Test",
+        "A deterministic audit.",
+        [
+            {"heading": "Introduction", "content": "Context."},
+            {"heading": "Methods", "content": "Method."},
+            {"heading": "Results", "content": "Result."},
+            {"heading": "Discussion", "content": "Discussion."},
+            {
+                "heading": "Testable Predictions",
+                "content": "H1. Prediction. Testable via: rerun.",
+            },
+            {"heading": "Limitations and Scope", "content": "Limitation."},
+            {
+                "heading": "Reproducibility and Data Availability",
+                "content": "Reproducibility.",
+            },
+            {
+                "heading": "Declarations and AI Disclosure",
+                "content": "Disclosure.",
+            },
+            {"heading": "Conclusion", "content": "Conclusion."},
+        ],
+        references=None,
+        knowledge_facts=None,
+        experiment_ids=None,
+    )
+
+    assert "## Testable Predictions" in markdown
+    assert "## Limitations and Scope" in markdown
+    assert "## Reproducibility and Data Availability" in markdown
+    assert "## Declarations and AI Disclosure" in markdown
