@@ -740,6 +740,47 @@ def test_ssh_edge_localization_discussion_uses_eigenvector_diagnostic_pattern():
     assert "computed value of -2.500000" not in discussion
 
 
+def test_ssh_disorder_benchmark_hypothesis_is_methodological():
+    result = {
+        "tool": "ssh_disorder_diagnostic_benchmark",
+        "description": "Paired SSH disorder diagnostic benchmark",
+        "result": (
+            "SSH disorder diagnostic benchmark:\n"
+            "  paired_orientations=true\n"
+            "  primary_estimand=error_gap_minus_error_joint\n"
+            "  pooled; namespace=primary; disorder_type=off_diagonal; "
+            "reference_label=random_ssh_log_geometric_mean; total=100; "
+            "gap_accuracy=0.70; joint_accuracy=0.82; "
+            "error_gap_minus_error_joint=0.12; "
+            "gap_wrong_joint_right=20; gap_right_joint_wrong=8; "
+            "mcnemar_pvalue=0.035\n"
+            "  summary; disorder_type=diagonal; reference_label=not_defined; "
+            "gap_positive_rate=0.30; joint_positive_rate=0.20\n"
+        ),
+        "success": True,
+    }
+
+    hypotheses = generate_hypothesis("chemistry", [result])
+    combined = "\n".join(
+        hypothesis["hypothesis"] + " " + hypothesis["method"]
+        for hypothesis in hypotheses
+    ).lower()
+    discussion = PaperEnhancer()._build_discussion(
+        "chemistry",
+        [result],
+        DOMAIN_INSIGHTS["chemistry"],
+    ).lower()
+
+    assert "paired" in combined
+    assert "mcnemar" in combined
+    assert "gap-only" in combined
+    assert "joint" in combined
+    assert "candidate methodological novelty" in combined
+    assert "reference label" in discussion
+    assert "chiral" in discussion
+    assert "not an experimental material result" in discussion
+
+
 def test_introduction_does_not_count_repeated_tool_runs_as_independent_methods():
     enhancer = PaperEnhancer()
     intro = enhancer._build_introduction(

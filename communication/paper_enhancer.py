@@ -89,6 +89,7 @@ DOMAIN_INSIGHTS = {
             "huckel_polyene_scaling": "The Hückel polyene scaling series is a falsifiable model-comparison control: linear finite-chain Hückel theory predicts a frontier gap proportional to sin(pi/(2(N+1))), which is nearly inverse-length over moderate N. Autschbach's particle-in-a-box analysis warns that real polyenes with bond-length alternation approach a finite absorption limit, so this computation should be framed as a baseline Hückel model test rather than a quantitative prediction of experimental spectra.",
             "ssh_polyene_gap_map": "The SSH/polyene gap map is a boundary-condition stress test for gap-only inference. Trivial termination estimates the Peierls-like bulk opening, while topological termination can compress the frontier gap through in-gap boundary states. The useful claim is therefore not that Peierls physics is new, but that finite-chain HOMO-LUMO gaps are not identifiable without recording boundary orientation and threshold sensitivity.",
             "ssh_edge_localization_map": "The SSH edge-localization map tests the gap-only interpretation with eigenvectors rather than eigenvalues alone. Edge weight, inverse participation ratio, and participation-sites diagnostics distinguish boundary-localized frontier states from delocalized bulk frontier states. This is the stronger control for the candidate claim: a small topological frontier gap supports edge-state contamination only if the corresponding frontier eigenvectors also concentrate at the chain ends.",
+            "ssh_disorder_diagnostic_benchmark": "The SSH disorder diagnostic benchmark is a paired methodological comparison, not a new-phase search. Its confirmatory estimand compares gap-only and joint gap/edge-weight/IPR errors on identical hash-seeded off-diagonal-disorder realizations using an exact McNemar test. Diagonal disorder is a descriptive negative control: because onsite disorder breaks chiral symmetry, it has no chiral topological reference label, and localization-positive outputs cannot be interpreted as topology. The finite tight-binding computation is not an experimental material result.",
             "molecular_weight_calc": "The computed molecular weights confirm standard atomic mass contributions and stoichiometric ratios. The precision of these calculations enables verification of empirical formulas and distinction between isomeric compounds with identical mass ratios.",
             "bond_energy_analyzer": "Bond energy analysis reveals the thermodynamic stability hierarchy of molecular interactions. The C-C bond energy (347 kJ/mol) compared to C=C (614 kJ/mol) and C≡C (839 kJ/mol) demonstrates the relationship between bond order and bond strength, consistent with molecular orbital theory predictions.",
             "reaction_predictor": "The predicted reaction pathways follow established mechanistic principles including Markovnikov's rule and Zaitsev's orientation. The thermodynamic favorability of products correlates with stability of the transition state.",
@@ -320,8 +321,8 @@ def _method_framework_summary(results: list[dict]) -> dict:
         description = "no usable computational analyses"
     elif n_frameworks == 1 and n_total > 1:
         description = (
-            f"{n_total} total analyses within a single methodological framework "
-            f"({labels[0]})"
+            f"a single computational method applied across {n_total} parameter "
+            f"configurations ({labels[0]})"
         )
     elif n_frameworks == 1:
         description = f"a single computational analysis within {labels[0]}"
@@ -933,7 +934,41 @@ def generate_hypothesis(domain: str, results: list[dict]) -> list[dict]:
                 ))
                 
         elif domain == "chemistry":
-            if "ssh_edge_localization_map" in tool:
+            if "ssh_disorder_diagnostic_benchmark" in tool:
+                pooled_match = re.search(
+                    r"pooled;.*?gap_accuracy=([0-9.]+);\s*"
+                    r"(?:gap_accuracy_ci95=[^;]+;\s*)?"
+                    r"joint_accuracy=([0-9.]+);.*?"
+                    r"error_gap_minus_error_joint=([-0-9.]+);.*?"
+                    r"gap_wrong_joint_right=([0-9]+);\s*"
+                    r"gap_right_joint_wrong=([0-9]+);\s*"
+                    r"mcnemar_pvalue=([0-9.eE+-]+)",
+                    result_text,
+                    flags=re.IGNORECASE | re.DOTALL,
+                )
+                if pooled_match:
+                    gap_accuracy = pooled_match.group(1)
+                    joint_accuracy = pooled_match.group(2)
+                    error_difference = pooled_match.group(3)
+                    improved = pooled_match.group(4)
+                    harmed = pooled_match.group(5)
+                    p_value = pooled_match.group(6)
+                    observed = (
+                        f"gap_accuracy={gap_accuracy}, joint_accuracy={joint_accuracy}, "
+                        f"error_gap_minus_error_joint={error_difference}, "
+                        f"discordant counts={improved}/{harmed}, and "
+                        f"mcnemar_pvalue={p_value}"
+                    )
+                else:
+                    observed = "the recorded pooled accuracy, paired error difference, discordant counts, and exact p-value"
+                hypotheses.append(_hypothesis(
+                    "The candidate methodological novelty is a preregistered paired benchmark: the joint gap/edge-weight/IPR rule should reduce error relative to the gap-only rule on the same hash-seeded off-diagonal-disorder SSH realizations.",
+                    0.50,
+                    f"Evaluate {observed} with the exact paired McNemar test, then require the direction and conclusion to reproduce under the independent namespace; treat diagonal disorder only as a chiral-symmetry-breaking negative control with no topological reference label.",
+                    novelty_status="candidate_methodological_observation",
+                    evidence_level="paired_computational_benchmark",
+                ))
+            elif "ssh_edge_localization_map" in tool:
                 localization_match = re.search(
                     r"delta=([0-9.]+);\s*orientation=topological;\s*"
                     r"localization_onset_n=([0-9]+|not_observed);\s*"
@@ -956,7 +991,7 @@ def generate_hypothesis(domain: str, results: list[dict]) -> list[dict]:
                     ipr = "the recorded"
                     participation = "the recorded"
                 hypotheses.append(_hypothesis(
-                    f"The SSH/polyene edge-state interpretation is directly testable by eigenvector localization: for delta={delta_value}, localization_onset_n={onset_n}, max_pair_edge_weight={edge_weight}, max_pair_ipr={ipr}, and min_participation_sites={participation} should co-occur with the small topological frontier gap rather than with the trivial Peierls gap.",
+                    f"The SSH/polyene edge-state interpretation is directly testable beyond gap-only evidence by eigenvector localization: for delta={delta_value}, localization_onset_n={onset_n}, max_pair_edge_weight={edge_weight}, max_pair_ipr={ipr}, and min_participation_sites={participation} should co-occur with the small topological frontier gap rather than with the trivial Peierls gap.",
                     0.50,
                     f"Rerun ssh_edge_localization_map with denser chain lengths and require the topological edge weight/IPR signal at delta={delta_value} to remain localized at or before localization_onset_n={onset_n}; compare against an external DFT, experimental, or literature benchmark before treating the pattern as novelty.",
                     novelty_status="candidate_methodological_observation",
@@ -1156,6 +1191,10 @@ def generate_references(domain: str, results: list[dict]) -> list[str]:
             tool_refs.append("Pomerance, C. (2009). Prime Numbers. Springer Berlin Heidelberg.")
         elif "quantum" in tool or "energy" in tool:
             tool_refs.append("Griffiths, D.J. (2018). Introduction to Quantum Mechanics. Cambridge University Press.")
+        elif "ssh_disorder_diagnostic_benchmark" in tool:
+            tool_refs.append("Pérez-González, B., Bello, M., Gómez-León, A. & Platero, G. (2019). SSH model with long-range hoppings: topology, driving and disorder. Physical Review B, 99, 035146. doi:10.1103/PhysRevB.99.035146.")
+            tool_refs.append("Yao, Y., Schlömer, H., Ma, Z., Campos Venuti, L. & Haas, S. (2021). Topological protection of coherence in disordered open quantum systems. Physical Review A, 104, 012216. doi:10.1103/PhysRevA.104.012216.")
+            tool_refs.append("Kvande, C.I., Hill, D.B. & Blume, D. (2023). Finite SSH chains coupled to a two-level emitter: Hybridization of edge and emitter states. arXiv:2307.05824.")
         elif "ssh_polyene_gap_map" in tool or "ssh_edge_localization_map" in tool:
             tool_refs.append("Su, W.P., Schrieffer, J.R. & Heeger, A.J. (1979). Solitons in polyacetylene. Physical Review Letters, 42(25), 1698-1701. doi:10.1103/PhysRevLett.42.1698.")
             tool_refs.append("Valli, A. & Tomczak, J.M. (2023). Resistance saturation in semi-conducting polyacetylene molecular wires. Journal of Computational Electronics, 22, 1363-1376. doi:10.1007/s10825-023-02043-7.")
