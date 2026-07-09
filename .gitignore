@@ -99,6 +99,7 @@ atlas/benchmark_*.log
 # Provisional / scratch dirs
 :memory:/
 *.bak
+.worktrees/
 
 # DO track the top-level experimental harness scripts
 !/experiments/
