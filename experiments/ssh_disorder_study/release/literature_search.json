@@ -1,0 +1,332 @@
+{
+  "papers": [
+    {
+      "title": "Data-driven reconstruction of band dispersion and quantum geometry via Koopman dynamical mode decomposition",
+      "abstract": "We present a data-driven framework for reconstructing band structures using Koopman operator analysis and dynamic mode decomposition (Koopman-DMD). Instead of deriving spectra from an explicit Hamiltonian, the approach reconstructs band dispersion and modal dynamics directly from spatiotemporal data, including wavefunctions and observables. This framework establishes a correspondence between Hamiltonian Floquet-Bloch decomposition and Koopman-DMD, whereby the extracted DMD modes encode frequencies, decay or growth rates, spatial profiles and projection weights. These quantities allow the reconstruction of spectral functions, local density of states, and delocalized-to-localized measures such as the inverse participation ratio. Also, these extended DMD modes enable inference of quantum-geometric and topological properties, including the quantum metric, Berry curvature and geometric phases. Applications to prototypical one- and two-dimensional tight-binding models, including disordered Su-Schrieffer-Heeger model and its Floquet and non-Hermitian variants, graphene and Haldane models, demonstrate that Koopman-DMD provides a unified route for the data-driven analysis of wave propagation, localization, and topological phases in condensed matter, photonics, and related fields.",
+      "summary": "We present a data-driven framework for reconstructing band structures using Koopman operator analysis and dynamic mode decomposition (Koopman-DMD). Instead of deriving spectra from an explicit Hamiltonian, the approach reconstructs band dispersion and modal dynamics directly from spatiotemporal data, including wavefunctions and observables. This framework establishes a correspondence between Hamiltonian Floquet-Bloch decomposition and Koopman-DMD, whereby the extracted DMD modes encode frequencies, decay or growth rates, spatial profiles and projection weights. These quantities allow the reconstruction of spectral functions, local density of states, and delocalized-to-localized measures such as the inverse participation ratio. Also, these extended DMD modes enable inference of quantum-geometric and topological properties, including the quantum metric, Berry curvature and geometric phases. Applications to prototypical one- and two-dimensional tight-binding models, including disordered Su-Schrieffer-Heeger model and its Floquet and non-Hermitian variants, graphene and Haldane models, demonstrate that Koopman-DMD provides a unified route for the data-driven analysis of wave propagation, localization, and topological phases in condensed matter, photonics, and related fields.",
+      "year": 2026,
+      "doi": "",
+      "url": "https://openalex.org/W7160727533",
+      "authors": [
+        "Yiming Pan",
+        "Jinze He",
+        "Jiapeng Yang",
+        "Zhiwei Fan"
+      ],
+      "source": "OpenAlex",
+      "citations": 0
+    },
+    {
+      "title": "Tunably realizing flat-bands and exceptional points in kinetically frustrated systems: An example on the non-Hermitian Creutz ladder",
+      "abstract": "We study a non-Hermitian extension of the Creutz ladder with generic non-reciprocal hopping. By mapping the ladder onto two decoupled non-Hermitian Su--Schrieffer--Heeger (SSH) chains, we uncover a rich structure in parameter space under different boundary conditions. Under periodic boundary conditions, the spectrum admits a fine-tuned line in parameter space with entirely real eigenvalues, while deviations from this line induce a real--complex spectral transition without crossing exceptional points. In contrast, an exact analytical diagonalization under open boundary conditions reveals extended regions in parameter space with purely real or purely imaginary spectra, separated from complex spectral domains by exceptional lines. The intersections of these exceptional lines define triple-junction points where distinct spectral regimes meet, giving rise to a structured phase diagram that is absent under periodic boundary conditions. We further show that flat bands in this system can occur both as Hermitian diabolical points and as non-Hermitian exceptional points, known as exceptional flat bands, where the dynamics is more stringent than in the Hermitian case, leading to distinct spectral and dynamical signatures.",
+      "summary": "We study a non-Hermitian extension of the Creutz ladder with generic non-reciprocal hopping. By mapping the ladder onto two decoupled non-Hermitian Su--Schrieffer--Heeger (SSH) chains, we uncover a rich structure in parameter space under different boundary conditions. Under periodic boundary conditions, the spectrum admits a fine-tuned line in parameter space with entirely real eigenvalues, while deviations from this line induce a real--complex spectral transition without crossing exceptional points. In contrast, an exact analytical diagonalization under open boundary conditions reveals extended regions in parameter space with purely real or purely imaginary spectra, separated from complex spectral domains by exceptional lines. The intersections of these exceptional lines define triple-junction points where distinct spectral regimes meet, giving rise to a structured phase diagram that is absent under periodic boundary conditions. We further show that flat bands in this system can occur both as Hermitian diabolical points and as non-Hermitian exceptional points, known as exceptional flat bands, where the dynamics is more stringent than in the Hermitian case, leading to distinct spectral and dynamical signatures.",
+      "year": 2025,
+      "doi": "",
+      "url": "https://openalex.org/W7117277030",
+      "authors": [
+        "Debashish Dutta",
+        "Sayan Choudhury"
+      ],
+      "source": "OpenAlex",
+      "citations": 0
+    },
+    {
+      "title": "Augmented Space Formalism for Diagonal and Off‐Diagonal Disordered Alloys",
+      "abstract": "AbstractA general treatment for electronic states of disordered alloys, including composition‐dependent off‐diagonal Hamiltonian matrix elements is presented. The recursion method within the augmented space of a disordered lattice is exploited. The main novelty is the simple description of the states of this space by a binary logic to allow a manageable use of recurrence relations. Several examples of one‐dimensional disordered alloys are considered, and comparison is performed between the electronic structure obtained with our procedure and numerical simulation of small clusters.",
+      "summary": "AbstractA general treatment for electronic states of disordered alloys, including composition‐dependent off‐diagonal Hamiltonian matrix elements is presented. The recursion method within the augmented space of a disordered lattice is exploited. The main novelty is the simple description of the states of this space by a binary logic to allow a manageable use of recurrence relations. Several examples of one‐dimensional disordered alloys are considered, and comparison is performed between the electronic structure obtained with our procedure and numerical simulation of small clusters.",
+      "year": 1994,
+      "doi": "10.1002/pssb.2221820213",
+      "url": "https://doi.org/10.1002/pssb.2221820213",
+      "authors": [
+        "A. Cordelli",
+        "G. Grosso",
+        "G. Pastori Parravicini"
+      ],
+      "source": "Crossref",
+      "citations": 0
+    },
+    {
+      "title": "Transport in models with correlated diagonal and off-diagonal disorder",
+      "abstract": "",
+      "summary": "",
+      "year": 1989,
+      "doi": "10.1088/0953-8984/1/44/017",
+      "url": "https://doi.org/10.1088/0953-8984/1/44/017",
+      "authors": [
+        "J C Flores"
+      ],
+      "source": "Crossref",
+      "citations": 164
+    },
+    {
+      "title": "Statistical properties of eigenstates in three-dimensional mesoscopic systems with off-diagonal or diagonal disorder",
+      "abstract": "",
+      "summary": "",
+      "year": 2001,
+      "doi": "10.1103/physrevb.64.014203",
+      "url": "https://doi.org/10.1103/physrevb.64.014203",
+      "authors": [
+        "Branislav K. Nikolić"
+      ],
+      "source": "Crossref",
+      "citations": 31
+    },
+    {
+      "title": "Self-consistent cluster theories for alloys with diagonal and off-diagonal disorder",
+      "abstract": "",
+      "summary": "",
+      "year": 1978,
+      "doi": "10.1103/physrevb.18.3999",
+      "url": "https://doi.org/10.1103/physrevb.18.3999",
+      "authors": [
+        "A. Gonis",
+        "J. W. Garland"
+      ],
+      "source": "Crossref",
+      "citations": 28
+    },
+    {
+      "title": "The theory of disordered alloys. I. Continued fractions and off-diagonal disorder",
+      "abstract": "",
+      "summary": "",
+      "year": 1973,
+      "doi": "10.1088/0305-4608/3/5/008",
+      "url": "https://doi.org/10.1088/0305-4608/3/5/008",
+      "authors": [
+        "R L Jacobs"
+      ],
+      "source": "Crossref",
+      "citations": 28
+    },
+    {
+      "title": "Pseudofermion approach to binary disordered systems. II. Goldstone systems with off-diagonal disorder",
+      "abstract": "",
+      "summary": "",
+      "year": 1979,
+      "doi": "10.1103/physrevb.19.596",
+      "url": "https://doi.org/10.1103/physrevb.19.596",
+      "authors": [
+        "H. W. Diehl",
+        "P. L. Leath"
+      ],
+      "source": "Crossref",
+      "citations": 26
+    },
+    {
+      "title": "Electronic transport in disordered alloys: effect of thermal and off-diagonal disorder",
+      "abstract": "",
+      "summary": "",
+      "year": 1978,
+      "doi": "10.1088/0022-3719/11/2/014",
+      "url": "https://doi.org/10.1088/0022-3719/11/2/014",
+      "authors": [
+        "K I Wysokinski"
+      ],
+      "source": "Crossref",
+      "citations": 16
+    },
+    {
+      "title": "Coherent locator approach to lattice vibrations in alloys with diagonal and geometrically-scaled off-diagonal disorder",
+      "abstract": "",
+      "summary": "",
+      "year": 1979,
+      "doi": "10.1103/physrevb.19.3938",
+      "url": "https://doi.org/10.1103/physrevb.19.3938",
+      "authors": [
+        "Mark Mostoller",
+        "Theodore Kaplan"
+      ],
+      "source": "Crossref",
+      "citations": 13
+    },
+    {
+      "title": "Abstracts from the 2019 Annual Meeting of the Society of General Internal Medicine.",
+      "abstract": "",
+      "summary": "",
+      "year": 2019,
+      "doi": "10.1007/s11606-019-05007-5",
+      "url": "https://europepmc.org/article/MED/31090026",
+      "authors": [
+        ""
+      ],
+      "source": "Europe PMC",
+      "citations": 9
+    },
+    {
+      "title": "From disordered quantum walk to physics of off-diagonal disorder",
+      "abstract": "",
+      "summary": "",
+      "year": 2015,
+      "doi": "10.1103/physrevb.92.214205",
+      "url": "https://doi.org/10.1103/physrevb.92.214205",
+      "authors": [
+        "Qifang Zhao",
+        "Jiangbin Gong"
+      ],
+      "source": "Crossref",
+      "citations": 9
+    },
+    {
+      "title": "DIAGONAL AND OFF-DIAGONAL TYPES OF DISORDER IN CONDENSED MATTER THEORY",
+      "abstract": "",
+      "summary": "",
+      "year": 2000,
+      "doi": "10.5488/cmp.3.4.807",
+      "url": "https://doi.org/10.5488/cmp.3.4.807",
+      "authors": [
+        "Rudavskii",
+        "Ponedilok",
+        "Petriv"
+      ],
+      "source": "Crossref",
+      "citations": 2
+    },
+    {
+      "title": "Coherent potential approximation for a disordered diatomic linear chain having diagonal and off-diagonal randomness",
+      "abstract": "",
+      "summary": "",
+      "year": 1982,
+      "doi": "10.1007/bf02847380",
+      "url": "https://doi.org/10.1007/bf02847380",
+      "authors": [
+        "P Nayak",
+        "S N Behera"
+      ],
+      "source": "Crossref",
+      "citations": 2
+    },
+    {
+      "title": "Band Gap of Disordered Binary Alloys with Off-Diagonal Disorder –Repulsive Effect between Bands–",
+      "abstract": "",
+      "summary": "",
+      "year": 1982,
+      "doi": "10.1143/jpsj.51.3516",
+      "url": "https://doi.org/10.1143/jpsj.51.3516",
+      "authors": [
+        "Kozo Hoshino",
+        "Masaki Goda"
+      ],
+      "source": "Crossref",
+      "citations": 2
+    },
+    {
+      "title": "Correlated diagonal and off-diagonal disorder in amorphous solids",
+      "abstract": "",
+      "summary": "",
+      "year": 1982,
+      "doi": "10.1103/physrevb.25.7773",
+      "url": "https://doi.org/10.1103/physrevb.25.7773",
+      "authors": [
+        "C. G. Montgomery"
+      ],
+      "source": "Crossref",
+      "citations": 2
+    },
+    {
+      "title": "Abstracts of the 8th EBSA (European Biophysical Societies Association) European Biophysics Congress. August 23-27, 2011. Budapest, Hungary.",
+      "abstract": "",
+      "summary": "",
+      "year": 2011,
+      "doi": "",
+      "url": "https://europepmc.org/article/MED/21847795",
+      "authors": [
+        ""
+      ],
+      "source": "Europe PMC",
+      "citations": 1
+    },
+    {
+      "title": "Simple cluster mean-field theory for disordered systems: Off-diagonal disorder in substitutional alloys",
+      "abstract": "",
+      "summary": "",
+      "year": 1984,
+      "doi": "10.1103/physrevb.29.6859",
+      "url": "https://doi.org/10.1103/physrevb.29.6859",
+      "authors": [
+        "Rafael E. Peña"
+      ],
+      "source": "Crossref",
+      "citations": 1
+    },
+    {
+      "title": "Localization with non-Hermitian off-diagonal disorder",
+      "abstract": "",
+      "summary": "",
+      "year": 2025,
+      "doi": "10.2139/ssrn.5415183",
+      "url": "https://doi.org/10.2139/ssrn.5415183",
+      "authors": [
+        "Debraj Rakshit",
+        "Aitijhya Saha"
+      ],
+      "source": "Crossref",
+      "citations": 0
+    },
+    {
+      "title": "Self-consistent theory of diagonal and off-diagonal disorder in the screened impurity band of doped semiconductors",
+      "abstract": "",
+      "summary": "",
+      "year": 1983,
+      "doi": "10.1016/0026-2714(83)90918-6",
+      "url": "https://doi.org/10.1016/0026-2714(83)90918-6",
+      "authors": [],
+      "source": "Crossref",
+      "citations": 0
+    },
+    {
+      "title": "Alloys with Off-Diagonal Disorder",
+      "abstract": "",
+      "summary": "",
+      "year": 1974,
+      "doi": "10.1515/9783112498248-024",
+      "url": "https://doi.org/10.1515/9783112498248-024",
+      "authors": [
+        "J. Mertsching"
+      ],
+      "source": "Crossref",
+      "citations": 0
+    },
+    {
+      "title": "Analytic Model of Nonequilibrium Charge Transport in Disordered Organic Semiconductors with Combined Energy and Off-Diagonal Disorder",
+      "abstract": "",
+      "summary": "",
+      "year": null,
+      "doi": "10.1021/acs.jpcc.1c06807.s001",
+      "url": "https://doi.org/10.1021/acs.jpcc.1c06807.s001",
+      "authors": [],
+      "source": "Crossref",
+      "citations": 0
+    },
+    {
+      "title": "Diagonal and Off-Diagonal Anharmonicity in Hydrogen-Bonded Systems",
+      "abstract": "",
+      "summary": "",
+      "year": null,
+      "doi": "10.53846/goediss-5641",
+      "url": "https://doi.org/10.53846/goediss-5641",
+      "authors": [
+        "Matthias Heger"
+      ],
+      "source": "Crossref",
+      "citations": 0
+    }
+  ],
+  "support_score": 0.85,
+  "sources_queried": [
+    "openalex",
+    "crossref",
+    "europepmc",
+    "pubmed",
+    "doaj",
+    "core"
+  ],
+  "sources_succeeded": [
+    "europepmc",
+    "crossref",
+    "openalex"
+  ],
+  "source_errors": {
+    "core": "HTTP 500"
+  },
+  "elapsed": 12.95
+}

@@ -1,0 +1,63 @@
+{
+  "primary": {
+    "namespace": "amy-ssh-disorder-v1-primary",
+    "disorder_type": "off_diagonal",
+    "reference_label": "random_ssh_log_geometric_mean",
+    "total": 9234,
+    "gap_accuracy": 0.8548841239,
+    "gap_accuracy_ci95": [
+      0.8475525614,
+      0.8619205368
+    ],
+    "joint_accuracy": 0.8513103747,
+    "joint_accuracy_ci95": [
+      0.843907653,
+      0.858420919
+    ],
+    "error_gap_minus_error_joint": -0.003573749188,
+    "error_difference_ci95": [
+      -0.004873294347,
+      -0.002382499459
+    ],
+    "gap_wrong_joint_right": 2,
+    "gap_right_joint_wrong": 35,
+    "mcnemar_pvalue": 1.024454832e-08,
+    "reference_label_flips_from_clean_parent": 84
+  },
+  "replication": {
+    "namespace": "amy-ssh-disorder-v1-replication",
+    "disorder_type": "off_diagonal",
+    "reference_label": "random_ssh_log_geometric_mean",
+    "total": 9234,
+    "gap_accuracy": 0.8555338965,
+    "gap_accuracy_ci95": [
+      0.8482154306,
+      0.8625566723
+    ],
+    "joint_accuracy": 0.852393329,
+    "joint_accuracy_ci95": [
+      0.8450120162,
+      0.8594815638
+    ],
+    "error_gap_minus_error_joint": -0.003140567468,
+    "error_difference_ci95": [
+      -0.004440112627,
+      -0.001841022309
+    ],
+    "gap_wrong_joint_right": 4,
+    "gap_right_joint_wrong": 33,
+    "mcnemar_pvalue": 1.084394171e-06,
+    "reference_label_flips_from_clean_parent": 89
+  },
+  "hypothesis_decisions": {
+    "alpha": 0.05,
+    "H1_primary_supported": false,
+    "H1_replication_supported": false,
+    "H2_replication_supported": false,
+    "primary_error_difference": -0.003573749188,
+    "primary_mcnemar_pvalue": 1.024454832e-08,
+    "replication_error_difference": -0.003140567468,
+    "replication_mcnemar_pvalue": 1.084394171e-06,
+    "plain_language": "The primary paired comparison did not support H1. The preregistered replication criterion failed; no replicated superiority claim is supported."
+  }
+}

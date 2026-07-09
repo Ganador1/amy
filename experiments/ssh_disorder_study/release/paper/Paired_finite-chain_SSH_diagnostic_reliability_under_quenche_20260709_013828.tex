@@ -1,0 +1,100 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{authblk}
+\usepackage{xcolor}
+
+\title{Paired finite-chain SSH diagnostic reliability under quenched disorder}
+\author{A.M.Y Computational Research System\\
+\small AXIOM Atlas Platform, Autonomous Computational Research}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We preregistered a paired computational benchmark comparing a frontier-gap-only rule with a joint gap, edge-weight, and inverse-participation-ratio rule for finite disordered Su-Schrieffer-Heeger chains. The primary paired comparison did not support H1. The preregistered replication criterion failed; no replicated superiority claim is supported. Every Atlas output, protocol, table, figure, and manuscript artifact is covered by SHA-256 provenance. The result is a finite tight-binding methodological benchmark, not a new material, experimental observation, or new topological phase.
+\end{abstract}
+
+\section{Introduction}
+The Su-Schrieffer-Heeger (SSH) chain is a canonical finite one-dimensional model in which boundary termination and chiral symmetry govern mid-gap edge states. Prior work established that off-diagonal disorder can preserve chiral protection whereas onsite disorder breaks it. The unresolved operational question addressed here is narrower: how reliably do fixed, inexpensive finite-chain diagnostics recover a random-SSH reference label? We compare a frontier-gap-only rule with a joint spectral and localization rule. The candidate novelty is the preregistered, paired, hash-auditable benchmark protocol, not new SSH physics.
+
+
+\section{Methods}
+We diagonalized real symmetric open-chain SSH Hamiltonians with N in \{20, 40, 80\}, dimerization delta in \{0.05, 0.10, 0.20\}, and disorder strength W in \{0.00, 0.05, 0.10, 0.20, 0.40\}. Each nonzero condition used 128 realizations per orientation; W=0 used one unique realization. Off-diagonal hoppings were multiplied by exp(W z\_i), preserving positivity and chiral symmetry. Diagonal controls used onsite energies W|beta|z\_i. Random z\_i values were generated from the first 64 bits of a SHA-256 condition digest, with orientation excluded to pair the random vectors. The off-diagonal reference label was mean(log t\_inter) > mean(log t\_intra). No topological reference label was assigned under diagonal disorder. The gap vote used frontier splitting divided by 4|beta|delta <= 0.20; the edge vote required frontier-pair edge weight >= 0.50; the IPR vote required N times frontier-pair IPR >= 2.50. The joint rule required at least two votes. The sole confirmatory test was a two-sided exact McNemar test on pooled paired off-diagonal records at alpha=0.05. Binomial intervals are Wilson 95\% intervals; the paired error-difference interval used 5,000 deterministic bootstrap resamples. No observations were excluded. The frozen preregistration SHA-256 was 269f5c9d13bfe336c181fc9b72afc57131ba06765c7eb75c9b605d75651a5897.
+
+
+\section{Results}
+Primary run (chemistry\_ssh\_disorder\_amy-ssh-disorder-v1-primary\_4): gap-only accuracy was 0.8549 (95\% CI [0.8476, 0.8619]); joint accuracy was 0.8513 (95\% CI [0.8439, 0.8584]). The paired error difference (gap-only minus joint) was -0.0036 (bootstrap 95\% CI [-0.0049, -0.0024]). McNemar discordant counts were 2 gap-wrong/joint-right and 35 gap-right/joint-wrong, with exact p=1.02445e-08. Replication (chemistry\_ssh\_disorder\_amy-ssh-disorder-v1-replication\_4): the paired error difference was -0.0031 (95\% CI [-0.0044, -0.0018]), and exact p=1.08439e-06. The primary paired comparison did not support H1. The preregistered replication criterion failed; no replicated superiority claim is supported. Diagonal-disorder positive rates are reported only as a symmetry-breaking negative control in the condition tables and Figure 2.
+
+
+\section{Discussion}
+The paired design isolates diagnostic disagreement from changes in disorder realization. A positive error difference supports the practical use of localization information beyond gap-only screening within this finite model; it does not establish a new phase or validate a material. McNemar discordance is the relevant paired effect because both rules see the same chains. Alternative explanations include threshold dependence, finite-size hybridization, and the use of a log-geometric random-SSH label rather than a many-body or experimentally measured invariant. The diagonal negative control demonstrates why localization alone cannot be equated with topology once chiral symmetry is broken. This study does not claim a new topological phase, a new material, or experimental validation because none of those outcomes was measured.
+
+
+\section{Testable Predictions}
+H1. The fixed joint rule has lower pooled error than the gap-only rule under off-diagonal disorder. Testable via: rerun the frozen grid and compare paired errors with the exact McNemar test.
+
+H2. The sign and H1 support decision reproduce under the independent namespace. Testable via: recompute all condition seeds from the published SHA-256 formula and repeat the complete analysis.
+
+H3. Diagonal-disorder diagnostic-positive rates must not be treated as topological accuracy. Testable via: restore chiral symmetry by removing onsite terms and compare against the random-SSH reference label only in that symmetry-preserving ensemble.
+
+
+\section{Limitations and Scope}
+This is a noninteracting nearest-neighbor tight-binding study, not DFT, spectroscopy, transport, or a wet-lab experiment. Thresholds were fixed before production execution but remain operational choices. The random-SSH reference criterion is valid for the preregistered chiral off-diagonal ensemble and was not extended to diagonal disorder. Automated literature search found 23 candidate records from open indexes; absence of an exact title or keyword match is not proof of novelty. External peer review and independent code replication remain necessary.
+
+
+\section{Reproducibility and Data Availability}
+The release contains the preregistration, raw Atlas outputs, condition CSV/JSON, pooled decisions, figures, literature-search record, manuscript sources, copied provenance records, and a SHA-256 manifest. Seeds are recoverable from the published namespace and condition formula. Re-running the same namespace and software stack should reproduce byte-identical Atlas text.
+
+
+\section{Declarations and AI Disclosure}
+No human or animal subjects, personal data, clinical intervention, or hazardous physical experiment were involved. No external funding or conflicts of interest were declared in the computational record. A.M.Y, an automated research system, designed and executed the computational workflow under a user-specified goal; Codex implemented and audited the software and manuscript. No claim of human authorship, institutional affiliation, or independent peer review is made. Human review is required before submission.
+
+
+\section{Conclusion}
+The primary paired comparison did not support H1. The preregistered replication criterion failed; no replicated superiority claim is supported. The result is limited to the frozen finite-chain benchmark and should be interpreted as candidate methodological novelty pending external replication and peer review.
+
+
+\section{Publication Artifacts}
+The paper pipeline generated machine-readable publication artifacts from the raw tool outputs.
+
+Artifact manifest: `artifacts/Paired\_finite-chain\_SSH\_diagnostic\_reliability\_under\_quenched\_disorder/manifest.json`
+
+Table 1. Machine-readable numeric values extracted from evidence-grade tool output. CSV: `artifacts/Paired\_finite-chain\_SSH\_diagnostic\_reliability\_under\_quenched\_disorder/numeric\_tool\_results.csv`; JSON: `artifacts/Paired\_finite-chain\_SSH\_diagnostic\_reliability\_under\_quenched\_disorder/numeric\_tool\_results.json`.
+
+![Figure 1: Figure 1. Pooled paired diagnostic error for the gap-only and joint two-of-three rules across the primary and replication Atlas runs.](artifacts/Paired\_finite-chain\_SSH\_diagnostic\_reliability\_under\_quenched\_disorder/figure\_1\_ssh\_disorder\_paired\_error.png)
+
+Figure 1. Pooled paired diagnostic error for the gap-only and joint two-of-three rules across the primary and replication Atlas runs.
+
+![Figure 2: Figure 2. Diagnostic-positive rates under diagonal disorder, reported as a symmetry-breaking negative control rather than topological accuracy.](artifacts/Paired\_finite-chain\_SSH\_diagnostic\_reliability\_under\_quenched\_disorder/figure\_2\_ssh\_diagonal\_negative\_control.png)
+
+Figure 2. Diagnostic-positive rates under diagonal disorder, reported as a symmetry-breaking negative control rather than topological accuracy.
+
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\linewidth]{\detokenize{artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/figure_1_ssh_disorder_paired_error.png}}
+\caption{Figure 1. Pooled paired diagnostic error for the gap-only and joint two-of-three rules across the primary and replication Atlas runs.}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\linewidth]{\detokenize{artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/figure_2_ssh_diagonal_negative_control.png}}
+\caption{Figure 2. Diagnostic-positive rates under diagonal disorder, reported as a symmetry-breaking negative control rather than topological accuracy.}
+\end{figure}
+
+\begin{thebibliography}{99}
+\bibitem{ref1} Su, W. P., Schrieffer, J. R. \& Heeger, A. J. (1979). Solitons in polyacetylene. Physical Review Letters, 42, 1698-1701. doi:10.1103/PhysRevLett.42.1698.
+\bibitem{ref2} Pérez-González, B., Bello, M., Gómez-León, A. \& Platero, G. (2019). SSH model with long-range hoppings: topology, driving and disorder. Physical Review B, 99, 035146. doi:10.1103/PhysRevB.99.035146.
+\bibitem{ref3} Yao, Y., Schlömer, H., Ma, Z., Campos Venuti, L. \& Haas, S. (2021). Topological protection of coherence in disordered open quantum systems. Physical Review A, 104, 012216. doi:10.1103/PhysRevA.104.012216.
+\bibitem{ref4} Kvande, C. I., Hill, D. B. \& Blume, D. (2023). Finite SSH chains coupled to a two-level emitter: Hybridization of edge and emitter states. arXiv:2307.05824.
+\bibitem{ref5} Harris, C. R. et al. (2020). Array programming with NumPy. Nature, 585, 357-362. doi:10.1038/s41586-020-2649-2.
+\bibitem{ref6} McNemar, Q. (1947). Note on the sampling error of the difference between correlated proportions or percentages. Psychometrika, 12, 153-157. doi:10.1007/BF02295996.
+\end{thebibliography}
+\end{document}

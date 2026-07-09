@@ -703,7 +703,18 @@ class PaperGenerator:
                     for r in tool_results:
                         tool_name = r.get("tool", "unknown")
                         # Real/local/evidence tools
-                        if any(k in tool_name.lower() for k in ["pyscf", "sympy", "scipy", "astropy", "ase", "pymatgen"]):
+                        if any(
+                            key in tool_name.lower()
+                            for key in [
+                                "pyscf",
+                                "sympy",
+                                "scipy",
+                                "astropy",
+                                "ase",
+                                "pymatgen",
+                                "ssh_disorder_diagnostic_benchmark",
+                            ]
+                        ):
                             evidence_grade_tools.append(r)
                         elif "search" in tool_name.lower() or "literature" in tool_name.lower():
                             evidence_grade_tools.append(r)
@@ -738,8 +749,9 @@ class PaperGenerator:
             "## Acknowledgments",
             "",
             "The authors acknowledge the AXIOM Atlas computational platform for providing ",
-            "the scientific tools used in this study. All computations were performed on ",
-            "Apple Silicon M4 hardware with Python 3.13 and MPS acceleration.",
+            "the scientific tools used in this study. The exact environment for each ",
+            "computation, including operating system, architecture, and Python version, ",
+            "is recorded in its provenance file; no unrecorded hardware acceleration is claimed.",
             "",
         ]
 
@@ -854,6 +866,7 @@ class PaperGenerator:
             from reportlab.lib.units import cm
             from reportlab.platypus import (
                 HRFlowable,
+                Image,
                 PageBreak,
                 Paragraph,
                 SimpleDocTemplate,
@@ -943,6 +956,20 @@ class PaperGenerator:
                 for para in content.split("\n\n"):
                     para = para.strip()
                     if not para:
+                        continue
+                    image_match = re.fullmatch(
+                        r"!\[[^\]]*\]\(([^)]+)\)",
+                        para,
+                    )
+                    if image_match:
+                        image_path = Path(image_match.group(1))
+                        if not image_path.is_absolute():
+                            image_path = pdf_path.parent / image_path
+                        if image_path.is_file():
+                            image = Image(str(image_path))
+                            image._restrictSize(16 * cm, 12 * cm)
+                            story.append(image)
+                            story.append(Spacer(1, 0.2 * cm))
                         continue
                     # Render bullet points
                     if para.startswith("- ") or para.startswith("* "):

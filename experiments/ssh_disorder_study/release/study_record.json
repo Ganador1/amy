@@ -1,0 +1,106 @@
+{
+  "study_id": "amy-ssh-disorder-diagnostic-benchmark-v1",
+  "smoke": false,
+  "completed_at_utc": "2026-07-09T05:31:31.808955+00:00",
+  "preregistration_sha256": "269f5c9d13bfe336c181fc9b72afc57131ba06765c7eb75c9b605d75651a5897",
+  "experiment_ids": [
+    "chemistry_ssh_disorder_amy-ssh-disorder-v1-primary_4",
+    "chemistry_ssh_disorder_amy-ssh-disorder-v1-replication_4"
+  ],
+  "protocol_sha256": {
+    "primary": "49770675bdbffb73c399c7558adf146aba6488a69dae607cfce5424b8db7a1c8",
+    "replication": "c7e9b5ebc0bddd3e14c00730686414407210cecc84cb687d26ca749a15d8c8ea"
+  },
+  "hypothesis_decisions": {
+    "alpha": 0.05,
+    "H1_primary_supported": false,
+    "H1_replication_supported": false,
+    "H2_replication_supported": false,
+    "primary_error_difference": -0.003573749188,
+    "primary_mcnemar_pvalue": 1.024454832e-08,
+    "replication_error_difference": -0.003140567468,
+    "replication_mcnemar_pvalue": 1.084394171e-06,
+    "plain_language": "The primary paired comparison did not support H1. The preregistered replication criterion failed; no replicated superiority claim is supported."
+  },
+  "paper": {
+    "title": "Paired finite-chain SSH diagnostic reliability under quenched disorder",
+    "markdown_path": "experiments/ssh_disorder_study/release/paper/Paired_finite-chain_SSH_diagnostic_reliability_under_quenche_20260709_013828.md",
+    "pdf_path": "experiments/ssh_disorder_study/release/paper/Paired_finite-chain_SSH_diagnostic_reliability_under_quenche_20260709_013828.pdf",
+    "latex_path": "experiments/ssh_disorder_study/release/paper/Paired_finite-chain_SSH_diagnostic_reliability_under_quenche_20260709_013828.tex",
+    "word_count": 1476,
+    "sections": 10,
+    "publication_status": "published",
+    "rejection_reasons": [],
+    "internal_review_path": null,
+    "grounding_repair": {
+      "repairs": 0,
+      "items": [],
+      "experiment_ids": [
+        "chemistry_ssh_disorder_amy-ssh-disorder-v1-primary_4",
+        "chemistry_ssh_disorder_amy-ssh-disorder-v1-replication_4"
+      ],
+      "sections_checked": [
+        "Abstract",
+        "Discussion"
+      ]
+    },
+    "publication_artifacts": {
+      "tables": [
+        {
+          "id": "table_1",
+          "csv_path": "experiments/ssh_disorder_study/release/paper/artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/numeric_tool_results.csv",
+          "json_path": "experiments/ssh_disorder_study/release/paper/artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/numeric_tool_results.json",
+          "csv_display_path": "artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/numeric_tool_results.csv",
+          "json_display_path": "artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/numeric_tool_results.json",
+          "row_count": 182,
+          "columns": [
+            "tool",
+            "row_index",
+            "delta",
+            "n",
+            "strength",
+            "effective_realizations_per_orientation",
+            "total",
+            "gap_accuracy",
+            "joint_accuracy",
+            "gap_false_positive_rate",
+            "joint_false_positive_rate",
+            "gap_false_negative_rate",
+            "joint_false_negative_rate",
+            "error_gap_minus_error_joint",
+            "gap_wrong_joint_right",
+            "gap_right_joint_wrong",
+            "mcnemar_pvalue",
+            "reference_label_flips_from_clean_parent",
+            "gap_positive_rate",
+            "joint_positive_rate",
+            "gap_accuracy_ci95",
+            "joint_accuracy_ci95",
+            "error_difference_ci95"
+          ],
+          "caption": "Machine-readable numeric values extracted from evidence-grade tool output."
+        }
+      ],
+      "figures": [
+        {
+          "id": "figure_1",
+          "path": "experiments/ssh_disorder_study/release/paper/artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/figure_1_ssh_disorder_paired_error.png",
+          "display_path": "artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/figure_1_ssh_disorder_paired_error.png",
+          "caption": "Figure 1. Pooled paired diagnostic error for the gap-only and joint two-of-three rules across the primary and replication Atlas runs."
+        },
+        {
+          "id": "figure_2",
+          "path": "experiments/ssh_disorder_study/release/paper/artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/figure_2_ssh_diagonal_negative_control.png",
+          "display_path": "artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/figure_2_ssh_diagonal_negative_control.png",
+          "caption": "Figure 2. Diagnostic-positive rates under diagonal disorder, reported as a symmetry-breaking negative control rather than topological accuracy."
+        }
+      ],
+      "manifest_path": "experiments/ssh_disorder_study/release/paper/artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/manifest.json",
+      "manifest_display_path": "artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/manifest.json",
+      "section": {
+        "heading": "Publication Artifacts",
+        "content": "The paper pipeline generated machine-readable publication artifacts from the raw tool outputs.\n\nArtifact manifest: `artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/manifest.json`\n\nTable 1. Machine-readable numeric values extracted from evidence-grade tool output. CSV: `artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/numeric_tool_results.csv`; JSON: `artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/numeric_tool_results.json`.\n\n![Figure 1: Figure 1. Pooled paired diagnostic error for the gap-only and joint two-of-three rules across the primary and replication Atlas runs.](artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/figure_1_ssh_disorder_paired_error.png)\n\nFigure 1. Pooled paired diagnostic error for the gap-only and joint two-of-three rules across the primary and replication Atlas runs.\n\n![Figure 2: Figure 2. Diagnostic-positive rates under diagonal disorder, reported as a symmetry-breaking negative control rather than topological accuracy.](artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/figure_2_ssh_diagonal_negative_control.png)\n\nFigure 2. Diagnostic-positive rates under diagonal disorder, reported as a symmetry-breaking negative control rather than topological accuracy."
+      }
+    }
+  }
+}

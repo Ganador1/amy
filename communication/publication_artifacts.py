@@ -7,9 +7,12 @@ structured numeric rows are found, it returns an empty artifact set.
 from __future__ import annotations
 
 import csv
+import importlib
 import inspect
 import json
+import math
 import re
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -35,6 +38,42 @@ _PLOT_METADATA_COLUMNS = {
     "min_localization_n",
     "residual_threshold",
 }
+
+
+def _real_pyplot():
+    """Load site-packages pyplot even when Atlas stubs lead ``sys.path``."""
+    atlas_root = Path(__file__).resolve().parent.parent / "atlas"
+    original_path = list(sys.path)
+    module_names = [
+        name
+        for name in list(sys.modules)
+        if name == "matplotlib"
+        or name.startswith("matplotlib.")
+        or name == "mpl_toolkits"
+        or name.startswith("mpl_toolkits.")
+    ]
+    try:
+        filtered_path = []
+        for entry in sys.path:
+            if entry == "":
+                continue
+            try:
+                if Path(entry).resolve() == atlas_root.resolve():
+                    continue
+            except (OSError, RuntimeError):
+                pass
+            filtered_path.append(entry)
+        sys.path[:] = filtered_path
+        for name in module_names:
+            sys.modules.pop(name, None)
+        matplotlib = importlib.import_module("matplotlib")
+        origin = str(getattr(matplotlib, "__file__", "") or "")
+        if "site-packages/matplotlib" not in origin:
+            raise ImportError(f"non-site-packages matplotlib resolved from {origin}")
+        matplotlib.use("Agg", force=True)
+        return importlib.import_module("matplotlib.pyplot")
+    finally:
+        sys.path[:] = original_path
 
 
 def _safe_slug(text: str) -> str:
@@ -259,6 +298,16 @@ class PublicationArtifactBuilder:
         artifact_dir: Path,
         output_dir: Path,
     ) -> list[dict[str, Any]]:
+        if any(
+            str(row.get("tool", "")) == "ssh_disorder_diagnostic_benchmark"
+            for row in rows
+        ):
+            return self._build_ssh_disorder_figures(
+                rows,
+                artifact_dir,
+                output_dir,
+            )
+
         numeric_columns = [
             col for col in columns
             if col not in {"tool"} and all(isinstance(row.get(col), (int, float)) for row in rows if col in row)
@@ -300,10 +349,7 @@ class PublicationArtifactBuilder:
             return []
 
         try:
-            import matplotlib
-
-            matplotlib.use("Agg", force=True)
-            import matplotlib.pyplot as plt
+            plt = _real_pyplot()
         except Exception:
             return []
 
@@ -437,6 +483,162 @@ class PublicationArtifactBuilder:
                 "caption": caption,
             }
         ]
+
+    def _build_ssh_disorder_figures(
+        self,
+        rows: list[dict[str, Any]],
+        artifact_dir: Path,
+        output_dir: Path,
+    ) -> list[dict[str, Any]]:
+        """Render diagnostic-specific figures from Atlas benchmark summaries."""
+        try:
+            plt = _real_pyplot()
+        except Exception:
+            return []
+
+        figures: list[dict[str, Any]] = []
+        classified = [
+            row
+            for row in rows
+            if all(
+                isinstance(row.get(key), (int, float))
+                for key in ("total", "gap_accuracy", "joint_accuracy")
+            )
+        ]
+        if classified:
+            max_total = max(float(row["total"]) for row in classified)
+            pooled = [
+                row
+                for row in classified
+                if math.isclose(float(row["total"]), max_total)
+            ]
+            gap_errors = [1.0 - float(row["gap_accuracy"]) for row in pooled]
+            joint_errors = [1.0 - float(row["joint_accuracy"]) for row in pooled]
+            labels = [f"Run {index + 1}" for index in range(len(pooled))]
+            x_values = list(range(len(pooled)))
+            width = 0.34
+            fig, ax = plt.subplots(figsize=(6.4, 4.0), dpi=160)
+            ax.bar(
+                [value - width / 2 for value in x_values],
+                gap_errors,
+                width,
+                color="#d95f02",
+                label="Gap-only",
+            )
+            ax.bar(
+                [value + width / 2 for value in x_values],
+                joint_errors,
+                width,
+                color="#1b9e77",
+                label="Joint 2-of-3",
+            )
+            ax.set_xticks(x_values, labels)
+            ax.set_ylabel("classification error")
+            ax.set_ylim(bottom=0)
+            ax.set_title("Paired off-diagonal-disorder diagnostic error")
+            ax.grid(True, axis="y", alpha=0.25)
+            ax.legend(frameon=False)
+            fig.tight_layout()
+            figure_path = artifact_dir / "figure_1_ssh_disorder_paired_error.png"
+            fig.savefig(figure_path, dpi=220, bbox_inches="tight")
+            plt.close(fig)
+            figures.append(
+                {
+                    "id": "figure_1",
+                    "path": str(figure_path),
+                    "display_path": _portable_path(figure_path, output_dir),
+                    "caption": (
+                        "Figure 1. Pooled paired diagnostic error for the "
+                        "gap-only and joint two-of-three rules across the "
+                        "primary and replication Atlas runs."
+                    ),
+                }
+            )
+
+        negative_controls = [
+            row
+            for row in rows
+            if all(
+                isinstance(row.get(key), (int, float))
+                for key in (
+                    "strength",
+                    "total",
+                    "gap_positive_rate",
+                    "joint_positive_rate",
+                )
+            )
+        ]
+        if negative_controls:
+            strengths = sorted(
+                {float(row["strength"]) for row in negative_controls}
+            )
+            gap_rates: list[float] = []
+            joint_rates: list[float] = []
+            for strength in strengths:
+                selected = [
+                    row
+                    for row in negative_controls
+                    if math.isclose(float(row["strength"]), strength)
+                ]
+                total = sum(float(row["total"]) for row in selected)
+                gap_rates.append(
+                    sum(
+                        float(row["gap_positive_rate"]) * float(row["total"])
+                        for row in selected
+                    )
+                    / total
+                )
+                joint_rates.append(
+                    sum(
+                        float(row["joint_positive_rate"]) * float(row["total"])
+                        for row in selected
+                    )
+                    / total
+                )
+
+            fig, ax = plt.subplots(figsize=(6.4, 4.0), dpi=160)
+            ax.plot(
+                strengths,
+                gap_rates,
+                marker="o",
+                linewidth=1.8,
+                color="#d95f02",
+                label="Gap-only positive",
+            )
+            ax.plot(
+                strengths,
+                joint_rates,
+                marker="o",
+                linewidth=1.8,
+                color="#1b9e77",
+                label="Joint positive",
+            )
+            ax.set_xlabel("diagonal disorder strength W")
+            ax.set_ylabel("diagnostic-positive rate")
+            ax.set_ylim(0, 1)
+            ax.set_title("Symmetry-breaking negative control")
+            ax.grid(True, alpha=0.25)
+            ax.legend(frameon=False)
+            fig.tight_layout()
+            figure_path = (
+                artifact_dir
+                / "figure_2_ssh_diagonal_negative_control.png"
+            )
+            fig.savefig(figure_path, dpi=220, bbox_inches="tight")
+            plt.close(fig)
+            figures.append(
+                {
+                    "id": "figure_2",
+                    "path": str(figure_path),
+                    "display_path": _portable_path(figure_path, output_dir),
+                    "caption": (
+                        "Figure 2. Diagnostic-positive rates under diagonal "
+                        "disorder, reported as a symmetry-breaking negative "
+                        "control rather than topological accuracy."
+                    ),
+                }
+            )
+        return figures
 
     @staticmethod
     def _markdown_section(

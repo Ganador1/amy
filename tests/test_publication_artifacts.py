@@ -275,3 +275,109 @@ def test_markdown_keeps_scientific_audit_sections(tmp_path):
     assert "## Limitations and Scope" in markdown
     assert "## Reproducibility and Data Availability" in markdown
     assert "## Declarations and AI Disclosure" in markdown
+
+
+def test_ssh_disorder_publication_figures_use_diagnostic_captions(tmp_path):
+    artifacts = PublicationArtifactBuilder().build(
+        title="SSH disorder diagnostic benchmark",
+        output_dir=tmp_path,
+        tool_results=[
+            {
+                "tool": "ssh_disorder_diagnostic_benchmark",
+                "result": "\n".join(
+                    [
+                        "summary; disorder_type=diagonal; n=20; delta=0.1; strength=0; total=2; gap_positive_rate=0.5; joint_positive_rate=0.5",
+                        "summary; disorder_type=diagonal; n=20; delta=0.1; strength=0.2; total=16; gap_positive_rate=0.4; joint_positive_rate=0.3",
+                        "pooled; disorder_type=off_diagonal; total=100; gap_accuracy=0.85; joint_accuracy=0.82; error_gap_minus_error_joint=-0.03",
+                    ]
+                ),
+            },
+            {
+                "tool": "ssh_disorder_diagnostic_benchmark",
+                "result": "\n".join(
+                    [
+                        "summary; disorder_type=diagonal; n=20; delta=0.1; strength=0; total=2; gap_positive_rate=0.5; joint_positive_rate=0.5",
+                        "summary; disorder_type=diagonal; n=20; delta=0.1; strength=0.2; total=16; gap_positive_rate=0.45; joint_positive_rate=0.35",
+                        "pooled; disorder_type=off_diagonal; total=100; gap_accuracy=0.86; joint_accuracy=0.83; error_gap_minus_error_joint=-0.03",
+                    ]
+                ),
+            },
+        ],
+    )
+
+    assert len(artifacts["figures"]) == 2
+    captions = " ".join(figure["caption"] for figure in artifacts["figures"])
+    assert "paired diagnostic error" in captions.lower()
+    assert "symmetry-breaking negative control" in captions.lower()
+    assert all(Path(figure["path"]).exists() for figure in artifacts["figures"])
+
+
+def test_reportlab_pdf_embeds_markdown_image(tmp_path):
+    import asyncio
+    from PIL import Image as PILImage
+
+    image_path = tmp_path / "figure.png"
+    PILImage.new("RGB", (80, 40), color=(40, 100, 160)).save(image_path)
+    pdf_path = tmp_path / "paper.pdf"
+    generator = PaperGenerator(enhance=False, output_dir=tmp_path)
+
+    rendered = asyncio.run(
+        generator._render_pdf(
+            "unused",
+            pdf_path,
+            "Embedded Figure Test",
+            "Abstract.",
+            [
+                {
+                    "heading": "Figures",
+                    "content": (
+                        f"![Diagnostic figure]({image_path})\n\n"
+                        "Figure 1. Diagnostic figure."
+                    ),
+                }
+            ],
+            references=None,
+        )
+    )
+
+    assert rendered is True
+    assert b"/Subtype /Image" in pdf_path.read_bytes()
+
+
+def test_ssh_disorder_numpy_benchmark_is_evidence_grade(tmp_path):
+    generator = PaperGenerator(enhance=False, output_dir=tmp_path)
+
+    markdown = generator._build_markdown(
+        "SSH disorder benchmark",
+        "Abstract.",
+        [{"heading": "Results", "content": "Summary."}],
+        references=None,
+        knowledge_facts=None,
+        experiment_ids=None,
+        tool_results=[
+            {
+                "tool": "ssh_disorder_diagnostic_benchmark",
+                "result": "pooled; gap_accuracy=0.85; joint_accuracy=0.82",
+            }
+        ],
+    )
+
+    assert "### Evidence-grade results" in markdown
+    assert "### Heuristic/demo results" not in markdown
+
+
+def test_markdown_acknowledgment_does_not_claim_unrecorded_acceleration(tmp_path):
+    generator = PaperGenerator(enhance=False, output_dir=tmp_path)
+
+    markdown = generator._build_markdown(
+        "Environment Disclosure Test",
+        "Abstract.",
+        [{"heading": "Results", "content": "Result."}],
+        references=None,
+        knowledge_facts=None,
+        experiment_ids=None,
+    )
+
+    assert "MPS acceleration" not in markdown
+    assert "exact environment" in markdown.lower()
+    assert "provenance" in markdown.lower()

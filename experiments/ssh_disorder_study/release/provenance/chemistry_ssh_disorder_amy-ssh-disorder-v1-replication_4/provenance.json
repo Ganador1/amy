@@ -1,0 +1,35 @@
+{
+  "experiment_id": "chemistry_ssh_disorder_amy-ssh-disorder-v1-replication_4",
+  "timestamp": "2026-07-09T05:31:11.432616+00:00",
+  "tool": {
+    "name": "ssh_disorder_diagnostic_benchmark",
+    "input": "20,40,80;deltas=0.05,0.1,0.2;strengths=0,0.05,0.1,0.2,0.4;disorders=off_diagonal,diagonal;orientations=trivial,topological;realizations=128;namespace=amy-ssh-disorder-v1-replication;protocol_sha256=269f5c9d13bfe336c181fc9b72afc57131ba06765c7eb75c9b605d75651a5897",
+    "output_hash": "744991204bb15dc9eafaf0966287b869538fc5c90d9c394a2c5366a673badd3e",
+    "output_length": 56390,
+    "success": true,
+    "duration_seconds": 4.564
+  },
+  "output_preview": "SSH disorder diagnostic benchmark:\n  Method: exact diagonalization of paired finite open SSH chains.\n  seed_derivation=sha256\n  paired_orientations=true\n  primary_estimand=error_gap_minus_error_joint\n  namespace=amy-ssh-disorder-v1-replication\n  protocol_sha256=c7e9b5ebc0bddd3e14c00730686414407210cecc84cb687d26ca749a15d8c8ea\n  preregistration_sha256=269f5c9d13bfe336c181fc9b72afc57131ba06765c7eb75c9b605d75651a5897\n  Diagnostic thresholds: gap_ratio<=0.2; edge_weight>=0.5; normalized_ipr>=2.5; joint_rule=at_least_two_of_three\n  Condition summaries:\n    summary; namespace=amy-ssh-disorder-v1-replication; disorder_type=off_diagonal; n=20; delta=0.05; strength=0; effective_realizations_per_orientation=1; reference_label=random_ssh_log_geometric_mean; total=2; gap_accuracy=0.5; joint_accuracy=0.5; gap_positive_rate=not_defined; joint_positive_rate=not_defined; gap_false_positive_rate=0; joint_false_positive_rate=0; gap_false_negative_rate=1; joint_false_negative_rate=1; error_gap_minus_error_joint=0; gap_wrong_joint_right=0; gap_right_joint_wrong=0; mcnemar_pvalue=1; reference_label_flips_from_clean_parent=0\n    summary; namespace=amy-ssh-disorder-v1-replication; disorder_type=off_diagonal; n=20; delta=0.05; strength=0.05; effective_realizations_per_orientation=128; reference_label=random_ssh_log_geometric_mean; total=256; gap_accuracy=0.5; joint_accuracy=0.5; gap_positive_rate=not_defined; joint_positive_rate=not_defined; gap_false_positive_rate=0; joint_false_positive_rate=0; gap_false_negative_rate=1; joint_false_negative_rate=1; error_gap_minus_error_joint=0; gap_wrong_joint_right=0; gap_right_joint_wrong=0; mcnemar_pvalue=1; reference_label_flips_from_clean_parent=0\n    summary; namespace=amy-ssh-disorder-v1-replication; disorder_type=off_diagonal; n=20; delta=0.05; strength=0.1; effective_realizations_per_orientation=128; reference_label=random_ssh_log_geometric_mean; total=256; gap_accuracy=0.5; joint_accuracy=0.5; gap_positive_rate=not_defined; joint_positive_rate",
+  "domain": "chemistry",
+  "environment": {
+    "python_version": "3.14.3",
+    "platform": "Darwin",
+    "platform_release": "25.5.0",
+    "machine": "arm64",
+    "processor": "arm",
+    "hostname": "giovannis-Mac-mini.local"
+  },
+  "provenance_version": "1.0",
+  "extra": {
+    "namespace": "amy-ssh-disorder-v1-replication",
+    "preregistration_sha256": "269f5c9d13bfe336c181fc9b72afc57131ba06765c7eb75c9b605d75651a5897",
+    "assessment": {
+      "usable": true,
+      "evidence_level": "strong",
+      "markers": [],
+      "warnings": [],
+      "preview": "SSH disorder diagnostic benchmark:\n  Method: exact diagonalization of paired finite open SSH chains.\n  seed_derivation=sha256\n  paired_orientations=true\n  primary_estimand=error_gap_minus_error_joint\n  namespace=amy-ssh-disorder-v1-replication\n  protocol_sha256=c7e9b5ebc0bddd3e14c00730686414407210cecc84cb687d26ca749a15d8c8ea\n  preregistration_sha256=269f5c9d13bfe336c181fc9b72afc57131ba06765c7eb75c9b605d75651a5897\n  Diagnostic thresholds: gap_ratio<=0.2; edge_weight>=0.5; normalized_ipr>=2.5; joi"
+    },
+    "smoke": false
+  }
+}
