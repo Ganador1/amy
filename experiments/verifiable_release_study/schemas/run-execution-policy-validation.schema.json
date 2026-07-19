@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://amy.example/schemas/run-execution-policy-validation.schema.json",
+  "title": "A.M.Y run execution policy validation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "valid", "policy_sha256", "policy_schema_sha256",
+    "validator_sha256", "bound_artifact_hashes_match",
+    "runner_contract_status", "runner_contract_hashes_match",
+    "runner_contract_test_record_valid", "runner_contract_test_record_sha256",
+    "runner_contract_passed_test_count", "runner_contract_open_control_count",
+    "runner_confirmatory_execution_permitted", "runner_rg006_complete", "case_count",
+    "base_count", "profile_count", "proposition_count",
+    "pending_compatibility_row_count", "dummy_analysis_status",
+    "dummy_analysis_valid", "dummy_analysis_planned_row_count",
+    "external_reproduction_mandatory", "freeze_permitted", "decision",
+    "read_scope", "errors", "warnings"
+  ],
+  "properties": {
+    "schema_version": {"const": "amy.run-execution-policy-validation.v1-draft"},
+    "valid": {"type": "boolean"},
+    "policy_sha256": {"$ref": "#/$defs/sha256"},
+    "policy_schema_sha256": {"$ref": "#/$defs/sha256"},
+    "validator_sha256": {"$ref": "#/$defs/sha256"},
+    "bound_artifact_hashes_match": {"type": "boolean"},
+    "runner_contract_status": {
+      "enum": [
+        "missing_or_invalid",
+        "synthetic_contract_tests_passed_production_controls_open"
+      ]
+    },
+    "runner_contract_hashes_match": {"type": "boolean"},
+    "runner_contract_test_record_valid": {"type": "boolean"},
+    "runner_contract_test_record_sha256": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "runner_contract_passed_test_count": {"type": "integer", "minimum": 0},
+    "runner_contract_open_control_count": {"type": "integer", "minimum": 0},
+    "runner_confirmatory_execution_permitted": {"type": "boolean"},
+    "runner_rg006_complete": {"type": "boolean"},
+    "case_count": {"type": "integer", "minimum": 0},
+    "base_count": {"type": "integer", "minimum": 0},
+    "profile_count": {"type": "integer", "minimum": 0},
+    "proposition_count": {"type": "integer", "minimum": 0},
+    "pending_compatibility_row_count": {"type": "integer", "minimum": 0},
+    "dummy_analysis_status": {
+      "enum": ["not_implemented", "implemented_validated_not_frozen", "frozen"]
+    },
+    "dummy_analysis_valid": {"type": "boolean"},
+    "dummy_analysis_planned_row_count": {"type": "integer", "minimum": 0},
+    "external_reproduction_mandatory": {"type": "boolean"},
+    "freeze_permitted": {"type": "boolean"},
+    "decision": {"enum": ["GO", "NO-GO"]},
+    "read_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "confirmatory_artifacts_read", "verifier_results_read",
+        "oracle_join_performed", "independent_review_performed"
+      ],
+      "properties": {
+        "confirmatory_artifacts_read": {"const": false},
+        "verifier_results_read": {"const": false},
+        "oracle_join_performed": {"const": false},
+        "independent_review_performed": {"const": false}
+      }
+    },
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array", "items": {"type": "string"}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

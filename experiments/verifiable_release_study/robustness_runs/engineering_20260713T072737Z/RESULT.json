@@ -1,0 +1,96 @@
+{
+  "schema_version": "amy.robustness-engineering-run.v1",
+  "classification": "exploratory_pre_registration_engineering_not_confirmatory_evidence",
+  "confirmatory": false,
+  "recorded_at": "2026-07-13T07:27:37Z",
+  "scheduled_case_count": 12,
+  "direct_test_count": 12,
+  "repository": {
+    "git_head": "40663854cfc2a2cf8e8e828cc0ac7c031db58963",
+    "study_tree_status": "untracked_working_tree_snapshot",
+    "identity_rule": "The per-file SHA-256 map below, not Git HEAD alone, identifies this exploratory run."
+  },
+  "source_sha256": {
+    "amy_verifier/json_tools.py": "2c0d7c6a3a5558ac60639f558d9e9b61f64bff70d77c5226cfdcf5b6ed6cc903",
+    "amy_verifier/path_policy.py": "30f8ebab8c16c3ddc968e778ce0933c097b3439f912781c9854104aa9f90323a",
+    "amy_verifier/manifest.py": "b267ac496d4120ab14fb0d789d35d4d32774ab70f672de6e10f9e7099dc262ee",
+    "amy_verifier/verifier.py": "6aa7b16cc5ed6f4bc470fcb07bdd407491ce0271abd5a20779e618597db3316f",
+    "tests/test_toctou_and_fault_injection.py": "010b54a39595e59687c5ee324b5386ffd8c4f57be776052ed60716cc436aa6cf",
+    "protocol/ROBUSTNESS_CATALOG_DRAFT.json": "7218f609e68323392830d21832fea5480bc5f8358865c6cd70cb97b3c0598373",
+    "schemas/verifier-result.schema.json": "73e7ef19b85a27a497f9f15c6f1c4e34c8d6efcb8ad54522124321c214b01f35",
+    "protocol/TRUST_POLICY_DRAFT.json": "5a2dc1f9c8eb42109707ed45b66c8f0b10b871727dbc29d92c4a5338037bbd3f",
+    "schemas/manifest.schema.json": "4fcb2d9cafe52c60935f50b47afcdb5df91418207697bebc86524cc9d19fc33c",
+    "uv.lock": "ada446114e2534983167988f875dea92b5d1d895a6a12a9db70e63626a3d9f41",
+    "scripts/validate_robustness_run.py": "29d05854aff80e4db0b4de6c0af02becc62c76eb39a90a81b4f24813d747dcfe"
+  },
+  "dependency_provisioning": {
+    "classification": "pre_run_environment_preparation_not_test_execution",
+    "network_enabled": true,
+    "command": "uv sync --frozen --extra pilot --no-install-project",
+    "image": "ghcr.io/astral-sh/uv:0.9.17-python3.12-bookworm-slim@sha256:c8367d14e6e5f9311689792032852506d7188f487c6db2967c386a26ebeecff1",
+    "lockfile_sha256": "ada446114e2534983167988f875dea92b5d1d895a6a12a9db70e63626a3d9f41",
+    "installed_packages": [
+      "attrs==26.1.0",
+      "cffi==2.1.0",
+      "cryptography==49.0.0",
+      "iniconfig==2.3.0",
+      "jsonschema==4.26.0",
+      "jsonschema-specifications==2025.9.1",
+      "packaging==26.2",
+      "pluggy==1.6.0",
+      "pycparser==3.0",
+      "pygments==2.20.0",
+      "pytest==9.0.3",
+      "referencing==0.37.0",
+      "rfc8785==0.1.4",
+      "rpds-py==2026.6.3",
+      "typing-extensions==4.16.0"
+    ]
+  },
+  "runs": [
+    {
+      "environment_id": "ENV-AUTHOR",
+      "environment_record": "environment_probes/ENV-AUTHOR_2026-07-13.json",
+      "environment_record_sha256": "bfc3e37226f9d88b01836ccad436d39a4267d35322e24a3fe2d055c7f1faafc6",
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --frozen --extra pilot python -m pytest -q -p no:cacheprovider tests/test_toctou_and_fault_injection.py",
+      "network_isolation_enforced": false,
+      "repository_mount": "host_working_tree",
+      "exit_code": 0,
+      "direct_test_count": 12,
+      "stdout": "............                                                             [100%]\n12 passed in 0.05s\n"
+    },
+    {
+      "environment_id": "ENV-LINUX-PINNED",
+      "environment_record": "environment_probes/ENV-LINUX-PINNED_2026-07-13.json",
+      "environment_record_sha256": "313bf0c8c671f1f94047a2ae767f0b39ef17277ad8f56fcc7f3a0f7cf90ffbff",
+      "image": "ghcr.io/astral-sh/uv:0.9.17-python3.12-bookworm-slim@sha256:c8367d14e6e5f9311689792032852506d7188f487c6db2967c386a26ebeecff1",
+      "platform": "linux/amd64",
+      "docker_version": "29.6.1",
+      "command": "/venv/bin/python -m pytest -q -p no:cacheprovider tests/test_toctou_and_fault_injection.py",
+      "network_isolation_enforced": true,
+      "container_root_filesystem": "read_only",
+      "repository_mount": "read_only",
+      "venv_mount": "read_only",
+      "uid_gid": "65534:65534",
+      "linux_capabilities": "all_dropped",
+      "no_new_privileges": true,
+      "tmpfs": "/tmp rw,nosuid,nodev,noexec,size=128m,mode=1777",
+      "exit_code": 0,
+      "direct_test_count": 12,
+      "stdout": "............                                                             [100%]\n12 passed in 0.25s\n"
+    }
+  ],
+  "cross_environment_comparison": {
+    "same_exit_code": true,
+    "same_passed_test_count": true,
+    "byte_identical_stdout": false,
+    "stdout_difference": "Only the reported elapsed time differs (0.05 s versus 0.25 s)."
+  },
+  "limitations": [
+    "The Linux dependency environment was populated online from the frozen lockfile before the network-disabled test execution; the venv volume itself is not content-addressed.",
+    "This is a scheduled-interleaving and fault-injection suite, not proof of freedom from all races or failures.",
+    "The author performed both runs; this is cross-platform replay, not independent reproduction.",
+    "The study bytes were still untracked at Git HEAD, so exact per-file hashes are required to identify this run.",
+    "No result from this engineering stratum enters a primary confirmatory denominator."
+  ]
+}

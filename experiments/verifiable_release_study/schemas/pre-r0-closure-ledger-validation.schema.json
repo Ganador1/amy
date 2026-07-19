@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Ganador1/amy/experiments/verifiable_release_study/schemas/pre-r0-closure-ledger-validation.schema.json",
+  "title": "A.M.Y pre-R0 closure-ledger validation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "classification", "ledger_sha256", "schema_sha256",
+    "validator_sha256", "valid", "errors", "control_count",
+    "open_requirement_count", "current_evidence_path_count",
+    "all_bindings_match", "all_current_evidence_paths_exist",
+    "registration_blocker_ids", "decision", "boundaries"
+  ],
+  "properties": {
+    "schema_version": {"const": "amy.pre-r0-closure-ledger-validation.v1"},
+    "classification": {"const": "same_worktree_structural_validation_not_independent_review"},
+    "ledger_sha256": {"$ref": "#/$defs/sha256"},
+    "schema_sha256": {"$ref": "#/$defs/sha256"},
+    "validator_sha256": {"$ref": "#/$defs/sha256"},
+    "valid": {"type": "boolean"},
+    "errors": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "control_count": {"const": 10},
+    "open_requirement_count": {"type": "integer", "minimum": 10},
+    "current_evidence_path_count": {"type": "integer", "minimum": 10},
+    "all_bindings_match": {"type": "boolean"},
+    "all_current_evidence_paths_exist": {"type": "boolean"},
+    "registration_blocker_ids": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "prefixItems": [
+        {"const": "RG-001"}, {"const": "RG-002"}, {"const": "RG-004"},
+        {"const": "RG-005"}, {"const": "RG-006"}, {"const": "RG-009"},
+        {"const": "RG-010"}, {"const": "RG-011"}, {"const": "RG-013"},
+        {"const": "RG-014"}
+      ],
+      "items": false
+    },
+    "decision": {"const": "NO-GO"},
+    "boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "confirmatory_evidence_read", "scientific_claims_authorized",
+        "independent_review_performed", "network_used"
+      ],
+      "properties": {
+        "confirmatory_evidence_read": {"const": false},
+        "scientific_claims_authorized": {"const": false},
+        "independent_review_performed": {"const": false},
+        "network_used": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"valid": {"const": true}}},
+      "then": {
+        "properties": {
+          "errors": {"maxItems": 0},
+          "all_bindings_match": {"const": true},
+          "all_current_evidence_paths_exist": {"const": true}
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://amy.example/schemas/base-aware-mutation-development-check.schema.json",
+  "title": "A.M.Y base-aware mutation development check",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "classification",
+    "started_at",
+    "ended_at",
+    "command",
+    "environment",
+    "source_inventory",
+    "source_inventory_pre_sha256",
+    "source_inventory_post_sha256",
+    "source_inventory_unchanged_during_execution",
+    "execution",
+    "declared_coverage",
+    "unavailable_plans",
+    "boundaries",
+    "decision",
+    "manuscript_claims_authorized"
+  ],
+  "properties": {
+    "schema_version": {"const": "amy.base-aware-mutation-development-check.v1-draft"},
+    "classification": {
+      "const": "pre_registration_base_aware_disposable_fixture_test_not_confirmatory"
+    },
+    "started_at": {"type": "string", "format": "date-time"},
+    "ended_at": {"type": "string", "format": "date-time"},
+    "command": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "prefixItems": [
+        {"type": "string", "minLength": 1},
+        {"const": "-m"},
+        {"const": "pytest"},
+        {"const": "-q"},
+        {"const": "tests/test_selected_profile_base_aware_mutations.py"}
+      ],
+      "items": false
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["python", "python_implementation", "platform", "machine", "git"],
+      "properties": {
+        "python": {"type": "string", "minLength": 1},
+        "python_implementation": {"type": "string", "minLength": 1},
+        "platform": {"type": "string", "minLength": 1},
+        "machine": {"type": "string", "minLength": 1},
+        "git": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["commit", "dirty_or_untracked"],
+          "properties": {
+            "commit": {"type": "string", "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$"},
+            "dirty_or_untracked": {"type": "boolean"}
+          }
+        }
+      }
+    },
+    "source_inventory": {
+      "type": "array",
+      "minItems": 20,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/source"}
+    },
+    "source_inventory_pre_sha256": {"$ref": "#/$defs/sha256"},
+    "source_inventory_post_sha256": {"$ref": "#/$defs/sha256"},
+    "source_inventory_unchanged_during_execution": {"const": true},
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "exit_code",
+        "stdout",
+        "stdout_sha256",
+        "stderr",
+        "stderr_sha256",
+        "passed_test_count"
+      ],
+      "properties": {
+        "exit_code": {"const": 0},
+        "stdout": {"type": "string", "minLength": 1, "maxLength": 1000000},
+        "stdout_sha256": {"$ref": "#/$defs/sha256"},
+        "stderr": {"const": ""},
+        "stderr_sha256": {"$ref": "#/$defs/sha256"},
+        "passed_test_count": {"const": 4}
+      }
+    },
+    "declared_coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "base_count",
+        "operator_count",
+        "base_operator_plan_count",
+        "resolved_plan_count",
+        "unavailable_plan_count",
+        "disposable_target_dependent_execution_count",
+        "policy_fixture_collision_tested",
+        "forged_plan_rejection_tested"
+      ],
+      "properties": {
+        "base_count": {"const": 6},
+        "operator_count": {"const": 41},
+        "base_operator_plan_count": {"const": 246},
+        "resolved_plan_count": {"const": 245},
+        "unavailable_plan_count": {"const": 1},
+        "disposable_target_dependent_execution_count": {"const": 65},
+        "policy_fixture_collision_tested": {"const": true},
+        "forged_plan_rejection_tested": {"const": true}
+      }
+    },
+    "unavailable_plans": {
+      "const": [
+        {
+          "base_id": "B04-SOFTWARE",
+          "operator_id": "INVENTORY-OMIT-ROLE-001",
+          "reason_code": "TARGET_REQUIRED_ROLE_NOT_UNIQUE"
+        }
+      ]
+    },
+    "boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "confirmatory_case_archives_created",
+        "confirmatory_outcomes_read",
+        "verifier_invoked_by_base_aware_test",
+        "oracle_join_performed",
+        "registered_result_ledger_written",
+        "production_sigstore_conformance_established",
+        "independent_review_performed"
+      ],
+      "properties": {
+        "confirmatory_case_archives_created": {"const": false},
+        "confirmatory_outcomes_read": {"const": false},
+        "verifier_invoked_by_base_aware_test": {"const": false},
+        "oracle_join_performed": {"const": false},
+        "registered_result_ledger_written": {"const": false},
+        "production_sigstore_conformance_established": {"const": false},
+        "independent_review_performed": {"const": false}
+      }
+    },
+    "decision": {"const": "NO-GO"},
+    "manuscript_claims_authorized": {"const": false}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1, "maxLength": 1000},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

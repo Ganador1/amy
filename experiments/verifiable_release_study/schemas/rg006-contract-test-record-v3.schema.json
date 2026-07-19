@@ -1,0 +1,227 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://amy.example/schemas/rg006-contract-test-record-v3.schema.json",
+  "title": "A.M.Y RG-006 synthetic contract-test record v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "classification", "started_at", "ended_at", "command",
+    "environment", "source_inventory", "source_inventory_pre_sha256",
+    "source_inventory_post_sha256", "source_inventory_unchanged_during_execution",
+    "execution", "declared_coverage", "control_statuses", "boundaries",
+    "decision", "open_controls", "rg006_complete", "manuscript_claims_authorized"
+  ],
+  "properties": {
+    "schema_version": {"const": "amy.rg006-contract-test-record.v3-draft"},
+    "classification": {"const": "pre_registration_synthetic_runner_contract_test_not_confirmatory"},
+    "started_at": {"type": "string", "format": "date-time"},
+    "ended_at": {"type": "string", "format": "date-time"},
+    "command": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "prefixItems": [
+        {"type": "string", "minLength": 1},
+        {"const": "-m"},
+        {"const": "pytest"},
+        {"const": "-q"},
+        {"const": "tests/test_confirmatory_runner_contract.py"}
+      ],
+      "items": false
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["python", "python_implementation", "platform", "machine"],
+      "properties": {
+        "python": {"type": "string", "minLength": 1, "maxLength": 100},
+        "python_implementation": {"type": "string", "minLength": 1, "maxLength": 100},
+        "platform": {"type": "string", "minLength": 1, "maxLength": 1000},
+        "machine": {"type": "string", "minLength": 1, "maxLength": 100}
+      }
+    },
+    "source_inventory": {
+      "type": "array",
+      "minItems": 17,
+      "maxItems": 32,
+      "items": {"$ref": "#/$defs/source"}
+    },
+    "source_inventory_pre_sha256": {"$ref": "#/$defs/sha256"},
+    "source_inventory_post_sha256": {"$ref": "#/$defs/sha256"},
+    "source_inventory_unchanged_during_execution": {"const": true},
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exit_code", "stdout", "stdout_sha256", "stderr", "stderr_sha256", "passed_test_count"],
+      "properties": {
+        "exit_code": {"type": "integer", "minimum": 0, "maximum": 255},
+        "stdout": {"type": "string", "maxLength": 1000000},
+        "stdout_sha256": {"$ref": "#/$defs/sha256"},
+        "stderr": {"type": "string", "maxLength": 1000000},
+        "stderr_sha256": {"$ref": "#/$defs/sha256"},
+        "passed_test_count": {"type": ["integer", "null"], "minimum": 0}
+      }
+    },
+    "declared_coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attempt_truth_table_cell_count", "required_environment_count",
+        "subprocess_contract_tested", "raw_byte_stream_limits_tested",
+        "descriptor_and_environment_canaries_tested", "no_overwrite_tested",
+        "campaign_selection_tested", "later_attempt_campaign_seal_tested",
+        "attempt_process_consistency_tested", "inherited_capture_pipe_deadline_tested",
+        "exact_record_hash_recomputation_tested", "source_inventory_toctou_rejection_tested",
+        "typed_run_policy_bindings_verified", "runner_contract_bound_source_count",
+        "storage_errno_fault_cell_count", "storage_eintr_transient_cell_count",
+        "storage_eintr_persistent_cell_count", "storage_process_crash_cell_count",
+        "same_uid_entry_substitution_tested", "atomic_noreplace_rename_tested",
+        "fault_injection_scope", "intent_event_schema_and_process_binding_tested",
+        "intent_hash_chain_tested", "intent_ambiguous_rejection_cell_count",
+        "intent_advisory_lock_tested", "intent_popen_failure_retention_tested",
+        "intent_publication_failure_prevents_spawn_tested",
+        "intent_pre_spawn_process_crash_cell_count", "intent_log_scope"
+      ],
+      "properties": {
+        "attempt_truth_table_cell_count": {"const": 12},
+        "required_environment_count": {"const": 2},
+        "subprocess_contract_tested": {"const": true},
+        "raw_byte_stream_limits_tested": {"const": true},
+        "descriptor_and_environment_canaries_tested": {"const": true},
+        "no_overwrite_tested": {"const": true},
+        "campaign_selection_tested": {"const": true},
+        "later_attempt_campaign_seal_tested": {"const": true},
+        "attempt_process_consistency_tested": {"const": true},
+        "inherited_capture_pipe_deadline_tested": {"const": true},
+        "exact_record_hash_recomputation_tested": {"const": true},
+        "source_inventory_toctou_rejection_tested": {"const": true},
+        "typed_run_policy_bindings_verified": {"const": true},
+        "runner_contract_bound_source_count": {"const": 16},
+        "storage_errno_fault_cell_count": {"const": 12},
+        "storage_eintr_transient_cell_count": {"const": 4},
+        "storage_eintr_persistent_cell_count": {"const": 3},
+        "storage_process_crash_cell_count": {"const": 3},
+        "same_uid_entry_substitution_tested": {"const": true},
+        "atomic_noreplace_rename_tested": {"const": true},
+        "fault_injection_scope": {"const": "atomic_jcs_publication_only_not_all_runner_persistence_boundaries"},
+        "intent_event_schema_and_process_binding_tested": {"const": true},
+        "intent_hash_chain_tested": {"const": true},
+        "intent_ambiguous_rejection_cell_count": {"const": 3},
+        "intent_advisory_lock_tested": {"const": true},
+        "intent_popen_failure_retention_tested": {"const": true},
+        "intent_publication_failure_prevents_spawn_tested": {"const": true},
+        "intent_pre_spawn_process_crash_cell_count": {"const": 1},
+        "intent_log_scope": {"const": "contract_test_top_level_spawn_only_no_authenticated_checkpoint_recovery_or_classifier_derivation"}
+      }
+    },
+    "control_statuses": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "DURABLE_SCIENTIFIC_INTENT_LOG", "CAPABILITY_SEPARATED_OUTCOME_VAULT",
+        "FULL_PROCESS_TREE_CONTAINMENT", "OS_ENFORCED_OFFLINE_BOUNDARY",
+        "CRASH_AND_STORAGE_FAULT_INJECTION", "BASE_AWARE_CASE_GENERATOR",
+        "ALL_PROFILE_CHILD_ADAPTERS", "CAMPAIGN_SEAL_TO_LEDGER_LINK",
+        "EXTERNAL_SELECTION_AUTHENTICATION", "QUALIFIED_INDEPENDENT_HUMAN_REVIEW",
+        "R0_FREEZE_AND_REGISTRATION"
+      ],
+      "properties": {
+        "DURABLE_SCIENTIFIC_INTENT_LOG": {"$ref": "#/$defs/controlStatus"},
+        "CAPABILITY_SEPARATED_OUTCOME_VAULT": {"$ref": "#/$defs/controlStatus"},
+        "FULL_PROCESS_TREE_CONTAINMENT": {"$ref": "#/$defs/controlStatus"},
+        "OS_ENFORCED_OFFLINE_BOUNDARY": {"$ref": "#/$defs/controlStatus"},
+        "CRASH_AND_STORAGE_FAULT_INJECTION": {"$ref": "#/$defs/controlStatus"},
+        "BASE_AWARE_CASE_GENERATOR": {"$ref": "#/$defs/controlStatus"},
+        "ALL_PROFILE_CHILD_ADAPTERS": {"$ref": "#/$defs/controlStatus"},
+        "CAMPAIGN_SEAL_TO_LEDGER_LINK": {"$ref": "#/$defs/controlStatus"},
+        "EXTERNAL_SELECTION_AUTHENTICATION": {"$ref": "#/$defs/controlStatus"},
+        "QUALIFIED_INDEPENDENT_HUMAN_REVIEW": {"$ref": "#/$defs/controlStatus"},
+        "R0_FREEZE_AND_REGISTRATION": {"$ref": "#/$defs/controlStatus"}
+      }
+    },
+    "boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "confirmatory_execution_performed", "confirmatory_outputs_read",
+        "benchmark_cases_generated", "oracle_join_performed",
+        "production_sigstore_conformance_established", "network_isolation_established",
+        "full_process_tree_containment_established", "external_selection_authentication_established",
+        "independent_review_performed", "power_loss_durability_established",
+        "cross_filesystem_equivalence_established", "storage_recovery_implemented",
+        "authenticated_intent_checkpoint_established", "same_uid_intent_tamper_excluded",
+        "intent_log_rollback_detection_established", "intent_classifier_derivation_integrated"
+      ],
+      "properties": {
+        "confirmatory_execution_performed": {"const": false},
+        "confirmatory_outputs_read": {"const": false},
+        "benchmark_cases_generated": {"const": false},
+        "oracle_join_performed": {"const": false},
+        "production_sigstore_conformance_established": {"const": false},
+        "network_isolation_established": {"const": false},
+        "full_process_tree_containment_established": {"const": false},
+        "external_selection_authentication_established": {"const": false},
+        "independent_review_performed": {"const": false},
+        "power_loss_durability_established": {"const": false},
+        "cross_filesystem_equivalence_established": {"const": false},
+        "storage_recovery_implemented": {"const": false},
+        "authenticated_intent_checkpoint_established": {"const": false},
+        "same_uid_intent_tamper_excluded": {"const": false},
+        "intent_log_rollback_detection_established": {"const": false},
+        "intent_classifier_derivation_integrated": {"const": false}
+      }
+    },
+    "decision": {"const": "NO-GO"},
+    "open_controls": {
+      "type": "array",
+      "minItems": 11,
+      "maxItems": 11,
+      "uniqueItems": true,
+      "items": {"enum": [
+        "DURABLE_SCIENTIFIC_INTENT_LOG", "CAPABILITY_SEPARATED_OUTCOME_VAULT",
+        "FULL_PROCESS_TREE_CONTAINMENT", "OS_ENFORCED_OFFLINE_BOUNDARY",
+        "CRASH_AND_STORAGE_FAULT_INJECTION", "BASE_AWARE_CASE_GENERATOR",
+        "ALL_PROFILE_CHILD_ADAPTERS", "CAMPAIGN_SEAL_TO_LEDGER_LINK",
+        "EXTERNAL_SELECTION_AUTHENTICATION", "QUALIFIED_INDEPENDENT_HUMAN_REVIEW",
+        "R0_FREEZE_AND_REGISTRATION"
+      ]}
+    },
+    "rg006_complete": {"const": false},
+    "manuscript_claims_authorized": {"const": false}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1, "maxLength": 1000},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "controlStatus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "evidence_paths", "limitations"],
+      "properties": {
+        "status": {"enum": ["OPEN", "PARTIAL", "CLOSED"]},
+        "evidence_paths": {
+          "type": "array", "maxItems": 20, "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1, "maxLength": 1000}
+        },
+        "limitations": {
+          "type": "array", "minItems": 1, "maxItems": 20, "uniqueItems": true,
+          "items": {"type": "string", "minLength": 10, "maxLength": 2000}
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"execution": {"properties": {"exit_code": {"const": 0}}}}},
+      "then": {"properties": {"execution": {"properties": {"passed_test_count": {"const": 61}}}}}
+    }
+  ]
+}

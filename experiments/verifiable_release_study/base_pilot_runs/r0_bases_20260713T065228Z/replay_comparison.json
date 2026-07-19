@@ -1,0 +1,34 @@
+{
+  "schema_version": "amy.r0-base-replay-comparison.v1",
+  "compared_at": "2026-07-13T06:53:00Z",
+  "classification": "same_environment_exploratory_replay_not_independent_reproduction",
+  "retained_run": "base_pilot_runs/r0_bases_20260713T065228Z",
+  "replay_run": "/tmp/amy-r0-bases-fixed-replay-20260713T0653Z",
+  "base_count": 6,
+  "compared_fields": [
+    "base_id",
+    "manifest_sha256",
+    "tree_sha256",
+    "archive_sha256"
+  ],
+  "canonical_comparison_sha256": "9898dc20e4db5a318f2fd79dc5309fd576ebd10264dee6dc3e1f705c1a0577fb",
+  "all_compared_fields_identical": true,
+  "both_runs_pass_independent_validator": true,
+  "shared_inputs": {
+    "source_archive_sha256": "1477628425ab6ecd171f46d70b9a1725e72aa270fca680b22baf368469f6a861",
+    "fixture_policy_sha256": "f796d190478caa4fa52dfaf671704bacf87a6bdbf456dae91025984c117bd4d5",
+    "input_registry_sha256": "553352619f5b1f4e96b9ccc482070e0fba4398298ba15d9a27457698117dc015"
+  },
+  "tool_source_sha256": {
+    "scripts/build_r0_bases.py": "ea28fbb4e5037e9905779a683f99435f4a75c7f3d08d6a420b879ced3c12fcdd",
+    "scripts/validate_r0_base_run.py": "1cab77196ec5671e6aea490071aa2bfab0a04824bae3fcc8b6f32fcce6f700b1",
+    "amy_verifier/base_corpus.py": "4419f9db9e4f1db09fe5ff47d3e1d4626da5f0462578d6ba0dc57e2f919b5fce",
+    "corpus/BASE_REGISTRY_DRAFT.json": "553352619f5b1f4e96b9ccc482070e0fba4398298ba15d9a27457698117dc015"
+  },
+  "limitations": [
+    "Both executions used the same host, operating system, filesystem, Python environment, and repository working tree.",
+    "The replay establishes deterministic base bytes under this environment, not cross-platform or independent reproduction.",
+    "The controlled fixture PKI is intentionally public and is not production Sigstore.",
+    "No adversarial confirmatory case was generated."
+  ]
+}

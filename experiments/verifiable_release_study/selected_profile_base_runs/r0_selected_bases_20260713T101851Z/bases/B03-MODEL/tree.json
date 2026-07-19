@@ -1,0 +1,80 @@
+[
+  {
+    "bytes": 2266,
+    "kind": "regular",
+    "path": "MANIFEST.jcs.json",
+    "sha256": "a9ce9a6593ad820a5531b98572d1a4bf1dd94db2c83b76d79f8a109229480bf5"
+  },
+  {
+    "bytes": 2421,
+    "kind": "regular",
+    "path": "attestation.sigstore.json",
+    "sha256": "227dab995edd1e53887e215a95540abc5f979980846033831c3d6b940e3a2e92"
+  },
+  {
+    "kind": "directory",
+    "path": "payload"
+  },
+  {
+    "kind": "directory",
+    "path": "payload/fixtures"
+  },
+  {
+    "bytes": 22,
+    "kind": "regular",
+    "path": "payload/fixtures/pair-a.bin",
+    "sha256": "db2b54a47b58b3dc4b68c9a95ec665a998a2ad8943e4a88b611ec955438ae71b"
+  },
+  {
+    "bytes": 22,
+    "kind": "regular",
+    "path": "payload/fixtures/pair-b.bin",
+    "sha256": "db2b54a47b58b3dc4b68c9a95ec665a998a2ad8943e4a88b611ec955438ae71b"
+  },
+  {
+    "kind": "directory",
+    "path": "payload/logs"
+  },
+  {
+    "bytes": 0,
+    "kind": "regular",
+    "path": "payload/logs/empty.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "kind": "directory",
+    "path": "payload/model"
+  },
+  {
+    "bytes": 81,
+    "kind": "regular",
+    "path": "payload/model/metadata.json",
+    "sha256": "2e2c3f1d28e6d1cd02c7a500b3c4a3eff8d34e3c42a355733260b135ab196800"
+  },
+  {
+    "bytes": 2097169,
+    "kind": "regular",
+    "path": "payload/model/weights.bin",
+    "sha256": "bc82ad63b74788f390ac4e4bf8183c336d7d228d5ec61515571b78dc7533b0d5"
+  },
+  {
+    "kind": "directory",
+    "path": "payload/provenance"
+  },
+  {
+    "bytes": 12,
+    "kind": "regular",
+    "path": "payload/provenance/dependency.lock",
+    "sha256": "dbab12665d98aef021ba64953c61b0ed8a908cfb56a1c01e2fcb4b052b71a2a1"
+  },
+  {
+    "kind": "directory",
+    "path": "payload/source"
+  },
+  {
+    "bytes": 10240,
+    "kind": "regular",
+    "path": "payload/source/source.tar",
+    "sha256": "2bc8dc879609cf564b390de1036df57ea3e2dc6f6d16d7529a916d93eb58e8dd"
+  }
+]

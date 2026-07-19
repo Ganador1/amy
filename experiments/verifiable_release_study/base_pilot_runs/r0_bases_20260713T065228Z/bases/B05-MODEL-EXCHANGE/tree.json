@@ -1,0 +1,66 @@
+[
+  {
+    "bytes": 1219,
+    "kind": "regular",
+    "path": "MANIFEST.jcs.json",
+    "sha256": "7bafc7494784073545a1054bebed3b0ef6d7bda0a408b4d7f35ff8b08ee9d1a5"
+  },
+  {
+    "bytes": 2821,
+    "kind": "regular",
+    "path": "attestation.sigstore.json",
+    "sha256": "41da08234137dd54bd2d571c19bf2d6a1e23b849b566bb201fc0a9cfaa53b4a5"
+  },
+  {
+    "kind": "directory",
+    "path": "payload"
+  },
+  {
+    "kind": "directory",
+    "path": "payload/exchange"
+  },
+  {
+    "bytes": 96,
+    "kind": "regular",
+    "path": "payload/exchange/metadata.json",
+    "sha256": "2e6cb537a9d7cc9f934fbfc9a9122248860836ac03bc2108040483defb2e6c39"
+  },
+  {
+    "bytes": 92,
+    "kind": "regular",
+    "path": "payload/exchange/request.json",
+    "sha256": "1948bb3e419d66da5099e7b48b0d76269497fff969d8d4dc65b51e764752571a"
+  },
+  {
+    "bytes": 83,
+    "kind": "regular",
+    "path": "payload/exchange/response.json",
+    "sha256": "472142346da2de0727c8c66561d07e1b08ff45db7e976e66b8c04f708980eb6d"
+  },
+  {
+    "kind": "directory",
+    "path": "payload/fixtures"
+  },
+  {
+    "bytes": 22,
+    "kind": "regular",
+    "path": "payload/fixtures/pair-a.txt",
+    "sha256": "db2b54a47b58b3dc4b68c9a95ec665a998a2ad8943e4a88b611ec955438ae71b"
+  },
+  {
+    "bytes": 22,
+    "kind": "regular",
+    "path": "payload/fixtures/pair-b.txt",
+    "sha256": "db2b54a47b58b3dc4b68c9a95ec665a998a2ad8943e4a88b611ec955438ae71b"
+  },
+  {
+    "kind": "directory",
+    "path": "payload/prompt"
+  },
+  {
+    "bytes": 68,
+    "kind": "regular",
+    "path": "payload/prompt/system.txt",
+    "sha256": "e1bddfa9eefad4c8f0af8f0056547216571f13c5445956dd2e8a16b46ff0a3f4"
+  }
+]

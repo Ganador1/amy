@@ -1,0 +1,37 @@
+{
+  "archive_contract_valid": true,
+  "archive_member_count": 135,
+  "artifact_count": 134,
+  "confirmatory_outputs_read": false,
+  "detached_authentication_verified": false,
+  "errors": [],
+  "manifest_canonical": true,
+  "packet": {
+    "byte_length": 3133440,
+    "expected_sha256": "cc55835ac0904b2d9228a25196f571f5da4cdbbf92c4f2de7ebc1620d488db0e",
+    "hash_matches": true,
+    "observed_sha256": "cc55835ac0904b2d9228a25196f571f5da4cdbbf92c4f2de7ebc1620d488db0e",
+    "path": "/Volumes/Ganador disk/A.M.Y/experiments/verifiable_release_study/reviews/r0_review_packet_draft_20260713T161037Z/R0_REVIEW_PACKET.tar"
+  },
+  "review_record": {
+    "human_review_claimed": false,
+    "path": "/Volumes/Ganador disk/A.M.Y/experiments/verifiable_release_study/protocol/R0_HUMAN_REVIEW_RECORD_TEMPLATE.json",
+    "record_status": "template_unreviewed",
+    "schema_valid": true,
+    "subject_binding_matches": null,
+    "supplied": true
+  },
+  "reviewer_authorization_verified": false,
+  "reviewer_competence_verified": false,
+  "rg004_complete": false,
+  "schema_version": "amy.r0-review-packet-verification.v1-draft",
+  "status": "mechanical_integrity_valid_unreviewed",
+  "subject_manifest": {
+    "byte_length": 26199,
+    "expected_sha256": "d6769b3564d4653bb6c12660f913dcf46e0e5c2678246252b7004e87d5828cc7",
+    "hash_matches": true,
+    "observed_sha256": "d6769b3564d4653bb6c12660f913dcf46e0e5c2678246252b7004e87d5828cc7",
+    "path": "/Volumes/Ganador disk/A.M.Y/experiments/verifiable_release_study/reviews/r0_review_packet_draft_20260713T161037Z/R0_REVIEW_SUBJECT_MANIFEST.jcs.json"
+  },
+  "valid": true
+}

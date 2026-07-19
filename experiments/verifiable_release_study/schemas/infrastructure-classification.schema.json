@@ -1,0 +1,703 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Ganador1/amy/experiments/verifiable_release_study/schemas/infrastructure-classification.schema.json",
+  "title": "A.M.Y outcome-blind infrastructure classification",
+  "description": "Closed output contract for classify_infrastructure_before_decode after projection to the restricted classifier view. Hash linkage and local continuous-clock values do not authenticate provider signals or external wall-clock order.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "classification",
+    "attempt_id",
+    "environment_id",
+    "attempt_number",
+    "bindings",
+    "temporal_boundary",
+    "observed_signals",
+    "observed_process",
+    "outcome_guard",
+    "verdict",
+    "boundaries",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "amy.infrastructure-classification.v1-draft"
+    },
+    "classification": {
+      "$ref": "#/$defs/recordClassification"
+    },
+    "attempt_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "environment_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "attempt_number": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 16
+    },
+    "bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attempt_record_sha256",
+        "attempt_record_schema_sha256",
+        "run_policy_sha256",
+        "classifier_sha256",
+        "classification_schema_sha256",
+        "classifier_view_sha256"
+      ],
+      "properties": {
+        "attempt_record_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "attempt_record_schema_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "run_policy_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "classifier_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "classification_schema_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "classifier_view_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "temporal_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clock_id",
+        "attempt_ended_continuous_us",
+        "classified_continuous_us",
+        "classified_wall_utc",
+        "classification_record_must_be_persisted_before_attempt_two",
+        "external_temporal_order_authenticated",
+        "external_temporal_order_attestation_sha256"
+      ],
+      "properties": {
+        "clock_id": {
+          "$ref": "#/$defs/continuousClockId"
+        },
+        "attempt_ended_continuous_us": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "classified_continuous_us": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "classified_wall_utc": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "classification_record_must_be_persisted_before_attempt_two": {
+          "const": true
+        },
+        "external_temporal_order_authenticated": {
+          "const": false
+        },
+        "external_temporal_order_attestation_sha256": {
+          "const": null
+        }
+      }
+    },
+    "observed_signals": {
+      "$ref": "#/$defs/predecodeSignals"
+    },
+    "observed_process": {
+      "$ref": "#/$defs/attemptProcess"
+    },
+    "outcome_guard": {
+      "$ref": "#/$defs/outcomeGuard"
+    },
+    "verdict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "predicate_id",
+        "complete_environment_rerun_permitted",
+        "reason_codes"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "RETRY_ELIGIBLE",
+            "NOT_RETRY_ELIGIBLE",
+            "INVALID_CLASSIFICATION"
+          ]
+        },
+        "predicate_id": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/infrastructurePredicate"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "complete_environment_rerun_permitted": {
+          "type": "boolean"
+        },
+        "reason_codes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 10,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "OUTCOMES_EXPOSED_BEFORE_SELECTION",
+              "RESULT_BYTES_DECODED_BEFORE_SELECTION",
+              "ORACLE_JOINED_BEFORE_SELECTION",
+              "SCIENTIFIC_INTENT_COUNT_MISMATCH",
+              "GUARD_RECORDED_RESULT_DECODE",
+              "GUARD_RECORDED_ORACLE_JOIN",
+              "GUARD_RECORDED_HUMAN_OUTCOME_READ",
+              "DECODE_CAPABILITY_RELEASED_BEFORE_SELECTION",
+              "CLASSIFICATION_CLOCK_ID_MISMATCH",
+              "CLASSIFICATION_CLOCK_PRECEDES_ATTEMPT_END",
+              "ATTEMPT_PROCESS_STATE_CONTRADICTION",
+              "ATTEMPT_RECORD_HASH_MISMATCH",
+              "AMBIGUOUS_INFRASTRUCTURE_PREDICATES",
+              "EXACTLY_ONE_PRESTART_PREDICATE_MATCHED",
+              "OPERATOR_CANCELLATION_NONRETRYABLE",
+              "INPUT_HASH_MISMATCH_NONRETRYABLE",
+              "SCIENTIFIC_EXECUTION_STARTED_NONRETRYABLE",
+              "TERMINAL_SCIENTIFIC_EVENT_NONRETRYABLE",
+              "NO_ELIGIBLE_PRESTART_PREDICATE"
+            ]
+          }
+        }
+      }
+    },
+    "boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attempt_record_finalized_before_classification",
+        "result_bytes_received_by_classifier",
+        "result_bytes_decoded_by_classifier",
+        "oracle_received_by_classifier",
+        "decision_fields_received_by_classifier",
+        "classification_finished_before_result_decode"
+      ],
+      "properties": {
+        "attempt_record_finalized_before_classification": {
+          "const": true
+        },
+        "result_bytes_received_by_classifier": {
+          "const": false
+        },
+        "result_bytes_decoded_by_classifier": {
+          "const": false
+        },
+        "oracle_received_by_classifier": {
+          "const": false
+        },
+        "decision_fields_received_by_classifier": {
+          "const": false
+        },
+        "classification_finished_before_result_decode": {
+          "type": "boolean"
+        }
+      }
+    },
+    "limitations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider_signal_authenticity_verified",
+        "external_outcome_access_excluded",
+        "operator_identity_authenticated",
+        "cryptographic_signature_verified",
+        "independent_review_performed"
+      ],
+      "properties": {
+        "provider_signal_authenticity_verified": {
+          "const": false
+        },
+        "external_outcome_access_excluded": {
+          "const": false
+        },
+        "operator_identity_authenticated": {
+          "const": false
+        },
+        "cryptographic_signature_verified": {
+          "const": false
+        },
+        "independent_review_performed": {
+          "const": false
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "verdict": {
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "const": "RETRY_ELIGIBLE"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "verdict": {
+            "properties": {
+              "predicate_id": {
+                "$ref": "#/$defs/infrastructurePredicate"
+              },
+              "complete_environment_rerun_permitted": {
+                "const": true
+              },
+              "reason_codes": {
+                "const": [
+                  "EXACTLY_ONE_PRESTART_PREDICATE_MATCHED"
+                ]
+              }
+            }
+          },
+          "boundaries": {
+            "properties": {
+              "classification_finished_before_result_decode": {
+                "const": true
+              }
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "verdict": {
+            "properties": {
+              "predicate_id": {
+                "type": "null"
+              },
+              "complete_environment_rerun_permitted": {
+                "const": false
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "verdict": {
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "const": "NOT_RETRY_ELIGIBLE"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "verdict": {
+            "properties": {
+              "reason_codes": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 1,
+                "items": {
+                  "enum": [
+                    "OPERATOR_CANCELLATION_NONRETRYABLE",
+                    "INPUT_HASH_MISMATCH_NONRETRYABLE",
+                    "SCIENTIFIC_EXECUTION_STARTED_NONRETRYABLE",
+                    "TERMINAL_SCIENTIFIC_EVENT_NONRETRYABLE",
+                    "NO_ELIGIBLE_PRESTART_PREDICATE"
+                  ]
+                }
+              }
+            }
+          },
+          "boundaries": {
+            "properties": {
+              "classification_finished_before_result_decode": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "verdict": {
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "const": "INVALID_CLASSIFICATION"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "oneOf": [
+          {
+            "properties": {
+              "verdict": {
+                "properties": {
+                  "reason_codes": {
+                    "const": [
+                      "AMBIGUOUS_INFRASTRUCTURE_PREDICATES"
+                    ]
+                  }
+                }
+              },
+              "boundaries": {
+                "properties": {
+                  "classification_finished_before_result_decode": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          },
+          {
+            "properties": {
+              "verdict": {
+                "properties": {
+                  "reason_codes": {
+                    "type": "array",
+                    "minItems": 1,
+                    "maxItems": 10,
+                    "uniqueItems": true,
+                    "items": {
+                      "enum": [
+                        "OUTCOMES_EXPOSED_BEFORE_SELECTION",
+                        "RESULT_BYTES_DECODED_BEFORE_SELECTION",
+                        "ORACLE_JOINED_BEFORE_SELECTION",
+                        "SCIENTIFIC_INTENT_COUNT_MISMATCH",
+                        "GUARD_RECORDED_RESULT_DECODE",
+                        "GUARD_RECORDED_ORACLE_JOIN",
+                        "GUARD_RECORDED_HUMAN_OUTCOME_READ",
+                        "DECODE_CAPABILITY_RELEASED_BEFORE_SELECTION",
+                        "CLASSIFICATION_CLOCK_ID_MISMATCH",
+                        "CLASSIFICATION_CLOCK_PRECEDES_ATTEMPT_END",
+                        "ATTEMPT_PROCESS_STATE_CONTRADICTION",
+                        "ATTEMPT_RECORD_HASH_MISMATCH"
+                      ]
+                    }
+                  }
+                }
+              },
+              "boundaries": {
+                "properties": {
+                  "classification_finished_before_result_decode": {
+                    "const": false
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "verdict": {
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "enum": [
+                  "RETRY_ELIGIBLE",
+                  "NOT_RETRY_ELIGIBLE"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "observed_signals": {
+            "properties": {
+              "outcomes_exposed_to_selection_process": {
+                "const": false
+              },
+              "result_bytes_decoded_before_selection": {
+                "const": false
+              },
+              "oracle_join_performed_before_selection": {
+                "const": false
+              }
+            }
+          },
+          "outcome_guard": {
+            "properties": {
+              "result_decode_event_count": {
+                "const": 0
+              },
+              "oracle_join_event_count": {
+                "const": 0
+              },
+              "human_outcome_read_event_count": {
+                "const": 0
+              },
+              "decode_capability_released": {
+                "const": false
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "recordClassification": {
+      "enum": [
+        "contract_test_no_confirmatory_evidence",
+        "confirmatory_R1",
+        "external_reproduction"
+      ]
+    },
+    "continuousClockId": {
+      "enum": [
+        "linux_CLOCK_BOOTTIME",
+        "darwin_mach_continuous_time"
+      ]
+    },
+    "infrastructurePredicate": {
+      "enum": [
+        "INFRA-JOB-NOT-STARTED",
+        "INFRA-EXTERNAL-RUNNER-LOSS",
+        "INFRA-PRELOCK-ACQUISITION-FAILURE",
+        "INFRA-PREFLIGHT-STORAGE-FAILURE"
+      ]
+    },
+    "predecodeSignals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider_job_id",
+        "provider_job_state",
+        "external_cancellation_actor",
+        "host_heartbeat_state",
+        "image_pull_status",
+        "input_acquisition_status",
+        "input_lock_completed",
+        "preflight_storage_probe",
+        "run_started_marker",
+        "case_execution_started",
+        "run_completed_marker",
+        "terminal_scientific_event_count",
+        "scientific_intent_event_count",
+        "outcomes_exposed_to_selection_process",
+        "result_bytes_decoded_before_selection",
+        "oracle_join_performed_before_selection",
+        "operator_cancellation_requested",
+        "input_hash_mismatch"
+      ],
+      "properties": {
+        "provider_job_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "provider_job_state": {
+          "enum": [
+            "unknown",
+            "not_scheduled",
+            "runner_unavailable",
+            "queued",
+            "running",
+            "runner_lost",
+            "provider_cancelled",
+            "completed",
+            "failed"
+          ]
+        },
+        "external_cancellation_actor": {
+          "enum": [
+            "none",
+            "provider",
+            "operator",
+            "unknown"
+          ]
+        },
+        "host_heartbeat_state": {
+          "enum": [
+            "not_started",
+            "present",
+            "lost",
+            "unknown"
+          ]
+        },
+        "image_pull_status": {
+          "enum": [
+            "not_started",
+            "in_progress",
+            "succeeded",
+            "failed",
+            "unknown"
+          ]
+        },
+        "input_acquisition_status": {
+          "enum": [
+            "not_started",
+            "in_progress",
+            "complete",
+            "failed",
+            "unknown"
+          ]
+        },
+        "input_lock_completed": {
+          "type": "boolean"
+        },
+        "preflight_storage_probe": {
+          "enum": [
+            "not_run",
+            "passed",
+            "failed",
+            "unknown"
+          ]
+        },
+        "run_started_marker": {
+          "type": "boolean"
+        },
+        "case_execution_started": {
+          "type": "boolean"
+        },
+        "run_completed_marker": {
+          "type": "boolean"
+        },
+        "terminal_scientific_event_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "scientific_intent_event_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "outcomes_exposed_to_selection_process": {
+          "type": "boolean"
+        },
+        "result_bytes_decoded_before_selection": {
+          "type": "boolean"
+        },
+        "oracle_join_performed_before_selection": {
+          "type": "boolean"
+        },
+        "operator_cancellation_requested": {
+          "type": "boolean"
+        },
+        "input_hash_mismatch": {
+          "type": "boolean"
+        }
+      }
+    },
+    "attemptProcess": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "spawned",
+        "pid",
+        "exit_code",
+        "exit_signal",
+        "timeout_triggered",
+        "output_limit_exceeded",
+        "sigterm_sent",
+        "sigkill_sent",
+        "reaped"
+      ],
+      "properties": {
+        "spawned": {"type": "boolean"},
+        "pid": {"type": ["integer", "null"], "minimum": 1},
+        "exit_code": {"type": ["integer", "null"], "minimum": 0},
+        "exit_signal": {"type": ["integer", "null"], "minimum": 1},
+        "timeout_triggered": {"type": "boolean"},
+        "output_limit_exceeded": {"type": "boolean"},
+        "sigterm_sent": {"type": "boolean"},
+        "sigkill_sent": {"type": "boolean"},
+        "reaped": {"type": "boolean"}
+      }
+    },
+    "outcomeGuard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "guard_epoch_id",
+        "checkpoint_sequence",
+        "log_head_sha256",
+        "scientific_intent_event_count",
+        "result_decode_event_count",
+        "oracle_join_event_count",
+        "human_outcome_read_event_count",
+        "decode_capability_released"
+      ],
+      "properties": {
+        "guard_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9._-]+$"
+        },
+        "checkpoint_sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "log_head_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "scientific_intent_event_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "result_decode_event_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "oracle_join_event_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "human_outcome_read_event_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "decode_capability_released": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

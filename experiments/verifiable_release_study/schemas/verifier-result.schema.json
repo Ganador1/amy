@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Ganador1/amy/experiments/verifiable_release_study/schemas/verifier-result.schema.json",
+  "title": "Verifiable release verifier result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "case_id",
+    "profile_id",
+    "decision",
+    "primary_reason",
+    "all_reasons",
+    "input",
+    "implementation",
+    "checks",
+    "started_at",
+    "ended_at"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.3.0-draft"},
+    "case_id": {"type": "string", "pattern": "^[A-Z0-9-]+$"},
+    "profile_id": {"enum": ["P0", "P1", "P2", "P3"]},
+    "decision": {"enum": ["ACCEPT", "REJECT", "ERROR"]},
+    "primary_reason": {"$ref": "#/$defs/reasonCode"},
+    "all_reasons": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/reasonCode"}
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["case_archive_sha256", "manifest_sha256", "attestation_sha256", "trust_policy_sha256"],
+      "properties": {
+        "case_archive_sha256": {"$ref": "#/$defs/sha256"},
+        "manifest_sha256": {"$ref": "#/$defs/nullableSha256"},
+        "attestation_sha256": {"$ref": "#/$defs/nullableSha256"},
+        "trust_policy_sha256": {"$ref": "#/$defs/nullableSha256"}
+      }
+    },
+    "implementation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "git_commit", "source_archive_sha256", "dirty"],
+      "properties": {
+        "version": {"type": "string", "minLength": 1},
+        "git_commit": {"type": "string", "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$"},
+        "source_archive_sha256": {"$ref": "#/$defs/sha256"},
+        "dirty": {"type": "boolean"}
+      }
+    },
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bounded_input",
+        "manifest_json_syntax",
+        "manifest_schema",
+        "manifest_canonicality",
+        "path_safety",
+        "closed_world_inventory",
+        "payload_digests",
+        "attestation_structure",
+        "algorithm_policy",
+        "signature_crypto",
+        "certificate_time",
+        "signer_policy",
+        "transparency",
+        "subject_binding",
+        "provenance_policy"
+      ],
+      "properties": {
+        "bounded_input": {"$ref": "#/$defs/checkState"},
+        "manifest_json_syntax": {"$ref": "#/$defs/checkState"},
+        "manifest_schema": {"$ref": "#/$defs/checkState"},
+        "manifest_canonicality": {"$ref": "#/$defs/checkState"},
+        "path_safety": {"$ref": "#/$defs/checkState"},
+        "closed_world_inventory": {"$ref": "#/$defs/checkState"},
+        "payload_digests": {"$ref": "#/$defs/checkState"},
+        "attestation_structure": {"$ref": "#/$defs/checkState"},
+        "algorithm_policy": {"$ref": "#/$defs/checkState"},
+        "signature_crypto": {"$ref": "#/$defs/checkState"},
+        "certificate_time": {"$ref": "#/$defs/checkState"},
+        "signer_policy": {"$ref": "#/$defs/checkState"},
+        "transparency": {"$ref": "#/$defs/checkState"},
+        "subject_binding": {"$ref": "#/$defs/checkState"},
+        "provenance_policy": {"$ref": "#/$defs/checkState"}
+      }
+    },
+    "started_at": {"type": "string", "format": "date-time"},
+    "ended_at": {"type": "string", "format": "date-time"},
+    "details": {"type": "object"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "nullableSha256": {
+      "oneOf": [
+        {"$ref": "#/$defs/sha256"},
+        {"type": "null"}
+      ]
+    },
+    "checkState": {"enum": ["PASS", "FAIL", "NOT_RUN", "NOT_REQUIRED"]},
+    "reasonCode": {
+      "enum": [
+        "OK",
+        "RESOURCE_LIMIT",
+        "INPUT_MISSING",
+        "JSON_INVALID",
+        "DUPLICATE_JSON_KEY",
+        "MANIFEST_NONCANONICAL",
+        "SCHEMA_INVALID",
+        "UNSAFE_PATH",
+        "DUPLICATE_PATH",
+        "SYMLINK_FORBIDDEN",
+        "HARDLINK_FORBIDDEN",
+        "NONREGULAR_FILE",
+        "INPUT_CHANGED",
+        "REQUIRED_ROLE_MISSING",
+        "PAYLOAD_MISSING",
+        "UNEXPECTED_FILE",
+        "SIZE_MISMATCH",
+        "DIGEST_MISMATCH",
+        "ATTESTATION_MISSING",
+        "ATTESTATION_INVALID",
+        "ALGORITHM_UNAPPROVED",
+        "SIGNATURE_INVALID",
+        "CERTIFICATE_TIME_INVALID",
+        "TRANSPARENCY_INVALID",
+        "SIGNER_UNAUTHORIZED",
+        "BUILDER_UNAUTHORIZED",
+        "SUBJECT_MISMATCH",
+        "PREDICATE_TYPE_UNSUPPORTED",
+        "SOURCE_MISMATCH",
+        "DIRTY_BUILD",
+        "MATERIAL_MISMATCH",
+        "INTERNAL_ERROR"
+      ]
+    }
+  }
+}

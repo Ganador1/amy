@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Ganador1/amy/experiments/verifiable_release_study/schemas/pre-r0-closure-ledger.schema.json",
+  "title": "A.M.Y pre-R0 closure ledger",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "status", "classification", "bindings", "summary",
+    "controls", "boundaries"
+  ],
+  "properties": {
+    "schema_version": {"const": "amy.pre-r0-closure-ledger.v1-draft"},
+    "status": {"const": "NO-GO"},
+    "classification": {"const": "pre_registration_planning_evidence_not_scientific_result"},
+    "bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "registration_gates_sha256", "run_execution_policy_sha256",
+        "run_execution_policy_validation_sha256",
+        "selected_compatibility_matrix_sha256",
+        "r0_reviewer_identity_policy_validation_sha256",
+        "release_lineage_validation_sha256"
+      ],
+      "properties": {
+        "registration_gates_sha256": {"$ref": "#/$defs/sha256"},
+        "run_execution_policy_sha256": {"$ref": "#/$defs/sha256"},
+        "run_execution_policy_validation_sha256": {"$ref": "#/$defs/sha256"},
+        "selected_compatibility_matrix_sha256": {"$ref": "#/$defs/sha256"},
+        "r0_reviewer_identity_policy_validation_sha256": {"$ref": "#/$defs/sha256"},
+        "release_lineage_validation_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "registration_blocker_count", "partial_blocker_count",
+        "open_blocker_count", "pending_compatibility_row_count",
+        "unresolved_tbd_count", "runner_open_control_count",
+        "confirmatory_execution_permitted", "freeze_permitted"
+      ],
+      "properties": {
+        "registration_blocker_count": {"const": 10},
+        "partial_blocker_count": {"const": 7},
+        "open_blocker_count": {"const": 3},
+        "pending_compatibility_row_count": {"const": 54},
+        "unresolved_tbd_count": {"const": 47},
+        "runner_open_control_count": {"const": 11},
+        "confirmatory_execution_permitted": {"const": false},
+        "freeze_permitted": {"const": false}
+      }
+    },
+    "controls": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "items": {"$ref": "#/$defs/control"}
+    },
+    "boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "confirmatory_evidence_read", "scientific_claims_authorized",
+        "qualified_human_review_performed", "external_authentication_performed",
+        "model_review_treated_as_independent", "ledger_self_certifies_completion"
+      ],
+      "properties": {
+        "confirmatory_evidence_read": {"const": false},
+        "scientific_claims_authorized": {"const": false},
+        "qualified_human_review_performed": {"const": false},
+        "external_authentication_performed": {"const": false},
+        "model_review_treated_as_independent": {"const": false},
+        "ledger_self_certifies_completion": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "safePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"
+    },
+    "requirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "evidence_kind", "status", "can_complete_in_current_worktree",
+        "requires_external_actor", "required_artifacts", "acceptance_test"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^CLOSE-[A-Z0-9-]+$"},
+        "evidence_kind": {
+          "enum": [
+            "compatibility_resolution", "external_authentication",
+            "external_execution", "fault_injection", "frozen_exact_bytes",
+            "human_review", "local_code_and_tests", "model_protocol",
+            "policy_instantiation", "public_snapshot"
+          ]
+        },
+        "status": {"const": "OPEN"},
+        "can_complete_in_current_worktree": {"type": "boolean"},
+        "requires_external_actor": {"type": "boolean"},
+        "required_artifacts": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1, "maxLength": 1000}
+        },
+        "acceptance_test": {"type": "string", "minLength": 20, "maxLength": 4000}
+      }
+    },
+    "control": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gate_id", "gate_status", "closure_domain", "blocks_registration",
+        "blocks_confirmatory_execution", "current_evidence_paths",
+        "established_claims", "prohibited_inferences", "unmet_requirements",
+        "next_action"
+      ],
+      "properties": {
+        "gate_id": {
+          "enum": [
+            "RG-001", "RG-002", "RG-004", "RG-005", "RG-006",
+            "RG-009", "RG-010", "RG-011", "RG-013", "RG-014"
+          ]
+        },
+        "gate_status": {"enum": ["open", "partial"]},
+        "closure_domain": {
+          "enum": [
+            "external_human", "external_infrastructure", "local_implementation",
+            "mixed", "release_identity"
+          ]
+        },
+        "blocks_registration": {"const": true},
+        "blocks_confirmatory_execution": {"const": true},
+        "current_evidence_paths": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"$ref": "#/$defs/safePath"}
+        },
+        "established_claims": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "minLength": 10, "maxLength": 2000}
+        },
+        "prohibited_inferences": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "minLength": 10, "maxLength": 2000}
+        },
+        "unmet_requirements": {
+          "type": "array", "minItems": 1,
+          "items": {"$ref": "#/$defs/requirement"}
+        },
+        "next_action": {"type": "string", "minLength": 20, "maxLength": 4000}
+      }
+    }
+  }
+}

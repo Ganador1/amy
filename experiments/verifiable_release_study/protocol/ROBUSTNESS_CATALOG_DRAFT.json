@@ -1,0 +1,137 @@
+{
+  "schema_version": "amy.robustness-catalog.v1-draft",
+  "status": "draft_engineering_stratum_cross_platform_not_independently_reviewed",
+  "stratum": "S0-ENGINEERING-ROBUSTNESS",
+  "confirmatory": false,
+  "executed_before_registration": true,
+  "excluded_from_primary_denominators": true,
+  "purpose": "Exercise temporal mutation and injected infrastructure failures before freezing the confirmatory verifier.",
+  "outcome_rule": {
+    "adversarial_input_change": "REJECT with INPUT_CHANGED",
+    "infrastructure_or_internal_fault": "ERROR with INTERNAL_ERROR",
+    "forbidden_interpretation": "An ERROR is not a successful attack rejection and neither class contributes to the primary conformance success rate."
+  },
+  "cases": [
+    {
+      "id": "RB-TOCTOU-MANIFEST-SWAP-001",
+      "family": "toctou",
+      "injection": "Replace a regular bounded input with a symlink after lstat and before open.",
+      "profiles": ["P0", "P1", "P2", "P3"],
+      "expected_decision": "REJECT",
+      "expected_reason": "INPUT_CHANGED",
+      "coverage_state": "IMPLEMENTED",
+      "evidence": ["tests/test_toctou_and_fault_injection.py::test_swap_to_symlink_between_lstat_and_open_is_input_changed"]
+    },
+    {
+      "id": "RB-TOCTOU-BOUNDED-GROWTH-001",
+      "family": "toctou",
+      "injection": "Grow a bounded regular input after its first read and before end-of-file validation.",
+      "profiles": ["P0", "P1", "P2", "P3"],
+      "expected_decision": "REJECT",
+      "expected_reason": "INPUT_CHANGED",
+      "coverage_state": "IMPLEMENTED",
+      "evidence": ["tests/test_toctou_and_fault_injection.py::test_growth_during_bounded_read_is_input_changed"]
+    },
+    {
+      "id": "RB-TOCTOU-LATE-UNLISTED-001",
+      "family": "toctou",
+      "injection": "Add an unlisted payload after the initial closed-world inventory and after listed payload hashing.",
+      "profiles": ["P1", "P3"],
+      "expected_decision": "REJECT",
+      "expected_reason": "INPUT_CHANGED",
+      "coverage_state": "IMPLEMENTED",
+      "evidence": ["tests/test_toctou_and_fault_injection.py::test_final_rescan_rejects_file_added_after_hashing"]
+    },
+    {
+      "id": "RB-TOCTOU-POSTHASH-MUTATION-001",
+      "family": "toctou",
+      "injection": "Mutate a previously hashed payload before the verifier's final inventory rescan.",
+      "profiles": ["P1", "P3"],
+      "expected_decision": "REJECT",
+      "expected_reason": "INPUT_CHANGED",
+      "coverage_state": "IMPLEMENTED",
+      "evidence": ["tests/test_toctou_and_fault_injection.py::test_final_rescan_rejects_payload_changed_after_its_hash"]
+    },
+    {
+      "id": "RB-TOCTOU-DIRECTORY-SWAP-001",
+      "family": "toctou",
+      "injection": "Replace an observed intermediate payload directory before descriptor-relative traversal opens it.",
+      "profiles": ["P1", "P3"],
+      "expected_decision": "REJECT",
+      "expected_reason": "INPUT_CHANGED",
+      "coverage_state": "IMPLEMENTED",
+      "evidence": ["tests/test_toctou_and_fault_injection.py::test_intermediate_directory_swap_is_input_changed"]
+    },
+    {
+      "id": "RB-TOCTOU-BUNDLE-SWAP-001",
+      "family": "toctou",
+      "injection": "Replace or mutate the attestation bundle between metadata observation and bounded snapshot.",
+      "profiles": ["P2", "P3"],
+      "expected_decision": "REJECT",
+      "expected_reason": "INPUT_CHANGED",
+      "coverage_state": "IMPLEMENTED",
+      "evidence": ["tests/test_toctou_and_fault_injection.py::test_attestation_bundle_swap_is_input_changed"]
+    },
+    {
+      "id": "RB-TOCTOU-TRUST-ROOT-SWAP-001",
+      "family": "toctou",
+      "injection": "Replace the trusted-root file between observation and the private production-verifier snapshot.",
+      "profiles": ["P2", "P3"],
+      "expected_decision": "REJECT",
+      "expected_reason": "INPUT_CHANGED",
+      "coverage_state": "IMPLEMENTED",
+      "evidence": ["tests/test_toctou_and_fault_injection.py::test_trusted_root_swap_is_input_changed"]
+    },
+    {
+      "id": "RB-FAULT-PAYLOAD-IO-001",
+      "family": "fault_injection",
+      "injection": "Raise an unexpected operating-system read failure during payload hashing.",
+      "profiles": ["P1", "P3"],
+      "expected_decision": "ERROR",
+      "expected_reason": "INTERNAL_ERROR",
+      "coverage_state": "IMPLEMENTED",
+      "evidence": ["tests/test_toctou_and_fault_injection.py::test_injected_hash_io_failure_maps_to_error_not_rejection"]
+    },
+    {
+      "id": "RB-FAULT-POLICY-MISSING-001",
+      "family": "fault_injection",
+      "injection": "Remove the trusted policy before verifier startup.",
+      "profiles": ["P0", "P1", "P2", "P3"],
+      "expected_decision": "ERROR",
+      "expected_reason": "INTERNAL_ERROR",
+      "coverage_state": "IMPLEMENTED",
+      "evidence": ["tests/test_toctou_and_fault_injection.py::test_missing_trust_policy_produces_schema_valid_error_record"]
+    },
+    {
+      "id": "RB-FAULT-SCHEMA-MISSING-001",
+      "family": "fault_injection",
+      "injection": "Remove the trusted manifest schema before P1/P3 validation.",
+      "profiles": ["P1", "P3"],
+      "expected_decision": "ERROR",
+      "expected_reason": "INTERNAL_ERROR",
+      "coverage_state": "IMPLEMENTED",
+      "evidence": ["tests/test_toctou_and_fault_injection.py::test_missing_manifest_schema_produces_schema_valid_error_record"]
+    },
+    {
+      "id": "RB-FAULT-CRYPTO-BACKEND-001",
+      "family": "fault_injection",
+      "injection": "Raise an unexpected exception inside the cryptographic backend after bounded input capture.",
+      "profiles": ["P2", "P3"],
+      "expected_decision": "ERROR",
+      "expected_reason": "INTERNAL_ERROR",
+      "coverage_state": "IMPLEMENTED",
+      "evidence": ["tests/test_toctou_and_fault_injection.py::test_injected_crypto_backend_failure_maps_to_error"]
+    },
+    {
+      "id": "RB-FAULT-GH-TIMEOUT-001",
+      "family": "fault_injection",
+      "injection": "Force the pinned GitHub CLI verification subprocess to exceed its frozen timeout.",
+      "profiles": ["P2", "P3"],
+      "expected_decision": "ERROR",
+      "expected_reason": "INTERNAL_ERROR",
+      "coverage_state": "IMPLEMENTED",
+      "evidence": ["tests/test_toctou_and_fault_injection.py::test_github_cli_timeout_is_tool_error_not_policy_rejection"]
+    }
+  ],
+  "non_claim": "Passing these scheduled interleavings does not prove freedom from every filesystem race. The final study requires isolated, read-only case extraction and reports the remaining mutable-filesystem assumption."
+}

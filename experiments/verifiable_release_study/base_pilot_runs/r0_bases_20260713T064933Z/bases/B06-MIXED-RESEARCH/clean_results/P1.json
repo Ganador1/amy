@@ -1,0 +1,42 @@
+{
+  "all_reasons": [
+    "OK"
+  ],
+  "case_id": "R0::B06-MIXED-RESEARCH::CLEAN",
+  "checks": {
+    "algorithm_policy": "NOT_REQUIRED",
+    "attestation_structure": "NOT_REQUIRED",
+    "bounded_input": "PASS",
+    "certificate_time": "NOT_REQUIRED",
+    "closed_world_inventory": "PASS",
+    "manifest_canonicality": "PASS",
+    "manifest_json_syntax": "PASS",
+    "manifest_schema": "PASS",
+    "path_safety": "PASS",
+    "payload_digests": "PASS",
+    "provenance_policy": "NOT_REQUIRED",
+    "signature_crypto": "NOT_REQUIRED",
+    "signer_policy": "NOT_REQUIRED",
+    "subject_binding": "NOT_REQUIRED",
+    "transparency": "NOT_REQUIRED"
+  },
+  "decision": "ACCEPT",
+  "details": {},
+  "ended_at": "2026-07-13T06:49:39.483237Z",
+  "implementation": {
+    "dirty": true,
+    "git_commit": "40663854cfc2a2cf8e8e828cc0ac7c031db58963",
+    "source_archive_sha256": "c2230f22030989d9a144fb17a3db5901dda0ffa40230b0dc6c9e04264502941a",
+    "version": "0.4.0.dev0"
+  },
+  "input": {
+    "attestation_sha256": null,
+    "case_archive_sha256": "240e33662bbdbaeb904a86d22b72b089204aed574bfed3520c0df1af931b2573",
+    "manifest_sha256": "9e9489777c4a98ad2ae96cb342d88ec6e5550427c99dd1571ebd8bc21a2e0d14",
+    "trust_policy_sha256": "f796d190478caa4fa52dfaf671704bacf87a6bdbf456dae91025984c117bd4d5"
+  },
+  "primary_reason": "OK",
+  "profile_id": "P1",
+  "schema_version": "0.3.0-draft",
+  "started_at": "2026-07-13T06:49:39.481824Z"
+}

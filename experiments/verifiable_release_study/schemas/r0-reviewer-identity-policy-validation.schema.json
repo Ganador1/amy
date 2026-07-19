@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Ganador1/amy/experiments/verifiable_release_study/schemas/r0-reviewer-identity-policy-validation.schema.json",
+  "title": "A.M.Y R0 reviewer-identity policy validation result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "valid",
+    "errors",
+    "policy_path",
+    "policy_sha256",
+    "policy_schema_path",
+    "policy_schema_sha256",
+    "validation_schema_path",
+    "validation_schema_sha256",
+    "source_ledger_sha256",
+    "validator_sha256",
+    "policy_status",
+    "source_basis_complete",
+    "security_floor_valid",
+    "selected_version_not_known_vulnerable",
+    "freeze_permitted",
+    "authentication_execution_permitted",
+    "decision",
+    "rg004_complete",
+    "read_scope",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "amy.r0-reviewer-identity-policy-validation.v1-draft"
+    },
+    "valid": {"type": "boolean"},
+    "errors": {
+      "type": "array",
+      "maxItems": 1000,
+      "items": {"type": "string", "minLength": 1, "maxLength": 10000}
+    },
+    "policy_path": {"type": "string", "minLength": 1},
+    "policy_sha256": {"$ref": "#/$defs/sha256"},
+    "policy_schema_path": {"type": "string", "minLength": 1},
+    "policy_schema_sha256": {"$ref": "#/$defs/sha256"},
+    "validation_schema_path": {"type": "string", "minLength": 1},
+    "validation_schema_sha256": {"$ref": "#/$defs/sha256"},
+    "source_ledger_sha256": {"$ref": "#/$defs/sha256"},
+    "validator_sha256": {"$ref": "#/$defs/sha256"},
+    "policy_status": {
+      "enum": [
+        "template_not_authorized_not_frozen",
+        "frozen_authorized_for_authentication_only"
+      ]
+    },
+    "source_basis_complete": {"type": "boolean"},
+    "security_floor_valid": {"type": "boolean"},
+    "selected_version_not_known_vulnerable": {"type": "boolean"},
+    "freeze_permitted": {"type": "boolean"},
+    "authentication_execution_permitted": {"type": "boolean"},
+    "decision": {"enum": ["NO-GO", "GO-FOR-AUTHENTICATION-ONLY"]},
+    "rg004_complete": {"const": false},
+    "read_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "network_used",
+        "signature_bundle_read",
+        "review_record_read",
+        "confirmatory_outputs_read",
+        "authentication_executed"
+      ],
+      "properties": {
+        "network_used": {"const": false},
+        "signature_bundle_read": {"const": false},
+        "review_record_read": {"const": false},
+        "confirmatory_outputs_read": {"const": false},
+        "authentication_executed": {"const": false}
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 20,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 20, "maxLength": 4000}
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"valid": {"const": true}},
+        "required": ["valid"]
+      },
+      "then": {
+        "properties": {"errors": {"maxItems": 0}}
+      }
+    },
+    {
+      "if": {
+        "properties": {"decision": {"const": "GO-FOR-AUTHENTICATION-ONLY"}},
+        "required": ["decision"]
+      },
+      "then": {
+        "properties": {
+          "valid": {"const": true},
+          "source_basis_complete": {"const": true},
+          "security_floor_valid": {"const": true},
+          "selected_version_not_known_vulnerable": {"const": true},
+          "freeze_permitted": {"const": true},
+          "authentication_execution_permitted": {"const": true}
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "byte_identical_after_canonicalization": true,
+  "classification": "same_environment_exploratory_replay",
+  "command_contract": "uv run --frozen python scripts/validate_axiom_audit.py",
+  "errors": [],
+  "fresh_canonical_json_sha256": "a5fcb2b79a73c71840889aa90a3f22db28d7f72f52d05991b1178113ae01e74c",
+  "limitations": [
+    "The replay uses the same host and dirty worktree, not an independent environment.",
+    "Canonical byte identity establishes deterministic replay on this snapshot, not scientific correctness of artifact contents.",
+    "The audit does not execute producers or recover historical source, dependency, service, or model states."
+  ],
+  "record_path": "audit/AXIOM_DEEP_AUDIT_RAW_2026-07-13.json",
+  "retained_canonical_json_sha256": "a5fcb2b79a73c71840889aa90a3f22db28d7f72f52d05991b1178113ae01e74c",
+  "retained_pretty_json_sha256": "6cf3f6911bcc267a00b40d611f0023a639571d7b8620cb73719d12b9c539f2ea",
+  "scanner_sha256": "f7bb62b773e65d7797ca274d58884e5f0ddec42f08cbbe61ae3cafddfef07db6",
+  "schema_version": "axiom.integrity-audit-replay-validation.v1",
+  "summary": {
+    "authenticated_scientific_artifacts": 0,
+    "axiom_named_json_files": 14,
+    "failed_upstream_but_final_true": 3,
+    "literal_source_subtree_matches": 22,
+    "scientific_or_claim_artifacts": 11,
+    "zero_data_positive_reports": 2
+  },
+  "valid": true
+}

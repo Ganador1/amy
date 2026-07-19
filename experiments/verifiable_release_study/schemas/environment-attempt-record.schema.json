@@ -1,0 +1,775 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Ganador1/amy/experiments/verifiable_release_study/schemas/environment-attempt-record.schema.json",
+  "title": "A.M.Y environment-attempt metadata record",
+  "description": "Closed metadata for one retained environment attempt before selection or result decoding. It contains immutable hash bindings, exact classifier signals, a hash-chained outcome guard, and raw-artifact identities rather than result bytes. These local records do not prove network isolation, provider authenticity, operator identity, independence, or external time order.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "classification",
+    "attempt_id",
+    "environment_id",
+    "attempt_number",
+    "attempt_state",
+    "bindings",
+    "attempt_two_authorization",
+    "clock",
+    "isolation",
+    "process",
+    "signals",
+    "outcome_guard",
+    "raw_artifacts",
+    "boundaries",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "amy.environment-attempt-record.v1-draft"
+    },
+    "classification": {
+      "$ref": "#/$defs/recordClassification"
+    },
+    "attempt_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "environment_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "attempt_number": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 16
+    },
+    "attempt_state": {
+      "enum": [
+        "PRESTART_ABORTED",
+        "STARTED_INCOMPLETE",
+        "COMPLETED"
+      ]
+    },
+    "bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_execution_policy_sha256",
+        "release_lineage_contract_sha256",
+        "registered_input_manifest_sha256",
+        "command_plan_sha256",
+        "runner_sha256",
+        "attempt_record_schema_sha256"
+      ],
+      "properties": {
+        "run_execution_policy_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "release_lineage_contract_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "registered_input_manifest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "command_plan_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "runner_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "attempt_record_schema_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "attempt_two_authorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Attempt one uses NOT_APPLICABLE with a null hash. An authorized attempt two binds the SHA-256 of the persisted attempt-one classification; an observed unauthorized attempt two is retained as MISSING_UNAUTHORIZED with a null hash.",
+      "required": [
+        "status",
+        "attempt_one_classification_sha256"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "NOT_APPLICABLE",
+            "AUTHORIZED",
+            "MISSING_UNAUTHORIZED"
+          ]
+        },
+        "attempt_one_classification_sha256": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "clock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clock_id",
+        "resolution_ns",
+        "started_continuous_us",
+        "ended_continuous_us",
+        "elapsed_us",
+        "started_wall_utc",
+        "ended_wall_utc"
+      ],
+      "properties": {
+        "clock_id": {
+          "$ref": "#/$defs/continuousClockId"
+        },
+        "resolution_ns": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "started_continuous_us": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "ended_continuous_us": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "elapsed_us": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "started_wall_utc": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "ended_wall_utc": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "isolation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "shell_used",
+        "start_new_session",
+        "close_fds",
+        "stdin_devnull",
+        "environment_allowlist_sha256",
+        "cwd_identity_sha256",
+        "network_isolation_verified_by_runner",
+        "filesystem_sandbox_verified_by_runner"
+      ],
+      "properties": {
+        "shell_used": {
+          "const": false
+        },
+        "start_new_session": {
+          "const": true
+        },
+        "close_fds": {
+          "const": true
+        },
+        "stdin_devnull": {
+          "const": true
+        },
+        "environment_allowlist_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "cwd_identity_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "network_isolation_verified_by_runner": {
+          "const": false
+        },
+        "filesystem_sandbox_verified_by_runner": {
+          "const": false
+        }
+      }
+    },
+    "process": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "spawned",
+        "pid",
+        "exit_code",
+        "exit_signal",
+        "timeout_triggered",
+        "output_limit_exceeded",
+        "sigterm_sent",
+        "sigkill_sent",
+        "reaped"
+      ],
+      "properties": {
+        "spawned": {
+          "type": "boolean"
+        },
+        "pid": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "exit_code": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "exit_signal": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "timeout_triggered": {
+          "type": "boolean"
+        },
+        "output_limit_exceeded": {
+          "type": "boolean"
+        },
+        "sigterm_sent": {
+          "type": "boolean"
+        },
+        "sigkill_sent": {
+          "type": "boolean"
+        },
+        "reaped": {
+          "type": "boolean"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "spawned"
+            ],
+            "properties": {
+              "spawned": {
+                "const": false
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "pid": {
+                "type": "null"
+              },
+              "exit_code": {
+                "type": "null"
+              },
+              "exit_signal": {
+                "type": "null"
+              },
+              "timeout_triggered": {
+                "const": false
+              },
+              "output_limit_exceeded": {
+                "const": false
+              },
+              "sigterm_sent": {
+                "const": false
+              },
+              "sigkill_sent": {
+                "const": false
+              },
+              "reaped": {
+                "const": false
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "pid": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "reaped": {
+                "const": true
+              }
+            },
+            "oneOf": [
+              {
+                "properties": {
+                  "exit_code": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "exit_signal": {
+                    "type": "null"
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "exit_code": {
+                    "type": "null"
+                  },
+                  "exit_signal": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "sigkill_sent"
+            ],
+            "properties": {
+              "sigkill_sent": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "sigterm_sent": {
+                "const": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    "signals": {
+      "$ref": "#/$defs/predecodeSignals"
+    },
+    "outcome_guard": {
+      "$ref": "#/$defs/outcomeGuard"
+    },
+    "raw_artifacts": {
+      "type": "array",
+      "maxItems": 100000,
+      "uniqueItems": true,
+      "description": "Hash-only inventory of retained raw files; no result bytes are embedded in this metadata record.",
+      "items": {
+        "$ref": "#/$defs/rawArtifactHash"
+      }
+    },
+    "boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_finalized_before_result_decoding",
+        "selection_not_yet_performed",
+        "confirmatory_outcomes_read_by_runner",
+        "oracle_read_by_runner",
+        "independent_review_performed"
+      ],
+      "properties": {
+        "record_finalized_before_result_decoding": {
+          "const": true
+        },
+        "selection_not_yet_performed": {
+          "const": true
+        },
+        "confirmatory_outcomes_read_by_runner": {
+          "const": false
+        },
+        "oracle_read_by_runner": {
+          "const": false
+        },
+        "independent_review_performed": {
+          "const": false
+        }
+      }
+    },
+    "limitations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "network_absence_proven",
+        "provider_signals_authenticated",
+        "external_outcome_access_excluded",
+        "operator_identity_authenticated",
+        "cryptographic_signature_verified"
+      ],
+      "properties": {
+        "network_absence_proven": {
+          "const": false
+        },
+        "provider_signals_authenticated": {
+          "const": false
+        },
+        "external_outcome_access_excluded": {
+          "const": false
+        },
+        "operator_identity_authenticated": {
+          "const": false
+        },
+        "cryptographic_signature_verified": {
+          "const": false
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": ["attempt_state"],
+        "properties": {
+          "attempt_state": {"const": "PRESTART_ABORTED"}
+        }
+      },
+      "then": {
+        "properties": {
+          "process": {
+            "properties": {
+              "spawned": {"const": false},
+              "pid": {"type": "null"},
+              "exit_code": {"type": "null"},
+              "exit_signal": {"type": "null"},
+              "reaped": {"const": false}
+            }
+          },
+          "signals": {
+            "properties": {
+              "run_started_marker": {"const": false},
+              "case_execution_started": {"const": false},
+              "run_completed_marker": {"const": false},
+              "terminal_scientific_event_count": {"const": 0},
+              "scientific_intent_event_count": {"const": 0}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "attempt_number"
+        ],
+        "properties": {
+          "attempt_number": {
+            "const": 1
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "attempt_two_authorization": {
+            "properties": {
+              "status": {
+                "const": "NOT_APPLICABLE"
+              },
+              "attempt_one_classification_sha256": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      },
+      "else": {
+        "if": {
+          "properties": {
+            "attempt_number": {
+              "const": 2
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "attempt_two_authorization": {
+              "properties": {
+                "status": {
+                  "enum": [
+                    "AUTHORIZED",
+                    "MISSING_UNAUTHORIZED"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "else": {
+          "properties": {
+            "attempt_two_authorization": {
+              "properties": {
+                "status": {
+                  "const": "MISSING_UNAUTHORIZED"
+                },
+                "attempt_one_classification_sha256": {
+                  "type": "null"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "attempt_two_authorization": {
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "const": "AUTHORIZED"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "attempt_two_authorization": {
+            "properties": {
+              "attempt_one_classification_sha256": {
+                "$ref": "#/$defs/sha256"
+              }
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "attempt_two_authorization": {
+            "properties": {
+              "attempt_one_classification_sha256": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "recordClassification": {
+      "enum": [
+        "contract_test_no_confirmatory_evidence",
+        "confirmatory_R1",
+        "external_reproduction"
+      ]
+    },
+    "continuousClockId": {
+      "enum": [
+        "linux_CLOCK_BOOTTIME",
+        "darwin_mach_continuous_time"
+      ]
+    },
+    "predecodeSignals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider_job_id",
+        "provider_job_state",
+        "external_cancellation_actor",
+        "host_heartbeat_state",
+        "image_pull_status",
+        "input_acquisition_status",
+        "input_lock_completed",
+        "preflight_storage_probe",
+        "run_started_marker",
+        "case_execution_started",
+        "run_completed_marker",
+        "terminal_scientific_event_count",
+        "scientific_intent_event_count",
+        "outcomes_exposed_to_selection_process",
+        "result_bytes_decoded_before_selection",
+        "oracle_join_performed_before_selection",
+        "operator_cancellation_requested",
+        "input_hash_mismatch"
+      ],
+      "properties": {
+        "provider_job_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "provider_job_state": {
+          "enum": [
+            "unknown",
+            "not_scheduled",
+            "runner_unavailable",
+            "queued",
+            "running",
+            "runner_lost",
+            "provider_cancelled",
+            "completed",
+            "failed"
+          ]
+        },
+        "external_cancellation_actor": {
+          "enum": [
+            "none",
+            "provider",
+            "operator",
+            "unknown"
+          ]
+        },
+        "host_heartbeat_state": {
+          "enum": [
+            "not_started",
+            "present",
+            "lost",
+            "unknown"
+          ]
+        },
+        "image_pull_status": {
+          "enum": [
+            "not_started",
+            "in_progress",
+            "succeeded",
+            "failed",
+            "unknown"
+          ]
+        },
+        "input_acquisition_status": {
+          "enum": [
+            "not_started",
+            "in_progress",
+            "complete",
+            "failed",
+            "unknown"
+          ]
+        },
+        "input_lock_completed": {
+          "type": "boolean"
+        },
+        "preflight_storage_probe": {
+          "enum": [
+            "not_run",
+            "passed",
+            "failed",
+            "unknown"
+          ]
+        },
+        "run_started_marker": {
+          "type": "boolean"
+        },
+        "case_execution_started": {
+          "type": "boolean"
+        },
+        "run_completed_marker": {
+          "type": "boolean"
+        },
+        "terminal_scientific_event_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "scientific_intent_event_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "outcomes_exposed_to_selection_process": {
+          "type": "boolean"
+        },
+        "result_bytes_decoded_before_selection": {
+          "type": "boolean"
+        },
+        "oracle_join_performed_before_selection": {
+          "type": "boolean"
+        },
+        "operator_cancellation_requested": {
+          "type": "boolean"
+        },
+        "input_hash_mismatch": {
+          "type": "boolean"
+        }
+      }
+    },
+    "outcomeGuard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "guard_epoch_id",
+        "checkpoint_sequence",
+        "log_head_sha256",
+        "scientific_intent_event_count",
+        "result_decode_event_count",
+        "oracle_join_event_count",
+        "human_outcome_read_event_count",
+        "decode_capability_released"
+      ],
+      "properties": {
+        "guard_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9._-]+$"
+        },
+        "checkpoint_sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "log_head_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "scientific_intent_event_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "result_decode_event_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "oracle_join_event_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "human_outcome_read_event_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "decode_capability_released": {
+          "type": "boolean"
+        }
+      }
+    },
+    "rawArtifactHash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "role",
+        "bytes",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096,
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\u0000]+$"
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9._-]+$"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    }
+  }
+}

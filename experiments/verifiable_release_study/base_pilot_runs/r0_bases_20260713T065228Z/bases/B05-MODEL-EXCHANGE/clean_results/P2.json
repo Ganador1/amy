@@ -1,0 +1,42 @@
+{
+  "all_reasons": [
+    "OK"
+  ],
+  "case_id": "R0-B05-MODEL-EXCHANGE-CLEAN",
+  "checks": {
+    "algorithm_policy": "PASS",
+    "attestation_structure": "PASS",
+    "bounded_input": "PASS",
+    "certificate_time": "PASS",
+    "closed_world_inventory": "NOT_REQUIRED",
+    "manifest_canonicality": "NOT_REQUIRED",
+    "manifest_json_syntax": "NOT_REQUIRED",
+    "manifest_schema": "NOT_REQUIRED",
+    "path_safety": "NOT_REQUIRED",
+    "payload_digests": "NOT_REQUIRED",
+    "provenance_policy": "NOT_REQUIRED",
+    "signature_crypto": "PASS",
+    "signer_policy": "PASS",
+    "subject_binding": "PASS",
+    "transparency": "PASS"
+  },
+  "decision": "ACCEPT",
+  "details": {},
+  "ended_at": "2026-07-13T06:52:34.416177Z",
+  "implementation": {
+    "dirty": true,
+    "git_commit": "40663854cfc2a2cf8e8e828cc0ac7c031db58963",
+    "source_archive_sha256": "1477628425ab6ecd171f46d70b9a1725e72aa270fca680b22baf368469f6a861",
+    "version": "0.4.0.dev0"
+  },
+  "input": {
+    "attestation_sha256": "41da08234137dd54bd2d571c19bf2d6a1e23b849b566bb201fc0a9cfaa53b4a5",
+    "case_archive_sha256": "f4e539bcaeb7cf38460e597071d935fafee7fdc72c0adb648d19ee5c68f6a184",
+    "manifest_sha256": "7bafc7494784073545a1054bebed3b0ef6d7bda0a408b4d7f35ff8b08ee9d1a5",
+    "trust_policy_sha256": "f796d190478caa4fa52dfaf671704bacf87a6bdbf456dae91025984c117bd4d5"
+  },
+  "primary_reason": "OK",
+  "profile_id": "P2",
+  "schema_version": "0.3.0-draft",
+  "started_at": "2026-07-13T06:52:34.415344Z"
+}

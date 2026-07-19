@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Ganador1/amy/experiments/verifiable_release_study/schemas/artifact-retention-policy.schema.json",
+  "title": "A.M.Y retained-artifact policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "classification",
+    "tree_hash_algorithm",
+    "retained_roots",
+    "artifacts",
+    "boundaries"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "amy.artifact-retention-policy.v1"
+    },
+    "classification": {
+      "const": "retention_and_distribution_policy_not_scientific_evidence"
+    },
+    "tree_hash_algorithm": {
+      "const": "sha256-rfc8785-member-tree-v1"
+    },
+    "retained_roots": {
+      "type": "array",
+      "minItems": 7,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/safePath"
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/artifactPolicy"
+      }
+    },
+    "boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status_is_scientific_validity",
+        "tree_hash_is_authentication",
+        "source_git_is_publication",
+        "public_packet_is_authorization",
+        "historical_bytes_may_be_rewritten"
+      ],
+      "properties": {
+        "status_is_scientific_validity": {
+          "const": false
+        },
+        "tree_hash_is_authentication": {
+          "const": false
+        },
+        "source_git_is_publication": {
+          "const": false
+        },
+        "public_packet_is_authorization": {
+          "const": false
+        },
+        "historical_bytes_may_be_rewritten": {
+          "const": false
+        }
+      }
+    }
+  },
+  "$defs": {
+    "safePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"
+    },
+    "validator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "path",
+        "invocation"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "executable",
+            "pytest",
+            "retention_only"
+          ]
+        },
+        "path": {
+          "$ref": "#/$defs/safePath"
+        },
+        "invocation": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 2000
+        }
+      }
+    },
+    "localCommitment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tree_sha256",
+        "member_count",
+        "byte_count",
+        "non_git_member_count",
+        "absolute_path_count"
+      ],
+      "properties": {
+        "tree_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "member_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "byte_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "non_git_member_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "absolute_path_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "artifactPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "family",
+        "path",
+        "kind",
+        "status",
+        "validator",
+        "reason",
+        "source_git",
+        "public_packet"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^ART-[A-Z0-9-]+$"
+        },
+        "family": {
+          "enum": [
+            "audit",
+            "pilot_run",
+            "base_pilot_run",
+            "selected_profile_base_run",
+            "production_pilot_run",
+            "robustness_run",
+            "review"
+          ]
+        },
+        "path": {
+          "$ref": "#/$defs/safePath"
+        },
+        "kind": {
+          "enum": [
+            "file",
+            "directory"
+          ]
+        },
+        "status": {
+          "enum": [
+            "active",
+            "historical_valid",
+            "historical_invalid",
+            "superseded",
+            "local_only"
+          ]
+        },
+        "validator": {
+          "$ref": "#/$defs/validator"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 20,
+          "maxLength": 4000
+        },
+        "source_git": {
+          "type": "boolean"
+        },
+        "public_packet": {
+          "type": "boolean"
+        },
+        "local_commitment": {
+          "$ref": "#/$defs/localCommitment"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "source_git": {
+                "const": false
+              }
+            },
+            "required": [
+              "source_git"
+            ]
+          },
+          "then": {
+            "required": [
+              "local_commitment"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": [
+                "local_commitment"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

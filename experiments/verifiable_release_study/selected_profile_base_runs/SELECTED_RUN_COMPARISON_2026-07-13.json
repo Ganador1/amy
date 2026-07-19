@@ -1,0 +1,132 @@
+{
+  "base_archive_and_result_inventories_identical": true,
+  "base_comparisons": [
+    {
+      "base_id": "B01-TABULAR",
+      "compared_fields": [
+        "archive_bytes",
+        "archive_sha256",
+        "attestation_sha256",
+        "blueprint_payload_count",
+        "clean_profile_results",
+        "injected_fixture_payload_count",
+        "manifest_sha256",
+        "release_kind",
+        "total_payload_count",
+        "tree_sha256"
+      ],
+      "identical": true,
+      "mismatched_fields": []
+    },
+    {
+      "base_id": "B02-PAPER",
+      "compared_fields": [
+        "archive_bytes",
+        "archive_sha256",
+        "attestation_sha256",
+        "blueprint_payload_count",
+        "clean_profile_results",
+        "injected_fixture_payload_count",
+        "manifest_sha256",
+        "release_kind",
+        "total_payload_count",
+        "tree_sha256"
+      ],
+      "identical": true,
+      "mismatched_fields": []
+    },
+    {
+      "base_id": "B03-MODEL",
+      "compared_fields": [
+        "archive_bytes",
+        "archive_sha256",
+        "attestation_sha256",
+        "blueprint_payload_count",
+        "clean_profile_results",
+        "injected_fixture_payload_count",
+        "manifest_sha256",
+        "release_kind",
+        "total_payload_count",
+        "tree_sha256"
+      ],
+      "identical": true,
+      "mismatched_fields": []
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "compared_fields": [
+        "archive_bytes",
+        "archive_sha256",
+        "attestation_sha256",
+        "blueprint_payload_count",
+        "clean_profile_results",
+        "injected_fixture_payload_count",
+        "manifest_sha256",
+        "release_kind",
+        "total_payload_count",
+        "tree_sha256"
+      ],
+      "identical": true,
+      "mismatched_fields": []
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "compared_fields": [
+        "archive_bytes",
+        "archive_sha256",
+        "attestation_sha256",
+        "blueprint_payload_count",
+        "clean_profile_results",
+        "injected_fixture_payload_count",
+        "manifest_sha256",
+        "release_kind",
+        "total_payload_count",
+        "tree_sha256"
+      ],
+      "identical": true,
+      "mismatched_fields": []
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "compared_fields": [
+        "archive_bytes",
+        "archive_sha256",
+        "attestation_sha256",
+        "blueprint_payload_count",
+        "clean_profile_results",
+        "injected_fixture_payload_count",
+        "manifest_sha256",
+        "release_kind",
+        "total_payload_count",
+        "tree_sha256"
+      ],
+      "identical": true,
+      "mismatched_fields": []
+    }
+  ],
+  "base_count": 6,
+  "classification": "same_environment_R0_release_output_comparison",
+  "compared_file_count": 101,
+  "confirmatory_cases_generated": false,
+  "confirmatory_outcomes_read": false,
+  "errors": [],
+  "first_run": "selected_profile_base_runs/r0_selected_bases_20260713T095915Z",
+  "first_summary_sha256": "94d01c3ba3a1a4e0a56d99b7194ff3127c5678f09410a7a1e5ce4ebeb4d15e6b",
+  "first_validation_sha256": "d8165995f0df0ea116f2135110d1c158bf148707ac7666b8dc65cd61cb072823",
+  "limitations": [
+    "This is a same-environment byte comparison, not independent reproduction.",
+    "Identical controlled-fixture outputs do not establish production Sigstore conformance."
+  ],
+  "production_sigstore_conformance": false,
+  "reason_for_second_run": "The validator terminology was narrowed from independent to separate same-worktree replay; the first run was retained rather than overwritten.",
+  "schema_version": "amy.selected-profile-base-run-comparison.v1-draft",
+  "second_run": "selected_profile_base_runs/r0_selected_bases_20260713T101851Z",
+  "second_summary_sha256": "987be28d37cdc5219dabb36be8908087a08cbc35e99cdf749e8f182019cae4e8",
+  "second_validation_sha256": "d5f5767439de6c032704bed8b88e8f303a164af05a895f8ec826da700223d757",
+  "source_archive_sha256": {
+    "first": "84af1daab82ad987b291a753b5073f14e033c4cd7a215c63e8a0556aa98eff9e",
+    "identical": false,
+    "second": "5cca81bf9ae025e2e907b76857f1f98c458bb98ae04aaee32af9c3807989332f"
+  },
+  "valid": true
+}

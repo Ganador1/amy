@@ -1,0 +1,4357 @@
+{
+  "atomic_unit": "base_release_id × mutation_operator_id",
+  "candidate_unit_count": 204,
+  "catalog_fields_used": [
+    "cases[].id",
+    "cases[].family",
+    "cases[].kind",
+    "cases[].prerequisites"
+  ],
+  "classification": "R0_metadata_only_no_case_generation_or_execution",
+  "compatibility_counts": {
+    "COMPATIBLE": 174,
+    "NOT_COMPATIBLE": 6,
+    "PENDING": 24
+  },
+  "input_sha256": {
+    "attack_catalog": "409213b0660263467947dc611933352cea145a03d536224181d94a3107c8c46d",
+    "base_registry": "553352619f5b1f4e96b9ccc482070e0fba4398298ba15d9a27457698117dc015",
+    "base_run_validation": "f8f6ea6cf5c7e540a375960cf20d329f01fec6b59fb5478b8f4898a04c60bc5c",
+    "prerequisite_registry": "7bb7d65d24f38f648d4bcd198cdd66f2dfe32b810a3818a4c85fa8b7a5abe903"
+  },
+  "planned_if_all_pending_resolve_true": 198,
+  "rows": [
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "attestation_structure",
+      "operator_id": "ATTESTATION-MALFORMED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_attestation_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--ATTESTATION-MALFORMED-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "attestation_structure",
+      "operator_id": "ATTESTATION-MISSING-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_attestation_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--ATTESTATION-MISSING-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [
+        "dirty_build_field_or_invariant_frozen"
+      ],
+      "compatibility": "PENDING",
+      "operator_family": "provenance",
+      "operator_id": "BUILD-DIRTY-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "normative_policy",
+          "id": "dirty_build_field_or_invariant_frozen",
+          "state": "PENDING"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--BUILD-DIRTY-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "certificate_policy",
+      "operator_id": "CERTIFICATE-TIME-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "controlled_certificate_time_fixture_available",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authenticated_signing_time_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--CERTIFICATE-TIME-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "clean_control",
+      "operator_id": "CLEAN-001",
+      "operator_kind": "clean",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "base_release_valid_for_all_profiles",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--CLEAN-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "content_integrity",
+      "operator_id": "CONTENT-BITFLIP-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--CONTENT-BITFLIP-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "content_integrity",
+      "operator_id": "CONTENT-SAME-SIZE-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--CONTENT-SAME-SIZE-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "content_integrity",
+      "operator_id": "CONTENT-TRUNCATE-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--CONTENT-TRUNCATE-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "identity",
+      "operator_id": "IDENTITY-WORKFLOW-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "wrong_workflow_identity_fixture_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--IDENTITY-WORKFLOW-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "inventory",
+      "operator_id": "INVENTORY-EXTRA-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "payload_directory_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--INVENTORY-EXTRA-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "inventory",
+      "operator_id": "INVENTORY-MISSING-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_nested_regular_payload_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--INVENTORY-MISSING-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "inventory",
+      "operator_id": "INVENTORY-OMIT-ROLE-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "required_role_has_exactly_one_payload",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--INVENTORY-OMIT-ROLE-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-DUPLICATE-KEY-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--MANIFEST-DUPLICATE-KEY-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-MALFORMED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--MANIFEST-MALFORMED-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "required_input",
+      "operator_id": "MANIFEST-MISSING-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_manifest_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--MANIFEST-MISSING-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-NONCANONICAL-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--MANIFEST-NONCANONICAL-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-SCHEMA-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--MANIFEST-SCHEMA-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-SELF-HASH-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--MANIFEST-SELF-HASH-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [
+        "required_material_policy_frozen"
+      ],
+      "compatibility": "PENDING",
+      "operator_family": "provenance",
+      "operator_id": "MATERIAL-LOCK-MISMATCH-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "normative_policy",
+          "id": "required_material_policy_frozen",
+          "state": "PENDING"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--MATERIAL-LOCK-MISMATCH-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-DUPLICATE-NORMALIZED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--PATH-DUPLICATE-NORMALIZED-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-HARDLINK-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "required_environment_probes",
+          "id": "filesystem_supports_hardlink",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--PATH-HARDLINK-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-NONREGULAR-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "required_environment_probes",
+          "id": "filesystem_supports_fifo",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--PATH-NONREGULAR-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-PARENT-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--PATH-PARENT-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-SYMLINK-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "required_environment_probes",
+          "id": "filesystem_supports_symlink",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_exists",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--PATH-SYMLINK-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "provenance",
+      "operator_id": "PREDICATE-WRONG-TYPE-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--PREDICATE-WRONG-TYPE-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [
+        "manifest_size_limit_frozen"
+      ],
+      "compatibility": "PENDING",
+      "operator_family": "robustness",
+      "operator_id": "RESOURCE-MANIFEST-LIMIT-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "normative_policy",
+          "id": "manifest_size_limit_frozen",
+          "state": "PENDING"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--RESOURCE-MANIFEST-LIMIT-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "signature",
+      "operator_id": "SIGNATURE-ALGORITHM-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "unapproved_algorithm_fixture_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--SIGNATURE-ALGORITHM-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "signature",
+      "operator_id": "SIGNATURE-CORRUPT-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_signature_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--SIGNATURE-CORRUPT-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [
+        "source_revision_policy_frozen"
+      ],
+      "compatibility": "PENDING",
+      "operator_family": "provenance",
+      "operator_id": "SOURCE-WRONG-REVISION-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "normative_policy",
+          "id": "source_revision_policy_frozen",
+          "state": "PENDING"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--SOURCE-WRONG-REVISION-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "attestation_structure",
+      "operator_id": "STATEMENT-MALFORMED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "controlled_authorized_test_signer_available",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "valid_authenticated_outer_bundle_fixture_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--STATEMENT-MALFORMED-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "subject_binding",
+      "operator_id": "SUBJECT-REPLAY-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "second_valid_release_attestation_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--SUBJECT-REPLAY-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_authentication",
+      "operator_id": "SUBSTITUTION-COHERENT-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_authorized_attestation_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--SUBSTITUTION-COHERENT-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "identity",
+      "operator_id": "SUBSTITUTION-UNAUTHORIZED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "unauthorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--SUBSTITUTION-UNAUTHORIZED-001"
+    },
+    {
+      "base_id": "B01-TABULAR",
+      "base_release_kind": "benchmark_case",
+      "blocking_false": [
+        "public_keyless_profile_frozen"
+      ],
+      "blocking_pending": [],
+      "compatibility": "NOT_COMPATIBLE",
+      "operator_family": "transparency",
+      "operator_id": "TRANSPARENCY-MISSING-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "stratum_contract",
+          "id": "public_keyless_profile_frozen",
+          "state": "FALSE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "valid_transparency_material_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B01-TABULAR--TRANSPARENCY-MISSING-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "attestation_structure",
+      "operator_id": "ATTESTATION-MALFORMED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_attestation_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--ATTESTATION-MALFORMED-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "attestation_structure",
+      "operator_id": "ATTESTATION-MISSING-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_attestation_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--ATTESTATION-MISSING-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [
+        "dirty_build_field_or_invariant_frozen"
+      ],
+      "compatibility": "PENDING",
+      "operator_family": "provenance",
+      "operator_id": "BUILD-DIRTY-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "normative_policy",
+          "id": "dirty_build_field_or_invariant_frozen",
+          "state": "PENDING"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--BUILD-DIRTY-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "certificate_policy",
+      "operator_id": "CERTIFICATE-TIME-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "controlled_certificate_time_fixture_available",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authenticated_signing_time_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--CERTIFICATE-TIME-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "clean_control",
+      "operator_id": "CLEAN-001",
+      "operator_kind": "clean",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "base_release_valid_for_all_profiles",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--CLEAN-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "content_integrity",
+      "operator_id": "CONTENT-BITFLIP-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--CONTENT-BITFLIP-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "content_integrity",
+      "operator_id": "CONTENT-SAME-SIZE-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--CONTENT-SAME-SIZE-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "content_integrity",
+      "operator_id": "CONTENT-TRUNCATE-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--CONTENT-TRUNCATE-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "identity",
+      "operator_id": "IDENTITY-WORKFLOW-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "wrong_workflow_identity_fixture_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--IDENTITY-WORKFLOW-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "inventory",
+      "operator_id": "INVENTORY-EXTRA-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "payload_directory_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--INVENTORY-EXTRA-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "inventory",
+      "operator_id": "INVENTORY-MISSING-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_nested_regular_payload_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--INVENTORY-MISSING-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "inventory",
+      "operator_id": "INVENTORY-OMIT-ROLE-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "required_role_has_exactly_one_payload",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--INVENTORY-OMIT-ROLE-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-DUPLICATE-KEY-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--MANIFEST-DUPLICATE-KEY-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-MALFORMED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--MANIFEST-MALFORMED-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "required_input",
+      "operator_id": "MANIFEST-MISSING-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_manifest_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--MANIFEST-MISSING-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-NONCANONICAL-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--MANIFEST-NONCANONICAL-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-SCHEMA-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--MANIFEST-SCHEMA-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-SELF-HASH-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--MANIFEST-SELF-HASH-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [
+        "required_material_policy_frozen"
+      ],
+      "compatibility": "PENDING",
+      "operator_family": "provenance",
+      "operator_id": "MATERIAL-LOCK-MISMATCH-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "normative_policy",
+          "id": "required_material_policy_frozen",
+          "state": "PENDING"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--MATERIAL-LOCK-MISMATCH-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-DUPLICATE-NORMALIZED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--PATH-DUPLICATE-NORMALIZED-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-HARDLINK-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "required_environment_probes",
+          "id": "filesystem_supports_hardlink",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--PATH-HARDLINK-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-NONREGULAR-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "required_environment_probes",
+          "id": "filesystem_supports_fifo",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--PATH-NONREGULAR-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-PARENT-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--PATH-PARENT-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-SYMLINK-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "required_environment_probes",
+          "id": "filesystem_supports_symlink",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_exists",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--PATH-SYMLINK-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "provenance",
+      "operator_id": "PREDICATE-WRONG-TYPE-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--PREDICATE-WRONG-TYPE-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [
+        "manifest_size_limit_frozen"
+      ],
+      "compatibility": "PENDING",
+      "operator_family": "robustness",
+      "operator_id": "RESOURCE-MANIFEST-LIMIT-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "normative_policy",
+          "id": "manifest_size_limit_frozen",
+          "state": "PENDING"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--RESOURCE-MANIFEST-LIMIT-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "signature",
+      "operator_id": "SIGNATURE-ALGORITHM-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "unapproved_algorithm_fixture_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--SIGNATURE-ALGORITHM-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "signature",
+      "operator_id": "SIGNATURE-CORRUPT-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_signature_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--SIGNATURE-CORRUPT-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [
+        "source_revision_policy_frozen"
+      ],
+      "compatibility": "PENDING",
+      "operator_family": "provenance",
+      "operator_id": "SOURCE-WRONG-REVISION-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "normative_policy",
+          "id": "source_revision_policy_frozen",
+          "state": "PENDING"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--SOURCE-WRONG-REVISION-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "attestation_structure",
+      "operator_id": "STATEMENT-MALFORMED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "controlled_authorized_test_signer_available",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "valid_authenticated_outer_bundle_fixture_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--STATEMENT-MALFORMED-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "subject_binding",
+      "operator_id": "SUBJECT-REPLAY-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "second_valid_release_attestation_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--SUBJECT-REPLAY-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_authentication",
+      "operator_id": "SUBSTITUTION-COHERENT-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_authorized_attestation_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--SUBSTITUTION-COHERENT-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "identity",
+      "operator_id": "SUBSTITUTION-UNAUTHORIZED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "unauthorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--SUBSTITUTION-UNAUTHORIZED-001"
+    },
+    {
+      "base_id": "B02-PAPER",
+      "base_release_kind": "scientific_paper",
+      "blocking_false": [
+        "public_keyless_profile_frozen"
+      ],
+      "blocking_pending": [],
+      "compatibility": "NOT_COMPATIBLE",
+      "operator_family": "transparency",
+      "operator_id": "TRANSPARENCY-MISSING-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "stratum_contract",
+          "id": "public_keyless_profile_frozen",
+          "state": "FALSE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "valid_transparency_material_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B02-PAPER--TRANSPARENCY-MISSING-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "attestation_structure",
+      "operator_id": "ATTESTATION-MALFORMED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_attestation_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--ATTESTATION-MALFORMED-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "attestation_structure",
+      "operator_id": "ATTESTATION-MISSING-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_attestation_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--ATTESTATION-MISSING-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [
+        "dirty_build_field_or_invariant_frozen"
+      ],
+      "compatibility": "PENDING",
+      "operator_family": "provenance",
+      "operator_id": "BUILD-DIRTY-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "normative_policy",
+          "id": "dirty_build_field_or_invariant_frozen",
+          "state": "PENDING"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--BUILD-DIRTY-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "certificate_policy",
+      "operator_id": "CERTIFICATE-TIME-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "controlled_certificate_time_fixture_available",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authenticated_signing_time_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--CERTIFICATE-TIME-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "clean_control",
+      "operator_id": "CLEAN-001",
+      "operator_kind": "clean",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "base_release_valid_for_all_profiles",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--CLEAN-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "content_integrity",
+      "operator_id": "CONTENT-BITFLIP-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--CONTENT-BITFLIP-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "content_integrity",
+      "operator_id": "CONTENT-SAME-SIZE-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--CONTENT-SAME-SIZE-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "content_integrity",
+      "operator_id": "CONTENT-TRUNCATE-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--CONTENT-TRUNCATE-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "identity",
+      "operator_id": "IDENTITY-WORKFLOW-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "wrong_workflow_identity_fixture_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--IDENTITY-WORKFLOW-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "inventory",
+      "operator_id": "INVENTORY-EXTRA-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "payload_directory_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--INVENTORY-EXTRA-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "inventory",
+      "operator_id": "INVENTORY-MISSING-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_nested_regular_payload_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--INVENTORY-MISSING-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "inventory",
+      "operator_id": "INVENTORY-OMIT-ROLE-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "required_role_has_exactly_one_payload",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--INVENTORY-OMIT-ROLE-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-DUPLICATE-KEY-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--MANIFEST-DUPLICATE-KEY-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-MALFORMED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--MANIFEST-MALFORMED-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "required_input",
+      "operator_id": "MANIFEST-MISSING-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_manifest_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--MANIFEST-MISSING-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-NONCANONICAL-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--MANIFEST-NONCANONICAL-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-SCHEMA-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--MANIFEST-SCHEMA-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-SELF-HASH-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--MANIFEST-SELF-HASH-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [
+        "required_material_policy_frozen"
+      ],
+      "compatibility": "PENDING",
+      "operator_family": "provenance",
+      "operator_id": "MATERIAL-LOCK-MISMATCH-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "normative_policy",
+          "id": "required_material_policy_frozen",
+          "state": "PENDING"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--MATERIAL-LOCK-MISMATCH-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-DUPLICATE-NORMALIZED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--PATH-DUPLICATE-NORMALIZED-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-HARDLINK-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "required_environment_probes",
+          "id": "filesystem_supports_hardlink",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--PATH-HARDLINK-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-NONREGULAR-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "required_environment_probes",
+          "id": "filesystem_supports_fifo",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--PATH-NONREGULAR-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-PARENT-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--PATH-PARENT-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-SYMLINK-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "required_environment_probes",
+          "id": "filesystem_supports_symlink",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_exists",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--PATH-SYMLINK-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "provenance",
+      "operator_id": "PREDICATE-WRONG-TYPE-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--PREDICATE-WRONG-TYPE-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [
+        "manifest_size_limit_frozen"
+      ],
+      "compatibility": "PENDING",
+      "operator_family": "robustness",
+      "operator_id": "RESOURCE-MANIFEST-LIMIT-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "normative_policy",
+          "id": "manifest_size_limit_frozen",
+          "state": "PENDING"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--RESOURCE-MANIFEST-LIMIT-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "signature",
+      "operator_id": "SIGNATURE-ALGORITHM-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "unapproved_algorithm_fixture_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--SIGNATURE-ALGORITHM-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "signature",
+      "operator_id": "SIGNATURE-CORRUPT-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_signature_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--SIGNATURE-CORRUPT-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [
+        "source_revision_policy_frozen"
+      ],
+      "compatibility": "PENDING",
+      "operator_family": "provenance",
+      "operator_id": "SOURCE-WRONG-REVISION-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "normative_policy",
+          "id": "source_revision_policy_frozen",
+          "state": "PENDING"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--SOURCE-WRONG-REVISION-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "attestation_structure",
+      "operator_id": "STATEMENT-MALFORMED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "controlled_authorized_test_signer_available",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "valid_authenticated_outer_bundle_fixture_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--STATEMENT-MALFORMED-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "subject_binding",
+      "operator_id": "SUBJECT-REPLAY-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "second_valid_release_attestation_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--SUBJECT-REPLAY-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_authentication",
+      "operator_id": "SUBSTITUTION-COHERENT-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_authorized_attestation_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--SUBSTITUTION-COHERENT-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "identity",
+      "operator_id": "SUBSTITUTION-UNAUTHORIZED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "unauthorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--SUBSTITUTION-UNAUTHORIZED-001"
+    },
+    {
+      "base_id": "B03-MODEL",
+      "base_release_kind": "model_artifact",
+      "blocking_false": [
+        "public_keyless_profile_frozen"
+      ],
+      "blocking_pending": [],
+      "compatibility": "NOT_COMPATIBLE",
+      "operator_family": "transparency",
+      "operator_id": "TRANSPARENCY-MISSING-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "stratum_contract",
+          "id": "public_keyless_profile_frozen",
+          "state": "FALSE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "valid_transparency_material_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B03-MODEL--TRANSPARENCY-MISSING-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "attestation_structure",
+      "operator_id": "ATTESTATION-MALFORMED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_attestation_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--ATTESTATION-MALFORMED-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "attestation_structure",
+      "operator_id": "ATTESTATION-MISSING-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_attestation_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--ATTESTATION-MISSING-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [
+        "dirty_build_field_or_invariant_frozen"
+      ],
+      "compatibility": "PENDING",
+      "operator_family": "provenance",
+      "operator_id": "BUILD-DIRTY-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "normative_policy",
+          "id": "dirty_build_field_or_invariant_frozen",
+          "state": "PENDING"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--BUILD-DIRTY-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "certificate_policy",
+      "operator_id": "CERTIFICATE-TIME-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "controlled_certificate_time_fixture_available",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authenticated_signing_time_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--CERTIFICATE-TIME-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "clean_control",
+      "operator_id": "CLEAN-001",
+      "operator_kind": "clean",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "base_release_valid_for_all_profiles",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--CLEAN-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "content_integrity",
+      "operator_id": "CONTENT-BITFLIP-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--CONTENT-BITFLIP-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "content_integrity",
+      "operator_id": "CONTENT-SAME-SIZE-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--CONTENT-SAME-SIZE-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "content_integrity",
+      "operator_id": "CONTENT-TRUNCATE-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--CONTENT-TRUNCATE-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "identity",
+      "operator_id": "IDENTITY-WORKFLOW-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "wrong_workflow_identity_fixture_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--IDENTITY-WORKFLOW-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "inventory",
+      "operator_id": "INVENTORY-EXTRA-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "payload_directory_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--INVENTORY-EXTRA-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "inventory",
+      "operator_id": "INVENTORY-MISSING-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_nested_regular_payload_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--INVENTORY-MISSING-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "inventory",
+      "operator_id": "INVENTORY-OMIT-ROLE-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "required_role_has_exactly_one_payload",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--INVENTORY-OMIT-ROLE-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-DUPLICATE-KEY-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--MANIFEST-DUPLICATE-KEY-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-MALFORMED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--MANIFEST-MALFORMED-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "required_input",
+      "operator_id": "MANIFEST-MISSING-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_manifest_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--MANIFEST-MISSING-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-NONCANONICAL-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--MANIFEST-NONCANONICAL-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-SCHEMA-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--MANIFEST-SCHEMA-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-SELF-HASH-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--MANIFEST-SELF-HASH-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [
+        "required_material_policy_frozen"
+      ],
+      "compatibility": "PENDING",
+      "operator_family": "provenance",
+      "operator_id": "MATERIAL-LOCK-MISMATCH-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "normative_policy",
+          "id": "required_material_policy_frozen",
+          "state": "PENDING"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--MATERIAL-LOCK-MISMATCH-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-DUPLICATE-NORMALIZED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--PATH-DUPLICATE-NORMALIZED-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-HARDLINK-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "required_environment_probes",
+          "id": "filesystem_supports_hardlink",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--PATH-HARDLINK-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-NONREGULAR-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "required_environment_probes",
+          "id": "filesystem_supports_fifo",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--PATH-NONREGULAR-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-PARENT-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--PATH-PARENT-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-SYMLINK-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "required_environment_probes",
+          "id": "filesystem_supports_symlink",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_exists",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--PATH-SYMLINK-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "provenance",
+      "operator_id": "PREDICATE-WRONG-TYPE-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--PREDICATE-WRONG-TYPE-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [
+        "manifest_size_limit_frozen"
+      ],
+      "compatibility": "PENDING",
+      "operator_family": "robustness",
+      "operator_id": "RESOURCE-MANIFEST-LIMIT-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "normative_policy",
+          "id": "manifest_size_limit_frozen",
+          "state": "PENDING"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--RESOURCE-MANIFEST-LIMIT-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "signature",
+      "operator_id": "SIGNATURE-ALGORITHM-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "unapproved_algorithm_fixture_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--SIGNATURE-ALGORITHM-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "signature",
+      "operator_id": "SIGNATURE-CORRUPT-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_signature_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--SIGNATURE-CORRUPT-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [
+        "source_revision_policy_frozen"
+      ],
+      "compatibility": "PENDING",
+      "operator_family": "provenance",
+      "operator_id": "SOURCE-WRONG-REVISION-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "normative_policy",
+          "id": "source_revision_policy_frozen",
+          "state": "PENDING"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--SOURCE-WRONG-REVISION-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "attestation_structure",
+      "operator_id": "STATEMENT-MALFORMED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "controlled_authorized_test_signer_available",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "valid_authenticated_outer_bundle_fixture_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--STATEMENT-MALFORMED-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "subject_binding",
+      "operator_id": "SUBJECT-REPLAY-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "second_valid_release_attestation_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--SUBJECT-REPLAY-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_authentication",
+      "operator_id": "SUBSTITUTION-COHERENT-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_authorized_attestation_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--SUBSTITUTION-COHERENT-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "identity",
+      "operator_id": "SUBSTITUTION-UNAUTHORIZED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "unauthorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--SUBSTITUTION-UNAUTHORIZED-001"
+    },
+    {
+      "base_id": "B04-SOFTWARE",
+      "base_release_kind": "software_release",
+      "blocking_false": [
+        "public_keyless_profile_frozen"
+      ],
+      "blocking_pending": [],
+      "compatibility": "NOT_COMPATIBLE",
+      "operator_family": "transparency",
+      "operator_id": "TRANSPARENCY-MISSING-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "stratum_contract",
+          "id": "public_keyless_profile_frozen",
+          "state": "FALSE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "valid_transparency_material_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B04-SOFTWARE--TRANSPARENCY-MISSING-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "attestation_structure",
+      "operator_id": "ATTESTATION-MALFORMED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_attestation_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--ATTESTATION-MALFORMED-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "attestation_structure",
+      "operator_id": "ATTESTATION-MISSING-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_attestation_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--ATTESTATION-MISSING-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [
+        "dirty_build_field_or_invariant_frozen"
+      ],
+      "compatibility": "PENDING",
+      "operator_family": "provenance",
+      "operator_id": "BUILD-DIRTY-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "normative_policy",
+          "id": "dirty_build_field_or_invariant_frozen",
+          "state": "PENDING"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--BUILD-DIRTY-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "certificate_policy",
+      "operator_id": "CERTIFICATE-TIME-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "controlled_certificate_time_fixture_available",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authenticated_signing_time_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--CERTIFICATE-TIME-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "clean_control",
+      "operator_id": "CLEAN-001",
+      "operator_kind": "clean",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "base_release_valid_for_all_profiles",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--CLEAN-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "content_integrity",
+      "operator_id": "CONTENT-BITFLIP-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--CONTENT-BITFLIP-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "content_integrity",
+      "operator_id": "CONTENT-SAME-SIZE-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--CONTENT-SAME-SIZE-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "content_integrity",
+      "operator_id": "CONTENT-TRUNCATE-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--CONTENT-TRUNCATE-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "identity",
+      "operator_id": "IDENTITY-WORKFLOW-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "wrong_workflow_identity_fixture_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--IDENTITY-WORKFLOW-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "inventory",
+      "operator_id": "INVENTORY-EXTRA-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "payload_directory_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--INVENTORY-EXTRA-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "inventory",
+      "operator_id": "INVENTORY-MISSING-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_nested_regular_payload_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--INVENTORY-MISSING-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "inventory",
+      "operator_id": "INVENTORY-OMIT-ROLE-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "required_role_has_exactly_one_payload",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--INVENTORY-OMIT-ROLE-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-DUPLICATE-KEY-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--MANIFEST-DUPLICATE-KEY-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-MALFORMED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--MANIFEST-MALFORMED-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "required_input",
+      "operator_id": "MANIFEST-MISSING-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_manifest_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--MANIFEST-MISSING-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-NONCANONICAL-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--MANIFEST-NONCANONICAL-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-SCHEMA-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--MANIFEST-SCHEMA-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-SELF-HASH-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--MANIFEST-SELF-HASH-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [
+        "required_material_policy_frozen"
+      ],
+      "compatibility": "PENDING",
+      "operator_family": "provenance",
+      "operator_id": "MATERIAL-LOCK-MISMATCH-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "normative_policy",
+          "id": "required_material_policy_frozen",
+          "state": "PENDING"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--MATERIAL-LOCK-MISMATCH-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-DUPLICATE-NORMALIZED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--PATH-DUPLICATE-NORMALIZED-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-HARDLINK-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "required_environment_probes",
+          "id": "filesystem_supports_hardlink",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--PATH-HARDLINK-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-NONREGULAR-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "required_environment_probes",
+          "id": "filesystem_supports_fifo",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--PATH-NONREGULAR-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-PARENT-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--PATH-PARENT-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-SYMLINK-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "required_environment_probes",
+          "id": "filesystem_supports_symlink",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_exists",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--PATH-SYMLINK-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "provenance",
+      "operator_id": "PREDICATE-WRONG-TYPE-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--PREDICATE-WRONG-TYPE-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [
+        "manifest_size_limit_frozen"
+      ],
+      "compatibility": "PENDING",
+      "operator_family": "robustness",
+      "operator_id": "RESOURCE-MANIFEST-LIMIT-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "normative_policy",
+          "id": "manifest_size_limit_frozen",
+          "state": "PENDING"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--RESOURCE-MANIFEST-LIMIT-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "signature",
+      "operator_id": "SIGNATURE-ALGORITHM-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "unapproved_algorithm_fixture_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--SIGNATURE-ALGORITHM-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "signature",
+      "operator_id": "SIGNATURE-CORRUPT-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_signature_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--SIGNATURE-CORRUPT-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [
+        "source_revision_policy_frozen"
+      ],
+      "compatibility": "PENDING",
+      "operator_family": "provenance",
+      "operator_id": "SOURCE-WRONG-REVISION-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "normative_policy",
+          "id": "source_revision_policy_frozen",
+          "state": "PENDING"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--SOURCE-WRONG-REVISION-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "attestation_structure",
+      "operator_id": "STATEMENT-MALFORMED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "controlled_authorized_test_signer_available",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "valid_authenticated_outer_bundle_fixture_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--STATEMENT-MALFORMED-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "subject_binding",
+      "operator_id": "SUBJECT-REPLAY-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "second_valid_release_attestation_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--SUBJECT-REPLAY-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_authentication",
+      "operator_id": "SUBSTITUTION-COHERENT-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_authorized_attestation_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--SUBSTITUTION-COHERENT-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "identity",
+      "operator_id": "SUBSTITUTION-UNAUTHORIZED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "unauthorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--SUBSTITUTION-UNAUTHORIZED-001"
+    },
+    {
+      "base_id": "B05-MODEL-EXCHANGE",
+      "base_release_kind": "model_exchange",
+      "blocking_false": [
+        "public_keyless_profile_frozen"
+      ],
+      "blocking_pending": [],
+      "compatibility": "NOT_COMPATIBLE",
+      "operator_family": "transparency",
+      "operator_id": "TRANSPARENCY-MISSING-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "stratum_contract",
+          "id": "public_keyless_profile_frozen",
+          "state": "FALSE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "valid_transparency_material_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B05-MODEL-EXCHANGE--TRANSPARENCY-MISSING-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "attestation_structure",
+      "operator_id": "ATTESTATION-MALFORMED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_attestation_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--ATTESTATION-MALFORMED-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "attestation_structure",
+      "operator_id": "ATTESTATION-MISSING-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_attestation_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--ATTESTATION-MISSING-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [
+        "dirty_build_field_or_invariant_frozen"
+      ],
+      "compatibility": "PENDING",
+      "operator_family": "provenance",
+      "operator_id": "BUILD-DIRTY-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "normative_policy",
+          "id": "dirty_build_field_or_invariant_frozen",
+          "state": "PENDING"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--BUILD-DIRTY-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "certificate_policy",
+      "operator_id": "CERTIFICATE-TIME-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "controlled_certificate_time_fixture_available",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authenticated_signing_time_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--CERTIFICATE-TIME-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "clean_control",
+      "operator_id": "CLEAN-001",
+      "operator_kind": "clean",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "base_release_valid_for_all_profiles",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--CLEAN-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "content_integrity",
+      "operator_id": "CONTENT-BITFLIP-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--CONTENT-BITFLIP-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "content_integrity",
+      "operator_id": "CONTENT-SAME-SIZE-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--CONTENT-SAME-SIZE-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "content_integrity",
+      "operator_id": "CONTENT-TRUNCATE-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--CONTENT-TRUNCATE-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "identity",
+      "operator_id": "IDENTITY-WORKFLOW-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "wrong_workflow_identity_fixture_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--IDENTITY-WORKFLOW-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "inventory",
+      "operator_id": "INVENTORY-EXTRA-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "payload_directory_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--INVENTORY-EXTRA-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "inventory",
+      "operator_id": "INVENTORY-MISSING-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_nested_regular_payload_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--INVENTORY-MISSING-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "inventory",
+      "operator_id": "INVENTORY-OMIT-ROLE-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "required_role_has_exactly_one_payload",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--INVENTORY-OMIT-ROLE-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-DUPLICATE-KEY-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--MANIFEST-DUPLICATE-KEY-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-MALFORMED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--MANIFEST-MALFORMED-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "required_input",
+      "operator_id": "MANIFEST-MISSING-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_manifest_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--MANIFEST-MISSING-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-NONCANONICAL-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--MANIFEST-NONCANONICAL-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-SCHEMA-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--MANIFEST-SCHEMA-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_structure",
+      "operator_id": "MANIFEST-SELF-HASH-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--MANIFEST-SELF-HASH-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [
+        "required_material_policy_frozen"
+      ],
+      "compatibility": "PENDING",
+      "operator_family": "provenance",
+      "operator_id": "MATERIAL-LOCK-MISMATCH-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "normative_policy",
+          "id": "required_material_policy_frozen",
+          "state": "PENDING"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--MATERIAL-LOCK-MISMATCH-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-DUPLICATE-NORMALIZED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--PATH-DUPLICATE-NORMALIZED-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-HARDLINK-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "required_environment_probes",
+          "id": "filesystem_supports_hardlink",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--PATH-HARDLINK-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-NONREGULAR-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "required_environment_probes",
+          "id": "filesystem_supports_fifo",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--PATH-NONREGULAR-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-PARENT-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--PATH-PARENT-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "path_safety",
+      "operator_id": "PATH-SYMLINK-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "required_environment_probes",
+          "id": "filesystem_supports_symlink",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_exists",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--PATH-SYMLINK-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "provenance",
+      "operator_id": "PREDICATE-WRONG-TYPE-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--PREDICATE-WRONG-TYPE-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [
+        "manifest_size_limit_frozen"
+      ],
+      "compatibility": "PENDING",
+      "operator_family": "robustness",
+      "operator_id": "RESOURCE-MANIFEST-LIMIT-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "normative_policy",
+          "id": "manifest_size_limit_frozen",
+          "state": "PENDING"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--RESOURCE-MANIFEST-LIMIT-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "signature",
+      "operator_id": "SIGNATURE-ALGORITHM-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "unapproved_algorithm_fixture_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--SIGNATURE-ALGORITHM-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "signature",
+      "operator_id": "SIGNATURE-CORRUPT-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_signature_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--SIGNATURE-CORRUPT-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [
+        "source_revision_policy_frozen"
+      ],
+      "compatibility": "PENDING",
+      "operator_family": "provenance",
+      "operator_id": "SOURCE-WRONG-REVISION-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "normative_policy",
+          "id": "source_revision_policy_frozen",
+          "state": "PENDING"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "authorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--SOURCE-WRONG-REVISION-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "attestation_structure",
+      "operator_id": "STATEMENT-MALFORMED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "controlled_authorized_test_signer_available",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "valid_authenticated_outer_bundle_fixture_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--STATEMENT-MALFORMED-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "subject_binding",
+      "operator_id": "SUBJECT-REPLAY-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "second_valid_release_attestation_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--SUBJECT-REPLAY-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "manifest_authentication",
+      "operator_id": "SUBSTITUTION-COHERENT-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "valid_authorized_attestation_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--SUBSTITUTION-COHERENT-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [],
+      "blocking_pending": [],
+      "compatibility": "COMPATIBLE",
+      "operator_family": "identity",
+      "operator_id": "SUBSTITUTION-UNAUTHORIZED-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "base_blueprint_and_retained_clean_validation",
+          "id": "listed_regular_payload_size_at_least_1",
+          "state": "TRUE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "unauthorized_fixture_signer_available",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--SUBSTITUTION-UNAUTHORIZED-001"
+    },
+    {
+      "base_id": "B06-MIXED-RESEARCH",
+      "base_release_kind": "mixed_research_release",
+      "blocking_false": [
+        "public_keyless_profile_frozen"
+      ],
+      "blocking_pending": [],
+      "compatibility": "NOT_COMPATIBLE",
+      "operator_family": "transparency",
+      "operator_id": "TRANSPARENCY-MISSING-001",
+      "operator_kind": "target_invalid",
+      "prerequisites": [
+        {
+          "evidence_source": "stratum_contract",
+          "id": "public_keyless_profile_frozen",
+          "state": "FALSE"
+        },
+        {
+          "evidence_source": "controlled_fixture_contract",
+          "id": "valid_transparency_material_exists",
+          "state": "TRUE"
+        }
+      ],
+      "stratum": "S1-CONFORMANCE",
+      "unit_id": "B06-MIXED-RESEARCH--TRANSPARENCY-MISSING-001"
+    }
+  ],
+  "schema_version": "amy.compatibility-matrix.v1-draft",
+  "status": "draft_with_pending_prerequisites_not_frozen",
+  "stratum": "S1-CONFORMANCE",
+  "uses_observed_decisions": false,
+  "uses_profile_expectations": false,
+  "uses_target_decisions": false
+}

@@ -1,0 +1,501 @@
+{
+  "catalog_version": "0.3.0-draft",
+  "status": "pilot_only_not_frozen",
+  "target_contract_id": "TARGET-ATTESTED-SCIENTIFIC-RELEASE-0.3-DRAFT",
+  "decision_values": ["ACCEPT", "REJECT", "ERROR"],
+  "compatibility_value": "NOT_APPLICABLE",
+  "reason_code_registry": "REASON_CODES.json",
+  "profiles": [
+    {"id": "P0", "name": "P0-METADATA"},
+    {"id": "P1", "name": "P1-CHECKSUM"},
+    {"id": "P2", "name": "P2-SIGNATURE_ONLY"},
+    {"id": "P3", "name": "P3-ATTESTED_RELEASE"}
+  ],
+  "rules": [
+    "The target decision is independent of profile behavior.",
+    "Profile expectations test implementation conformance, not scientific truth.",
+    "Compatibility depends only on frozen structural prerequisites.",
+    "ERROR never satisfies an expected REJECT.",
+    "No boundary or availability case is included in primary target-miss denominators.",
+    "Each confirmatory mutation is applied once to every compatible frozen base bundle.",
+    "An authorized fixture signer is a controlled oracle-generation identity, not a modeled production attacker; it permits invalid authenticated structures to reach later checks."
+  ],
+  "cases": [
+    {
+      "id": "CLEAN-001",
+      "family": "clean_control",
+      "kind": "clean",
+      "operation": "No bytes or policy metadata are changed from a valid base release.",
+      "prerequisites": ["base_release_valid_for_all_profiles"],
+      "target_decision": "ACCEPT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P2": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P3": {"decision": "ACCEPT", "primary_reason": "OK"}
+      }
+    },
+    {
+      "id": "MANIFEST-MISSING-001",
+      "family": "required_input",
+      "kind": "target_invalid",
+      "operation": "Delete MANIFEST.jcs.json while retaining every other release object.",
+      "prerequisites": ["valid_manifest_exists"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "REJECT", "primary_reason": "INPUT_MISSING"},
+        "P1": {"decision": "REJECT", "primary_reason": "INPUT_MISSING"},
+        "P2": {"decision": "REJECT", "primary_reason": "INPUT_MISSING"},
+        "P3": {"decision": "REJECT", "primary_reason": "INPUT_MISSING"}
+      }
+    },
+    {
+      "id": "CONTENT-BITFLIP-001",
+      "family": "content_integrity",
+      "kind": "target_invalid",
+      "operation": "Flip one frozen bit in a non-empty listed regular payload; leave manifest and attestation bytes unchanged.",
+      "prerequisites": ["listed_regular_payload_size_at_least_1"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "REJECT", "primary_reason": "DIGEST_MISMATCH"},
+        "P2": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P3": {"decision": "REJECT", "primary_reason": "DIGEST_MISMATCH"}
+      }
+    },
+    {
+      "id": "CONTENT-TRUNCATE-001",
+      "family": "content_integrity",
+      "kind": "target_invalid",
+      "operation": "Remove the final byte from a non-empty listed regular payload; leave manifest and attestation bytes unchanged.",
+      "prerequisites": ["listed_regular_payload_size_at_least_1"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "REJECT", "primary_reason": "SIZE_MISMATCH"},
+        "P2": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P3": {"decision": "REJECT", "primary_reason": "SIZE_MISMATCH"}
+      }
+    },
+    {
+      "id": "CONTENT-SAME-SIZE-001",
+      "family": "content_integrity",
+      "kind": "target_invalid",
+      "operation": "Replace a listed payload with different bytes of exactly the same length; leave manifest and attestation bytes unchanged.",
+      "prerequisites": ["listed_regular_payload_size_at_least_1"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "REJECT", "primary_reason": "DIGEST_MISMATCH"},
+        "P2": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P3": {"decision": "REJECT", "primary_reason": "DIGEST_MISMATCH"}
+      }
+    },
+    {
+      "id": "INVENTORY-MISSING-001",
+      "family": "inventory",
+      "kind": "target_invalid",
+      "operation": "Delete one listed nested payload while leaving manifest and attestation bytes unchanged.",
+      "prerequisites": ["listed_nested_regular_payload_exists"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "REJECT", "primary_reason": "PAYLOAD_MISSING"},
+        "P2": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P3": {"decision": "REJECT", "primary_reason": "PAYLOAD_MISSING"}
+      }
+    },
+    {
+      "id": "INVENTORY-EXTRA-001",
+      "family": "inventory",
+      "kind": "target_invalid",
+      "operation": "Add one unlisted regular file below payload/ while leaving manifest and attestation bytes unchanged.",
+      "prerequisites": ["payload_directory_exists"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "REJECT", "primary_reason": "UNEXPECTED_FILE"},
+        "P2": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P3": {"decision": "REJECT", "primary_reason": "UNEXPECTED_FILE"}
+      }
+    },
+    {
+      "id": "INVENTORY-OMIT-ROLE-001",
+      "family": "inventory",
+      "kind": "target_invalid",
+      "operation": "Remove a required-role payload and its manifest entry, then create an authorized test attestation over the resulting manifest.",
+      "prerequisites": ["required_role_has_exactly_one_payload", "authorized_fixture_signer_available"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "REJECT", "primary_reason": "REQUIRED_ROLE_MISSING"},
+        "P2": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P3": {"decision": "REJECT", "primary_reason": "REQUIRED_ROLE_MISSING"}
+      }
+    },
+    {
+      "id": "SUBSTITUTION-COHERENT-001",
+      "family": "manifest_authentication",
+      "kind": "target_invalid",
+      "operation": "Replace one payload and coherently update manifest size and SHA-256 while retaining the original valid authorized attestation.",
+      "prerequisites": ["listed_regular_payload_size_at_least_1", "valid_authorized_attestation_exists"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P2": {"decision": "REJECT", "primary_reason": "SUBJECT_MISMATCH"},
+        "P3": {"decision": "REJECT", "primary_reason": "SUBJECT_MISMATCH"}
+      }
+    },
+    {
+      "id": "SUBSTITUTION-UNAUTHORIZED-001",
+      "family": "identity",
+      "kind": "target_invalid",
+      "operation": "Replace one payload, coherently update the manifest, and attach a cryptographically valid attestation from an identity absent from the frozen trust policy.",
+      "prerequisites": ["listed_regular_payload_size_at_least_1", "unauthorized_fixture_signer_available"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P2": {"decision": "REJECT", "primary_reason": "SIGNER_UNAUTHORIZED"},
+        "P3": {"decision": "REJECT", "primary_reason": "SIGNER_UNAUTHORIZED"}
+      }
+    },
+    {
+      "id": "MANIFEST-MALFORMED-001",
+      "family": "manifest_structure",
+      "kind": "target_invalid",
+      "operation": "Replace the manifest with malformed JSON and create an authorized test attestation whose subject matches those exact malformed bytes.",
+      "prerequisites": ["authorized_fixture_signer_available"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "REJECT", "primary_reason": "JSON_INVALID"},
+        "P1": {"decision": "REJECT", "primary_reason": "JSON_INVALID"},
+        "P2": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P3": {"decision": "REJECT", "primary_reason": "JSON_INVALID"}
+      }
+    },
+    {
+      "id": "MANIFEST-DUPLICATE-KEY-001",
+      "family": "manifest_structure",
+      "kind": "target_invalid",
+      "operation": "Insert a duplicate JSON object property and create an authorized test attestation over the exact bytes.",
+      "prerequisites": ["authorized_fixture_signer_available"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "REJECT", "primary_reason": "DUPLICATE_JSON_KEY"},
+        "P2": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P3": {"decision": "REJECT", "primary_reason": "DUPLICATE_JSON_KEY"}
+      }
+    },
+    {
+      "id": "MANIFEST-SCHEMA-001",
+      "family": "manifest_structure",
+      "kind": "target_invalid",
+      "operation": "Use syntactically valid canonical JSON that violates the frozen manifest schema and create an authorized test attestation over it.",
+      "prerequisites": ["authorized_fixture_signer_available"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "REJECT", "primary_reason": "SCHEMA_INVALID"},
+        "P2": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P3": {"decision": "REJECT", "primary_reason": "SCHEMA_INVALID"}
+      }
+    },
+    {
+      "id": "MANIFEST-NONCANONICAL-001",
+      "family": "manifest_structure",
+      "kind": "target_invalid",
+      "operation": "Reserialize a schema-valid manifest into non-JCS bytes without changing its parsed data, then create an authorized test attestation over those bytes.",
+      "prerequisites": ["authorized_fixture_signer_available"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "REJECT", "primary_reason": "MANIFEST_NONCANONICAL"},
+        "P2": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P3": {"decision": "REJECT", "primary_reason": "MANIFEST_NONCANONICAL"}
+      }
+    },
+    {
+      "id": "MANIFEST-SELF-HASH-001",
+      "family": "manifest_structure",
+      "kind": "target_invalid",
+      "operation": "Add a forbidden field claiming to contain the manifest's own SHA-256 and create an authorized test attestation over the resulting bytes.",
+      "prerequisites": ["authorized_fixture_signer_available"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "REJECT", "primary_reason": "SCHEMA_INVALID"},
+        "P2": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P3": {"decision": "REJECT", "primary_reason": "SCHEMA_INVALID"}
+      }
+    },
+    {
+      "id": "PATH-PARENT-001",
+      "family": "path_safety",
+      "kind": "target_invalid",
+      "operation": "Insert a parent-traversal or absolute payload path and create an authorized test attestation over the manifest.",
+      "prerequisites": ["authorized_fixture_signer_available"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "REJECT", "primary_reason": "UNSAFE_PATH"},
+        "P2": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P3": {"decision": "REJECT", "primary_reason": "UNSAFE_PATH"}
+      }
+    },
+    {
+      "id": "PATH-DUPLICATE-NORMALIZED-001",
+      "family": "path_safety",
+      "kind": "target_invalid",
+      "operation": "Create two manifest entries that resolve to the same normalized portable path and create an authorized test attestation.",
+      "prerequisites": ["authorized_fixture_signer_available"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "REJECT", "primary_reason": "DUPLICATE_PATH"},
+        "P2": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P3": {"decision": "REJECT", "primary_reason": "DUPLICATE_PATH"}
+      }
+    },
+    {
+      "id": "PATH-SYMLINK-001",
+      "family": "path_safety",
+      "kind": "target_invalid",
+      "operation": "Replace a listed regular payload with a symlink whose target is outside the release root; keep or recreate an authorized matching attestation as required by the fixture.",
+      "prerequisites": ["filesystem_supports_symlink", "listed_regular_payload_exists", "authorized_fixture_signer_available"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "REJECT", "primary_reason": "SYMLINK_FORBIDDEN"},
+        "P2": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P3": {"decision": "REJECT", "primary_reason": "SYMLINK_FORBIDDEN"}
+      }
+    },
+    {
+      "id": "PATH-HARDLINK-001",
+      "family": "path_safety",
+      "kind": "target_invalid",
+      "operation": "Replace a listed regular payload with a hard link to a test-owned regular file containing the same bytes; leave manifest and attestation bytes unchanged.",
+      "prerequisites": ["filesystem_supports_hardlink", "listed_regular_payload_exists"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "REJECT", "primary_reason": "HARDLINK_FORBIDDEN"},
+        "P2": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P3": {"decision": "REJECT", "primary_reason": "HARDLINK_FORBIDDEN"}
+      }
+    },
+    {
+      "id": "PATH-NONREGULAR-001",
+      "family": "path_safety",
+      "kind": "target_invalid",
+      "operation": "Replace a listed regular payload with a FIFO without opening it; leave manifest and attestation bytes unchanged.",
+      "prerequisites": ["filesystem_supports_fifo", "listed_regular_payload_exists"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "REJECT", "primary_reason": "NONREGULAR_FILE"},
+        "P2": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P3": {"decision": "REJECT", "primary_reason": "NONREGULAR_FILE"}
+      }
+    },
+    {
+      "id": "ATTESTATION-MISSING-001",
+      "family": "attestation_structure",
+      "kind": "target_invalid",
+      "operation": "Delete attestation.sigstore.json while retaining a valid manifest, provenance object, and payload tree.",
+      "prerequisites": ["valid_attestation_exists"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P2": {"decision": "REJECT", "primary_reason": "ATTESTATION_MISSING"},
+        "P3": {"decision": "REJECT", "primary_reason": "ATTESTATION_MISSING"}
+      }
+    },
+    {
+      "id": "ATTESTATION-MALFORMED-001",
+      "family": "attestation_structure",
+      "kind": "target_invalid",
+      "operation": "Replace attestation.sigstore.json with bounded malformed JSON while retaining a valid manifest, provenance object, and payload tree.",
+      "prerequisites": ["valid_attestation_exists"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P2": {"decision": "REJECT", "primary_reason": "ATTESTATION_INVALID"},
+        "P3": {"decision": "REJECT", "primary_reason": "ATTESTATION_INVALID"}
+      }
+    },
+    {
+      "id": "STATEMENT-MALFORMED-001",
+      "family": "attestation_structure",
+      "kind": "target_invalid",
+      "operation": "Use a structurally valid controlled Sigstore bundle with a cryptographically valid DSSE signature over bounded bytes that are not valid JSON and therefore cannot be an in-toto Statement.",
+      "prerequisites": ["controlled_authorized_test_signer_available", "valid_authenticated_outer_bundle_fixture_available"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P2": {"decision": "REJECT", "primary_reason": "ATTESTATION_INVALID"},
+        "P3": {"decision": "REJECT", "primary_reason": "ATTESTATION_INVALID"}
+      }
+    },
+    {
+      "id": "SIGNATURE-CORRUPT-001",
+      "family": "signature",
+      "kind": "target_invalid",
+      "operation": "Flip one bit in the DSSE signature while leaving manifest, Statement, certificate, and payload bytes unchanged.",
+      "prerequisites": ["valid_signature_exists"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P2": {"decision": "REJECT", "primary_reason": "SIGNATURE_INVALID"},
+        "P3": {"decision": "REJECT", "primary_reason": "SIGNATURE_INVALID"}
+      }
+    },
+    {
+      "id": "SIGNATURE-ALGORITHM-001",
+      "family": "signature",
+      "kind": "target_invalid",
+      "operation": "Provide a cryptographically valid fixture signature using an algorithm absent from the frozen approved-algorithm policy.",
+      "prerequisites": ["unapproved_algorithm_fixture_available"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P2": {"decision": "REJECT", "primary_reason": "ALGORITHM_UNAPPROVED"},
+        "P3": {"decision": "REJECT", "primary_reason": "ALGORITHM_UNAPPROVED"}
+      }
+    },
+    {
+      "id": "CERTIFICATE-TIME-001",
+      "family": "certificate_policy",
+      "kind": "target_invalid",
+      "operation": "Provide a cryptographically valid controlled fixture whose certificate validity interval excludes the authenticated signing time.",
+      "prerequisites": ["controlled_certificate_time_fixture_available", "authenticated_signing_time_available"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P2": {"decision": "REJECT", "primary_reason": "CERTIFICATE_TIME_INVALID"},
+        "P3": {"decision": "REJECT", "primary_reason": "CERTIFICATE_TIME_INVALID"}
+      }
+    },
+    {
+      "id": "IDENTITY-WORKFLOW-001",
+      "family": "identity",
+      "kind": "target_invalid",
+      "operation": "Use a valid keyless identity from a repository workflow/ref that is not authorized by the frozen trust policy.",
+      "prerequisites": ["wrong_workflow_identity_fixture_available"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P2": {"decision": "REJECT", "primary_reason": "BUILDER_UNAUTHORIZED"},
+        "P3": {"decision": "REJECT", "primary_reason": "BUILDER_UNAUTHORIZED"}
+      }
+    },
+    {
+      "id": "SUBJECT-REPLAY-001",
+      "family": "subject_binding",
+      "kind": "target_invalid",
+      "operation": "Attach a valid authorized attestation whose authenticated subject digest names another manifest.",
+      "prerequisites": ["second_valid_release_attestation_exists"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P2": {"decision": "REJECT", "primary_reason": "SUBJECT_MISMATCH"},
+        "P3": {"decision": "REJECT", "primary_reason": "SUBJECT_MISMATCH"}
+      }
+    },
+    {
+      "id": "TRANSPARENCY-MISSING-001",
+      "family": "transparency",
+      "kind": "target_invalid",
+      "operation": "Remove the transparency material required by the frozen public-keyless profile while retaining the signature and certificate.",
+      "prerequisites": ["public_keyless_profile_frozen", "valid_transparency_material_exists"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P2": {"decision": "REJECT", "primary_reason": "TRANSPARENCY_INVALID"},
+        "P3": {"decision": "REJECT", "primary_reason": "TRANSPARENCY_INVALID"}
+      }
+    },
+    {
+      "id": "PREDICATE-WRONG-TYPE-001",
+      "family": "provenance",
+      "kind": "target_invalid",
+      "operation": "Use a valid authorized DSSE Statement with the correct manifest subject but a predicateType other than https://slsa.dev/provenance/v1.",
+      "prerequisites": ["authorized_fixture_signer_available"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P2": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P3": {"decision": "REJECT", "primary_reason": "PREDICATE_TYPE_UNSUPPORTED"}
+      }
+    },
+    {
+      "id": "SOURCE-WRONG-REVISION-001",
+      "family": "provenance",
+      "kind": "target_invalid",
+      "operation": "Use a valid authorized SLSA provenance Statement whose source revision differs from the frozen expected revision.",
+      "prerequisites": ["source_revision_policy_frozen", "authorized_fixture_signer_available"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P2": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P3": {"decision": "REJECT", "primary_reason": "SOURCE_MISMATCH"}
+      }
+    },
+    {
+      "id": "BUILD-DIRTY-001",
+      "family": "provenance",
+      "kind": "target_invalid",
+      "operation": "Use valid authorized provenance that declares or encodes a dirty source build for an official release.",
+      "prerequisites": ["dirty_build_field_or_invariant_frozen", "authorized_fixture_signer_available"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P2": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P3": {"decision": "REJECT", "primary_reason": "DIRTY_BUILD"}
+      }
+    },
+    {
+      "id": "MATERIAL-LOCK-MISMATCH-001",
+      "family": "provenance",
+      "kind": "target_invalid",
+      "operation": "Use valid authorized provenance whose required lockfile or execution-image material digest differs from the frozen expected digest.",
+      "prerequisites": ["required_material_policy_frozen", "authorized_fixture_signer_available"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P1": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P2": {"decision": "ACCEPT", "primary_reason": "OK"},
+        "P3": {"decision": "REJECT", "primary_reason": "MATERIAL_MISMATCH"}
+      }
+    },
+    {
+      "id": "RESOURCE-MANIFEST-LIMIT-001",
+      "family": "robustness",
+      "kind": "target_invalid",
+      "operation": "Provide a manifest that exceeds the frozen maximum byte size without decompressing or allocating beyond that limit.",
+      "prerequisites": ["manifest_size_limit_frozen"],
+      "target_decision": "REJECT",
+      "profile_expectations": {
+        "P0": {"decision": "REJECT", "primary_reason": "RESOURCE_LIMIT"},
+        "P1": {"decision": "REJECT", "primary_reason": "RESOURCE_LIMIT"},
+        "P2": {"decision": "REJECT", "primary_reason": "RESOURCE_LIMIT"},
+        "P3": {"decision": "REJECT", "primary_reason": "RESOURCE_LIMIT"}
+      }
+    }
+  ]
+}

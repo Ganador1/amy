@@ -1,0 +1,431 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Ganador1/amy/experiments/verifiable_release_study/schemas/r0-reviewer-identity-policy.schema.json",
+  "title": "A.M.Y R0 reviewer identity and detached-authentication policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "gate_id",
+    "purpose",
+    "source_basis",
+    "record_contract",
+    "bundle_contract",
+    "identity",
+    "trusted_root",
+    "tool",
+    "security_floor",
+    "decision_boundary",
+    "claim_boundary"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "amy.r0-reviewer-identity-policy.v1-draft"
+    },
+    "status": {
+      "enum": [
+        "template_not_authorized_not_frozen",
+        "frozen_authorized_for_authentication_only"
+      ]
+    },
+    "gate_id": {
+      "const": "RG-004"
+    },
+    "purpose": {
+      "const": "preauthorize_one_exact_reviewer_identity_and_verification_environment_before_R0_review"
+    },
+    "source_basis": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "record_contract": {
+      "$ref": "#/$defs/recordContract"
+    },
+    "bundle_contract": {
+      "$ref": "#/$defs/bundleContract"
+    },
+    "identity": {
+      "$ref": "#/$defs/identity"
+    },
+    "trusted_root": {
+      "$ref": "#/$defs/trustedRoot"
+    },
+    "tool": {
+      "$ref": "#/$defs/tool"
+    },
+    "security_floor": {
+      "$ref": "#/$defs/securityFloor"
+    },
+    "decision_boundary": {
+      "$ref": "#/$defs/decisionBoundary"
+    },
+    "claim_boundary": {
+      "const": "A successful detached signature check authenticates exact record bytes under this exact policy; it does not establish reviewer authorization beyond the cited authorization record, competence, independence, care, conflict disclosure truth, scientific correctness, or RG-004 completion."
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/templateState"
+    },
+    {
+      "$ref": "#/$defs/frozenState"
+    }
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "rfc3339": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]+)?(?:Z|[+-][0-9]{2}:[0-9]{2})$"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "uri", "supports"],
+      "properties": {
+        "source_id": {
+          "enum": ["S14", "S15", "S25", "S45", "S46"]
+        },
+        "uri": {
+          "type": "string",
+          "format": "uri",
+          "maxLength": 4000
+        },
+        "supports": {
+          "type": "string",
+          "minLength": 20,
+          "maxLength": 4000
+        }
+      }
+    },
+    "recordContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "digest_algorithm",
+        "maximum_bytes",
+        "raw_bytes_are_signature_subject",
+        "post_signature_transformation_allowed"
+      ],
+      "properties": {
+        "path": {
+          "const": "R0_HUMAN_REVIEW_RECORD_SUBMITTED.json"
+        },
+        "digest_algorithm": {
+          "const": "sha256"
+        },
+        "maximum_bytes": {
+          "const": 16777216
+        },
+        "raw_bytes_are_signature_subject": {
+          "const": true
+        },
+        "post_signature_transformation_allowed": {
+          "const": false
+        }
+      }
+    },
+    "bundleContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "media_type",
+        "content_kind",
+        "minimum_tlog_entries",
+        "signed_time_evidence_required",
+        "rekor_entry_must_bind_record_digest_signature_and_public_key"
+      ],
+      "properties": {
+        "path": {
+          "const": "R0_HUMAN_REVIEW_RECORD.sigstore.json"
+        },
+        "media_type": {
+          "const": "application/vnd.dev.sigstore.bundle.v0.3+json"
+        },
+        "content_kind": {
+          "const": "messageSignature"
+        },
+        "minimum_tlog_entries": {
+          "const": 1
+        },
+        "signed_time_evidence_required": {
+          "const": true
+        },
+        "rekor_entry_must_bind_record_digest_signature_and_public_key": {
+          "const": true
+        }
+      }
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "certificate_identity",
+        "certificate_oidc_issuer",
+        "identity_regex_allowed",
+        "issuer_regex_allowed",
+        "authorized_by",
+        "authorization_record_uri",
+        "authorization_record_sha256"
+      ],
+      "properties": {
+        "certificate_identity": {
+          "type": ["string", "null"],
+          "maxLength": 4000
+        },
+        "certificate_oidc_issuer": {
+          "oneOf": [
+            {"type": "string", "format": "uri", "maxLength": 4000},
+            {"type": "null"}
+          ]
+        },
+        "identity_regex_allowed": {
+          "const": false
+        },
+        "issuer_regex_allowed": {
+          "const": false
+        },
+        "authorized_by": {
+          "type": ["string", "null"],
+          "maxLength": 1000
+        },
+        "authorization_record_uri": {
+          "oneOf": [
+            {"type": "string", "format": "uri", "maxLength": 4000},
+            {"type": "null"}
+          ]
+        },
+        "authorization_record_sha256": {
+          "oneOf": [
+            {"$ref": "#/$defs/sha256"},
+            {"type": "null"}
+          ]
+        }
+      }
+    },
+    "trustedRoot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "source_uri", "acquired_at"],
+      "properties": {
+        "path": {
+          "const": "trusted_root.json"
+        },
+        "sha256": {
+          "oneOf": [
+            {"$ref": "#/$defs/sha256"},
+            {"type": "null"}
+          ]
+        },
+        "source_uri": {
+          "oneOf": [
+            {"type": "string", "format": "uri", "maxLength": 4000},
+            {"type": "null"}
+          ]
+        },
+        "acquired_at": {
+          "oneOf": [
+            {"$ref": "#/$defs/rfc3339"},
+            {"type": "null"}
+          ]
+        }
+      }
+    },
+    "tool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "command",
+        "selected_version",
+        "platform",
+        "binary_sha256",
+        "release_uri",
+        "required_flags",
+        "forbidden_flags",
+        "timeout_seconds",
+        "stdout_max_bytes",
+        "stderr_max_bytes",
+        "network_allowed_during_verification"
+      ],
+      "properties": {
+        "name": {"const": "cosign"},
+        "command": {"const": "verify-blob"},
+        "selected_version": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "platform": {
+          "type": ["string", "null"],
+          "maxLength": 200
+        },
+        "binary_sha256": {
+          "oneOf": [
+            {"$ref": "#/$defs/sha256"},
+            {"type": "null"}
+          ]
+        },
+        "release_uri": {
+          "oneOf": [
+            {"type": "string", "format": "uri", "maxLength": 4000},
+            {"type": "null"}
+          ]
+        },
+        "required_flags": {
+          "const": [
+            "--bundle",
+            "--trusted-root",
+            "--certificate-identity",
+            "--certificate-oidc-issuer"
+          ]
+        },
+        "forbidden_flags": {
+          "const": [
+            "--certificate-identity-regexp",
+            "--certificate-oidc-issuer-regexp",
+            "--insecure-ignore-sct",
+            "--insecure-ignore-tlog"
+          ]
+        },
+        "timeout_seconds": {"const": 180},
+        "stdout_max_bytes": {"const": 1048576},
+        "stderr_max_bytes": {"const": 1048576},
+        "network_allowed_during_verification": {"const": false}
+      }
+    },
+    "securityFloor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "advisory_uri",
+        "rejected_version_ranges",
+        "minimum_patched_version_by_major",
+        "selected_version_reviewed_against_advisory"
+      ],
+      "properties": {
+        "advisory_uri": {
+          "const": "https://github.com/sigstore/cosign/security/advisories/GHSA-whqx-f9j3-ch6m"
+        },
+        "rejected_version_ranges": {
+          "const": ["<=2.6.1", "<=3.0.3"]
+        },
+        "minimum_patched_version_by_major": {
+          "const": {"2": "2.6.2", "3": "3.0.4"}
+        },
+        "selected_version_reviewed_against_advisory": {
+          "type": "boolean"
+        }
+      }
+    },
+    "decisionBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy_freeze_permitted",
+        "authentication_execution_permitted",
+        "rg004_completion_permitted_without_successful_external_checks"
+      ],
+      "properties": {
+        "policy_freeze_permitted": {"type": "boolean"},
+        "authentication_execution_permitted": {"type": "boolean"},
+        "rg004_completion_permitted_without_successful_external_checks": {
+          "const": false
+        }
+      }
+    },
+    "templateState": {
+      "properties": {
+        "status": {"const": "template_not_authorized_not_frozen"},
+        "identity": {
+          "properties": {
+            "certificate_identity": {"type": "null"},
+            "certificate_oidc_issuer": {"type": "null"},
+            "authorized_by": {"type": "null"},
+            "authorization_record_uri": {"type": "null"},
+            "authorization_record_sha256": {"type": "null"}
+          }
+        },
+        "trusted_root": {
+          "properties": {
+            "sha256": {"type": "null"},
+            "source_uri": {"type": "null"},
+            "acquired_at": {"type": "null"}
+          }
+        },
+        "tool": {
+          "properties": {
+            "selected_version": {"type": "null"},
+            "platform": {"type": "null"},
+            "binary_sha256": {"type": "null"},
+            "release_uri": {"type": "null"}
+          }
+        },
+        "security_floor": {
+          "properties": {
+            "selected_version_reviewed_against_advisory": {"const": false}
+          }
+        },
+        "decision_boundary": {
+          "properties": {
+            "policy_freeze_permitted": {"const": false},
+            "authentication_execution_permitted": {"const": false}
+          }
+        }
+      }
+    },
+    "frozenState": {
+      "properties": {
+        "status": {"const": "frozen_authorized_for_authentication_only"},
+        "identity": {
+          "properties": {
+            "certificate_identity": {"type": "string", "minLength": 3},
+            "certificate_oidc_issuer": {"type": "string", "format": "uri"},
+            "authorized_by": {"type": "string", "minLength": 3},
+            "authorization_record_uri": {"type": "string", "format": "uri"},
+            "authorization_record_sha256": {"$ref": "#/$defs/sha256"}
+          }
+        },
+        "trusted_root": {
+          "properties": {
+            "sha256": {"$ref": "#/$defs/sha256"},
+            "source_uri": {"type": "string", "format": "uri"},
+            "acquired_at": {"$ref": "#/$defs/rfc3339"}
+          }
+        },
+        "tool": {
+          "properties": {
+            "selected_version": {
+              "type": "string",
+              "pattern": "^(?:2\\.(?:[6-9]|[1-9][0-9]+)\\.[0-9]+|3\\.[0-9]+\\.[0-9]+)$"
+            },
+            "platform": {"type": "string", "minLength": 3},
+            "binary_sha256": {"$ref": "#/$defs/sha256"},
+            "release_uri": {"type": "string", "format": "uri"}
+          }
+        },
+        "security_floor": {
+          "properties": {
+            "selected_version_reviewed_against_advisory": {"const": true}
+          }
+        },
+        "decision_boundary": {
+          "properties": {
+            "policy_freeze_permitted": {"const": true},
+            "authentication_execution_permitted": {"const": true}
+          }
+        }
+      }
+    }
+  }
+}

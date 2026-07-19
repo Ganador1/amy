@@ -1,0 +1,29 @@
+{
+  "boundary": "controlled_fixture_not_production_sigstore_not_confirmatory",
+  "checks": {
+    "algorithm_policy": "NOT_REQUIRED",
+    "attestation_structure": "NOT_REQUIRED",
+    "bounded_input": "PASS",
+    "certificate_time": "NOT_REQUIRED",
+    "closed_world_inventory": "PASS",
+    "manifest_canonicality": "PASS",
+    "manifest_json_syntax": "PASS",
+    "manifest_schema": "PASS",
+    "path_safety": "PASS",
+    "payload_digests": "PASS",
+    "provenance_policy": "NOT_REQUIRED",
+    "signature_crypto": "NOT_REQUIRED",
+    "signer_policy": "NOT_REQUIRED",
+    "subject_binding": "NOT_REQUIRED",
+    "transparency": "NOT_REQUIRED"
+  },
+  "decision": "ACCEPT",
+  "details": {},
+  "input": {
+    "attestation_sha256": null,
+    "manifest_sha256": "7598203c027eca6402434b9a88b9cda9e2d65371d0a3f76bc255ed7b1c5d94ca"
+  },
+  "primary_reason": "OK",
+  "profile_id": "P1",
+  "schema_version": "amy.selected-profile-fixture-result.v1-draft"
+}

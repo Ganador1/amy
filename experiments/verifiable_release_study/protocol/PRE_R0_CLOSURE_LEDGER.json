@@ -1,0 +1,316 @@
+{
+  "schema_version": "amy.pre-r0-closure-ledger.v1-draft",
+  "status": "NO-GO",
+  "classification": "pre_registration_planning_evidence_not_scientific_result",
+  "bindings": {
+    "registration_gates_sha256": "7340ff4a76363dcb4757ba954649e18567e518c3214b7a34152a81216f265dd9",
+    "run_execution_policy_sha256": "e25779a38cc23b376facc849b0520b326005e53c0b3ddd67c6c8f6d3208c188a",
+    "run_execution_policy_validation_sha256": "0f7543f1742fbcb147a516825e110dc79a6d42f0110bef5667b2aecac2d9e6ea",
+    "selected_compatibility_matrix_sha256": "4de12c8c03c4227619986c63f3532047c3bcff3a960bb7bac40ccfebaa1031a1",
+    "r0_reviewer_identity_policy_validation_sha256": "05a09a9021734fdbe26367cdb6821ad293f52258edfb7aba247f9b395db18a4f",
+    "release_lineage_validation_sha256": "13a24e86041b1c4af61f3a998df3625bde3fd39ce08f718ae679177f607dc357"
+  },
+  "summary": {
+    "registration_blocker_count": 10,
+    "partial_blocker_count": 7,
+    "open_blocker_count": 3,
+    "pending_compatibility_row_count": 54,
+    "unresolved_tbd_count": 47,
+    "runner_open_control_count": 11,
+    "confirmatory_execution_permitted": false,
+    "freeze_permitted": false
+  },
+  "controls": [
+    {
+      "gate_id": "RG-001",
+      "gate_status": "partial",
+      "closure_domain": "mixed",
+      "blocks_registration": true,
+      "blocks_confirmatory_execution": true,
+      "current_evidence_paths": ["protocol/PROPOSITION_MATRIX_DRAFT.json", "scripts/validate_protocol.py"],
+      "established_claims": ["A closed draft maps 12 propositions to units, outcomes, falsification rules, and claim eligibility."],
+      "prohibited_inferences": ["Schema validity and same-worktree checks do not establish that the proposition set is unbiased, complete, or externally reviewed."],
+      "unmet_requirements": [
+        {
+          "id": "CLOSE-RG001-HUMAN-REVIEW",
+          "evidence_kind": "human_review",
+          "status": "OPEN",
+          "can_complete_in_current_worktree": false,
+          "requires_external_actor": true,
+          "required_artifacts": ["signed exact-byte proposition review", "reviewer qualification and conflict declarations"],
+          "acceptance_test": "A preauthorized qualified non-implementer reviews the exact proposition bytes, records every required decision, and authenticates the final record under the frozen reviewer policy."
+        },
+        {
+          "id": "CLOSE-RG001-FREEZE",
+          "evidence_kind": "frozen_exact_bytes",
+          "status": "OPEN",
+          "can_complete_in_current_worktree": true,
+          "requires_external_actor": false,
+          "required_artifacts": ["R0 manifest binding reviewed proposition bytes", "public registration identifier"],
+          "acceptance_test": "The reviewed proposition matrix hash is present in the immutable R0 manifest and the registered preregistration; any later byte change creates a new lineage."
+        }
+      ],
+      "next_action": "Keep the current matrix draft-only, place its exact bytes in the next R0 candidate packet, and solicit the qualified review before freezing."
+    },
+    {
+      "gate_id": "RG-002",
+      "gate_status": "partial",
+      "closure_domain": "mixed",
+      "blocks_registration": true,
+      "blocks_confirmatory_execution": true,
+      "current_evidence_paths": ["corpus/BASE_REGISTRY_DRAFT.json", "corpus/COMPATIBILITY_MATRIX_SELECTED_PROFILE_DRAFT.json", "development_checks/BASE_AWARE_MUTATION_PLANS_2026-07-13.json", "development_checks/BASE_AWARE_MUTATION_PLANS_2026-07-15.json", "development_checks/BASE_AWARE_MUTATION_PLANS_VALIDATION_2026-07-15.json", "development_checks/BASE_AWARE_MUTATION_PLANS_V2_2026-07-15T034921Z.json", "development_checks/BASE_AWARE_MUTATION_PLANS_VALIDATION_V2_2026-07-15T034921Z.json"],
+      "established_claims": ["Six draft bases, 246 candidate units, 185 compatible rows, 54 pending rows, and 245 resolved base-aware plans plus one explicit unavailable plan are retained."],
+      "prohibited_inferences": ["Development execution of disposable mutations does not freeze a confirmatory corpus or establish S2 production applicability."],
+      "unmet_requirements": [
+        {
+          "id": "CLOSE-RG002-COMPATIBILITY",
+          "evidence_kind": "compatibility_resolution",
+          "status": "OPEN",
+          "can_complete_in_current_worktree": true,
+          "requires_external_actor": false,
+          "required_artifacts": ["zero-pending selected compatibility matrix", "documented resolution for every unavailable unit"],
+          "acceptance_test": "The outcome-blind matrix validator reports zero PENDING rows, every row has a frozen reason and plan, and no observed verifier outcome participated in compatibility classification."
+        },
+        {
+          "id": "CLOSE-RG002-CROSS-PLATFORM",
+          "evidence_kind": "external_execution",
+          "status": "OPEN",
+          "can_complete_in_current_worktree": false,
+          "requires_external_actor": true,
+          "required_artifacts": ["hash-bound selected-base replay from pinned Linux", "comparison against author-environment replay"],
+          "acceptance_test": "A separately operated pinned Linux environment reproduces the frozen clean-base artifacts and records byte comparisons without access to confirmatory outcomes."
+        }
+      ],
+      "next_action": "Resolve the 54 policy-dependent rows without outcome data, instantiate the S2 A.M.Y base, then repeat clean-base construction in the pinned environment."
+    },
+    {
+      "gate_id": "RG-004",
+      "gate_status": "open",
+      "closure_domain": "external_human",
+      "blocks_registration": true,
+      "blocks_confirmatory_execution": true,
+      "current_evidence_paths": ["reviews/R0_REVIEW_PACKET_DRAFT.md", "paper/MANUSCRIPT_SKELETON.md", "paper/lint_manuscript.py", "protocol/R0_HUMAN_REVIEW_RECORD_TEMPLATE.json", "protocol/R0_REVIEWER_IDENTITY_POLICY_VALIDATION.json", "schemas/r0-human-review-record.schema.json", "tests/test_manuscript_skeleton.py"],
+      "established_claims": ["Deterministic packet construction, a protocol-aligned manuscript skeleton with 11 stage-discipline tests, a closed review-record schema requiring one manuscript-consistency decision, and a fail-closed reviewer-identity policy validator exist as preparation mechanics."],
+      "prohibited_inferences": ["No person is currently authorized or qualified by these empty templates, and no human review or signature has occurred."],
+      "unmet_requirements": [
+        {
+          "id": "CLOSE-RG004-IDENTITY",
+          "evidence_kind": "policy_instantiation",
+          "status": "OPEN",
+          "can_complete_in_current_worktree": false,
+          "requires_external_actor": true,
+          "required_artifacts": ["exact reviewer identity", "exact issuer", "authorization record", "trusted root", "patched verifier identity"],
+          "acceptance_test": "Every null or unresolved identity-policy field is instantiated before review, the verifier version is outside known vulnerable ranges, and policy validation returns GO without bypasses."
+        },
+        {
+          "id": "CLOSE-RG004-REVIEW",
+          "evidence_kind": "human_review",
+          "status": "OPEN",
+          "can_complete_in_current_worktree": false,
+          "requires_external_actor": true,
+          "required_artifacts": ["completed exact-byte review record", "detached authenticated signature or Sigstore bundle", "qualification and conflict evidence"],
+          "acceptance_test": "A qualified non-author and non-implementer who did not author the manuscript skeleton and has no outcome or subject-write access completes every required catalog, oracle, proposition, compatibility, policy, and manuscript-consistency decision and authenticates the record over the exact packet hash."
+        }
+      ],
+      "next_action": "Select and externally authorize a qualified reviewer, instantiate the identity policy, rebuild a fresh packet candidate, and keep all review templates unapproved until the external record verifies."
+    },
+    {
+      "gate_id": "RG-005",
+      "gate_status": "partial",
+      "closure_domain": "mixed",
+      "blocks_registration": true,
+      "blocks_confirmatory_execution": true,
+      "current_evidence_paths": ["schemas/observation-ledger.schema.json", "schemas/analysis-summary.schema.json", "scripts/build_dummy_analysis_fixture.py", "scripts/analyze_observation_ledger.py", "dummy_analysis/DUMMY_OBSERVATION_LEDGER.json", "dummy_analysis/DUMMY_ANALYSIS_SUMMARY.json", "evidence/CLAIM_EVIDENCE_MATRIX.csv", "scripts/validate_claim_evidence_matrix.py", "tests/test_dummy_analysis.py", "tests/test_claim_evidence_matrix.py"],
+      "established_claims": ["A 1,480-row dummy ledger is joined back to the exact catalog, matrix, and oracle; composite cells and profile-paired case bytes are enforced; a profile-by-family breakdown reconciles; 70 claim-evidence references resolve by exact path, locator, and SHA-256; and neither validator can authorize manuscript claims."],
+      "prohibited_inferences": ["Synthetic outcomes cannot estimate conformance, reliability, effect size, or empirical support for any paper claim."],
+      "unmet_requirements": [
+        {
+          "id": "CLOSE-RG005-FINAL-DENOMINATOR",
+          "evidence_kind": "compatibility_resolution",
+          "status": "OPEN",
+          "can_complete_in_current_worktree": true,
+          "requires_external_actor": false,
+          "required_artifacts": ["zero-pending compatibility matrix", "regenerated exact planned denominator", "reviewed analysis contract"],
+          "acceptance_test": "The denominator is regenerated only after all compatibility rows are frozen, all planned keys are represented exactly once, and qualified review accepts missingness and claim-decision rules."
+        }
+      ],
+      "next_action": "Do not change the analyzer from synthetic validation to confirmatory use until the final compatibility product, campaign-selection linkage, and external review are available."
+    },
+    {
+      "gate_id": "RG-006",
+      "gate_status": "partial",
+      "closure_domain": "mixed",
+      "blocks_registration": true,
+      "blocks_confirmatory_execution": true,
+      "current_evidence_paths": ["protocol/RUN_EXECUTION_POLICY_DRAFT.json", "protocol/RUN_EXECUTION_POLICY_VALIDATION.json", "development_checks/RG006_RUNNER_CONTRACT_TEST_2026-07-13.json", "development_checks/RG006_RUNNER_CONTRACT_TEST_V2_2026-07-14.json", "development_checks/RG006_RUNNER_CONTRACT_TEST_V2_2026-07-15.json", "development_checks/RG006_RUNNER_CONTRACT_TEST_V3_2026-07-15.json", "development_checks/RG006_RUNNER_CONTRACT_TEST_V3_2026-07-15T034827Z.json", "development_checks/RG006_RUNNER_CONTRACT_TEST_V3_2026-07-15T034921Z.json", "protocol/CONFIRMATORY_RUNNER_CONTRACT_DRAFT.md", "amy_verifier/confirmatory_runner.py", "schemas/process-isolation-record.schema.json", "schemas/official-attempt-selection.schema.json", "schemas/rg006-contract-test-record-v2.schema.json", "schemas/rg006-contract-test-record-v3.schema.json", "schemas/scientific-intent-event.schema.json", "schemas/run-execution-policy.schema.json", "scripts/validate_run_execution_policy.py", "tests/test_confirmatory_runner_contract.py", "tests/test_run_execution_policy.py"],
+      "established_claims": ["Historical receipts retain 29 and 52 synthetic tests. The active timestamped v3 receipt binds 61 focused runner/policy tests. Nine added cells exercise a canonical sequence-only parent-hash SCIENTIFIC_INTENT chain immediately before the nonconfirmatory contract-test Popen, bind its event identity into process metadata, reject three malformed or ambiguous log states, serialize cooperating appenders through spawn, retain intent after spawn failure, prevent spawn after publication failure, and retain intent after a process crash between persistence and Popen. The intent and crash/storage controls remain partial, and selection remains invalid without a vault and external authentication."],
+      "prohibited_inferences": ["A local unkeyed hash chain, advisory lock, inode-derived epoch, process group, local hashes, synthetic fault injection, file and directory fsync, and process-crash tests do not establish rollback detection, same-UID tamper exclusion, an authenticated checkpoint, a recovery automaton, classifier-derived intent counts, a sandbox, an offline boundary, hidden-attempt absence, authenticated ordering, outcome blindness, power-loss durability, cross-filesystem equivalence, or coverage of every runner persistence boundary."],
+      "unmet_requirements": [
+        {
+          "id": "CLOSE-RG006-LOCAL-CONTROLS",
+          "evidence_kind": "local_code_and_tests",
+          "status": "OPEN",
+          "can_complete_in_current_worktree": true,
+          "requires_external_actor": false,
+          "required_artifacts": ["authenticated intent-log checkpoint and closed recovery record", "classifier projection derived from scanned intent bytes", "base-aware generator integration", "all profile child adapters", "campaign-seal ledger linkage"],
+          "acceptance_test": "Each local control has a closed schema, fail-closed implementation, adversarial tests, exact source binding, and remains unable to start confirmatory R1 before registration; a local contract-test hash chain without rollback-resistant checkpoint/recovery does not close the intent control."
+        },
+        {
+          "id": "CLOSE-RG006-ISOLATION",
+          "evidence_kind": "external_execution",
+          "status": "OPEN",
+          "can_complete_in_current_worktree": false,
+          "requires_external_actor": true,
+          "required_artifacts": ["PID namespace or equivalent process-tree evidence", "OS-enforced network denial evidence", "capability-separated vault evidence"],
+          "acceptance_test": "The frozen execution environment proves process-tree containment and denies DNS, IPv4, IPv6, loopback, proxy, metadata, Unix-socket, and inherited-socket channels while separating selector and decoder capabilities."
+        },
+        {
+          "id": "CLOSE-RG006-FAULTS",
+          "evidence_kind": "fault_injection",
+          "status": "OPEN",
+          "can_complete_in_current_worktree": true,
+          "requires_external_actor": false,
+          "required_artifacts": ["complete runner-wide crash-point matrix", "atomic-publication ENOSPC EDQUOT EIO EINTR injection receipt", "power-loss and recovery evidence", "cross-filesystem and unsupported-filesystem preflight tests"],
+          "acceptance_test": "Every runner persistence write, sync, no-replace publication, recovery, and directory-sync boundary is fault-injected on each supported filesystem and shown to retain prior bytes or fail closed without authorizing a retry; process-crash simulation alone does not satisfy power-loss recovery."
+        },
+        {
+          "id": "CLOSE-RG006-AUTHENTICATION",
+          "evidence_kind": "external_authentication",
+          "status": "OPEN",
+          "can_complete_in_current_worktree": false,
+          "requires_external_actor": true,
+          "required_artifacts": ["preauthorized classifier and sealer identities", "authenticated campaign seal", "external temporal anchor"],
+          "acceptance_test": "The exact final campaign seal is authenticated by a preauthorized identity and externally anchored before any decode capability is released."
+        }
+      ],
+      "next_action": "Add an externally protected intent checkpoint, closed recovery receipt, rollback/suffix-deletion detection, and classifier derivation from scanned events; extend the partial fault campaign to every runner persistence boundary and supported filesystem, then integrate base-aware/profile adapters and campaign-seal linkage while keeping R1 disabled."
+    },
+    {
+      "gate_id": "RG-009",
+      "gate_status": "partial",
+      "closure_domain": "release_identity",
+      "blocks_registration": true,
+      "blocks_confirmatory_execution": true,
+      "current_evidence_paths": ["protocol/GITHUB_ATTESTATION_POLICY_TEMPLATE_V2.json", "protocol/RELEASE_LINEAGE_VALIDATION.json", "audit/RELEASE_IDENTITY_VERSION_SHA_SIGNATURE_AUDIT_2026-07-13.md"],
+      "established_claims": ["The release-lineage contract distinguishes version labels, Git identity, content hashes, signatures, trusted roots, registration identities, the study toolchain, and append-only R2 corrections; V2 also requires immutable repository and owner IDs while refusing to treat unauthenticated workflow pins as authorization evidence."],
+      "prohibited_inferences": ["A SHA-256 digest identifies bytes but does not authenticate an author, establish publication time, or resolve a mutable beta version by itself."],
+      "unmet_requirements": [
+        {
+          "id": "CLOSE-RG009-POLICY",
+          "evidence_kind": "policy_instantiation",
+          "status": "OPEN",
+          "can_complete_in_current_worktree": true,
+          "requires_external_actor": false,
+          "required_artifacts": ["production policy with zero TBD markers", "exact source OID and repository", "exact builder and workflow identity", "exact trusted root and material rules"],
+          "acceptance_test": "The production policy validator finds zero unresolved markers and every release identity field is exact, immutable, and cross-bound to the frozen lineage contract."
+        }
+      ],
+      "next_action": "Choose the exact A.M.Y release candidate and source commit, instantiate all 47 unresolved values, authenticate exact workflow bytes and trust-root lifecycle, and issue a new immutable identity whenever any beta byte changes."
+    },
+    {
+      "gate_id": "RG-010",
+      "gate_status": "open",
+      "closure_domain": "external_infrastructure",
+      "blocks_registration": true,
+      "blocks_confirmatory_execution": true,
+      "current_evidence_paths": ["production_pilot_runs/github_cli_2.96.0_upstream_smoke/result.json", "protocol/PRODUCTION_SIGSTORE_GATE_DRAFT.md"],
+      "established_claims": ["A pinned Linux smoke test exercises P2 interoperability against one real public upstream Sigstore bundle."],
+      "prohibited_inferences": ["The upstream smoke result is not a clean A.M.Y P3 attestation, does not cover required A.M.Y materials, and is not an independent reproduction."],
+      "unmet_requirements": [
+        {
+          "id": "CLOSE-RG010-AMY-P3",
+          "evidence_kind": "external_execution",
+          "status": "OPEN",
+          "can_complete_in_current_worktree": false,
+          "requires_external_actor": true,
+          "required_artifacts": ["real clean A.M.Y P3 bundle", "pinned trusted root", "required negative-control bundles", "separate verification receipt"],
+          "acceptance_test": "A real released A.M.Y object passes P3 under the exact frozen identity/material policy and every preregistered negative control fails with the expected typed reason in a separately operated environment."
+        }
+      ],
+      "next_action": "After RG-009 is instantiated, generate the real A.M.Y keyless attestation and commission separate P3 verification plus all frozen negative controls."
+    },
+    {
+      "gate_id": "RG-011",
+      "gate_status": "open",
+      "closure_domain": "release_identity",
+      "blocks_registration": true,
+      "blocks_confirmatory_execution": true,
+      "current_evidence_paths": ["protocol/RELEASE_LINEAGE_CONTRACT_DRAFT.json", "protocol/VERSIONING_AND_SIGNING_POLICY.md"],
+      "established_claims": ["The draft policy defines exact R0/R1 identities, a separate study-toolchain identity, and an append-only R2 correction chain that forbids silently overwriting historical bytes."],
+      "prohibited_inferences": ["Untracked local files and a branch name are not a durable public snapshot, timestamp, citation, or preregistration."],
+      "unmet_requirements": [
+        {
+          "id": "CLOSE-RG011-SNAPSHOT",
+          "evidence_kind": "public_snapshot",
+          "status": "OPEN",
+          "can_complete_in_current_worktree": false,
+          "requires_external_actor": true,
+          "required_artifacts": ["version-controlled exact-byte snapshot", "immutable public identifier", "detached authentication", "archival citation"],
+          "acceptance_test": "All R0 subject bytes are committed, signed or otherwise authenticated, deposited under an immutable public identifier, and reconstructable without relying on this workstation."
+        }
+      ],
+      "next_action": "Preserve the current work as an unregistered candidate; only after local gates are ready should an authorized operator publish and archive the exact R0 snapshot."
+    },
+    {
+      "gate_id": "RG-013",
+      "gate_status": "partial",
+      "closure_domain": "mixed",
+      "blocks_registration": true,
+      "blocks_confirmatory_execution": true,
+      "current_evidence_paths": ["tests/test_toctou_and_fault_injection.py", "audit/RELEASE_IDENTITY_VERSION_SHA_SIGNATURE_AUDIT_2026-07-13.md", "amy_verifier/github_attestation_v2.py", "amy_verifier/github_attestation_v2_core.py", "schemas/github-attestation-policy-v2.schema.json", "schemas/github-production-verification-result-v2.schema.json", "tests/test_github_attestation_v2.py"],
+      "established_claims": ["Current tests reject symlink, growth, rescan, missing-input, crypto-backend, timeout, repository-ID substitution, provenance-ID disagreement, public runner injection, and false workflow-pin assurance with typed fail-closed outcomes while preserving historical V1 bytes."],
+      "prohibited_inferences": ["These selected tests are not a complete cryptographic review, storage crash-consistency proof, or formal verification of Sigstore semantics."],
+      "unmet_requirements": [
+        {
+          "id": "CLOSE-RG013-CRYPTO-REVIEW",
+          "evidence_kind": "human_review",
+          "status": "OPEN",
+          "can_complete_in_current_worktree": false,
+          "requires_external_actor": true,
+          "required_artifacts": ["qualified cryptographic implementation review", "finding disposition ledger", "retest evidence"],
+          "acceptance_test": "A qualified reviewer audits canonicalization, signature verification, certificate and identity policy, transparency evidence, trusted-root handling, and reason mapping over exact source bytes; every finding is closed or explicitly blocks R0."
+        },
+        {
+          "id": "CLOSE-RG013-STORAGE-FAULTS",
+          "evidence_kind": "fault_injection",
+          "status": "OPEN",
+          "can_complete_in_current_worktree": true,
+          "requires_external_actor": false,
+          "required_artifacts": ["storage-boundary fault matrix", "repeatable injection harness", "retained fail-closed receipt"],
+          "acceptance_test": "The harness injects crash and storage errors at every provenance and result publication boundary and proves no partial or substituted artifact becomes authoritative."
+        }
+      ],
+      "next_action": "Extend fault injection to persistence boundaries, then submit the exact production verifier and policy bytes for qualified cryptographic review."
+    },
+    {
+      "gate_id": "RG-014",
+      "gate_status": "partial",
+      "closure_domain": "mixed",
+      "blocks_registration": true,
+      "blocks_confirmatory_execution": true,
+      "current_evidence_paths": ["protocol/MODEL_REVIEW_PROTOCOL.json", "scripts/run_model_review_batch.py", "scripts/validate_model_review_batch.py", "tests/test_model_review_protocol.py"],
+      "established_claims": ["A frozen ten-role protocol, closed response contract, fail-retaining harness, and tests that generate and mechanically validate a complete ten-attempt transport-failure fixture now exist. No model output is included in the public review subject or treated as evidence."],
+      "prohibited_inferences": ["Agent count, model prestige, token budget, or agreement among opaque cloud models cannot substitute for human review, empirical evidence, or reproducibility."],
+      "unmet_requirements": [
+        {
+          "id": "CLOSE-RG014-EXECUTION-AND-SYNTHESIS",
+          "evidence_kind": "model_protocol",
+          "status": "OPEN",
+          "can_complete_in_current_worktree": false,
+          "requires_external_actor": true,
+          "required_artifacts": ["successful ten-slot batch under the frozen protocol", "complete retained requests responses errors and provider metadata", "finding-by-finding verification ledger", "conflict-preserving synthesis"],
+          "acceptance_test": "An environment with authorized loopback access executes exactly one attempt for each frozen slot without replacement; every response or failure is retained, and each material finding is independently checked against exact code or primary sources before any protocol edit."
+        }
+      ],
+      "next_action": "Rerun the already frozen protocol from an environment permitted to reach the host Ollama endpoint, then verify every returned finding against exact bytes or primary sources without voting or silently replacing failed slots."
+    }
+  ],
+  "boundaries": {
+    "confirmatory_evidence_read": false,
+    "scientific_claims_authorized": false,
+    "qualified_human_review_performed": false,
+    "external_authentication_performed": false,
+    "model_review_treated_as_independent": false,
+    "ledger_self_certifies_completion": false
+  }
+}

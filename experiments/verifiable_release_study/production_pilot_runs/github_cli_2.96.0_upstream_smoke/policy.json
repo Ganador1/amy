@@ -1,0 +1,70 @@
+{
+  "policy_version": "0.1.0-exploratory-upstream-smoke",
+  "status": "exploratory_interoperability_only_not_amy_p3_evidence",
+  "tool": {
+    "name": "gh",
+    "version": "2.96.0",
+    "binary_sha256_by_platform": {
+      "linux-x86_64": "56b8bbbb27b066ecb33dbef9a256dc9d1314adaeff0908a752feba6c34053b40"
+    },
+    "binary_max_bytes": 268435456,
+    "timeout_seconds": 120
+  },
+  "subject": {
+    "name": "gh_2.96.0_linux_amd64.tar.gz",
+    "digest_algorithm": "sha256",
+    "allow_additional_subjects": true
+  },
+  "identity": {
+    "repository": "cli/cli",
+    "repository_uri": "https://github.com/cli/cli",
+    "repository_owner_uri": "https://github.com/cli",
+    "certificate_identity": "https://github.com/cli/cli/.github/workflows/deployment.yml@refs/heads/trunk",
+    "oidc_issuer": "https://token.actions.githubusercontent.com",
+    "signer_digest": "b300f2ec7ec9dc9addc39b2ad88c54097ded7ca0",
+    "source_digest": "b300f2ec7ec9dc9addc39b2ad88c54097ded7ca0",
+    "source_ref": "refs/heads/trunk",
+    "event_name": "workflow_dispatch",
+    "visibility": "public"
+  },
+  "trust": {
+    "trusted_root_sha256": "65ca537f6ed8a47fd0e560c421baa1f6c1efb8b25fc200d8c5c02c0e92eb2b9c",
+    "certificate_issuer_organization": "sigstore.dev",
+    "required_timestamp_type": "Tlog",
+    "required_timestamp_uri": "https://rekor.sigstore.dev",
+    "allowed_bundle_media_types": [
+      "application/vnd.dev.sigstore.bundle.v0.3+json"
+    ],
+    "allowed_verification_result_media_types": [
+      "application/vnd.dev.sigstore.verificationresult+json;version=0.1"
+    ]
+  },
+  "statement": {
+    "type": "https://in-toto.io/Statement/v1",
+    "p3_predicate_type": "https://slsa.dev/provenance/v1"
+  },
+  "provenance": {
+    "build_type": "https://actions.github.io/buildtypes/workflow/v1",
+    "source_repository_uri": "https://github.com/cli/cli",
+    "source_revision": "b300f2ec7ec9dc9addc39b2ad88c54097ded7ca0",
+    "source_ref": "refs/heads/trunk",
+    "workflow_path": ".github/workflows/deployment.yml",
+    "builder_id": "https://github.com/cli/cli/.github/workflows/deployment.yml@refs/heads/trunk",
+    "materials": [
+      {
+        "name": "not_exercised_by_p2",
+        "uri": "amy:not-exercised-by-p2",
+        "algorithm": "sha256",
+        "digest": "0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    ]
+  },
+  "limits": {
+    "manifest_max_bytes": 33554432,
+    "attestation_max_bytes": 1048576,
+    "trusted_root_max_bytes": 1048576,
+    "dsse_statement_max_bytes": 1048576,
+    "gh_output_max_bytes": 33554432,
+    "json_max_depth": 64
+  }
+}

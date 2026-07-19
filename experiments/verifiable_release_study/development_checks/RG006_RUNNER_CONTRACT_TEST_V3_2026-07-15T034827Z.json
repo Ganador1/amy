@@ -1,0 +1,269 @@
+{
+  "schema_version": "amy.rg006-contract-test-record.v3-draft",
+  "classification": "pre_registration_synthetic_runner_contract_test_not_confirmatory",
+  "started_at": "2026-07-15T03:49:11.391672Z",
+  "ended_at": "2026-07-15T03:49:12.390593Z",
+  "command": [
+    "/Volumes/Ganador disk/A.M.Y/experiments/verifiable_release_study/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_confirmatory_runner_contract.py"
+  ],
+  "environment": {
+    "python": "3.12.12",
+    "python_implementation": "CPython",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "source_inventory": [
+    {
+      "path": "amy_verifier/confirmatory_runner.py",
+      "bytes": 74864,
+      "sha256": "a68d23749bb72bad517bb12b86b92aab83d44c1aaabb282ce393173a70fa6c0c"
+    },
+    {
+      "path": "protocol/CONFIRMATORY_RUNNER_CONTRACT_DRAFT.md",
+      "bytes": 15616,
+      "sha256": "5874ceea81646e6f2087db2c151925642feba3df3b8b6be71ab5feb00cd65bb0"
+    },
+    {
+      "path": "protocol/RUN_EXECUTION_POLICY_DRAFT.json",
+      "bytes": 18797,
+      "sha256": "d59fb912245ce611c4ab1d27fa2937475954f0a7576069b6ed30d64196d5c43d"
+    },
+    {
+      "path": "pyproject.toml",
+      "bytes": 497,
+      "sha256": "8d1042a03fe74f320d6b71ee80a05da3e7e190bd64808914c5bf05460ec86af0"
+    },
+    {
+      "path": "schemas/environment-attempt-record.schema.json",
+      "bytes": 19285,
+      "sha256": "1131d69e94198b561c7aed87b1a2f0ad5e076558999621fec0cd358f830475e2"
+    },
+    {
+      "path": "schemas/infrastructure-classification.schema.json",
+      "bytes": 19122,
+      "sha256": "529c47e5e2f40a9bc9319cbf37c3be340dd8fdef841f701cc80fabb9787dcd6d"
+    },
+    {
+      "path": "schemas/official-attempt-selection.schema.json",
+      "bytes": 19993,
+      "sha256": "475578a6e4a9da418529e68f35b79f94f7a67797dd7da01393a68d26cf071786"
+    },
+    {
+      "path": "schemas/process-isolation-record.schema.json",
+      "bytes": 12482,
+      "sha256": "92f98df6c871ce0e08b568e5cbcca76fe5cd57ab26ec28e582a09368048a1add"
+    },
+    {
+      "path": "schemas/rg006-contract-test-record-v3.schema.json",
+      "bytes": 11181,
+      "sha256": "abf54002fd3d3bb1484266dda8f3aab2962e85d847539ac31bc89693d1f475e6"
+    },
+    {
+      "path": "schemas/run-execution-policy-validation.schema.json",
+      "bytes": 3403,
+      "sha256": "da08dceed2adb050b769414df05b48daebc4d0effa1856b3c5d5e4d4d404155c"
+    },
+    {
+      "path": "schemas/run-execution-policy.schema.json",
+      "bytes": 21141,
+      "sha256": "cfe61c9f9a12ce916b722ff28c3f512fb7d915ca08b7cc5e8f4a0052f4c1fcba"
+    },
+    {
+      "path": "schemas/scientific-intent-event.schema.json",
+      "bytes": 3131,
+      "sha256": "31fab458ecc55374d969677a57576b12ecee1e4dd6a9390c0de30b963c1d0442"
+    },
+    {
+      "path": "scripts/run_rg006_contract_tests.py",
+      "bytes": 12216,
+      "sha256": "b647217960087e6721f0831bc2fd6c68ecde21e8270587602e5104d14d98b8df"
+    },
+    {
+      "path": "scripts/validate_run_execution_policy.py",
+      "bytes": 41880,
+      "sha256": "04e5117fed48a9a6aaf617e946e8e13d47903b0f2bc10fa71a0b7c17ae8ddbb3"
+    },
+    {
+      "path": "tests/test_confirmatory_runner_contract.py",
+      "bytes": 52348,
+      "sha256": "49d301645aedb72a844473ea20ca6685c041013db602a1c91e19bd0bb5680ccc"
+    },
+    {
+      "path": "tests/test_run_execution_policy.py",
+      "bytes": 9738,
+      "sha256": "e15eb429c63be322c280a5bf16d28119652ccc707ffd6c9517c618207a8bd116"
+    },
+    {
+      "path": "uv.lock",
+      "bytes": 74227,
+      "sha256": "ada446114e2534983167988f875dea92b5d1d895a6a12a9db70e63626a3d9f41"
+    }
+  ],
+  "source_inventory_pre_sha256": "0fb964f718983a31ddd018d052c3bdde1dc70d5e0bb415826e5108901eb408aa",
+  "source_inventory_post_sha256": "0fb964f718983a31ddd018d052c3bdde1dc70d5e0bb415826e5108901eb408aa",
+  "source_inventory_unchanged_during_execution": true,
+  "execution": {
+    "exit_code": 0,
+    "stdout": ".............................................................            [100%]\n61 passed in 0.78s\n",
+    "stdout_sha256": "09bc854c94feca244e593093f612709c05c1d0fb7df72df44c5c24973fb759fa",
+    "stderr": "",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "passed_test_count": 61
+  },
+  "declared_coverage": {
+    "attempt_truth_table_cell_count": 12,
+    "required_environment_count": 2,
+    "subprocess_contract_tested": true,
+    "raw_byte_stream_limits_tested": true,
+    "descriptor_and_environment_canaries_tested": true,
+    "no_overwrite_tested": true,
+    "campaign_selection_tested": true,
+    "later_attempt_campaign_seal_tested": true,
+    "attempt_process_consistency_tested": true,
+    "inherited_capture_pipe_deadline_tested": true,
+    "exact_record_hash_recomputation_tested": true,
+    "source_inventory_toctou_rejection_tested": true,
+    "typed_run_policy_bindings_verified": true,
+    "runner_contract_bound_source_count": 16,
+    "storage_errno_fault_cell_count": 12,
+    "storage_eintr_transient_cell_count": 4,
+    "storage_eintr_persistent_cell_count": 3,
+    "storage_process_crash_cell_count": 3,
+    "same_uid_entry_substitution_tested": true,
+    "atomic_noreplace_rename_tested": true,
+    "fault_injection_scope": "atomic_jcs_publication_only_not_all_runner_persistence_boundaries",
+    "intent_event_schema_and_process_binding_tested": true,
+    "intent_hash_chain_tested": true,
+    "intent_ambiguous_rejection_cell_count": 3,
+    "intent_advisory_lock_tested": true,
+    "intent_popen_failure_retention_tested": true,
+    "intent_publication_failure_prevents_spawn_tested": true,
+    "intent_pre_spawn_process_crash_cell_count": 1,
+    "intent_log_scope": "contract_test_top_level_spawn_only_no_authenticated_checkpoint_recovery_or_classifier_derivation"
+  },
+  "control_statuses": {
+    "DURABLE_SCIENTIFIC_INTENT_LOG": {
+      "status": "PARTIAL",
+      "evidence_paths": [
+        "amy_verifier/confirmatory_runner.py",
+        "schemas/scientific-intent-event.schema.json",
+        "schemas/process-isolation-record.schema.json",
+        "tests/test_confirmatory_runner_contract.py"
+      ],
+      "limitations": [
+        "Coverage is limited to the nonconfirmatory contract-test top-level spawn. Authenticated checkpoints, rollback detection, same-UID exclusion, recovery records, classifier-derived counters, registered generator/profile adapters, and power-loss durability remain unestablished."
+      ]
+    },
+    "CAPABILITY_SEPARATED_OUTCOME_VAULT": {
+      "status": "OPEN",
+      "evidence_paths": [],
+      "limitations": [
+        "No complete closing evidence is retained for this control."
+      ]
+    },
+    "FULL_PROCESS_TREE_CONTAINMENT": {
+      "status": "OPEN",
+      "evidence_paths": [],
+      "limitations": [
+        "No complete closing evidence is retained for this control."
+      ]
+    },
+    "OS_ENFORCED_OFFLINE_BOUNDARY": {
+      "status": "OPEN",
+      "evidence_paths": [],
+      "limitations": [
+        "No complete closing evidence is retained for this control."
+      ]
+    },
+    "CRASH_AND_STORAGE_FAULT_INJECTION": {
+      "status": "PARTIAL",
+      "evidence_paths": [
+        "amy_verifier/confirmatory_runner.py",
+        "tests/test_confirmatory_runner_contract.py"
+      ],
+      "limitations": [
+        "Coverage is limited to atomic JCS publication under synthetic errno injection and process crash; full runner persistence boundaries, recovery, power-loss durability, and cross-filesystem equivalence remain unestablished."
+      ]
+    },
+    "BASE_AWARE_CASE_GENERATOR": {
+      "status": "OPEN",
+      "evidence_paths": [],
+      "limitations": [
+        "No complete closing evidence is retained for this control."
+      ]
+    },
+    "ALL_PROFILE_CHILD_ADAPTERS": {
+      "status": "OPEN",
+      "evidence_paths": [],
+      "limitations": [
+        "No complete closing evidence is retained for this control."
+      ]
+    },
+    "CAMPAIGN_SEAL_TO_LEDGER_LINK": {
+      "status": "OPEN",
+      "evidence_paths": [],
+      "limitations": [
+        "No complete closing evidence is retained for this control."
+      ]
+    },
+    "EXTERNAL_SELECTION_AUTHENTICATION": {
+      "status": "OPEN",
+      "evidence_paths": [],
+      "limitations": [
+        "No complete closing evidence is retained for this control."
+      ]
+    },
+    "QUALIFIED_INDEPENDENT_HUMAN_REVIEW": {
+      "status": "OPEN",
+      "evidence_paths": [],
+      "limitations": [
+        "No complete closing evidence is retained for this control."
+      ]
+    },
+    "R0_FREEZE_AND_REGISTRATION": {
+      "status": "OPEN",
+      "evidence_paths": [],
+      "limitations": [
+        "No complete closing evidence is retained for this control."
+      ]
+    }
+  },
+  "boundaries": {
+    "confirmatory_execution_performed": false,
+    "confirmatory_outputs_read": false,
+    "benchmark_cases_generated": false,
+    "oracle_join_performed": false,
+    "production_sigstore_conformance_established": false,
+    "network_isolation_established": false,
+    "full_process_tree_containment_established": false,
+    "external_selection_authentication_established": false,
+    "independent_review_performed": false,
+    "power_loss_durability_established": false,
+    "cross_filesystem_equivalence_established": false,
+    "storage_recovery_implemented": false,
+    "authenticated_intent_checkpoint_established": false,
+    "same_uid_intent_tamper_excluded": false,
+    "intent_log_rollback_detection_established": false,
+    "intent_classifier_derivation_integrated": false
+  },
+  "decision": "NO-GO",
+  "open_controls": [
+    "DURABLE_SCIENTIFIC_INTENT_LOG",
+    "CAPABILITY_SEPARATED_OUTCOME_VAULT",
+    "FULL_PROCESS_TREE_CONTAINMENT",
+    "OS_ENFORCED_OFFLINE_BOUNDARY",
+    "CRASH_AND_STORAGE_FAULT_INJECTION",
+    "BASE_AWARE_CASE_GENERATOR",
+    "ALL_PROFILE_CHILD_ADAPTERS",
+    "CAMPAIGN_SEAL_TO_LEDGER_LINK",
+    "EXTERNAL_SELECTION_AUTHENTICATION",
+    "QUALIFIED_INDEPENDENT_HUMAN_REVIEW",
+    "R0_FREEZE_AND_REGISTRATION"
+  ],
+  "rg006_complete": false,
+  "manuscript_claims_authorized": false
+}

@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Ganador1/amy/experiments/verifiable_release_study/schemas/selected-profile-oracle.schema.json",
+  "title": "A.M.Y selected-profile pre-registration oracle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "source_catalog",
+    "result_contract",
+    "derivation_boundary",
+    "profiles",
+    "case_count",
+    "row_count",
+    "rows"
+  ],
+  "properties": {
+    "schema_version": {"const": "amy.selected-profile-oracle.v1-draft"},
+    "status": {"const": "draft_same_author_not_independently_reviewed_not_frozen"},
+    "source_catalog": {"$ref": "#/$defs/sourceContract"},
+    "result_contract": {"$ref": "#/$defs/resultContract"},
+    "derivation_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_fields",
+        "observed_results_read",
+        "confirmatory_cases_read",
+        "confirmatory_cases_executed",
+        "target_decisions_used_as_profile_expectations",
+        "implementation_behavior_used_to_generate_rows",
+        "independent_human_review_complete",
+        "classification"
+      ],
+      "properties": {
+        "source_fields": {
+          "const": ["cases[].id", "cases[].profile_expectations"]
+        },
+        "observed_results_read": {"const": false},
+        "confirmatory_cases_read": {"const": false},
+        "confirmatory_cases_executed": {"const": false},
+        "target_decisions_used_as_profile_expectations": {"const": false},
+        "implementation_behavior_used_to_generate_rows": {"const": false},
+        "independent_human_review_complete": {"const": false},
+        "classification": {"const": "pre_registration_expected_implementation_behavior"}
+      }
+    },
+    "profiles": {"const": ["P0", "P1", "P2", "P3"]},
+    "case_count": {"const": 41},
+    "row_count": {"const": 164},
+    "rows": {
+      "type": "array",
+      "minItems": 164,
+      "maxItems": 164,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/oracleRow"}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "sourceContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "catalog_version"],
+      "properties": {
+        "path": {"const": "protocol/ATTACK_CATALOG_SELECTED_PROFILE_DRAFT.json"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "catalog_version": {"const": "0.4.0-draft"}
+      }
+    },
+    "resultContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"const": "schemas/selected-profile-fixture-result.schema.json"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "oracleRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "case_id",
+        "profile_id",
+        "expected_decision",
+        "expected_primary_reason",
+        "catalog_json_pointer"
+      ],
+      "properties": {
+        "case_id": {"type": "string", "pattern": "^[A-Z0-9]+(?:-[A-Z0-9]+)+$"},
+        "profile_id": {"enum": ["P0", "P1", "P2", "P3"]},
+        "expected_decision": {"enum": ["ACCEPT", "REJECT"]},
+        "expected_primary_reason": {
+          "enum": [
+            "OK", "RESOURCE_LIMIT", "INPUT_MISSING", "JSON_INVALID",
+            "DUPLICATE_JSON_KEY", "MANIFEST_NONCANONICAL", "SCHEMA_INVALID",
+            "UNSAFE_PATH", "DUPLICATE_PATH", "SYMLINK_FORBIDDEN",
+            "HARDLINK_FORBIDDEN", "NONREGULAR_FILE", "INPUT_CHANGED",
+            "REQUIRED_ROLE_MISSING", "PAYLOAD_MISSING", "UNEXPECTED_FILE",
+            "SIZE_MISMATCH", "DIGEST_MISMATCH", "ATTESTATION_MISSING",
+            "ATTESTATION_INVALID", "ALGORITHM_UNAPPROVED", "SIGNATURE_INVALID",
+            "CERTIFICATE_TIME_INVALID", "TRANSPARENCY_INVALID",
+            "SIGNER_UNAUTHORIZED", "BUILDER_UNAUTHORIZED", "SUBJECT_MISMATCH",
+            "PREDICATE_TYPE_UNSUPPORTED", "SOURCE_MISMATCH", "DIRTY_BUILD",
+            "MATERIAL_MISMATCH", "ATTESTATION_AMBIGUOUS", "TRUST_ROOT_MISMATCH",
+            "PROVENANCE_INVALID"
+          ]
+        },
+        "catalog_json_pointer": {
+          "type": "string",
+          "pattern": "^/cases/[0-9]+/profile_expectations/P[0-3]$"
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"expected_decision": {"const": "ACCEPT"}}},
+          "then": {"properties": {"expected_primary_reason": {"const": "OK"}}}
+        },
+        {
+          "if": {"properties": {"expected_decision": {"const": "REJECT"}}},
+          "then": {"properties": {"expected_primary_reason": {"not": {"const": "OK"}}}}
+        }
+      ]
+    }
+  }
+}

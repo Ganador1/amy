@@ -1,0 +1,34 @@
+{
+  "schema_version": "amy.production-reason-codes.v1-draft",
+  "status": "selected_profile_not_frozen",
+  "extends": {
+    "path": "protocol/REASON_CODES.json",
+    "sha256": "5ea73e4cea02ec265fadeb2995879ef0c8dad99e0308212b67e5a8e9bc89b02b",
+    "boundary": "The referenced registry remains the immutable vocabulary used by the retained v0.3 synthetic pilot and robustness records."
+  },
+  "additional_codes": [
+    {
+      "code": "ATTESTATION_AMBIGUOUS",
+      "decision": "REJECT",
+      "meaning": "Verification produced zero or multiple candidate attestations where the production profile requires exactly one."
+    },
+    {
+      "code": "TRUST_ROOT_MISMATCH",
+      "decision": "REJECT",
+      "meaning": "The archived trust-root bytes differed from the independently frozen trust-root SHA-256."
+    },
+    {
+      "code": "PROVENANCE_INVALID",
+      "decision": "REJECT",
+      "meaning": "Authenticated standard provenance or manifest build metadata was missing, ambiguous, or structurally incompatible with the selected production profile."
+    }
+  ],
+  "precedence_insertions": {
+    "P2": ["TRUST_ROOT_MISMATCH", "ATTESTATION_AMBIGUOUS"],
+    "P3": ["TRUST_ROOT_MISMATCH", "ATTESTATION_AMBIGUOUS", "PROVENANCE_INVALID"]
+  },
+  "limitations": [
+    "This extension governs the selected production adapter only and is not retroactively applied to retained pilot results.",
+    "The production output schema exists and is hash-bound, but it and the release-specific policy must still be independently reviewed and frozen before registration."
+  ]
+}

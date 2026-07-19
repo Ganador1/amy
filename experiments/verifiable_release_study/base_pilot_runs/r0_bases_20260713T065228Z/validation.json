@@ -1,0 +1,163 @@
+{
+  "base_count": 6,
+  "classification": "exploratory_R0_base_inputs_only_no_adversarial_cases",
+  "confirmatory_cases_generated": false,
+  "errors": [],
+  "valid": true,
+  "validated_bases": [
+    {
+      "archive_sha256": "bbd52fce2bb280e474952912115beae107b3be363b1dd51314531273bc041a03",
+      "base_id": "B01-TABULAR",
+      "clean_profile_results": {
+        "P0": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P1": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P2": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P3": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        }
+      },
+      "manifest_sha256": "5d1274581e6c35783536308f66f034a641cc7097200d425253801a4f509f9b66",
+      "payload_count": 6,
+      "tree_sha256": "f3d061ccac59180ed8e88259816478839eda3e05d32fce42758654523423b27a"
+    },
+    {
+      "archive_sha256": "dfe0092122866e1e77c58dd8a5877f13f011786eeea73aa1bf3a4a478e9b44bf",
+      "base_id": "B02-PAPER",
+      "clean_profile_results": {
+        "P0": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P1": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P2": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P3": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        }
+      },
+      "manifest_sha256": "b8e1bc023f2ef67dc91c1adc303ed8eb884f4fc7f24baf1460a65f5e663f34ad",
+      "payload_count": 9,
+      "tree_sha256": "e10be3e724b81e5f480ab6ec6313fbc4dde5dc39370a5a8f6e016661fd449e2e"
+    },
+    {
+      "archive_sha256": "58c29605301030fd848fe87ffae017e0658b8035e7cd664092e5b355b5ef226f",
+      "base_id": "B03-MODEL",
+      "clean_profile_results": {
+        "P0": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P1": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P2": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P3": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        }
+      },
+      "manifest_sha256": "4fa116958c84158d0d1724eadc62c0d1daee1fc9d7901bc5c2695b6fb5279f3b",
+      "payload_count": 5,
+      "tree_sha256": "2dc06e4913a9de4e7e6c6fee2c273c0ad0d13654a356d715a0c32644cc7c0d69"
+    },
+    {
+      "archive_sha256": "9f4a783674496b0b63a86b9f9ae877a0f88e82f1c6191a0982cfa9212806fbd6",
+      "base_id": "B04-SOFTWARE",
+      "clean_profile_results": {
+        "P0": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P1": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P2": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P3": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        }
+      },
+      "manifest_sha256": "d7acb68a463375ee41ac1ca53f1202d05faf58b0ef7e8b7bd4954de8d00fdb6e",
+      "payload_count": 6,
+      "tree_sha256": "ed253f296faa4ba3adc9ae1c8cd11de9a58fd88d1a199417fe6f7b2eca5bfe4e"
+    },
+    {
+      "archive_sha256": "f4e539bcaeb7cf38460e597071d935fafee7fdc72c0adb648d19ee5c68f6a184",
+      "base_id": "B05-MODEL-EXCHANGE",
+      "clean_profile_results": {
+        "P0": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P1": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P2": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P3": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        }
+      },
+      "manifest_sha256": "7bafc7494784073545a1054bebed3b0ef6d7bda0a408b4d7f35ff8b08ee9d1a5",
+      "payload_count": 6,
+      "tree_sha256": "2d2fc06c0a3b57dfe27ebb169adfe615da05feb5ce00e700c809f7fa60008c35"
+    },
+    {
+      "archive_sha256": "240e33662bbdbaeb904a86d22b72b089204aed574bfed3520c0df1af931b2573",
+      "base_id": "B06-MIXED-RESEARCH",
+      "clean_profile_results": {
+        "P0": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P1": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P2": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P3": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        }
+      },
+      "manifest_sha256": "9e9489777c4a98ad2ae96cb342d88ec6e5550427c99dd1571ebd8bc21a2e0d14",
+      "payload_count": 9,
+      "tree_sha256": "ed1beca745f0f63ab5c009593ba09695f2b966bacc3c74f80f2845aa891b857b"
+    }
+  ],
+  "warnings": [],
+  "validated_at": "2026-07-13T06:52:28Z",
+  "validation_classification": "independent_validator_same_environment"
+}
+

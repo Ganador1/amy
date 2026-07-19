@@ -1,0 +1,750 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Ganador1/amy/experiments/verifiable_release_study/schemas/official-attempt-selection.schema.json",
+  "title": "A.M.Y campaign-wide official-attempt selection seal",
+  "description": "Closed fail-closed output contract for build_campaign_selection_seal_before_decode across ENV-AUTHOR and ENV-LINUX-PINNED. Local guard counters may be checked, but this record does not technically prevent result release, authenticate temporal order, establish outcome blindness, authenticate the campaign, or release decode capability.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_status",
+    "classification",
+    "phase_id",
+    "seal_status",
+    "bindings",
+    "required_environment_ids",
+    "environment_selections",
+    "outcome_guard",
+    "candidate_decode_attempt_ids_after_external_authentication",
+    "read_scope",
+    "authentication",
+    "boundaries",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "amy.official-attempt-selection-seal.v1-draft"
+    },
+    "record_status": {
+      "const": "FINAL"
+    },
+    "classification": {
+      "const": "contract_test_no_confirmatory_evidence"
+    },
+    "phase_id": {
+      "const": "R1"
+    },
+    "seal_status": {
+      "const": "INVALID_FAIL_CLOSED"
+    },
+    "bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_policy_sha256",
+        "selector_sha256",
+        "selection_schema_sha256",
+        "outcome_guard_policy_sha256"
+      ],
+      "properties": {
+        "run_policy_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "selector_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "selection_schema_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "outcome_guard_policy_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "required_environment_ids": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "prefixItems": [
+        {
+          "const": "ENV-AUTHOR"
+        },
+        {
+          "const": "ENV-LINUX-PINNED"
+        }
+      ],
+      "items": false
+    },
+    "environment_selections": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "prefixItems": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/environmentSelection"
+            },
+            {
+              "properties": {
+                "environment_id": {
+                  "const": "ENV-AUTHOR"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/environmentSelection"
+            },
+            {
+              "properties": {
+                "environment_id": {
+                  "const": "ENV-LINUX-PINNED"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "items": false
+    },
+    "outcome_guard": {
+      "$ref": "#/$defs/outcomeGuard"
+    },
+    "candidate_decode_attempt_ids_after_external_authentication": {
+      "type": "array",
+      "maxItems": 2,
+      "uniqueItems": true,
+      "description": "Candidate identities only. The authentication and decode-capability fields remain false in this record.",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256,
+        "pattern": "^[A-Za-z0-9._-]+$"
+      }
+    },
+    "read_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "result_bytes_received",
+        "result_bytes_decoded",
+        "oracle_received_or_joined",
+        "decision_fields_received",
+        "human_override_used"
+      ],
+      "properties": {
+        "result_bytes_received": {
+          "const": false
+        },
+        "result_bytes_decoded": {
+          "const": false
+        },
+        "oracle_received_or_joined": {
+          "const": false
+        },
+        "decision_fields_received": {
+          "const": false
+        },
+        "human_override_used": {
+          "const": false
+        }
+      }
+    },
+    "authentication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "detached_authentication_verified",
+        "external_temporal_anchor_verified",
+        "decode_capability_released"
+      ],
+      "properties": {
+        "detached_authentication_verified": {
+          "const": false
+        },
+        "external_temporal_anchor_verified": {
+          "const": false
+        },
+        "decode_capability_released": {
+          "const": false
+        }
+      }
+    },
+    "boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "all_required_environments_selected_together",
+        "guard_counters_locally_consistent",
+        "result_release_prevention_technically_enforced",
+        "no_environment_result_released_before_campaign_selection",
+        "this_exact_record_must_be_durably_persisted_and_externally_authenticated_before_decode",
+        "all_supplied_attempts_retained"
+      ],
+      "properties": {
+        "all_required_environments_selected_together": {
+          "const": true
+        },
+        "guard_counters_locally_consistent": {
+          "type": "boolean",
+          "description": "A local consistency check over caller-supplied counters; not an authenticated temporal fact."
+        },
+        "result_release_prevention_technically_enforced": {
+          "const": false
+        },
+        "no_environment_result_released_before_campaign_selection": {
+          "const": false
+        },
+        "this_exact_record_must_be_durably_persisted_and_externally_authenticated_before_decode": {
+          "const": true
+        },
+        "all_supplied_attempts_retained": {
+          "const": true
+        }
+      }
+    },
+    "limitations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_is_a_cryptographic_signature",
+        "operator_identity_authenticated",
+        "hidden_attempts_excluded",
+        "external_outcome_access_excluded",
+        "independent_review_performed",
+        "rg006_complete"
+      ],
+      "properties": {
+        "record_is_a_cryptographic_signature": {
+          "const": false
+        },
+        "operator_identity_authenticated": {
+          "const": false
+        },
+        "hidden_attempts_excluded": {
+          "const": false
+        },
+        "external_outcome_access_excluded": {
+          "const": false
+        },
+        "independent_review_performed": {
+          "const": false
+        },
+        "rg006_complete": {
+          "const": false
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "properties": {
+        "candidate_decode_attempt_ids_after_external_authentication": {
+          "maxItems": 0
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "infrastructurePredicate": {
+      "enum": [
+        "INFRA-JOB-NOT-STARTED",
+        "INFRA-EXTERNAL-RUNNER-LOSS",
+        "INFRA-PRELOCK-ACQUISITION-FAILURE",
+        "INFRA-PREFLIGHT-STORAGE-FAILURE"
+      ]
+    },
+    "classificationStatus": {
+      "enum": [
+        "RETRY_ELIGIBLE",
+        "NOT_RETRY_ELIGIBLE",
+        "INVALID_CLASSIFICATION"
+      ]
+    },
+    "inputAttempt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attempt_id",
+        "attempt_number",
+        "attempt_record_sha256",
+        "classification_record_sha256",
+        "classification_status",
+        "predicate_id",
+        "attempt_two_authorization_status",
+        "attempt_one_classification_sha256"
+      ],
+      "properties": {
+        "attempt_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9._-]+$"
+        },
+        "attempt_number": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16
+        },
+        "attempt_record_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "classification_record_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "classification_status": {
+          "$ref": "#/$defs/classificationStatus"
+        },
+        "predicate_id": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/infrastructurePredicate"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "attempt_two_authorization_status": {
+          "enum": [
+            "NOT_APPLICABLE",
+            "AUTHORIZED",
+            "MISSING_UNAUTHORIZED"
+          ]
+        },
+        "attempt_one_classification_sha256": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "classification_status": {
+                "const": "RETRY_ELIGIBLE"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "predicate_id": {
+                "$ref": "#/$defs/infrastructurePredicate"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "predicate_id": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "inputAttempts": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 16,
+      "prefixItems": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/inputAttempt"
+            },
+            {
+              "properties": {
+                "attempt_number": {
+                  "const": 1
+                },
+                "attempt_two_authorization_status": {
+                  "const": "NOT_APPLICABLE"
+                },
+                "attempt_one_classification_sha256": {
+                  "type": "null"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/inputAttempt"
+            },
+            {
+              "properties": {
+                "attempt_number": {
+                  "const": 2
+                }
+              },
+              "oneOf": [
+                {
+                  "properties": {
+                    "attempt_two_authorization_status": {
+                      "const": "AUTHORIZED"
+                    },
+                    "attempt_one_classification_sha256": {
+                      "$ref": "#/$defs/sha256"
+                    }
+                  }
+                },
+                {
+                  "properties": {
+                    "attempt_two_authorization_status": {
+                      "const": "MISSING_UNAUTHORIZED"
+                    },
+                    "attempt_one_classification_sha256": {
+                      "type": "null"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "items": {
+        "allOf": [
+          {"$ref": "#/$defs/inputAttempt"},
+          {
+            "properties": {
+              "attempt_number": {"type": "integer", "minimum": 3, "maximum": 16},
+              "attempt_two_authorization_status": {"const": "MISSING_UNAUTHORIZED"},
+              "attempt_one_classification_sha256": {"type": "null"}
+            }
+          }
+        ]
+      }
+    },
+    "environmentSelection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environment_id",
+        "input_attempts",
+        "disposition",
+        "official_attempt_id",
+        "official_attempt_record_sha256",
+        "reason_code"
+      ],
+      "properties": {
+        "environment_id": {
+          "enum": [
+            "ENV-AUTHOR",
+            "ENV-LINUX-PINNED"
+          ]
+        },
+        "input_attempts": {
+          "$ref": "#/$defs/inputAttempts"
+        },
+        "disposition": {
+          "enum": [
+            "ATTEMPT_1_OFFICIAL",
+            "ATTEMPT_2_OFFICIAL",
+            "NO_OFFICIAL_ATTEMPT"
+          ]
+        },
+        "official_attempt_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9._-]+$"
+        },
+        "official_attempt_record_sha256": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason_code": {
+          "enum": [
+            "ATTEMPT_1_CLASSIFICATION_INVALID",
+            "AUTHORIZED_ATTEMPT_2_MISSING",
+            "ATTEMPT_2_AUTHORIZATION_BINDING_INVALID",
+            "ATTEMPT_2_CLASSIFICATION_INVALID",
+            "BOTH_ATTEMPTS_RETRY_ELIGIBLE_PRESTART",
+            "ATTEMPT_2_REPLACES_ELIGIBLE_PRESTART_ATTEMPT_1",
+            "UNAUTHORIZED_LATER_ATTEMPTS_RETAINED_EXPLORATORY",
+            "ATTEMPT_1_NOT_RETRY_ELIGIBLE"
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "disposition": {
+              "const": "ATTEMPT_1_OFFICIAL"
+            },
+            "official_attempt_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "official_attempt_record_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "reason_code": {
+              "enum": [
+                "ATTEMPT_1_NOT_RETRY_ELIGIBLE",
+                "UNAUTHORIZED_LATER_ATTEMPTS_RETAINED_EXPLORATORY"
+              ]
+            }
+          }
+        },
+        {
+          "properties": {
+            "disposition": {
+              "const": "ATTEMPT_2_OFFICIAL"
+            },
+            "official_attempt_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "official_attempt_record_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "reason_code": {
+              "const": "ATTEMPT_2_REPLACES_ELIGIBLE_PRESTART_ATTEMPT_1"
+            }
+          }
+        },
+        {
+          "properties": {
+            "disposition": {
+              "const": "NO_OFFICIAL_ATTEMPT"
+            },
+            "official_attempt_id": {
+              "type": "null"
+            },
+            "official_attempt_record_sha256": {
+              "type": "null"
+            },
+            "reason_code": {
+              "enum": [
+                "ATTEMPT_1_CLASSIFICATION_INVALID",
+                "AUTHORIZED_ATTEMPT_2_MISSING",
+                "ATTEMPT_2_AUTHORIZATION_BINDING_INVALID",
+                "ATTEMPT_2_CLASSIFICATION_INVALID",
+                "BOTH_ATTEMPTS_RETRY_ELIGIBLE_PRESTART"
+              ]
+            }
+          }
+        }
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "input_attempts": {
+                "prefixItems": [
+                  {
+                    "properties": {
+                      "classification_status": {
+                        "const": "INVALID_CLASSIFICATION"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "disposition": {
+                "const": "NO_OFFICIAL_ATTEMPT"
+              },
+              "reason_code": {
+                "const": "ATTEMPT_1_CLASSIFICATION_INVALID"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "input_attempts": {
+                "prefixItems": [
+                  {
+                    "properties": {
+                      "classification_status": {
+                        "const": "NOT_RETRY_ELIGIBLE"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "disposition": {
+                "const": "ATTEMPT_1_OFFICIAL"
+              }
+            },
+            "oneOf": [
+              {
+                "properties": {
+                  "input_attempts": {
+                    "maxItems": 1
+                  },
+                  "reason_code": {
+                    "const": "ATTEMPT_1_NOT_RETRY_ELIGIBLE"
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "input_attempts": {
+                    "minItems": 2
+                  },
+                  "reason_code": {
+                    "const": "UNAUTHORIZED_LATER_ATTEMPTS_RETAINED_EXPLORATORY"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "input_attempts": {
+                "prefixItems": [
+                  {
+                    "properties": {
+                      "classification_status": {
+                        "const": "RETRY_ELIGIBLE"
+                      }
+                    }
+                  }
+                ],
+                "maxItems": 1
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "disposition": {
+                "const": "NO_OFFICIAL_ATTEMPT"
+              },
+              "reason_code": {
+                "const": "AUTHORIZED_ATTEMPT_2_MISSING"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "input_attempts": {
+                "minItems": 2,
+                "prefixItems": [
+                  {
+                    "properties": {
+                      "classification_status": {
+                        "const": "RETRY_ELIGIBLE"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "attempt_two_authorization_status": {
+                        "const": "MISSING_UNAUTHORIZED"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "disposition": {
+                "const": "NO_OFFICIAL_ATTEMPT"
+              },
+              "official_attempt_id": {
+                "type": "null"
+              },
+              "official_attempt_record_sha256": {
+                "type": "null"
+              },
+              "reason_code": {
+                "const": "ATTEMPT_2_AUTHORIZATION_BINDING_INVALID"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "outcomeGuard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "guard_epoch_id",
+        "checkpoint_sequence",
+        "log_head_sha256",
+        "scientific_intent_event_count",
+        "result_decode_event_count",
+        "oracle_join_event_count",
+        "human_outcome_read_event_count",
+        "decode_capability_released"
+      ],
+      "properties": {
+        "guard_epoch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9._-]+$"
+        },
+        "checkpoint_sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "log_head_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "scientific_intent_event_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "result_decode_event_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "oracle_join_event_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "human_outcome_read_event_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "decode_capability_released": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

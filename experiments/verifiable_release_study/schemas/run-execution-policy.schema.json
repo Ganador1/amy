@@ -1,0 +1,538 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://amy.example/schemas/run-execution-policy.schema.json",
+  "title": "A.M.Y confirmatory run execution policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "bound_design",
+    "runner_contract",
+    "execution_phases",
+    "timeouts_seconds",
+    "attempt_policy",
+    "outcome_blind_infrastructure_classification",
+    "eligible_infrastructure_failures",
+    "non_retryable_conditions",
+    "missingness_and_stopping",
+    "deviation_rules",
+    "external_reproduction",
+    "dummy_analysis"
+  ],
+  "properties": {
+    "schema_version": {"const": "amy.run-execution-policy.v1-draft"},
+    "status": {
+      "enum": [
+        "draft_runner_contract_tests_passed_pending_isolation_authentication_review_and_freeze",
+        "frozen"
+      ]
+    },
+    "bound_design": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "selected_profile_case_count",
+        "base_count",
+        "candidate_unit_count",
+        "profile_ids",
+        "proposition_count",
+        "attack_catalog_sha256",
+        "selected_compatibility_matrix_sha256",
+        "selected_oracle_sha256",
+        "proposition_matrix_sha256",
+        "pending_compatibility_rows_must_be_zero_before_freeze"
+      ],
+      "properties": {
+        "selected_profile_case_count": {"const": 41},
+        "base_count": {"const": 6},
+        "candidate_unit_count": {"const": 246},
+        "profile_ids": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "P0"}, {"const": "P1"}, {"const": "P2"}, {"const": "P3"}
+          ],
+          "items": false,
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "proposition_count": {"const": 12},
+        "attack_catalog_sha256": {"$ref": "#/$defs/sha256"},
+        "selected_compatibility_matrix_sha256": {"$ref": "#/$defs/sha256"},
+        "selected_oracle_sha256": {"$ref": "#/$defs/sha256"},
+        "proposition_matrix_sha256": {"$ref": "#/$defs/sha256"},
+        "pending_compatibility_rows_must_be_zero_before_freeze": {"const": true}
+      }
+    },
+    "runner_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "implementation_symbol",
+        "classifier_projection_symbol",
+        "source_binding_count",
+        "source_bindings",
+        "contract_test_record",
+        "production_boundaries",
+        "rg006_complete",
+        "confirmatory_execution_permitted"
+      ],
+      "properties": {
+        "status": {
+          "const": "synthetic_contract_tests_passed_production_controls_open"
+        },
+        "implementation_symbol": {
+          "const": "amy_verifier.confirmatory_runner"
+        },
+        "classifier_projection_symbol": {
+          "const": "amy_verifier.confirmatory_runner.build_classifier_view"
+        },
+        "source_binding_count": {"const": 16},
+        "source_bindings": {
+          "type": "array",
+          "minItems": 16,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/sourceBinding"}
+        },
+        "contract_test_record": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "must_match_current_source_inventory",
+            "required_passed_test_count",
+            "required_decision"
+          ],
+          "properties": {
+            "path": {
+              "const": "development_checks/RG006_RUNNER_CONTRACT_TEST_V3_2026-07-15T034921Z.json"
+            },
+            "must_match_current_source_inventory": {"const": true},
+            "required_passed_test_count": {"const": 61},
+            "required_decision": {"const": "NO-GO"}
+          }
+        },
+        "production_boundaries": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "durable_scientific_intent_log_established",
+            "capability_separated_outcome_vault_established",
+            "full_process_tree_containment_established",
+            "os_enforced_offline_boundary_established",
+            "external_selection_authentication_established",
+            "qualified_external_human_review_completed"
+          ],
+          "properties": {
+            "durable_scientific_intent_log_established": {"const": false},
+            "capability_separated_outcome_vault_established": {"const": false},
+            "full_process_tree_containment_established": {"const": false},
+            "os_enforced_offline_boundary_established": {"const": false},
+            "external_selection_authentication_established": {"const": false},
+            "qualified_external_human_review_completed": {"const": false}
+          }
+        },
+        "rg006_complete": {"const": false},
+        "confirmatory_execution_permitted": {"const": false}
+      }
+    },
+    "execution_phases": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primary_R1_environments", "external_reproduction_phase", "unit_order",
+        "profile_order", "max_parallel_cases"
+      ],
+      "properties": {
+        "primary_R1_environments": {
+          "type": "array",
+          "prefixItems": [{"const": "ENV-AUTHOR"}, {"const": "ENV-LINUX-PINNED"}],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "external_reproduction_phase": {"const": "after_R1_release_before_R2_submission"},
+        "unit_order": {"const": "base_id_ascii_then_operator_id_ascii"},
+        "profile_order": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "P0"}, {"const": "P1"}, {"const": "P2"}, {"const": "P3"}
+          ],
+          "items": false,
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "max_parallel_cases": {"const": 1}
+      }
+    },
+    "timeouts_seconds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "input_acquisition",
+        "elapsed_clock",
+        "case_generation",
+        "case_unit",
+        "profile_execution",
+        "production_sigstore_inner_command",
+        "whole_environment_attempt",
+        "sigterm_grace",
+        "sigkill_reap"
+      ],
+      "properties": {
+        "input_acquisition": {"type": "integer", "minimum": 1, "maximum": 7200},
+        "elapsed_clock": {"const": "continuous_monotonic_including_suspend"},
+        "case_generation": {"type": "integer", "minimum": 1, "maximum": 1800},
+        "case_unit": {"type": "integer", "minimum": 1, "maximum": 3600},
+        "profile_execution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["P0", "P1", "P2", "P3"],
+          "properties": {
+            "P0": {"type": "integer", "minimum": 1, "maximum": 600},
+            "P1": {"type": "integer", "minimum": 1, "maximum": 600},
+            "P2": {"type": "integer", "minimum": 1, "maximum": 600},
+            "P3": {"type": "integer", "minimum": 1, "maximum": 600}
+          }
+        },
+        "production_sigstore_inner_command": {
+          "type": "integer", "minimum": 1, "maximum": 600
+        },
+        "whole_environment_attempt": {
+          "type": "integer", "minimum": 3600, "maximum": 259200
+        },
+        "sigterm_grace": {"type": "integer", "minimum": 1, "maximum": 60},
+        "sigkill_reap": {"type": "integer", "minimum": 1, "maximum": 60}
+      }
+    },
+    "attempt_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_attempts_per_environment",
+        "max_attempts_per_case_within_environment",
+        "case_level_retry_allowed",
+        "rerun_scope",
+        "rerun_trigger_basis",
+        "official_attempt_selection",
+        "eligible_retry_requires_zero_scientific_intent_events",
+        "eligible_retry_requires_zero_terminal_scientific_events",
+        "scientific_intent_must_be_durably_persisted_before_child_spawn",
+        "eligible_retry_requires_outcomes_exposed_false",
+        "eligible_retry_requires_exactly_one_complete_rerun",
+        "attempt_two_requires_persisted_attempt_one_classification_sha256",
+        "invalid_classification_retry_allowed",
+        "attempt_two_selection",
+        "campaign_selection_covers_all_primary_environments",
+        "per_environment_decode_before_campaign_seal_allowed",
+        "selection_sealed_before_result_decoding",
+        "unauthorized_attempt_disposition",
+        "all_infrastructure_attempts_fail_disposition",
+        "no_official_attempt_row_disposition",
+        "retain_all_attempts_immutably",
+        "favorable_or_unfavorable_outcome_cannot_trigger_retry"
+      ],
+      "properties": {
+        "max_attempts_per_environment": {"const": 2},
+        "max_attempts_per_case_within_environment": {"const": 1},
+        "case_level_retry_allowed": {"const": false},
+        "rerun_scope": {"const": "complete_environment"},
+        "rerun_trigger_basis": {
+          "const": "exactly_one_typed_prestart_infrastructure_predicate_with_zero_scientific_intent_and_no_outcome_exposure"
+        },
+        "official_attempt_selection": {
+          "const": "attempt_one_is_official_and_attempt_two_forbidden_unless_attempt_one_is_retry_eligible"
+        },
+        "eligible_retry_requires_zero_scientific_intent_events": {"const": true},
+        "eligible_retry_requires_zero_terminal_scientific_events": {"const": true},
+        "scientific_intent_must_be_durably_persisted_before_child_spawn": {"const": true},
+        "eligible_retry_requires_outcomes_exposed_false": {"const": true},
+        "eligible_retry_requires_exactly_one_complete_rerun": {"const": true},
+        "attempt_two_requires_persisted_attempt_one_classification_sha256": {"const": true},
+        "invalid_classification_retry_allowed": {"const": false},
+        "attempt_two_selection": {
+          "const": "attempt_two_is_official_only_when_authorized_by_persisted_attempt_one_classification_and_is_not_invalid"
+        },
+        "campaign_selection_covers_all_primary_environments": {"const": true},
+        "per_environment_decode_before_campaign_seal_allowed": {"const": false},
+        "selection_sealed_before_result_decoding": {"const": true},
+        "unauthorized_attempt_disposition": {"const": "EXPLORATORY_CANNOT_REPLACE_OFFICIAL"},
+        "all_infrastructure_attempts_fail_disposition": {
+          "const": "NO_OFFICIAL_ATTEMPT_RETAIN_AND_REPORT_ALL"
+        },
+        "no_official_attempt_row_disposition": {
+          "const": "ALL_PLANNED_ROWS_MISSING_EXECUTION"
+        },
+        "retain_all_attempts_immutably": {"const": true},
+        "favorable_or_unfavorable_outcome_cannot_trigger_retry": {"const": true}
+      }
+    },
+    "outcome_blind_infrastructure_classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "must_finish_before_oracle_join",
+        "must_finish_before_result_decision_fields_are_read",
+        "classifier_projection_top_level_fields",
+        "allowed_predecode_signal_fields",
+        "allowed_process_metadata_fields",
+        "forbidden_fields",
+        "scientific_intent_marker_must_be_durable_before_child_spawn",
+        "classifier_receives_process_metadata",
+        "classifier_receives_raw_artifacts",
+        "classifier_receives_result_or_oracle_bytes",
+        "exactly_one_typed_predicate_required_for_retry",
+        "invalid_classification_retry_allowed",
+        "classification_record_required",
+        "classification_record_sha256_required"
+      ],
+      "properties": {
+        "must_finish_before_oracle_join": {"const": true},
+        "must_finish_before_result_decision_fields_are_read": {"const": true},
+        "classifier_projection_top_level_fields": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "schema_version"},
+            {"const": "classification"},
+            {"const": "attempt_id"},
+            {"const": "environment_id"},
+            {"const": "attempt_number"},
+            {"const": "attempt_state"},
+            {"const": "attempt_record_jcs_sha256"},
+            {"const": "clock"},
+            {"const": "attempt_two_authorization"},
+            {"const": "process"},
+            {"const": "signals"},
+            {"const": "outcome_guard"}
+          ],
+          "items": false,
+          "minItems": 12,
+          "maxItems": 12
+        },
+        "allowed_predecode_signal_fields": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "provider_job_id"},
+            {"const": "provider_job_state"},
+            {"const": "external_cancellation_actor"},
+            {"const": "host_heartbeat_state"},
+            {"const": "image_pull_status"},
+            {"const": "input_acquisition_status"},
+            {"const": "input_lock_completed"},
+            {"const": "preflight_storage_probe"},
+            {"const": "run_started_marker"},
+            {"const": "case_execution_started"},
+            {"const": "run_completed_marker"},
+            {"const": "terminal_scientific_event_count"},
+            {"const": "scientific_intent_event_count"},
+            {"const": "outcomes_exposed_to_selection_process"},
+            {"const": "result_bytes_decoded_before_selection"},
+            {"const": "oracle_join_performed_before_selection"},
+            {"const": "operator_cancellation_requested"},
+            {"const": "input_hash_mismatch"}
+          ],
+          "items": false,
+          "minItems": 18,
+          "maxItems": 18
+        },
+        "allowed_process_metadata_fields": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "spawned"},
+            {"const": "pid"},
+            {"const": "exit_code"},
+            {"const": "exit_signal"},
+            {"const": "timeout_triggered"},
+            {"const": "output_limit_exceeded"},
+            {"const": "sigterm_sent"},
+            {"const": "sigkill_sent"},
+            {"const": "reaped"}
+          ],
+          "items": false,
+          "minItems": 9,
+          "maxItems": 9
+        },
+        "forbidden_fields": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "raw_artifacts"},
+            {"const": "raw_result_bytes"},
+            {"const": "result_stdout"},
+            {"const": "result_stderr"},
+            {"const": "decision"},
+            {"const": "primary_reason"},
+            {"const": "secondary_reasons"},
+            {"const": "target_decision"},
+            {"const": "expected_decision"},
+            {"const": "expected_primary_reason"},
+            {"const": "oracle_row"},
+            {"const": "profile_totals"},
+            {"const": "manuscript_text"}
+          ],
+          "items": false,
+          "minItems": 13,
+          "maxItems": 13
+        },
+        "scientific_intent_marker_must_be_durable_before_child_spawn": {"const": true},
+        "classifier_receives_process_metadata": {"const": true},
+        "classifier_receives_raw_artifacts": {"const": false},
+        "classifier_receives_result_or_oracle_bytes": {"const": false},
+        "exactly_one_typed_predicate_required_for_retry": {"const": true},
+        "invalid_classification_retry_allowed": {"const": false},
+        "classification_record_required": {"const": true},
+        "classification_record_sha256_required": {"const": true}
+      }
+    },
+    "eligible_infrastructure_failures": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {"$ref": "#/$defs/failurePredicate"}
+    },
+    "non_retryable_conditions": {
+      "type": "array",
+      "minItems": 8,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/nonRetryable"}
+    },
+    "missingness_and_stopping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "generation_failure",
+        "missing_execution",
+        "error_decision",
+        "not_applicable",
+        "stop_rule",
+        "outcome_based_stopping_forbidden"
+      ],
+      "properties": {
+        "generation_failure": {"const": "RETAIN_IN_PLANNED_DENOMINATOR_AND_REPORT_SEPARATELY"},
+        "missing_execution": {"const": "RETAIN_IN_PLANNED_DENOMINATOR_AND_REPORT_SEPARATELY"},
+        "error_decision": {"const": "RETAIN_AS_CONFORMANCE_FAILURE_NEVER_RELABEL_REJECT"},
+        "not_applicable": {"const": "ONLY_FROM_FROZEN_PREEXECUTION_COMPATIBILITY_MATRIX"},
+        "stop_rule": {
+          "const": "STOP_ONLY_AFTER_EVERY_PLANNED_ROW_HAS_TERMINAL_RESULT_OR_RETAINED_TERMINAL_FAILURE"
+        },
+        "outcome_based_stopping_forbidden": {"const": true}
+      }
+    },
+    "deviation_rules": {
+      "type": "array",
+      "minItems": 8,
+      "items": {"$ref": "#/$defs/deviationRule"}
+    },
+    "external_reproduction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mandatory_before_manuscript_submission",
+        "complete_benchmark_required",
+        "qualified_non_implementer_required",
+        "signed_dated_record_required",
+        "hash_identical_inputs_required",
+        "claim_C011_allowed_before_completion",
+        "same_author_or_same_host_replay_satisfies_requirement"
+      ],
+      "properties": {
+        "mandatory_before_manuscript_submission": {"const": true},
+        "complete_benchmark_required": {"const": true},
+        "qualified_non_implementer_required": {"const": true},
+        "signed_dated_record_required": {"const": true},
+        "hash_identical_inputs_required": {"const": true},
+        "claim_C011_allowed_before_completion": {"const": false},
+        "same_author_or_same_host_replay_satisfies_requirement": {"const": false}
+      }
+    },
+    "dummy_analysis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required_before_freeze", "status", "implementation_path", "retained_output_path"],
+      "properties": {
+        "required_before_freeze": {"const": true},
+        "status": {"enum": ["not_implemented", "implemented_validated_not_frozen", "frozen"]},
+        "implementation_path": {"type": ["string", "null"]},
+        "retained_output_path": {"type": ["string", "null"]}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "sourceBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "path", "sha256"],
+      "properties": {
+        "role": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"
+        },
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "failurePredicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "implementation_predicate_id", "implemented_by",
+        "eligible_for_complete_environment_rerun", "classification_deadline",
+        "required_common_guards", "predicate_requirements", "disqualifiers",
+        "required_evidence_fields"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^INFRA-[A-Z0-9-]+$"},
+        "implementation_predicate_id": {
+          "type": "string",
+          "pattern": "^INFRA-[A-Z0-9-]+$"
+        },
+        "implemented_by": {
+          "const": "amy_verifier.confirmatory_runner.classify_infrastructure_before_decode"
+        },
+        "eligible_for_complete_environment_rerun": {"const": true},
+        "classification_deadline": {"const": "before_outcome_join_and_decision_read"},
+        "required_common_guards": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]+$"}
+        },
+        "predicate_requirements": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]+$"}
+        },
+        "disqualifiers": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]+$"}
+        },
+        "required_evidence_fields": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "nonRetryable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "disposition", "case_retry_allowed"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]+$"},
+        "disposition": {"type": "string", "minLength": 1},
+        "case_retry_allowed": {"const": false}
+      }
+    },
+    "deviationRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "trigger", "required_action", "may_overwrite_history"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^DEV-[A-Z0-9-]+$"},
+        "trigger": {"type": "string", "minLength": 1},
+        "required_action": {"type": "string", "minLength": 1},
+        "may_overwrite_history": {"const": false}
+      }
+    }
+  }
+}

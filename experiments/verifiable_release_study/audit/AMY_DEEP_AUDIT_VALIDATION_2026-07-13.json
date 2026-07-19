@@ -1,0 +1,26 @@
+{
+  "byte_identical_after_canonicalization": true,
+  "classification": "same_environment_exploratory_replay",
+  "command_contract": "uv run --frozen python scripts/validate_amy_audit.py",
+  "errors": [],
+  "fresh_canonical_json_sha256": "d0ec28d8c5d960a4bb85573ae520a12928453c3f70222548f72c00b6a388ecb4",
+  "limitations": [
+    "The replay uses the same host and dirty working tree, not an independent environment.",
+    "Canonical byte identity establishes deterministic replay on this snapshot, not correctness of every interpretation.",
+    "The audit recomputes present bytes; it does not recover historical bytes or authenticate mutable local declarations."
+  ],
+  "record_path": "audit/AMY_DEEP_AUDIT_RAW_2026-07-13.json",
+  "retained_canonical_json_sha256": "d0ec28d8c5d960a4bb85573ae520a12928453c3f70222548f72c00b6a388ecb4",
+  "retained_pretty_json_sha256": "4b3cfb9470d5f64bc4229de45f3b1e626d066a7be3d2cba014ba4d65146a63ed",
+  "scanner_sha256": "26c386f9383ccb4f5853988b4116043aa12ee94157e7656a2df131b37c60fd75",
+  "schema_version": "amy.integrity-audit-replay-validation.v1",
+  "summary": {
+    "checksum_entries": 24,
+    "directory_authenticated_records": 0,
+    "directory_output_digest_matches": 1653,
+    "directory_provenance_records": 1653,
+    "flat_experiment_records": 165,
+    "publication_manifests": 11
+  },
+  "valid": true
+}

@@ -1,0 +1,230 @@
+{
+  "schema_version": "amy.run-execution-policy.v1-draft",
+  "status": "draft_runner_contract_tests_passed_pending_isolation_authentication_review_and_freeze",
+  "bound_design": {
+    "selected_profile_case_count": 41,
+    "base_count": 6,
+    "candidate_unit_count": 246,
+    "profile_ids": ["P0", "P1", "P2", "P3"],
+    "proposition_count": 12,
+    "attack_catalog_sha256": "098563afc029f8c1532999e3cc5c058c8bf3bdc33cfcfd01423decf56f4693b1",
+    "selected_compatibility_matrix_sha256": "4de12c8c03c4227619986c63f3532047c3bcff3a960bb7bac40ccfebaa1031a1",
+    "selected_oracle_sha256": "23a21bcfc834bd2638e283964f40e5129ee151f5c798a6eb1197be2c26403295",
+    "proposition_matrix_sha256": "8cea1e3341c716f287d7ac2cdb9ad2ae7529729f1dde9294a523051b8dcf8ff5",
+    "pending_compatibility_rows_must_be_zero_before_freeze": true
+  },
+  "runner_contract": {
+    "status": "synthetic_contract_tests_passed_production_controls_open",
+    "implementation_symbol": "amy_verifier.confirmatory_runner",
+    "classifier_projection_symbol": "amy_verifier.confirmatory_runner.build_classifier_view",
+    "source_binding_count": 16,
+    "source_bindings": [
+      {"role": "confirmatory_runner", "path": "amy_verifier/confirmatory_runner.py", "sha256": "a68d23749bb72bad517bb12b86b92aab83d44c1aaabb282ce393173a70fa6c0c"},
+      {"role": "runner_contract", "path": "protocol/CONFIRMATORY_RUNNER_CONTRACT_DRAFT.md", "sha256": "3d10853bed2c23040e9fd2ab49962d3e3294c40a24342c5efeb1e9f269d267be"},
+      {"role": "project_manifest", "path": "pyproject.toml", "sha256": "8d1042a03fe74f320d6b71ee80a05da3e7e190bd64808914c5bf05460ec86af0"},
+      {"role": "environment_attempt_schema", "path": "schemas/environment-attempt-record.schema.json", "sha256": "1131d69e94198b561c7aed87b1a2f0ad5e076558999621fec0cd358f830475e2"},
+      {"role": "infrastructure_classification_schema", "path": "schemas/infrastructure-classification.schema.json", "sha256": "529c47e5e2f40a9bc9319cbf37c3be340dd8fdef841f701cc80fabb9787dcd6d"},
+      {"role": "official_attempt_selection_schema", "path": "schemas/official-attempt-selection.schema.json", "sha256": "475578a6e4a9da418529e68f35b79f94f7a67797dd7da01393a68d26cf071786"},
+      {"role": "process_isolation_schema", "path": "schemas/process-isolation-record.schema.json", "sha256": "92f98df6c871ce0e08b568e5cbcca76fe5cd57ab26ec28e582a09368048a1add"},
+      {"role": "rg006_test_record_schema", "path": "schemas/rg006-contract-test-record-v3.schema.json", "sha256": "abf54002fd3d3bb1484266dda8f3aab2962e85d847539ac31bc89693d1f475e6"},
+      {"role": "run_policy_validation_schema", "path": "schemas/run-execution-policy-validation.schema.json", "sha256": "da08dceed2adb050b769414df05b48daebc4d0effa1856b3c5d5e4d4d404155c"},
+      {"role": "run_policy_schema", "path": "schemas/run-execution-policy.schema.json", "sha256": "f52eca029193a42193baf9e7f56e024277ee8c4747be8c91cb5ac1e808a04de5"},
+      {"role": "scientific_intent_event_schema", "path": "schemas/scientific-intent-event.schema.json", "sha256": "31fab458ecc55374d969677a57576b12ecee1e4dd6a9390c0de30b963c1d0442"},
+      {"role": "rg006_test_runner", "path": "scripts/run_rg006_contract_tests.py", "sha256": "c4608939e8570777158594c8460d7160e5dbc33d4868d838ef222d89e7396789"},
+      {"role": "run_policy_validator", "path": "scripts/validate_run_execution_policy.py", "sha256": "d91219aa580681fed734a7ba706eabb226a2838487c2beb8206137d0b0b33463"},
+      {"role": "runner_contract_tests", "path": "tests/test_confirmatory_runner_contract.py", "sha256": "49d301645aedb72a844473ea20ca6685c041013db602a1c91e19bd0bb5680ccc"},
+      {"role": "run_policy_tests", "path": "tests/test_run_execution_policy.py", "sha256": "e15eb429c63be322c280a5bf16d28119652ccc707ffd6c9517c618207a8bd116"},
+      {"role": "dependency_lock", "path": "uv.lock", "sha256": "ada446114e2534983167988f875dea92b5d1d895a6a12a9db70e63626a3d9f41"}
+    ],
+    "contract_test_record": {
+      "path": "development_checks/RG006_RUNNER_CONTRACT_TEST_V3_2026-07-15T034921Z.json",
+      "must_match_current_source_inventory": true,
+      "required_passed_test_count": 61,
+      "required_decision": "NO-GO"
+    },
+    "production_boundaries": {
+      "durable_scientific_intent_log_established": false,
+      "capability_separated_outcome_vault_established": false,
+      "full_process_tree_containment_established": false,
+      "os_enforced_offline_boundary_established": false,
+      "external_selection_authentication_established": false,
+      "qualified_external_human_review_completed": false
+    },
+    "rg006_complete": false,
+    "confirmatory_execution_permitted": false
+  },
+  "execution_phases": {
+    "primary_R1_environments": ["ENV-AUTHOR", "ENV-LINUX-PINNED"],
+    "external_reproduction_phase": "after_R1_release_before_R2_submission",
+    "unit_order": "base_id_ascii_then_operator_id_ascii",
+    "profile_order": ["P0", "P1", "P2", "P3"],
+    "max_parallel_cases": 1
+  },
+  "timeouts_seconds": {
+    "input_acquisition": 1800,
+    "elapsed_clock": "continuous_monotonic_including_suspend",
+    "case_generation": 120,
+    "case_unit": 900,
+    "profile_execution": {"P0": 180, "P1": 180, "P2": 180, "P3": 180},
+    "production_sigstore_inner_command": 120,
+    "whole_environment_attempt": 259200,
+    "sigterm_grace": 5,
+    "sigkill_reap": 5
+  },
+  "attempt_policy": {
+    "max_attempts_per_environment": 2,
+    "max_attempts_per_case_within_environment": 1,
+    "case_level_retry_allowed": false,
+    "rerun_scope": "complete_environment",
+    "rerun_trigger_basis": "exactly_one_typed_prestart_infrastructure_predicate_with_zero_scientific_intent_and_no_outcome_exposure",
+    "official_attempt_selection": "attempt_one_is_official_and_attempt_two_forbidden_unless_attempt_one_is_retry_eligible",
+    "eligible_retry_requires_zero_scientific_intent_events": true,
+    "eligible_retry_requires_zero_terminal_scientific_events": true,
+    "scientific_intent_must_be_durably_persisted_before_child_spawn": true,
+    "eligible_retry_requires_outcomes_exposed_false": true,
+    "eligible_retry_requires_exactly_one_complete_rerun": true,
+    "attempt_two_requires_persisted_attempt_one_classification_sha256": true,
+    "invalid_classification_retry_allowed": false,
+    "attempt_two_selection": "attempt_two_is_official_only_when_authorized_by_persisted_attempt_one_classification_and_is_not_invalid",
+    "campaign_selection_covers_all_primary_environments": true,
+    "per_environment_decode_before_campaign_seal_allowed": false,
+    "selection_sealed_before_result_decoding": true,
+    "unauthorized_attempt_disposition": "EXPLORATORY_CANNOT_REPLACE_OFFICIAL",
+    "all_infrastructure_attempts_fail_disposition": "NO_OFFICIAL_ATTEMPT_RETAIN_AND_REPORT_ALL",
+    "no_official_attempt_row_disposition": "ALL_PLANNED_ROWS_MISSING_EXECUTION",
+    "retain_all_attempts_immutably": true,
+    "favorable_or_unfavorable_outcome_cannot_trigger_retry": true
+  },
+  "outcome_blind_infrastructure_classification": {
+    "must_finish_before_oracle_join": true,
+    "must_finish_before_result_decision_fields_are_read": true,
+    "classifier_projection_top_level_fields": [
+      "schema_version", "classification", "attempt_id", "environment_id",
+      "attempt_number", "attempt_state", "attempt_record_jcs_sha256", "clock",
+      "attempt_two_authorization", "process", "signals", "outcome_guard"
+    ],
+    "allowed_predecode_signal_fields": [
+      "provider_job_id", "provider_job_state", "external_cancellation_actor",
+      "host_heartbeat_state", "image_pull_status", "input_acquisition_status",
+      "input_lock_completed", "preflight_storage_probe", "run_started_marker",
+      "case_execution_started", "run_completed_marker",
+      "terminal_scientific_event_count", "scientific_intent_event_count",
+      "outcomes_exposed_to_selection_process",
+      "result_bytes_decoded_before_selection",
+      "oracle_join_performed_before_selection",
+      "operator_cancellation_requested", "input_hash_mismatch"
+    ],
+    "allowed_process_metadata_fields": [
+      "spawned", "pid", "exit_code", "exit_signal", "timeout_triggered",
+      "output_limit_exceeded", "sigterm_sent", "sigkill_sent", "reaped"
+    ],
+    "forbidden_fields": [
+      "raw_artifacts", "raw_result_bytes", "result_stdout",
+      "result_stderr", "decision", "primary_reason", "secondary_reasons",
+      "target_decision", "expected_decision", "expected_primary_reason",
+      "oracle_row", "profile_totals", "manuscript_text"
+    ],
+    "scientific_intent_marker_must_be_durable_before_child_spawn": true,
+    "classifier_receives_process_metadata": true,
+    "classifier_receives_raw_artifacts": false,
+    "classifier_receives_result_or_oracle_bytes": false,
+    "exactly_one_typed_predicate_required_for_retry": true,
+    "invalid_classification_retry_allowed": false,
+    "classification_record_required": true,
+    "classification_record_sha256_required": true
+  },
+  "eligible_infrastructure_failures": [
+    {
+      "id": "INFRA-JOB-NOT-STARTED",
+      "implementation_predicate_id": "INFRA-JOB-NOT-STARTED",
+      "implemented_by": "amy_verifier.confirmatory_runner.classify_infrastructure_before_decode",
+      "eligible_for_complete_environment_rerun": true,
+      "classification_deadline": "before_outcome_join_and_decision_read",
+      "required_common_guards": ["ATTEMPT_STATE_PRESTART_ABORTED", "RUN_STARTED_FALSE", "CASE_EXECUTION_STARTED_FALSE", "SCIENTIFIC_INTENT_EVENT_COUNT_ZERO", "TERMINAL_SCIENTIFIC_EVENT_COUNT_ZERO", "OUTCOME_GUARD_CLEAN"],
+      "predicate_requirements": ["PROVIDER_JOB_STATE_NOT_SCHEDULED_OR_RUNNER_UNAVAILABLE"],
+      "disqualifiers": ["OUTCOMES_EXPOSED", "RESULT_BYTES_DECODED", "ORACLE_JOINED", "HUMAN_OUTCOME_READ", "DECODE_CAPABILITY_RELEASED"],
+      "required_evidence_fields": ["attempt_state", "provider_job_id", "provider_job_state", "run_started_marker", "case_execution_started", "scientific_intent_event_count", "terminal_scientific_event_count", "outcomes_exposed_to_selection_process", "outcome_guard"]
+    },
+    {
+      "id": "INFRA-EXTERNAL-RUNNER-LOSS",
+      "implementation_predicate_id": "INFRA-EXTERNAL-RUNNER-LOSS",
+      "implemented_by": "amy_verifier.confirmatory_runner.classify_infrastructure_before_decode",
+      "eligible_for_complete_environment_rerun": true,
+      "classification_deadline": "before_outcome_join_and_decision_read",
+      "required_common_guards": ["ATTEMPT_STATE_PRESTART_ABORTED", "RUN_STARTED_FALSE", "CASE_EXECUTION_STARTED_FALSE", "SCIENTIFIC_INTENT_EVENT_COUNT_ZERO", "TERMINAL_SCIENTIFIC_EVENT_COUNT_ZERO", "OUTCOME_GUARD_CLEAN"],
+      "predicate_requirements": ["PROVIDER_JOB_STATE_RUNNER_LOST_OR_PROVIDER_CANCELLED", "EXTERNAL_CANCELLATION_ACTOR_PROVIDER", "HOST_HEARTBEAT_LOST", "OPERATOR_CANCELLATION_FALSE"],
+      "disqualifiers": ["OUTCOMES_EXPOSED", "RESULT_BYTES_DECODED", "ORACLE_JOINED", "HUMAN_OUTCOME_READ", "DECODE_CAPABILITY_RELEASED"],
+      "required_evidence_fields": ["attempt_state", "provider_job_id", "provider_job_state", "external_cancellation_actor", "host_heartbeat_state", "operator_cancellation_requested", "run_started_marker", "case_execution_started", "scientific_intent_event_count", "terminal_scientific_event_count", "outcomes_exposed_to_selection_process", "outcome_guard"]
+    },
+    {
+      "id": "INFRA-PRELOCK-ACQUISITION-FAILURE",
+      "implementation_predicate_id": "INFRA-PRELOCK-ACQUISITION-FAILURE",
+      "implemented_by": "amy_verifier.confirmatory_runner.classify_infrastructure_before_decode",
+      "eligible_for_complete_environment_rerun": true,
+      "classification_deadline": "before_outcome_join_and_decision_read",
+      "required_common_guards": ["ATTEMPT_STATE_PRESTART_ABORTED", "RUN_STARTED_FALSE", "CASE_EXECUTION_STARTED_FALSE", "SCIENTIFIC_INTENT_EVENT_COUNT_ZERO", "TERMINAL_SCIENTIFIC_EVENT_COUNT_ZERO", "OUTCOME_GUARD_CLEAN"],
+      "predicate_requirements": ["INPUT_ACQUISITION_FAILED", "INPUT_LOCK_INCOMPLETE", "INPUT_HASH_MISMATCH_FALSE"],
+      "disqualifiers": ["OUTCOMES_EXPOSED", "RESULT_BYTES_DECODED", "ORACLE_JOINED", "HUMAN_OUTCOME_READ", "DECODE_CAPABILITY_RELEASED"],
+      "required_evidence_fields": ["attempt_state", "input_acquisition_status", "input_lock_completed", "input_hash_mismatch", "run_started_marker", "case_execution_started", "scientific_intent_event_count", "terminal_scientific_event_count", "outcomes_exposed_to_selection_process", "outcome_guard"]
+    },
+    {
+      "id": "INFRA-PREFLIGHT-STORAGE-FAILURE",
+      "implementation_predicate_id": "INFRA-PREFLIGHT-STORAGE-FAILURE",
+      "implemented_by": "amy_verifier.confirmatory_runner.classify_infrastructure_before_decode",
+      "eligible_for_complete_environment_rerun": true,
+      "classification_deadline": "before_outcome_join_and_decision_read",
+      "required_common_guards": ["ATTEMPT_STATE_PRESTART_ABORTED", "RUN_STARTED_FALSE", "CASE_EXECUTION_STARTED_FALSE", "SCIENTIFIC_INTENT_EVENT_COUNT_ZERO", "TERMINAL_SCIENTIFIC_EVENT_COUNT_ZERO", "OUTCOME_GUARD_CLEAN"],
+      "predicate_requirements": ["PREFLIGHT_STORAGE_PROBE_FAILED"],
+      "disqualifiers": ["OUTCOMES_EXPOSED", "RESULT_BYTES_DECODED", "ORACLE_JOINED", "HUMAN_OUTCOME_READ", "DECODE_CAPABILITY_RELEASED"],
+      "required_evidence_fields": ["attempt_state", "preflight_storage_probe", "run_started_marker", "case_execution_started", "scientific_intent_event_count", "terminal_scientific_event_count", "outcomes_exposed_to_selection_process", "outcome_guard"]
+    }
+  ],
+  "non_retryable_conditions": [
+    {"id": "CASE_TIMEOUT", "disposition": "retain ERROR/INTERNAL_ERROR or missing terminal output exactly as produced", "case_retry_allowed": false},
+    {"id": "VERIFIER_CRASH", "disposition": "retain crash and classify planned row as ERROR or MISSING_EXECUTION under frozen rules", "case_retry_allowed": false},
+    {"id": "RESOURCE_EXHAUSTION", "disposition": "retain terminal resource result; do not rerun the case", "case_retry_allowed": false},
+    {"id": "WHOLE_ENVIRONMENT_TIMEOUT", "disposition": "retain completed and missing rows; timeout alone is not eligible infrastructure failure", "case_retry_allowed": false},
+    {"id": "INPUT_HASH_MISMATCH", "disposition": "stop execution, retain acquisition failure, and do not substitute bytes", "case_retry_allowed": false},
+    {"id": "POLICY_OR_SCHEMA_HASH_MISMATCH", "disposition": "stop execution and require corrected lineage/new registration as applicable", "case_retry_allowed": false},
+    {"id": "UNEXPECTED_OR_UNFAVORABLE_OUTCOME", "disposition": "retain as official scientific result", "case_retry_allowed": false},
+    {"id": "ORACLE_OR_ANALYSIS_DISAGREEMENT", "disposition": "retain disagreement; resolution cannot replace original R1 bytes", "case_retry_allowed": false},
+    {"id": "DISK_OR_QUOTA_FAILURE", "disposition": "retain affected official attempt as incomplete; no replacement run after any scientific event", "case_retry_allowed": false},
+    {"id": "NETWORK_OR_DEPENDENCY_FAILURE", "disposition": "retain if it occurs after input lock or any scientific event; verification remains offline", "case_retry_allowed": false},
+    {"id": "MANUAL_CANCELLATION", "disposition": "retain attempt; operator cancellation is never retry eligible", "case_retry_allowed": false},
+    {"id": "HOST_SLEEP", "disposition": "continuous elapsed clock continues and resulting timeout is retained", "case_retry_allowed": false},
+    {"id": "RUNNER_IMPLEMENTATION_DEFECT", "disposition": "classify affected environment nonconfirmatory and require new preregistration after any outcome exists", "case_retry_allowed": false}
+  ],
+  "missingness_and_stopping": {
+    "generation_failure": "RETAIN_IN_PLANNED_DENOMINATOR_AND_REPORT_SEPARATELY",
+    "missing_execution": "RETAIN_IN_PLANNED_DENOMINATOR_AND_REPORT_SEPARATELY",
+    "error_decision": "RETAIN_AS_CONFORMANCE_FAILURE_NEVER_RELABEL_REJECT",
+    "not_applicable": "ONLY_FROM_FROZEN_PREEXECUTION_COMPATIBILITY_MATRIX",
+    "stop_rule": "STOP_ONLY_AFTER_EVERY_PLANNED_ROW_HAS_TERMINAL_RESULT_OR_RETAINED_TERMINAL_FAILURE",
+    "outcome_based_stopping_forbidden": true
+  },
+  "deviation_rules": [
+    {"id": "DEV-R0-CONTRACT-CHANGE", "trigger": "any protocol, catalog, oracle, compatibility, policy, schema, runner, verifier, dependency, image, or analysis byte changes after registration", "required_action": "preserve the registered R0 and create a new preregistration/R0 before further confirmatory execution", "may_overwrite_history": false},
+    {"id": "DEV-POST-START-CODE-CHANGE", "trigger": "generator, verifier, evaluator, runner, or analysis code changes after any confirmatory attempt starts", "required_action": "retain all attempted R1 evidence, classify the lineage as deviated, and start a new preregistration", "may_overwrite_history": false},
+    {"id": "DEV-REGISTERED-INPUT-DRIFT", "trigger": "an acquired input differs from its registered digest", "required_action": "do not execute or substitute; retain an input-integrity failure", "may_overwrite_history": false},
+    {"id": "DEV-ENVIRONMENT-IMAGE-DRIFT", "trigger": "the execution image digest differs from the registered environment", "required_action": "do not call the run comparable; register a new environment or new R0", "may_overwrite_history": false},
+    {"id": "DEV-PROVENANCE-LOG-LOSS", "trigger": "required attempt or environment provenance cannot be reconstructed from retained bytes", "required_action": "mark affected claim unavailable; no hand-repaired provenance record", "may_overwrite_history": false},
+    {"id": "DEV-EXTERNAL-REPRO-INPUT-DRIFT", "trigger": "external reproducer inputs differ from released R0/R1 identities", "required_action": "report reproduction-input failure and prohibit C011", "may_overwrite_history": false},
+    {"id": "DEV-RESULT-DISAGREEMENT", "trigger": "environment or external reproduction decision/reason differs", "required_action": "retain and report the disagreement; do not rerun based on outcome", "may_overwrite_history": false},
+    {"id": "DEV-PAPER-ONLY-CORRECTION", "trigger": "wording/layout correction cannot affect R0 or R1 evidence or analysis", "required_action": "create a new linked R2/correction while preserving prior R2", "may_overwrite_history": false}
+  ],
+  "external_reproduction": {
+    "mandatory_before_manuscript_submission": true,
+    "complete_benchmark_required": true,
+    "qualified_non_implementer_required": true,
+    "signed_dated_record_required": true,
+    "hash_identical_inputs_required": true,
+    "claim_C011_allowed_before_completion": false,
+    "same_author_or_same_host_replay_satisfies_requirement": false
+  },
+  "dummy_analysis": {
+    "required_before_freeze": true,
+    "status": "implemented_validated_not_frozen",
+    "implementation_path": "scripts/analyze_observation_ledger.py",
+    "retained_output_path": "dummy_analysis/DUMMY_ANALYSIS_SUMMARY.json"
+  }
+}

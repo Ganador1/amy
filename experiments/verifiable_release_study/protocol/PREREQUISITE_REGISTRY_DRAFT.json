@@ -1,0 +1,215 @@
+{
+  "schema_version": "0.1.0-draft",
+  "status": "draft_not_frozen",
+  "allowed_states": ["TRUE", "FALSE", "PENDING", "BASE_DERIVED"],
+  "compatibility_rule": {
+    "any_FALSE": "NOT_COMPATIBLE",
+    "else_any_PENDING": "PENDING",
+    "else_all_TRUE": "COMPATIBLE",
+    "forbidden_inputs": ["profile_expectations", "observed_decision", "target_decision"]
+  },
+  "environment_probe_contract": {
+    "script_path": "scripts/probe_filesystem_capabilities.py",
+    "script_sha256": "79b84619e5d896fa49208d22a2b69ba246f010c790761e06c561ea3d22e38895",
+    "records": [
+      {
+        "environment_id": "ENV-AUTHOR",
+        "path": "environment_probes/ENV-AUTHOR_2026-07-13.json",
+        "sha256": "bfc3e37226f9d88b01836ccad436d39a4267d35322e24a3fe2d055c7f1faafc6"
+      },
+      {
+        "environment_id": "ENV-LINUX-PINNED",
+        "path": "environment_probes/ENV-LINUX-PINNED_2026-07-13.json",
+        "sha256": "313bf0c8c671f1f94047a2ae767f0b39ef17277ad8f56fcc7f3a0f7cf90ffbff"
+      }
+    ],
+    "revalidation_rule": "Rerun and replace every record if the probe source, selected image, Python runtime, operating system, or backing filesystem changes."
+  },
+  "stratum": "S1-CONFORMANCE",
+  "prerequisites": [
+    {
+      "id": "authenticated_signing_time_available",
+      "source": "controlled_fixture_contract",
+      "draft_state": "TRUE",
+      "evidence_rule": "The controlled fixture binds a fixed integratedTime inside authenticated transparency material.",
+      "claim_boundary": "This is fixture signing-time coverage, not a public RFC 3161 or Rekor guarantee."
+    },
+    {
+      "id": "authorized_fixture_signer_available",
+      "source": "controlled_fixture_contract",
+      "draft_state": "TRUE",
+      "evidence_rule": "The deterministic fixture generator can sign with the identity authorized by the fixture policy."
+    },
+    {
+      "id": "base_release_valid_for_all_profiles",
+      "source": "base_blueprint",
+      "draft_state": "BASE_DERIVED",
+      "derivation": "True only when the retained clean-base validation has ACCEPT/OK for P0-P3 and no schema/archive error."
+    },
+    {
+      "id": "controlled_authorized_test_signer_available",
+      "source": "controlled_fixture_contract",
+      "draft_state": "TRUE",
+      "evidence_rule": "The public test key can authenticate deliberately malformed or policy-invalid fixture Statements."
+    },
+    {
+      "id": "controlled_certificate_time_fixture_available",
+      "source": "controlled_fixture_contract",
+      "draft_state": "TRUE",
+      "evidence_rule": "The fixture generator has deterministic valid-time and invalid-time certificate branches."
+    },
+    {
+      "id": "dirty_build_field_or_invariant_frozen",
+      "source": "normative_policy",
+      "draft_state": "PENDING",
+      "evidence_rule": "Resolve only when the exact predicate JSON pointer and dirty-build decision rule are independently reviewed and frozen."
+    },
+    {
+      "id": "filesystem_supports_fifo",
+      "source": "required_environment_probes",
+      "draft_state": "TRUE",
+      "evidence_rule": "Every planned environment records a passing mkfifo/lstat probe bound to the retained probe-source SHA-256.",
+      "evidence_paths": [
+        "environment_probes/ENV-AUTHOR_2026-07-13.json",
+        "environment_probes/ENV-LINUX-PINNED_2026-07-13.json"
+      ]
+    },
+    {
+      "id": "filesystem_supports_hardlink",
+      "source": "required_environment_probes",
+      "draft_state": "TRUE",
+      "evidence_rule": "Every planned environment creates a same-filesystem hard link and observes shared device/inode plus link count at least two.",
+      "evidence_paths": [
+        "environment_probes/ENV-AUTHOR_2026-07-13.json",
+        "environment_probes/ENV-LINUX-PINNED_2026-07-13.json"
+      ]
+    },
+    {
+      "id": "filesystem_supports_symlink",
+      "source": "required_environment_probes",
+      "draft_state": "TRUE",
+      "evidence_rule": "Every planned environment creates and lstat-identifies a symbolic link and confirms that O_NOFOLLOW rejects opening it.",
+      "evidence_paths": [
+        "environment_probes/ENV-AUTHOR_2026-07-13.json",
+        "environment_probes/ENV-LINUX-PINNED_2026-07-13.json"
+      ]
+    },
+    {
+      "id": "listed_nested_regular_payload_exists",
+      "source": "base_blueprint",
+      "draft_state": "BASE_DERIVED",
+      "derivation": "The base's nested_payload mutation target exists, is below payload/, and is a nonempty regular-file recipe."
+    },
+    {
+      "id": "listed_regular_payload_exists",
+      "source": "base_blueprint",
+      "draft_state": "BASE_DERIVED",
+      "derivation": "At least one declared payload recipe produces a regular file."
+    },
+    {
+      "id": "listed_regular_payload_size_at_least_1",
+      "source": "base_blueprint",
+      "draft_state": "BASE_DERIVED",
+      "derivation": "The primary_nonempty_payload target renders to at least one byte."
+    },
+    {
+      "id": "manifest_size_limit_frozen",
+      "source": "normative_policy",
+      "draft_state": "PENDING",
+      "evidence_rule": "Resolve only when the exact manifest byte limit is frozen in policy, schema, generator, and verifier."
+    },
+    {
+      "id": "payload_directory_exists",
+      "source": "base_blueprint",
+      "draft_state": "BASE_DERIVED",
+      "derivation": "The base has at least one payload blueprint and the clean constructor creates payload/."
+    },
+    {
+      "id": "public_keyless_profile_frozen",
+      "source": "stratum_contract",
+      "draft_state": "FALSE",
+      "evidence_rule": "S1 deliberately uses a controlled test PKI; public keyless transparency cases belong to S2.",
+      "claim_boundary": "FALSE is structural non-applicability, not a failed verifier outcome."
+    },
+    {
+      "id": "required_material_policy_frozen",
+      "source": "normative_policy",
+      "draft_state": "PENDING",
+      "evidence_rule": "Resolve only when every required material URI, algorithm, and digest is independently reviewed and frozen."
+    },
+    {
+      "id": "required_role_has_exactly_one_payload",
+      "source": "base_blueprint",
+      "draft_state": "BASE_DERIVED",
+      "derivation": "The sole_required_role_payload target exists, has a role required by its release kind, and no second payload has that role."
+    },
+    {
+      "id": "second_valid_release_attestation_exists",
+      "source": "controlled_fixture_contract",
+      "draft_state": "TRUE",
+      "evidence_rule": "The fixture generator can authenticate a second exact manifest subject under the authorized test identity."
+    },
+    {
+      "id": "source_revision_policy_frozen",
+      "source": "normative_policy",
+      "draft_state": "PENDING",
+      "evidence_rule": "Resolve only when the exact full source OID, object format, repository URI, and source-ref rule are frozen."
+    },
+    {
+      "id": "unapproved_algorithm_fixture_available",
+      "source": "controlled_fixture_contract",
+      "draft_state": "TRUE",
+      "evidence_rule": "The controlled fixture can emit a certificate/signature using the explicitly unapproved Ed448 branch."
+    },
+    {
+      "id": "unauthorized_fixture_signer_available",
+      "source": "controlled_fixture_contract",
+      "draft_state": "TRUE",
+      "evidence_rule": "The deterministic fixture generator includes an identity outside the authorized fixture policy."
+    },
+    {
+      "id": "valid_attestation_exists",
+      "source": "base_blueprint_and_fixture_build",
+      "draft_state": "BASE_DERIVED",
+      "derivation": "The retained clean base contains an attestation sidecar accepted by P2 and P3 under the exact fixture policy hash."
+    },
+    {
+      "id": "valid_authenticated_outer_bundle_fixture_available",
+      "source": "controlled_fixture_contract",
+      "draft_state": "TRUE",
+      "evidence_rule": "The fixture backend can authenticate the outer controlled bundle before exposing deliberately malformed Statement bytes.",
+      "claim_boundary": "The controlled media type is not claimed to conform to the production Sigstore bundle schema."
+    },
+    {
+      "id": "valid_authorized_attestation_exists",
+      "source": "base_blueprint_and_fixture_build",
+      "draft_state": "BASE_DERIVED",
+      "derivation": "The retained clean base's attestation is accepted by P2/P3 under the authorized controlled identity."
+    },
+    {
+      "id": "valid_manifest_exists",
+      "source": "base_blueprint_and_fixture_build",
+      "draft_state": "BASE_DERIVED",
+      "derivation": "The retained clean base contains exact JCS manifest bytes that pass the frozen-draft schema and payload checks."
+    },
+    {
+      "id": "valid_signature_exists",
+      "source": "base_blueprint_and_fixture_build",
+      "draft_state": "BASE_DERIVED",
+      "derivation": "The retained clean attestation signature is accepted by P2/P3 under the exact fixture policy."
+    },
+    {
+      "id": "valid_transparency_material_exists",
+      "source": "controlled_fixture_contract",
+      "draft_state": "TRUE",
+      "evidence_rule": "S1 contains deterministic authenticated test-log material.",
+      "claim_boundary": "This is not public Rekor inclusion or independent transparency."
+    },
+    {
+      "id": "wrong_workflow_identity_fixture_available",
+      "source": "controlled_fixture_contract",
+      "draft_state": "TRUE",
+      "evidence_rule": "The fixture generator can issue a valid test certificate for a workflow identity outside the allowlist."
+    }
+  ]
+}

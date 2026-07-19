@@ -1,0 +1,147 @@
+{
+  "schema_version": "amy.github-attestation-policy.v2-draft",
+  "policy_version": "0.2.0-draft",
+  "status": "template_not_release_specific_not_valid_for_acceptance",
+  "policy_schema": {
+    "schema_version": "amy.github-attestation-policy-schema.v2-draft",
+    "schema_path": "schemas/github-attestation-policy-v2.schema.json",
+    "schema_sha256": "ff5f4a0eb654c9d3b1884d6371ae5bcb5f60c8c5bc224e8a7b40e67acbcad753"
+  },
+  "tool": {
+    "name": "gh",
+    "version": "2.96.0",
+    "release_url": "https://github.com/cli/cli/releases/tag/v2.96.0",
+    "archive_sha256_by_platform": {
+      "linux-x86_64": "83d5c2ccad5498f58bf6368acb1ab32588cf43ab3a4b1c301bf36328b1c8bd60"
+    },
+    "binary_sha256_by_platform": {
+      "linux-x86_64": "56b8bbbb27b066ecb33dbef9a256dc9d1314adaeff0908a752feba6c34053b40"
+    },
+    "binary_max_bytes": 268435456,
+    "timeout_seconds": 120
+  },
+  "subject": {
+    "name": "MANIFEST.jcs.json",
+    "digest_algorithm": "sha256",
+    "allow_additional_subjects": false
+  },
+  "identity": {
+    "repository": "Ganador1/amy",
+    "repository_uri": "https://github.com/Ganador1/amy",
+    "repository_owner_uri": "https://github.com/Ganador1",
+    "repository_id": "TBD-BEFORE-REGISTRATION",
+    "repository_owner_id": "TBD-BEFORE-REGISTRATION",
+    "certificate_identity": "TBD-BEFORE-REGISTRATION",
+    "oidc_issuer": "https://token.actions.githubusercontent.com",
+    "signer_digest": "TBD-BEFORE-REGISTRATION",
+    "source_digest": "TBD-BEFORE-REGISTRATION",
+    "source_ref": "TBD-BEFORE-REGISTRATION",
+    "event_name": "push",
+    "visibility": "public"
+  },
+  "trust": {
+    "trusted_root_sha256": "TBD-BEFORE-REGISTRATION",
+    "certificate_issuer_organization": "sigstore.dev",
+    "required_timestamp_type": "Tlog",
+    "required_timestamp_uri": "https://rekor.sigstore.dev",
+    "allowed_bundle_media_types": [
+      "application/vnd.dev.sigstore.bundle.v0.3+json"
+    ],
+    "allowed_verification_result_media_types": [
+      "application/vnd.dev.sigstore.verificationresult+json;version=0.1"
+    ]
+  },
+  "statement": {
+    "type": "https://in-toto.io/Statement/v1",
+    "p3_predicate_type": "https://slsa.dev/provenance/v1",
+    "attestation_mode": "actions_attest_default_slsa_provenance",
+    "workflow_assertion_location": "/build_metadata"
+  },
+  "manifest": {
+    "schema_version": "0.2.0-draft",
+    "schema_path": "schemas/manifest-production-v0.2.schema.json",
+    "schema_sha256": "08f22071779168458fc89806a144c1aab89133c3a235f5deb3a40c5da8915562",
+    "build_metadata_schema_version": "amy.build-metadata.v1",
+    "assertion_scope": "workflow-authored-not-independently-certified",
+    "required_roles_by_release_kind": {
+      "benchmark_case": ["analysis_code", "analysis_output", "raw_data"],
+      "scientific_paper": ["analysis_code", "analysis_output", "environment_lock", "evidence_ledger", "manuscript_render", "manuscript_source", "source_code"],
+      "model_artifact": ["model", "model_metadata"],
+      "model_exchange": ["model_exchange_request", "model_exchange_response", "model_metadata"],
+      "software_release": ["environment_lock", "source_code"],
+      "mixed_research_release": ["analysis_code", "analysis_output", "environment_lock", "evidence_ledger", "source_code"]
+    }
+  },
+  "result": {
+    "schema_version": "amy.production-verification-result.v2-draft",
+    "schema_path": "schemas/github-production-verification-result-v2.schema.json",
+    "schema_sha256": "3712f2c587d3df11dedfd408a18b391690a40484ecefe0db05f0b4a6cbb1bd08"
+  },
+  "provenance": {
+    "build_type": "https://actions.github.io/buildtypes/workflow/v1",
+    "source_repository_uri": "https://github.com/Ganador1/amy",
+    "source_revision": "TBD-BEFORE-REGISTRATION",
+    "source_ref": "TBD-BEFORE-REGISTRATION",
+    "workflow_path": ".github/workflows/attest-verifiable-study.yml",
+    "builder_id": "TBD-BEFORE-REGISTRATION",
+    "resolved_source_dependency_uri": "TBD-BEFORE-REGISTRATION",
+    "manifest_assertions": {
+      "source": {
+        "repository_uri": "https://github.com/Ganador1/amy",
+        "revision": "TBD-BEFORE-REGISTRATION",
+        "ref": "TBD-BEFORE-REGISTRATION",
+        "git_object_format": "sha1",
+        "tree": "TBD-BEFORE-REGISTRATION",
+        "dirty": false,
+        "snapshot": {
+          "path": "payload/source/source.tar",
+          "sha256": "TBD-BEFORE-REGISTRATION",
+          "format": "application/x-tar",
+          "assurance": "exact-opaque-bytes-no-git-tree-equivalence-claim",
+          "required_payload_role": "source_code"
+        }
+      },
+      "dependency_lock": {
+        "path": "payload/environment/uv.lock",
+        "sha256": "TBD-BEFORE-REGISTRATION",
+        "required_payload_role": "environment_lock"
+      },
+      "execution_image": {
+        "reference": "ghcr.io/astral-sh/uv",
+        "digest": "sha256:c8367d14e6e5f9311689792032852506d7188f487c6db2967c386a26ebeecff1"
+      }
+    }
+  },
+  "limits": {
+    "manifest_max_bytes": 8388608,
+    "attestation_max_bytes": 16777216,
+    "trusted_root_max_bytes": 8388608,
+    "dsse_statement_max_bytes": 8388608,
+    "gh_output_max_bytes": 33554432,
+    "json_max_depth": 64,
+    "payload_file_max_count": 10000,
+    "single_payload_max_bytes": 5368709120,
+    "payload_total_max_bytes": 10737418240,
+    "path_max_utf8_bytes": 240,
+    "path_max_components": 64
+  },
+  "workflow_dependency_assurance": {
+    "verification_status": "NO_GO_AUTHENTICATED_WORKFLOW_BYTES_ABSENT",
+    "pins_are_authorization_evidence": false,
+    "evidence_binding": "workflow-identity-ref-and-source-commit-only-no-authenticated-workflow-content"
+  },
+  "workflow_dependencies": {
+    "actions_checkout": {
+      "release": "v7.0.0",
+      "commit": "9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0"
+    },
+    "actions_attest": {
+      "release": "v4.1.1",
+      "commit": "a1948c3f048ba23858d222213b7c278aabede763"
+    },
+    "actions_upload_artifact": {
+      "release": "v7.0.1",
+      "commit": "043fb46d1a93c77aae656e7c1c64a875d1fc6a0a"
+    }
+  }
+}

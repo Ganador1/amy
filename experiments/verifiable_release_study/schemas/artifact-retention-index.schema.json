@@ -1,0 +1,342 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Ganador1/amy/experiments/verifiable_release_study/schemas/artifact-retention-index.schema.json",
+  "title": "A.M.Y retained-artifact index",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "classification",
+    "valid",
+    "tree_hash_algorithm",
+    "policy_sha256",
+    "policy_schema_sha256",
+    "index_schema_sha256",
+    "retained_roots",
+    "summary",
+    "artifacts",
+    "unindexed_paths",
+    "multiply_indexed_paths",
+    "errors",
+    "boundaries"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "amy.artifact-retention-index.v1"
+    },
+    "classification": {
+      "const": "deterministic_inventory_not_authentication_or_scientific_validation"
+    },
+    "valid": {
+      "type": "boolean"
+    },
+    "tree_hash_algorithm": {
+      "const": "sha256-rfc8785-member-tree-v1"
+    },
+    "policy_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "policy_schema_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "index_schema_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "retained_roots": {
+      "type": "array",
+      "minItems": 7,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/safePath"
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_count",
+        "member_count",
+        "byte_count",
+        "source_git_count",
+        "public_packet_count",
+        "artifacts_with_absolute_paths",
+        "status_counts"
+      ],
+      "properties": {
+        "artifact_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "member_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "byte_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "source_git_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "public_packet_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "artifacts_with_absolute_paths": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "status_counts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "active",
+            "historical_valid",
+            "historical_invalid",
+            "superseded",
+            "local_only"
+          ],
+          "properties": {
+            "active": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "historical_valid": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "historical_invalid": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "superseded": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "local_only": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/artifactIndex"
+      }
+    },
+    "unindexed_paths": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/safePath"
+      }
+    },
+    "multiply_indexed_paths": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/safePath"
+      }
+    },
+    "errors": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000
+      }
+    },
+    "boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scientific_validity_established",
+        "authentication_established",
+        "authorization_established",
+        "historical_bytes_rewritten",
+        "absolute_paths_block_public_packet"
+      ],
+      "properties": {
+        "scientific_validity_established": {
+          "const": false
+        },
+        "authentication_established": {
+          "const": false
+        },
+        "authorization_established": {
+          "const": false
+        },
+        "historical_bytes_rewritten": {
+          "const": false
+        },
+        "absolute_paths_block_public_packet": {
+          "const": true
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "safePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"
+    },
+    "validator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "path",
+        "invocation"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "executable",
+            "pytest",
+            "retention_only"
+          ]
+        },
+        "path": {
+          "$ref": "#/$defs/safePath"
+        },
+        "invocation": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 2000
+        }
+      }
+    },
+    "absolutePathFinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "member_path",
+        "syntax"
+      ],
+      "properties": {
+        "member_path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "syntax": {
+          "enum": [
+            "posix",
+            "windows"
+          ]
+        }
+      }
+    },
+    "artifactIndex": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "family",
+        "path",
+        "kind",
+        "status",
+        "tree_sha256",
+        "member_count",
+        "byte_count",
+        "non_git_member_count",
+        "validator",
+        "reason",
+        "source_git",
+        "public_packet",
+        "absolute_path_count",
+        "absolute_path_findings",
+        "absolute_path_findings_redacted"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^ART-[A-Z0-9-]+$"
+        },
+        "family": {
+          "enum": [
+            "audit",
+            "pilot_run",
+            "base_pilot_run",
+            "selected_profile_base_run",
+            "production_pilot_run",
+            "robustness_run",
+            "review"
+          ]
+        },
+        "path": {
+          "$ref": "#/$defs/safePath"
+        },
+        "kind": {
+          "enum": [
+            "file",
+            "directory"
+          ]
+        },
+        "status": {
+          "enum": [
+            "active",
+            "historical_valid",
+            "historical_invalid",
+            "superseded",
+            "local_only"
+          ]
+        },
+        "tree_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "member_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "byte_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "non_git_member_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "validator": {
+          "$ref": "#/$defs/validator"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 20,
+          "maxLength": 4000
+        },
+        "source_git": {
+          "type": "boolean"
+        },
+        "public_packet": {
+          "type": "boolean"
+        },
+        "absolute_path_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "absolute_path_findings": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/absolutePathFinding"
+          }
+        },
+        "absolute_path_findings_redacted": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,1944 @@
+{
+  "schema_version": "amy.r0-human-review-record.v1-draft",
+  "record_status": "template_unreviewed",
+  "gate_id": "RG-004",
+  "record_purpose": "future_RG-004_human_review_of_exact_R0_subject_bytes",
+  "independent_human_review_occurred": false,
+  "subject_binding": {
+    "subject_manifest_path": "R0_REVIEW_SUBJECT_MANIFEST.jcs.json",
+    "subject_manifest_sha256": null,
+    "packet_path": "R0_REVIEW_PACKET.tar",
+    "packet_sha256": null,
+    "hash_source": "not_supplied_template_unreviewed"
+  },
+  "reviewer": null,
+  "declarations": {
+    "did_not_implement_verifier": null,
+    "did_not_implement_mutation_generator": null,
+    "did_not_implement_analysis": null,
+    "did_not_author_catalog_cases": null,
+    "did_not_author_oracle_expectations": null,
+    "did_not_author_propositions": null,
+    "did_not_author_manuscript_skeleton": null,
+    "project_author_or_investigator": null,
+    "confirmatory_outcomes_accessed": null,
+    "subject_write_access_during_review": null,
+    "prior_development_case_outcomes_accessed": null,
+    "employment_or_supervisory_conflict": null,
+    "shared_funding_conflict": null,
+    "financial_or_consulting_conflict": null,
+    "personal_or_competing_interest": null,
+    "compensation_disclosure": null,
+    "conflict_of_interest_present": null,
+    "disqualifying_conflict_present": null,
+    "conflict_disclosure": null,
+    "independence_statement": null
+  },
+  "reviewed_at": null,
+  "catalog_case_decisions": {
+    "ATTESTATION-MALFORMED-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "ATTESTATION-MISSING-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "BUILD-DIRTY-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "BUILD-METADATA-MISSING-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "BUILDER-PREDICATE-MISMATCH-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "CERTIFICATE-TIME-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "CLEAN-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "CONTENT-BITFLIP-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "CONTENT-SAME-SIZE-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "CONTENT-TRUNCATE-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "EXECUTION-IMAGE-MISMATCH-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "IDENTITY-WORKFLOW-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "INVENTORY-EXTRA-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "INVENTORY-MISSING-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "INVENTORY-OMIT-ROLE-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-DUPLICATE-KEY-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-MALFORMED-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-MISSING-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-NONCANONICAL-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-SCHEMA-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-SELF-HASH-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MATERIAL-LOCK-MISMATCH-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PATH-DUPLICATE-NORMALIZED-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PATH-HARDLINK-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PATH-NONREGULAR-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PATH-PARENT-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PATH-SYMLINK-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PREDICATE-WRONG-TYPE-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "RESOURCE-MANIFEST-LIMIT-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SIGNATURE-ALGORITHM-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SIGNATURE-CORRUPT-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SNAPSHOT-DIGEST-MISMATCH-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SNAPSHOT-ROLE-MISMATCH-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SOURCE-TREE-MISMATCH-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SOURCE-WRONG-REVISION-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "STATEMENT-MALFORMED-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SUBJECT-REPLAY-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SUBSTITUTION-COHERENT-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SUBSTITUTION-UNAUTHORIZED-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "TRANSPARENCY-MISSING-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "WORKFLOW-PARAMETER-MISMATCH-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    }
+  },
+  "oracle_row_decisions": {
+    "ATTESTATION-MALFORMED-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "ATTESTATION-MALFORMED-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "ATTESTATION-MALFORMED-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "ATTESTATION-MALFORMED-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "ATTESTATION-MISSING-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "ATTESTATION-MISSING-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "ATTESTATION-MISSING-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "ATTESTATION-MISSING-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "BUILD-DIRTY-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "BUILD-DIRTY-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "BUILD-DIRTY-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "BUILD-DIRTY-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "BUILD-METADATA-MISSING-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "BUILD-METADATA-MISSING-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "BUILD-METADATA-MISSING-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "BUILD-METADATA-MISSING-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "BUILDER-PREDICATE-MISMATCH-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "BUILDER-PREDICATE-MISMATCH-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "BUILDER-PREDICATE-MISMATCH-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "BUILDER-PREDICATE-MISMATCH-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "CERTIFICATE-TIME-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "CERTIFICATE-TIME-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "CERTIFICATE-TIME-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "CERTIFICATE-TIME-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "CLEAN-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "CLEAN-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "CLEAN-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "CLEAN-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "CONTENT-BITFLIP-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "CONTENT-BITFLIP-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "CONTENT-BITFLIP-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "CONTENT-BITFLIP-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "CONTENT-SAME-SIZE-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "CONTENT-SAME-SIZE-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "CONTENT-SAME-SIZE-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "CONTENT-SAME-SIZE-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "CONTENT-TRUNCATE-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "CONTENT-TRUNCATE-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "CONTENT-TRUNCATE-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "CONTENT-TRUNCATE-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "EXECUTION-IMAGE-MISMATCH-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "EXECUTION-IMAGE-MISMATCH-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "EXECUTION-IMAGE-MISMATCH-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "EXECUTION-IMAGE-MISMATCH-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "IDENTITY-WORKFLOW-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "IDENTITY-WORKFLOW-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "IDENTITY-WORKFLOW-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "IDENTITY-WORKFLOW-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "INVENTORY-EXTRA-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "INVENTORY-EXTRA-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "INVENTORY-EXTRA-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "INVENTORY-EXTRA-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "INVENTORY-MISSING-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "INVENTORY-MISSING-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "INVENTORY-MISSING-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "INVENTORY-MISSING-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "INVENTORY-OMIT-ROLE-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "INVENTORY-OMIT-ROLE-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "INVENTORY-OMIT-ROLE-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "INVENTORY-OMIT-ROLE-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-DUPLICATE-KEY-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-DUPLICATE-KEY-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-DUPLICATE-KEY-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-DUPLICATE-KEY-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-MALFORMED-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-MALFORMED-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-MALFORMED-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-MALFORMED-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-MISSING-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-MISSING-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-MISSING-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-MISSING-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-NONCANONICAL-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-NONCANONICAL-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-NONCANONICAL-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-NONCANONICAL-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-SCHEMA-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-SCHEMA-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-SCHEMA-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-SCHEMA-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-SELF-HASH-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-SELF-HASH-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-SELF-HASH-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MANIFEST-SELF-HASH-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MATERIAL-LOCK-MISMATCH-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MATERIAL-LOCK-MISMATCH-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MATERIAL-LOCK-MISMATCH-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "MATERIAL-LOCK-MISMATCH-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PATH-DUPLICATE-NORMALIZED-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PATH-DUPLICATE-NORMALIZED-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PATH-DUPLICATE-NORMALIZED-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PATH-DUPLICATE-NORMALIZED-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PATH-HARDLINK-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PATH-HARDLINK-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PATH-HARDLINK-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PATH-HARDLINK-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PATH-NONREGULAR-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PATH-NONREGULAR-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PATH-NONREGULAR-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PATH-NONREGULAR-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PATH-PARENT-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PATH-PARENT-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PATH-PARENT-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PATH-PARENT-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PATH-SYMLINK-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PATH-SYMLINK-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PATH-SYMLINK-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PATH-SYMLINK-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PREDICATE-WRONG-TYPE-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PREDICATE-WRONG-TYPE-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PREDICATE-WRONG-TYPE-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PREDICATE-WRONG-TYPE-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "RESOURCE-MANIFEST-LIMIT-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "RESOURCE-MANIFEST-LIMIT-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "RESOURCE-MANIFEST-LIMIT-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "RESOURCE-MANIFEST-LIMIT-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SIGNATURE-ALGORITHM-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SIGNATURE-ALGORITHM-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SIGNATURE-ALGORITHM-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SIGNATURE-ALGORITHM-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SIGNATURE-CORRUPT-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SIGNATURE-CORRUPT-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SIGNATURE-CORRUPT-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SIGNATURE-CORRUPT-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SNAPSHOT-DIGEST-MISMATCH-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SNAPSHOT-DIGEST-MISMATCH-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SNAPSHOT-DIGEST-MISMATCH-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SNAPSHOT-DIGEST-MISMATCH-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SNAPSHOT-ROLE-MISMATCH-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SNAPSHOT-ROLE-MISMATCH-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SNAPSHOT-ROLE-MISMATCH-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SNAPSHOT-ROLE-MISMATCH-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SOURCE-TREE-MISMATCH-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SOURCE-TREE-MISMATCH-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SOURCE-TREE-MISMATCH-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SOURCE-TREE-MISMATCH-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SOURCE-WRONG-REVISION-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SOURCE-WRONG-REVISION-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SOURCE-WRONG-REVISION-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SOURCE-WRONG-REVISION-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "STATEMENT-MALFORMED-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "STATEMENT-MALFORMED-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "STATEMENT-MALFORMED-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "STATEMENT-MALFORMED-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SUBJECT-REPLAY-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SUBJECT-REPLAY-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SUBJECT-REPLAY-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SUBJECT-REPLAY-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SUBSTITUTION-COHERENT-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SUBSTITUTION-COHERENT-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SUBSTITUTION-COHERENT-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SUBSTITUTION-COHERENT-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SUBSTITUTION-UNAUTHORIZED-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SUBSTITUTION-UNAUTHORIZED-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SUBSTITUTION-UNAUTHORIZED-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "SUBSTITUTION-UNAUTHORIZED-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "TRANSPARENCY-MISSING-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "TRANSPARENCY-MISSING-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "TRANSPARENCY-MISSING-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "TRANSPARENCY-MISSING-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "WORKFLOW-PARAMETER-MISMATCH-001::P0": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "WORKFLOW-PARAMETER-MISMATCH-001::P1": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "WORKFLOW-PARAMETER-MISMATCH-001::P2": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "WORKFLOW-PARAMETER-MISMATCH-001::P3": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    }
+  },
+  "proposition_decisions": {
+    "PR-001": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PR-002": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PR-003": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PR-004": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PR-005": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PR-006": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PR-007": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PR-008": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PR-009": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PR-010": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PR-011": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    },
+    "PR-012": {
+      "decision": "NOT_REVIEWED",
+      "rationale": null
+    }
+  },
+  "compatibility_policy_decisions": {
+    "matrix_row_decisions": {
+      "B01-TABULAR--ATTESTATION-MALFORMED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--ATTESTATION-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--BUILD-DIRTY-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--BUILD-METADATA-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--BUILDER-PREDICATE-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--CERTIFICATE-TIME-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--CLEAN-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--CONTENT-BITFLIP-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--CONTENT-SAME-SIZE-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--CONTENT-TRUNCATE-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--EXECUTION-IMAGE-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--IDENTITY-WORKFLOW-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--INVENTORY-EXTRA-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--INVENTORY-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--INVENTORY-OMIT-ROLE-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--MANIFEST-DUPLICATE-KEY-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--MANIFEST-MALFORMED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--MANIFEST-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--MANIFEST-NONCANONICAL-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--MANIFEST-SCHEMA-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--MANIFEST-SELF-HASH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--MATERIAL-LOCK-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--PATH-DUPLICATE-NORMALIZED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--PATH-HARDLINK-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--PATH-NONREGULAR-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--PATH-PARENT-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--PATH-SYMLINK-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--PREDICATE-WRONG-TYPE-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--RESOURCE-MANIFEST-LIMIT-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--SIGNATURE-ALGORITHM-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--SIGNATURE-CORRUPT-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--SNAPSHOT-DIGEST-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--SNAPSHOT-ROLE-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--SOURCE-TREE-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--SOURCE-WRONG-REVISION-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--STATEMENT-MALFORMED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--SUBJECT-REPLAY-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--SUBSTITUTION-COHERENT-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--SUBSTITUTION-UNAUTHORIZED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--TRANSPARENCY-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B01-TABULAR--WORKFLOW-PARAMETER-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--ATTESTATION-MALFORMED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--ATTESTATION-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--BUILD-DIRTY-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--BUILD-METADATA-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--BUILDER-PREDICATE-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--CERTIFICATE-TIME-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--CLEAN-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--CONTENT-BITFLIP-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--CONTENT-SAME-SIZE-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--CONTENT-TRUNCATE-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--EXECUTION-IMAGE-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--IDENTITY-WORKFLOW-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--INVENTORY-EXTRA-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--INVENTORY-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--INVENTORY-OMIT-ROLE-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--MANIFEST-DUPLICATE-KEY-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--MANIFEST-MALFORMED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--MANIFEST-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--MANIFEST-NONCANONICAL-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--MANIFEST-SCHEMA-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--MANIFEST-SELF-HASH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--MATERIAL-LOCK-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--PATH-DUPLICATE-NORMALIZED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--PATH-HARDLINK-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--PATH-NONREGULAR-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--PATH-PARENT-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--PATH-SYMLINK-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--PREDICATE-WRONG-TYPE-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--RESOURCE-MANIFEST-LIMIT-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--SIGNATURE-ALGORITHM-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--SIGNATURE-CORRUPT-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--SNAPSHOT-DIGEST-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--SNAPSHOT-ROLE-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--SOURCE-TREE-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--SOURCE-WRONG-REVISION-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--STATEMENT-MALFORMED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--SUBJECT-REPLAY-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--SUBSTITUTION-COHERENT-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--SUBSTITUTION-UNAUTHORIZED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--TRANSPARENCY-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B02-PAPER--WORKFLOW-PARAMETER-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--ATTESTATION-MALFORMED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--ATTESTATION-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--BUILD-DIRTY-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--BUILD-METADATA-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--BUILDER-PREDICATE-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--CERTIFICATE-TIME-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--CLEAN-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--CONTENT-BITFLIP-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--CONTENT-SAME-SIZE-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--CONTENT-TRUNCATE-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--EXECUTION-IMAGE-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--IDENTITY-WORKFLOW-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--INVENTORY-EXTRA-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--INVENTORY-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--INVENTORY-OMIT-ROLE-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--MANIFEST-DUPLICATE-KEY-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--MANIFEST-MALFORMED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--MANIFEST-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--MANIFEST-NONCANONICAL-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--MANIFEST-SCHEMA-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--MANIFEST-SELF-HASH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--MATERIAL-LOCK-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--PATH-DUPLICATE-NORMALIZED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--PATH-HARDLINK-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--PATH-NONREGULAR-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--PATH-PARENT-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--PATH-SYMLINK-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--PREDICATE-WRONG-TYPE-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--RESOURCE-MANIFEST-LIMIT-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--SIGNATURE-ALGORITHM-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--SIGNATURE-CORRUPT-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--SNAPSHOT-DIGEST-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--SNAPSHOT-ROLE-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--SOURCE-TREE-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--SOURCE-WRONG-REVISION-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--STATEMENT-MALFORMED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--SUBJECT-REPLAY-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--SUBSTITUTION-COHERENT-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--SUBSTITUTION-UNAUTHORIZED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--TRANSPARENCY-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B03-MODEL--WORKFLOW-PARAMETER-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--ATTESTATION-MALFORMED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--ATTESTATION-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--BUILD-DIRTY-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--BUILD-METADATA-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--BUILDER-PREDICATE-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--CERTIFICATE-TIME-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--CLEAN-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--CONTENT-BITFLIP-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--CONTENT-SAME-SIZE-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--CONTENT-TRUNCATE-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--EXECUTION-IMAGE-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--IDENTITY-WORKFLOW-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--INVENTORY-EXTRA-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--INVENTORY-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--INVENTORY-OMIT-ROLE-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--MANIFEST-DUPLICATE-KEY-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--MANIFEST-MALFORMED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--MANIFEST-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--MANIFEST-NONCANONICAL-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--MANIFEST-SCHEMA-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--MANIFEST-SELF-HASH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--MATERIAL-LOCK-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--PATH-DUPLICATE-NORMALIZED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--PATH-HARDLINK-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--PATH-NONREGULAR-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--PATH-PARENT-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--PATH-SYMLINK-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--PREDICATE-WRONG-TYPE-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--RESOURCE-MANIFEST-LIMIT-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--SIGNATURE-ALGORITHM-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--SIGNATURE-CORRUPT-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--SNAPSHOT-DIGEST-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--SNAPSHOT-ROLE-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--SOURCE-TREE-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--SOURCE-WRONG-REVISION-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--STATEMENT-MALFORMED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--SUBJECT-REPLAY-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--SUBSTITUTION-COHERENT-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--SUBSTITUTION-UNAUTHORIZED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--TRANSPARENCY-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B04-SOFTWARE--WORKFLOW-PARAMETER-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--ATTESTATION-MALFORMED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--ATTESTATION-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--BUILD-DIRTY-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--BUILD-METADATA-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--BUILDER-PREDICATE-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--CERTIFICATE-TIME-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--CLEAN-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--CONTENT-BITFLIP-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--CONTENT-SAME-SIZE-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--CONTENT-TRUNCATE-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--EXECUTION-IMAGE-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--IDENTITY-WORKFLOW-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--INVENTORY-EXTRA-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--INVENTORY-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--INVENTORY-OMIT-ROLE-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--MANIFEST-DUPLICATE-KEY-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--MANIFEST-MALFORMED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--MANIFEST-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--MANIFEST-NONCANONICAL-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--MANIFEST-SCHEMA-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--MANIFEST-SELF-HASH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--MATERIAL-LOCK-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--PATH-DUPLICATE-NORMALIZED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--PATH-HARDLINK-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--PATH-NONREGULAR-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--PATH-PARENT-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--PATH-SYMLINK-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--PREDICATE-WRONG-TYPE-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--RESOURCE-MANIFEST-LIMIT-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--SIGNATURE-ALGORITHM-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--SIGNATURE-CORRUPT-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--SNAPSHOT-DIGEST-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--SNAPSHOT-ROLE-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--SOURCE-TREE-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--SOURCE-WRONG-REVISION-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--STATEMENT-MALFORMED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--SUBJECT-REPLAY-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--SUBSTITUTION-COHERENT-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--SUBSTITUTION-UNAUTHORIZED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--TRANSPARENCY-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B05-MODEL-EXCHANGE--WORKFLOW-PARAMETER-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--ATTESTATION-MALFORMED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--ATTESTATION-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--BUILD-DIRTY-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--BUILD-METADATA-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--BUILDER-PREDICATE-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--CERTIFICATE-TIME-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--CLEAN-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--CONTENT-BITFLIP-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--CONTENT-SAME-SIZE-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--CONTENT-TRUNCATE-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--EXECUTION-IMAGE-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--IDENTITY-WORKFLOW-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--INVENTORY-EXTRA-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--INVENTORY-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--INVENTORY-OMIT-ROLE-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--MANIFEST-DUPLICATE-KEY-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--MANIFEST-MALFORMED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--MANIFEST-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--MANIFEST-NONCANONICAL-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--MANIFEST-SCHEMA-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--MANIFEST-SELF-HASH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--MATERIAL-LOCK-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--PATH-DUPLICATE-NORMALIZED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--PATH-HARDLINK-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--PATH-NONREGULAR-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--PATH-PARENT-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--PATH-SYMLINK-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--PREDICATE-WRONG-TYPE-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--RESOURCE-MANIFEST-LIMIT-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--SIGNATURE-ALGORITHM-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--SIGNATURE-CORRUPT-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--SNAPSHOT-DIGEST-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--SNAPSHOT-ROLE-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--SOURCE-TREE-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--SOURCE-WRONG-REVISION-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--STATEMENT-MALFORMED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--SUBJECT-REPLAY-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--SUBSTITUTION-COHERENT-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--SUBSTITUTION-UNAUTHORIZED-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--TRANSPARENCY-MISSING-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "B06-MIXED-RESEARCH--WORKFLOW-PARAMETER-MISMATCH-001": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      }
+    },
+    "policy_decisions": {
+      "clean_base_evidence_boundary": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "finite_designed_denominator": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "outcome_blindness": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "pending_rows_excluded_until_resolved": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "post_execution_reclassification_forbidden": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "s1_s2_stratum_assignment": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      },
+      "structural_prerequisites_only": {
+        "decision": "NOT_REVIEWED",
+        "rationale": null
+      }
+    }
+  },
+  "manuscript_skeleton_decision": {
+    "decision": "NOT_REVIEWED",
+    "rationale": null
+  },
+  "findings": [],
+  "overall_decision": "NOT_REVIEWED",
+  "authentication_boundary_acknowledgements": {
+    "raw_record_bytes_require_detached_sigstore_authentication": true,
+    "separately_authorized_reviewer_identity_policy_required": true,
+    "consumer_must_compare_subject_hashes_to_external_values": true,
+    "authentication_establishes_bytes_and_identity_under_policy_only": true,
+    "authentication_does_not_establish_reviewer_competence": true,
+    "authentication_does_not_establish_scientific_truth": true
+  }
+}

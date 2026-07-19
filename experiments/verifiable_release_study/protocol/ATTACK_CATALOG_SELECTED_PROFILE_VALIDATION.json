@@ -1,0 +1,43 @@
+{
+  "builder_sha256": "c94ee3e761a696d89e4321fccc241595113a5479295e8f040dbdd25130e69bee",
+  "catalog_canonical_sha256": "883550c491b7eb7053a113b01e84a9109b1797fe2271e0c595d7c0eab0b50f16",
+  "catalog_path": "protocol/ATTACK_CATALOG_SELECTED_PROFILE_DRAFT.json",
+  "catalog_pretty_sha256": "098563afc029f8c1532999e3cc5c058c8bf3bdc33cfcfd01423decf56f4693b1",
+  "classification": "pre_registration_outcome_blind_contract_replay",
+  "errors": [],
+  "fixture_implementation_sha256": "d091d745f0fad38b852b9e9c5084ed5355c7300b9dadce3fb6d5b5880d72bedb",
+  "fresh_catalog_canonical_sha256": "883550c491b7eb7053a113b01e84a9109b1797fe2271e0c595d7c0eab0b50f16",
+  "fresh_prerequisite_canonical_sha256": "f386d6ddb7d0357a8bc4bba42e0ef552a9d2f3dbe5c64fbddc485e2b043e029b",
+  "limitations": [
+    "The fixture uses deterministic public test PKI, not production Sigstore.",
+    "Development tests exercise all 41 operators on temporary generic fixtures; they do not materialize the registered six-base confirmatory corpus.",
+    "The selected compatibility matrix and draft oracle are separately replayed; independent oracle review, release-specific production policy, and a real A.M.Y P3 run remain open.",
+    "No target expectation was derived from observed confirmatory behavior."
+  ],
+  "mutation_generator_sha256": "528ac758b11c5389a26d250eb265f998bea42c835dcc7bce12d026f6e0aa05fe",
+  "prerequisite_canonical_sha256": "f386d6ddb7d0357a8bc4bba42e0ef552a9d2f3dbe5c64fbddc485e2b043e029b",
+  "prerequisite_path": "protocol/PREREQUISITE_REGISTRY_SELECTED_PROFILE_DRAFT.json",
+  "prerequisite_pretty_sha256": "a66f888752ff823c7190c87f5272e9c58347fe58622d08605ed5b52b8ce44f69",
+  "schema_version": "amy.selected-profile-catalog-validation.v1-draft",
+  "summary": {
+    "added_case_count": 7,
+    "confirmatory_cases_executed": false,
+    "confirmatory_outcomes_read": false,
+    "historical_case_count": 34,
+    "implemented_generator_case_count": 41,
+    "migrated_semantic_case_count": 11,
+    "pending_prerequisite_count": 5,
+    "pending_prerequisite_ids": [
+      "dirty_build_field_or_invariant_frozen",
+      "manifest_size_limit_frozen",
+      "required_material_policy_frozen",
+      "selected_manifest_metadata_policy_frozen",
+      "source_revision_policy_frozen"
+    ],
+    "prerequisite_count": 30,
+    "preserved_case_id_count": 34,
+    "selected_case_count": 41
+  },
+  "valid": true,
+  "validator_sha256": "455ed8a0df6c4b42da823bdf17bea76f3f558ad72fe46cc55879ff99945b92b2"
+}

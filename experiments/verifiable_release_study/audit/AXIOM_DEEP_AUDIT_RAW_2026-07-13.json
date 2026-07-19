@@ -1,0 +1,1229 @@
+{
+  "axiom_named_json_artifacts": {
+    "artifacts": [
+      {
+        "bytes": 21597,
+        "classification": "scientific_or_demo_output",
+        "field_coverage": {
+          "authentication": [],
+          "content_digest": [],
+          "dependency_identity": [],
+          "environment_identity": [],
+          "model_immutable_identity": [],
+          "producer_identity": [],
+          "provenance": [],
+          "raw_exchange": [],
+          "seed": [],
+          "source_revision": []
+        },
+        "git_ignored": true,
+        "git_tracked": false,
+        "path": "atlas/archive/json_results/axiom_autonomous_research_report_hf.json",
+        "producer_paths": [
+          "atlas/scripts/test_axiom_autonomous_hf.py"
+        ],
+        "producer_sha256": {
+          "atlas/scripts/test_axiom_autonomous_hf.py": "ff9bea1e3f85e063dff231b30b6b34ead3839c767f148ed5fa077e98d4796b50"
+        },
+        "sha256": "4add3592225f67b368ccbba976aeba52832ded1007d6d59dbdf78a24d980f13d",
+        "top_level_keys": [
+          "experimental_code",
+          "experimental_plan",
+          "hypothesis",
+          "metadata",
+          "metrics",
+          "peer_review",
+          "refined_hypothesis",
+          "scientific_paper",
+          "workflow_history"
+        ],
+        "top_level_type": "dict"
+      },
+      {
+        "bytes": 1923,
+        "classification": "scientific_or_demo_output",
+        "field_coverage": {
+          "authentication": [],
+          "content_digest": [],
+          "dependency_identity": [],
+          "environment_identity": [],
+          "model_immutable_identity": [],
+          "producer_identity": [],
+          "provenance": [],
+          "raw_exchange": [],
+          "seed": [],
+          "source_revision": []
+        },
+        "git_ignored": true,
+        "git_tracked": false,
+        "path": "atlas/artifacts/demos/axiom_complete_demo_20250921_213324.json",
+        "producer_paths": [],
+        "producer_sha256": {},
+        "sha256": "6160a8cf81c2a5e03134a4cc0396d8255f92bf439e87fdeb927f904d6bfb52d1",
+        "top_level_keys": [
+          "corroboration",
+          "dft_validation",
+          "final_assessment",
+          "hypothesis",
+          "peer_review",
+          "research_cycle",
+          "timestamp",
+          "workflow"
+        ],
+        "top_level_type": "dict"
+      },
+      {
+        "bytes": 446,
+        "classification": "scientific_or_demo_output",
+        "field_coverage": {
+          "authentication": [],
+          "content_digest": [],
+          "dependency_identity": [],
+          "environment_identity": [],
+          "model_immutable_identity": [],
+          "producer_identity": [],
+          "provenance": [],
+          "raw_exchange": [],
+          "seed": [],
+          "source_revision": []
+        },
+        "git_ignored": true,
+        "git_tracked": false,
+        "path": "atlas/artifacts/demos/axiom_meta_41_demo_results_1758241276.json",
+        "producer_paths": [
+          "atlas/scripts/experiments/demo_advanced_ai_integration.py"
+        ],
+        "producer_sha256": {
+          "atlas/scripts/experiments/demo_advanced_ai_integration.py": "4251d6cb3308c38f6aeb56027eec164090f0da098565a462edc4d7ce178f88df"
+        },
+        "sha256": "882c0ca509d04aeee4dfc87b91340730c52a71410c4d50b427baf0e0c5ca7619",
+        "top_level_keys": [
+          "api_results",
+          "loop_results",
+          "performance",
+          "timestamp"
+        ],
+        "top_level_type": "dict"
+      },
+      {
+        "bytes": 22889,
+        "classification": "scientific_or_demo_output",
+        "field_coverage": {
+          "authentication": [],
+          "content_digest": [],
+          "dependency_identity": [],
+          "environment_identity": [],
+          "model_immutable_identity": [],
+          "producer_identity": [],
+          "provenance": [],
+          "raw_exchange": [],
+          "seed": [],
+          "source_revision": []
+        },
+        "git_ignored": true,
+        "git_tracked": false,
+        "path": "atlas/artifacts/demos/axiom_real_data_comprehensive_demo.json",
+        "producer_paths": [
+          "atlas/scripts/experiments/axiom_real_data_demo.py"
+        ],
+        "producer_sha256": {
+          "atlas/scripts/experiments/axiom_real_data_demo.py": "56262a10c59ffe331ede0476887e234786f26e0f7b11778c3d4be3826c113080"
+        },
+        "sha256": "f6412588e58ab1fa555bfd371eadd02d9b1d3aed4749d3fd63abe763c879fbd0",
+        "top_level_keys": [
+          "demo_metadata",
+          "real_data_examples",
+          "results_by_area",
+          "system_capabilities"
+        ],
+        "top_level_type": "dict"
+      },
+      {
+        "bytes": 850559,
+        "classification": "administrative_report",
+        "field_coverage": {
+          "authentication": [],
+          "content_digest": [],
+          "dependency_identity": [],
+          "environment_identity": [],
+          "model_immutable_identity": [],
+          "producer_identity": [],
+          "provenance": [],
+          "raw_exchange": [],
+          "seed": [],
+          "source_revision": []
+        },
+        "git_ignored": true,
+        "git_tracked": false,
+        "path": "atlas/artifacts/reports/AXIOM_APP_REORGANIZATION_FINAL_REPORT.json",
+        "producer_paths": [
+          "atlas/scripts/utils/generate_final_report.py"
+        ],
+        "producer_sha256": {
+          "atlas/scripts/utils/generate_final_report.py": "f716346e3d8321fdcfc36a5a3c90ade602f48d2842272121e261406cdd1f2aca"
+        },
+        "sha256": "2d42b3b05662e856536cee5adf62ef510aa2fdf5e5510389f9d637c3ff6ac4ea",
+        "top_level_keys": [
+          "achievements",
+          "current_status",
+          "detailed_reports",
+          "metrics",
+          "project",
+          "recommendations",
+          "report_date",
+          "summary",
+          "version"
+        ],
+        "top_level_type": "dict"
+      },
+      {
+        "bytes": 5161,
+        "classification": "capability_claim_summary",
+        "field_coverage": {
+          "authentication": [],
+          "content_digest": [],
+          "dependency_identity": [],
+          "environment_identity": [],
+          "model_immutable_identity": [],
+          "producer_identity": [],
+          "provenance": [],
+          "raw_exchange": [],
+          "seed": [],
+          "source_revision": []
+        },
+        "git_ignored": true,
+        "git_tracked": false,
+        "path": "atlas/artifacts/reports/axiom_complete_analysis_summary.json",
+        "producer_paths": [],
+        "producer_sha256": {},
+        "sha256": "fbc4045c90207ddf2c99366c743833ca2349dd0b513b7198b0471d56dd4d1236",
+        "top_level_keys": [
+          "capabilities_demonstrated",
+          "final_verdict",
+          "implementation_roadmap",
+          "improvements_implemented",
+          "scientific_impact",
+          "technical_results",
+          "timestamp"
+        ],
+        "top_level_type": "dict"
+      },
+      {
+        "bytes": 528,
+        "classification": "scientific_or_demo_output",
+        "field_coverage": {
+          "authentication": [],
+          "content_digest": [],
+          "dependency_identity": [],
+          "environment_identity": [],
+          "model_immutable_identity": [],
+          "producer_identity": [],
+          "provenance": [],
+          "raw_exchange": [],
+          "seed": [],
+          "source_revision": []
+        },
+        "git_ignored": true,
+        "git_tracked": false,
+        "path": "atlas/data/results/axiom_meta_41_demo_results_1763683461.json",
+        "producer_paths": [
+          "atlas/scripts/experiments/demo_advanced_ai_integration.py"
+        ],
+        "producer_sha256": {
+          "atlas/scripts/experiments/demo_advanced_ai_integration.py": "4251d6cb3308c38f6aeb56027eec164090f0da098565a462edc4d7ce178f88df"
+        },
+        "sha256": "7f729b9242192b8fe05ed328d2a41fa57982a3ca5c8801ea7ef66281decefad3",
+        "top_level_keys": [
+          "api_results",
+          "loop_results",
+          "performance",
+          "timestamp"
+        ],
+        "top_level_type": "dict"
+      },
+      {
+        "bytes": 126100,
+        "classification": "scientific_or_demo_output",
+        "field_coverage": {
+          "authentication": [],
+          "content_digest": [],
+          "dependency_identity": [],
+          "environment_identity": [],
+          "model_immutable_identity": [],
+          "producer_identity": [],
+          "provenance": [],
+          "raw_exchange": [],
+          "seed": [],
+          "source_revision": []
+        },
+        "git_ignored": true,
+        "git_tracked": false,
+        "path": "atlas/data/results/axiom_scientific_demo_results.json",
+        "producer_paths": [
+          "atlas/examples/scientific_demo.py"
+        ],
+        "producer_sha256": {
+          "atlas/examples/scientific_demo.py": "e0a9a9c9a3bc416a5d218f7a341436ee1a16c8c1a24362d9d6159b7d86a61cc1"
+        },
+        "sha256": "23a7203a179ff6a55d951ab43254cc03e75572d37e881f920d0953b424a1c43f",
+        "top_level_keys": [
+          "chemistry",
+          "quantum_computing",
+          "quantum_physics",
+          "scientific_ai",
+          "service_status",
+          "timestamp",
+          "version"
+        ],
+        "top_level_type": "dict"
+      },
+      {
+        "bytes": 5767,
+        "classification": "monitoring_configuration",
+        "field_coverage": {
+          "authentication": [],
+          "content_digest": [],
+          "dependency_identity": [],
+          "environment_identity": [],
+          "model_immutable_identity": [],
+          "producer_identity": [],
+          "provenance": [],
+          "raw_exchange": [],
+          "seed": [],
+          "source_revision": []
+        },
+        "git_ignored": false,
+        "git_tracked": true,
+        "path": "atlas/monitoring/grafana/dashboards/axiom-services.json",
+        "producer_paths": [],
+        "producer_sha256": {},
+        "sha256": "69dee6a4376ff74c04872d5d45614e53b044dc6c2bd3480547cca267bc774dcf",
+        "top_level_keys": [
+          "dashboard"
+        ],
+        "top_level_type": "dict"
+      },
+      {
+        "bytes": 3317,
+        "classification": "monitoring_configuration",
+        "field_coverage": {
+          "authentication": [],
+          "content_digest": [],
+          "dependency_identity": [],
+          "environment_identity": [],
+          "model_immutable_identity": [],
+          "producer_identity": [],
+          "provenance": [],
+          "raw_exchange": [],
+          "seed": [],
+          "source_revision": []
+        },
+        "git_ignored": false,
+        "git_tracked": true,
+        "path": "atlas/monitoring/grafana/provisioning/dashboards/axiom-dashboard.json",
+        "producer_paths": [],
+        "producer_sha256": {},
+        "sha256": "9613e8143646d934c0ce471437281ceb40836f32590ae3cbfb44387cee58de1e",
+        "top_level_keys": [
+          "dashboard"
+        ],
+        "top_level_type": "dict"
+      },
+      {
+        "bytes": 603,
+        "classification": "scientific_or_demo_output",
+        "field_coverage": {
+          "authentication": [],
+          "content_digest": [],
+          "dependency_identity": [],
+          "environment_identity": [],
+          "model_immutable_identity": [],
+          "producer_identity": [],
+          "provenance": [],
+          "raw_exchange": [],
+          "seed": [],
+          "source_revision": []
+        },
+        "git_ignored": true,
+        "git_tracked": false,
+        "path": "atlas/reports/axiom_demo_report_20250925_005737.json",
+        "producer_paths": [
+          "atlas/examples/axiom_real_data_comprehensive_demo.py"
+        ],
+        "producer_sha256": {
+          "atlas/examples/axiom_real_data_comprehensive_demo.py": "d150e1df26d2461f8ff82d30ce514c2fcbaace8b5e3c3dc503e449277d35a524"
+        },
+        "sha256": "209c7e4690484cfb503b61ecc7f7017a578f065ae6f38e1d2ea186eadcbdbbf8",
+        "top_level_keys": [
+          "data_sources_accessed",
+          "duration_minutes",
+          "objects_analyzed",
+          "scientific_findings",
+          "technical_metrics",
+          "timestamp"
+        ],
+        "top_level_type": "dict"
+      },
+      {
+        "bytes": 603,
+        "classification": "scientific_or_demo_output",
+        "field_coverage": {
+          "authentication": [],
+          "content_digest": [],
+          "dependency_identity": [],
+          "environment_identity": [],
+          "model_immutable_identity": [],
+          "producer_identity": [],
+          "provenance": [],
+          "raw_exchange": [],
+          "seed": [],
+          "source_revision": []
+        },
+        "git_ignored": true,
+        "git_tracked": false,
+        "path": "atlas/reports/axiom_demo_report_20250925_005837.json",
+        "producer_paths": [
+          "atlas/examples/axiom_real_data_comprehensive_demo.py"
+        ],
+        "producer_sha256": {
+          "atlas/examples/axiom_real_data_comprehensive_demo.py": "d150e1df26d2461f8ff82d30ce514c2fcbaace8b5e3c3dc503e449277d35a524"
+        },
+        "sha256": "41964d20a2f10306c4dc6bfd79823a795dc6f1bce4031842b87606e11cd997b5",
+        "top_level_keys": [
+          "data_sources_accessed",
+          "duration_minutes",
+          "objects_analyzed",
+          "scientific_findings",
+          "technical_metrics",
+          "timestamp"
+        ],
+        "top_level_type": "dict"
+      },
+      {
+        "bytes": 1001,
+        "classification": "scientific_or_demo_output",
+        "field_coverage": {
+          "authentication": [],
+          "content_digest": [],
+          "dependency_identity": [],
+          "environment_identity": [],
+          "model_immutable_identity": [],
+          "producer_identity": [],
+          "provenance": [],
+          "raw_exchange": [],
+          "seed": [],
+          "source_revision": []
+        },
+        "git_ignored": true,
+        "git_tracked": false,
+        "path": "atlas/reports/axiom_real_data_report_20250925_010355.json",
+        "producer_paths": [
+          "atlas/examples/axiom_complete_real_data_demo.py",
+          "atlas/examples/real_astronomical_data_demo.py"
+        ],
+        "producer_sha256": {
+          "atlas/examples/axiom_complete_real_data_demo.py": "4af22502e6e0f8ac4e431304bfeca550af0693a972b91f20f4fa9dcb65e3c0ec",
+          "atlas/examples/real_astronomical_data_demo.py": "e36ed55e0ee387d1a97fbc04eb0f4ce1104c499a331ef56560e7afbdadd7619d"
+        },
+        "sha256": "c7d4efdeb0c77eb1bada95fc5deca316c1e3167bb0b2fb62f4aebadc326aed26",
+        "top_level_keys": [
+          "analysis_results",
+          "axiom_version",
+          "data_sources",
+          "duration_minutes",
+          "real_data_verification",
+          "scientific_findings",
+          "technical_metrics",
+          "timestamp"
+        ],
+        "top_level_type": "dict"
+      },
+      {
+        "bytes": 5964,
+        "classification": "scientific_or_demo_output",
+        "field_coverage": {
+          "authentication": [],
+          "content_digest": [],
+          "dependency_identity": [],
+          "environment_identity": [],
+          "model_immutable_identity": [],
+          "producer_identity": [],
+          "provenance": [],
+          "raw_exchange": [],
+          "seed": [],
+          "source_revision": []
+        },
+        "git_ignored": true,
+        "git_tracked": false,
+        "path": "atlas/reports/axiom_scientific_workflow_20250925_010548.json",
+        "producer_paths": [
+          "atlas/examples/axiom_scientific_workflow_example.py",
+          "atlas/examples/real_astronomical_data_demo.py"
+        ],
+        "producer_sha256": {
+          "atlas/examples/axiom_scientific_workflow_example.py": "4064f3b4d24fd7207b8646d892dc39ed05dd661de1b72c90fb7609648fe5cead",
+          "atlas/examples/real_astronomical_data_demo.py": "e36ed55e0ee387d1a97fbc04eb0f4ce1104c499a331ef56560e7afbdadd7619d"
+        },
+        "sha256": "fea22471f4a72493896710a47cc086aad0e0ef7d73bf5b2f0ca10ff45f41854f",
+        "top_level_keys": [
+          "analysis_results",
+          "data_sources",
+          "future_research",
+          "metadata",
+          "scientific_conclusions"
+        ],
+        "top_level_type": "dict"
+      }
+    ],
+    "audited_inventory_sha256": "f89258eddd5e1e4ecc1e36c50689151546229a5d4a1d14b53db1b91bebb470fb",
+    "interpretation_limit": "A source-like key, timestamp, model alias, or matching current byte digest would not by itself authenticate origin, establish historical time, or validate a scientific claim.",
+    "parse_failures": [],
+    "summary": {
+      "artifacts_without_identified_producer": 4,
+      "axiom_named_json_files": 14,
+      "git_ignored_artifacts": 12,
+      "git_tracked_artifacts": 2,
+      "parseable_json_files": 14,
+      "scientific_artifacts_with_authentication_fields": 0,
+      "scientific_artifacts_with_content_digest_fields": 0,
+      "scientific_artifacts_with_dependency_identity_fields": 0,
+      "scientific_artifacts_with_model_immutable_identity_fields": 0,
+      "scientific_artifacts_with_provenance_fields": 0,
+      "scientific_artifacts_with_raw_exchange_fields": 0,
+      "scientific_artifacts_with_seed_fields": 0,
+      "scientific_artifacts_with_source_revision_fields": 0,
+      "scientific_or_claim_artifacts": 11
+    }
+  },
+  "classification": "exploratory_pre_registration_read_only",
+  "critical_claim_checks": {
+    "astronomy_real_data_report": {
+      "analysis_results_empty": true,
+      "artifact": "atlas/reports/axiom_real_data_report_20250925_010355.json",
+      "artifact_sha256": "c7d4efdeb0c77eb1bada95fc5deca316c1e3167bb0b2fb62f4aebadc326aed26",
+      "connector_method_evidence": {
+        "get_bright_stars_data": {
+          "classification": "source_embedded_literal_catalog",
+          "end_line": 395,
+          "found": true,
+          "source": "    def get_bright_stars_data(self) -> RealDataResult:\n        \"\"\"\n        Obtener datos de estrellas brillantes más conocidas.\n        \n        Returns:\n            RealDataResult con estrellas brillantes\n        \"\"\"\n        # Datos reales de las estrellas más brillantes (magnitud aparente)\n        bright_stars = {\n            'sirius': {\n                'proper_name': 'Sirius',\n                'designation': 'Alpha Canis Majoris',\n                'apparent_magnitude': -1.46,\n                'absolute_magnitude': 1.42,\n                'distance_ly': 8.6,\n                'spectral_type': 'A1V',\n                'ra_hours': 6.75,\n                'dec_degrees': -16.72,\n                'binary': True\n            },\n            'canopus': {\n                'proper_name': 'Canopus',\n                'designation': 'Alpha Carinae',\n                'apparent_magnitude': -0.74,\n                'absolute_magnitude': -5.71,\n                'distance_ly': 310,\n                'spectral_type': 'A9II',\n                'ra_hours': 6.4,\n                'dec_degrees': -52.7,\n                'binary': False\n            },\n            'arcturus': {\n                'proper_name': 'Arcturus',\n                'designation': 'Alpha Boötis',\n                'apparent_magnitude': -0.05,\n                'absolute_magnitude': -0.30,\n                'distance_ly': 36.7,\n                'spectral_type': 'K1.5IIIFe-0.5',\n                'ra_hours': 14.26,\n                'dec_degrees': 19.18,\n                'binary': False\n            },\n            'vega': {\n                'proper_name': 'Vega',\n                'designation': 'Alpha Lyrae',\n                'apparent_magnitude': 0.03,\n                'absolute_magnitude': 0.58,\n                'distance_ly': 25.04,\n                'spectral_type': 'A0V',\n                'ra_hours': 18.62,\n                'dec_degrees': 38.78,\n                'binary': False\n            },\n            'capella': {\n                'proper_name': 'Capella',\n                'designation': 'Alpha Aurigae',\n                'apparent_magnitude': 0.08,\n                'absolute_magnitude': -0.48,\n                'distance_ly': 42.9,\n                'spectral_type': 'G3III',\n                'ra_hours': 5.28,\n                'dec_degrees': 45.99,\n                'binary': True\n            },\n            'rigel': {\n                'proper_name': 'Rigel',\n                'designation': 'Beta Orionis',\n                'apparent_magnitude': 0.13,\n                'absolute_magnitude': -7.84,\n                'distance_ly': 860,\n                'spectral_type': 'B8Ia',\n                'ra_hours': 5.24,\n                'dec_degrees': -8.2,\n                'binary': True\n            },\n            'procyon': {\n                'proper_name': 'Procyon',\n                'designation': 'Alpha Canis Minoris',\n                'apparent_magnitude': 0.34,\n                'absolute_magnitude': 2.61,\n                'distance_ly': 11.5,\n                'spectral_type': 'F5IV-V',\n                'ra_hours': 7.65,\n                'dec_degrees': 5.22,\n                'binary': True\n            },\n            'betelgeuse': {\n                'proper_name': 'Betelgeuse',\n                'designation': 'Alpha Orionis',\n                'apparent_magnitude': 0.50,  # Variable\n                'absolute_magnitude': -5.85,\n                'distance_ly': 700,\n                'spectral_type': 'M1-2Ia-Iab',\n                'ra_hours': 5.92,\n                'dec_degrees': 7.41,\n                'binary': False,\n                'variable': True\n            }\n        }\n        \n        return RealDataResult(\n            source='HIPPARCOS_CATALOG',\n            object_name='Bright Stars',\n            data=bright_stars,\n            timestamp=datetime.now(),\n            success=True\n        )\n",
+          "source_sha256": "ade3fba28aee602f6e6eb0be51ca0c6873d285469d2f7047e200ec43bf85296f",
+          "start_line": 289
+        },
+        "get_exoplanet_data": {
+          "classification": "source_embedded_literal_catalog",
+          "end_line": 463,
+          "found": true,
+          "source": "    def get_exoplanet_data(self) -> RealDataResult:\n        \"\"\"\n        Obtener datos de exoplanetas confirmados más conocidos.\n        \n        Returns:\n            RealDataResult con exoplanetas confirmados\n        \"\"\"\n        # Datos reales de exoplanetas confirmados\n        confirmed_exoplanets = {\n            '51_eridani_b': {\n                'planet_name': '51 Eridani b',\n                'host_star': '51 Eridani',\n                'discovery_year': 2014,\n                'discovery_method': 'Direct Imaging',\n                'mass_jupiter': 2.6,\n                'orbital_period_years': 28.1,\n                'distance_ly': 28.1,\n                'temperature_k': 700\n            },\n            'proxima_centauri_b': {\n                'planet_name': 'Proxima Centauri b',\n                'host_star': 'Proxima Centauri',\n                'discovery_year': 2016,\n                'discovery_method': 'Radial Velocity',\n                'mass_earth': 1.17,\n                'orbital_period_days': 11.19,\n                'distance_ly': 4.24,\n                'potentially_habitable': True\n            },\n            'kepler_452b': {\n                'planet_name': 'Kepler-452b',\n                'host_star': 'Kepler-452',\n                'discovery_year': 2015,\n                'discovery_method': 'Transit',\n                'radius_earth': 1.63,\n                'orbital_period_days': 384.8,\n                'distance_ly': 1402,\n                'potentially_habitable': True\n            },\n            'hd_209458b': {\n                'planet_name': 'HD 209458 b (Osiris)',\n                'host_star': 'HD 209458',\n                'discovery_year': 1999,\n                'discovery_method': 'Transit',\n                'mass_jupiter': 0.69,\n                'orbital_period_days': 3.52,\n                'distance_ly': 159,\n                'first_transiting_exoplanet': True\n            },\n            'trappist_1_system': {\n                'system_name': 'TRAPPIST-1',\n                'host_star': 'TRAPPIST-1',\n                'discovery_year': 2016,\n                'planet_count': 7,\n                'distance_ly': 40.7,\n                'potentially_habitable_planets': 3,\n                'planets': ['b', 'c', 'd', 'e', 'f', 'g', 'h']\n            }\n        }\n        \n        return RealDataResult(\n            source='CONFIRMED_EXOPLANETS',\n            object_name='Exoplanets',\n            data=confirmed_exoplanets,\n            timestamp=datetime.now(),\n            success=True\n        )\n",
+          "source_sha256": "79524a387e4bedc2263d868d5fc52cc01f09d92dd9713e847d3edc4b813a2520",
+          "start_line": 397
+        },
+        "get_iss_position": {
+          "classification": "network_response_plus_embedded_orbital_constants",
+          "end_line": 155,
+          "found": true,
+          "source": "    def get_iss_position(self) -> RealDataResult:\n        \"\"\"\n        Obtener posición actual de la ISS.\n        \n        Returns:\n            RealDataResult con posición de ISS\n        \"\"\"\n        try:\n            response = self.session.get(\n                'http://api.open-notify.org/iss-now.json',\n                timeout=10\n            )\n            \n            if response.status_code == 200:\n                data = response.json()\n                position = data.get('iss_position', {})\n                \n                return RealDataResult(\n                    source='ISS_API',\n                    object_name='International Space Station',\n                    data={\n                        'latitude': float(position.get('latitude', 0)),\n                        'longitude': float(position.get('longitude', 0)),\n                        'timestamp': data.get('timestamp'),\n                        'altitude_km': 408,  # Altitud promedio ISS\n                        'speed_kmh': 27600,  # Velocidad promedio ISS\n                        'orbital_period_min': 90\n                    },\n                    timestamp=datetime.now(),\n                    success=True\n                )\n            else:\n                return RealDataResult(\n                    source='ISS_API',\n                    object_name='ISS Error',\n                    data={},\n                    timestamp=datetime.now(),\n                    success=False,\n                    error=f\"HTTP {response.status_code}\"\n                )\n                \n        except Exception as e:\n            return RealDataResult(\n                source='ISS_API',\n                object_name='ISS Error',\n                data={},\n                timestamp=datetime.now(),\n                success=False,\n                error=str(e)\n            )\n",
+          "source_sha256": "d23e660accf2f5e2aa5cb88014edb40168a6b087ec7d1af8e460d2744fc246ae",
+          "start_line": 106
+        },
+        "get_messier_objects": {
+          "classification": "source_embedded_literal_catalog",
+          "end_line": 532,
+          "found": true,
+          "source": "    def get_messier_objects(self) -> RealDataResult:\n        \"\"\"\n        Obtener datos del catálogo Messier.\n        \n        Returns:\n            RealDataResult con objetos Messier\n        \"\"\"\n        # Objetos Messier más conocidos con datos reales\n        messier_objects = {\n            'M1': {\n                'name': 'Crab Nebula',\n                'type': 'Supernova Remnant',\n                'constellation': 'Taurus',\n                'ra_hours': 5.58,\n                'dec_degrees': 22.02,\n                'distance_ly': 6500,\n                'magnitude': 8.4,\n                'size_arcmin': 6.0\n            },\n            'M31': {\n                'name': 'Andromeda Galaxy',\n                'type': 'Spiral Galaxy',\n                'constellation': 'Andromeda',\n                'ra_hours': 0.71,\n                'dec_degrees': 41.27,\n                'distance_ly': 2537000,\n                'magnitude': 3.4,\n                'size_arcmin': 178.0\n            },\n            'M42': {\n                'name': 'Orion Nebula',\n                'type': 'Emission Nebula',\n                'constellation': 'Orion',\n                'ra_hours': 5.59,\n                'dec_degrees': -5.4,\n                'distance_ly': 1344,\n                'magnitude': 4.0,\n                'size_arcmin': 85.0\n            },\n            'M45': {\n                'name': 'Pleiades',\n                'type': 'Open Cluster',\n                'constellation': 'Taurus',\n                'ra_hours': 3.79,\n                'dec_degrees': 24.11,\n                'distance_ly': 444,\n                'magnitude': 1.6,\n                'size_arcmin': 110.0\n            },\n            'M57': {\n                'name': 'Ring Nebula',\n                'type': 'Planetary Nebula',\n                'constellation': 'Lyra',\n                'ra_hours': 18.88,\n                'dec_degrees': 33.03,\n                'distance_ly': 2300,\n                'magnitude': 8.8,\n                'size_arcmin': 1.4\n            }\n        }\n        \n        return RealDataResult(\n            source='MESSIER_CATALOG',\n            object_name='Messier Objects',\n            data=messier_objects,\n            timestamp=datetime.now(),\n            success=True\n        )\n",
+          "source_sha256": "164ed85079c90a3a38d2dc66f3b8fb24feb2d6e22c440ddd3c465ee972862457",
+          "start_line": 465
+        },
+        "get_nasa_apod": {
+          "classification": "network_response",
+          "end_line": 104,
+          "found": true,
+          "source": "    def get_nasa_apod(self, date: Optional[str] = None) -> RealDataResult:\n        \"\"\"\n        Obtener Astronomy Picture of the Day de NASA.\n        \n        Args:\n            date: Fecha en formato YYYY-MM-DD (opcional)\n            \n        Returns:\n            RealDataResult con datos de APOD\n        \"\"\"\n        try:\n            params = {'api_key': 'DEMO_KEY'}\n            if date:\n                params['date'] = date\n                \n            response = self.session.get(\n                self.base_urls['nasa_api'], \n                params=params,\n                timeout=10\n            )\n            \n            if response.status_code == 200:\n                data = response.json()\n                return RealDataResult(\n                    source='NASA_APOD',\n                    object_name=data.get('title', 'NASA APOD'),\n                    data={\n                        'title': data.get('title'),\n                        'explanation': data.get('explanation'),\n                        'date': data.get('date'),\n                        'media_type': data.get('media_type'),\n                        'url': data.get('url'),\n                        'hdurl': data.get('hdurl')\n                    },\n                    timestamp=datetime.now(),\n                    success=True\n                )\n            else:\n                return RealDataResult(\n                    source='NASA_APOD',\n                    object_name='Error',\n                    data={},\n                    timestamp=datetime.now(),\n                    success=False,\n                    error=f\"HTTP {response.status_code}: {response.text}\"\n                )\n                \n        except Exception as e:\n            return RealDataResult(\n                source='NASA_APOD',\n                object_name='Error',\n                data={},\n                timestamp=datetime.now(),\n                success=False,\n                error=str(e)\n            )\n",
+          "source_sha256": "141c0ecefc45922579bc394cd80c432369ec3388570ea5505b1fdcfbbc752572",
+          "start_line": 49
+        },
+        "get_people_in_space": {
+          "classification": "network_response",
+          "end_line": 203,
+          "found": true,
+          "source": "    def get_people_in_space(self) -> RealDataResult:\n        \"\"\"\n        Obtener lista de personas actualmente en el espacio.\n        \n        Returns:\n            RealDataResult con astronautas en el espacio\n        \"\"\"\n        try:\n            response = self.session.get(\n                'http://api.open-notify.org/astros.json',\n                timeout=10\n            )\n            \n            if response.status_code == 200:\n                data = response.json()\n                people = data.get('people', [])\n                \n                return RealDataResult(\n                    source='ASTROS_API',\n                    object_name='People in Space',\n                    data={\n                        'total_count': data.get('number', 0),\n                        'astronauts': people,\n                        'spacecraft': list(set([person.get('craft', 'Unknown') for person in people]))\n                    },\n                    timestamp=datetime.now(),\n                    success=True\n                )\n            else:\n                return RealDataResult(\n                    source='ASTROS_API',\n                    object_name='Astros Error',\n                    data={},\n                    timestamp=datetime.now(),\n                    success=False,\n                    error=f\"HTTP {response.status_code}\"\n                )\n                \n        except Exception as e:\n            return RealDataResult(\n                source='ASTROS_API',\n                object_name='Astros Error',\n                data={},\n                timestamp=datetime.now(),\n                success=False,\n                error=str(e)\n            )\n",
+          "source_sha256": "232411eba57d2c2b9def0ca160dccd5a27d25b9234e6681dcafdc53e53e54307",
+          "start_line": 157
+        },
+        "get_solar_system_data": {
+          "classification": "source_embedded_literal_catalog",
+          "end_line": 287,
+          "found": true,
+          "source": "    def get_solar_system_data(self) -> RealDataResult:\n        \"\"\"\n        Obtener datos básicos del sistema solar.\n        \n        Returns:\n            RealDataResult con datos verificados del sistema solar\n        \"\"\"\n        # Datos astronómicos reales y verificados\n        solar_system_data = {\n            'sun': {\n                'mass_kg': 1.989e30,\n                'radius_km': 696340,\n                'temperature_k': 5778,\n                'age_years': 4.6e9,\n                'spectral_type': 'G2V'\n            },\n            'planets': {\n                'mercury': {\n                    'mass_earth': 0.055,\n                    'radius_earth': 0.383,\n                    'orbital_period_days': 87.97,\n                    'distance_au': 0.387,\n                    'moons': 0\n                },\n                'venus': {\n                    'mass_earth': 0.815,\n                    'radius_earth': 0.949,\n                    'orbital_period_days': 224.7,\n                    'distance_au': 0.723,\n                    'moons': 0\n                },\n                'earth': {\n                    'mass_earth': 1.0,\n                    'radius_earth': 1.0,\n                    'orbital_period_days': 365.26,\n                    'distance_au': 1.0,\n                    'moons': 1\n                },\n                'mars': {\n                    'mass_earth': 0.107,\n                    'radius_earth': 0.532,\n                    'orbital_period_days': 686.98,\n                    'distance_au': 1.524,\n                    'moons': 2\n                },\n                'jupiter': {\n                    'mass_earth': 317.8,\n                    'radius_earth': 11.21,\n                    'orbital_period_days': 4332.82,\n                    'distance_au': 5.203,\n                    'moons': 95\n                },\n                'saturn': {\n                    'mass_earth': 95.2,\n                    'radius_earth': 9.45,\n                    'orbital_period_days': 10755.7,\n                    'distance_au': 9.537,\n                    'moons': 146\n                },\n                'uranus': {\n                    'mass_earth': 14.5,\n                    'radius_earth': 4.01,\n                    'orbital_period_days': 30687.2,\n                    'distance_au': 19.191,\n                    'moons': 28\n                },\n                'neptune': {\n                    'mass_earth': 17.1,\n                    'radius_earth': 3.88,\n                    'orbital_period_days': 60190.0,\n                    'distance_au': 30.069,\n                    'moons': 16\n                }\n            }\n        }\n        \n        return RealDataResult(\n            source='VERIFIED_CATALOG',\n            object_name='Solar System',\n            data=solar_system_data,\n            timestamp=datetime.now(),\n            success=True\n        )\n",
+          "source_sha256": "e5ef81eccce16acebace5a162b5a58b6234391600e4ac1487bf3cdfafb121f0f",
+          "start_line": 205
+        }
+      },
+      "declared_data_source_count": 7,
+      "network_backed_connector_methods": 3,
+      "producer_function_evidence": {
+        "end_line": 374,
+        "found": true,
+        "source": "    def generate_comprehensive_report(self):\n        \"\"\"Generar reporte científico comprensivo.\"\"\"\n        print(\"\\n📋 REPORTE CIENTÍFICO COMPRENSIVO\")\n        print(\"=\" * 60)\n        \n        report = {\n            'timestamp': self.start_time.isoformat(),\n            'duration_minutes': (datetime.now() - self.start_time).total_seconds() / 60,\n            'axiom_version': '1.0.0',\n            'data_sources': list(self.results.keys()),\n            'real_data_verification': True,\n            'analysis_results': {},\n            'scientific_findings': [],\n            'technical_metrics': {}\n        }\n        \n        # Métricas técnicas\n        total_objects = 0\n        if 'bright_stars' in self.results:\n            total_objects += len(self.results['bright_stars'].data)\n        if 'exoplanets' in self.results:\n            total_objects += len(self.results['exoplanets'].data)\n        if 'messier_objects' in self.results:\n            total_objects += len(self.results['messier_objects'].data)\n        if 'solar_system' in self.results:\n            total_objects += len(self.results['solar_system'].data['planets'])\n        \n        report['technical_metrics'] = {\n            'total_objects_analyzed': total_objects,\n            'data_sources_accessed': len(self.results),\n            'axiom_services_used': len(self.axiom_services),\n            'real_time_data_points': 2 if 'iss_position' in self.results else 0\n        }\n        \n        # Hallazgos científicos\n        report['scientific_findings'] = [\n            \"Demostración exitosa de integración AXIOM con datos astronómicos reales\",\n            \"Verificación de parámetros físicos del Sistema Solar\",\n            \"Análisis de clasificación estelar con datos del catálogo Hipparcos\",\n            \"Caracterización de exoplanetas confirmados con múltiples métodos de detección\",\n            \"Monitoreo orbital en tiempo real de la Estación Espacial Internacional\",\n            \"Integración multidisciplinaria de análisis astronómico automatizado\"\n        ]\n        \n        print(f\"\\n📊 MÉTRICAS FINALES:\")\n        print(f\"   🎯 Objetos analizados: {total_objects:,}\")\n        print(f\"   📡 Fuentes de datos: {len(self.results)}\")\n        print(f\"   🧠 Servicios AXIOM: {len(self.axiom_services)}\")\n        print(f\"   ⏱️ Duración total: {report['duration_minutes']:.1f} minutos\")\n        print(f\"   ✅ Verificación de datos reales: EXITOSA\")\n        \n        print(f\"\\n🔬 FUENTES DE DATOS REALES VERIFICADAS:\")\n        for source in self.results.keys():\n            print(f\"   ✅ {source.upper().replace('_', ' ')}\")\n        \n        print(f\"\\n🚀 SERVICIOS AXIOM INTEGRADOS:\")\n        count = 0\n        for service_id, service_name in self.axiom_services.items():\n            if count < 6:  # Mostrar primeros 6\n                print(f\"   🔧 {service_name}\")\n                count += 1\n        if len(self.axiom_services) > 6:\n            print(f\"   ... y {len(self.axiom_services) - 6} servicios más\")\n        \n        # Guardar reporte\n        report_filename = f\"axiom_real_data_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json\"\n        try:\n            with open(report_filename, 'w', encoding='utf-8') as f:\n                json.dump(report, f, indent=2, ensure_ascii=False)\n            print(f\"\\n💾 Reporte completo guardado: {report_filename}\")\n        except Exception as e:\n            print(f\"\\n⚠️ Error guardando reporte: {e}\")\n        \n        return report\n",
+        "source_sha256": "65629e74c98ab33daa41b928c23f72f71393f1d30e687a1c5986e69cc8c6648e",
+        "start_line": 301
+      },
+      "producer_sets_real_data_verification_unconditionally_true": true,
+      "real_data_verification_value": true,
+      "report_contains_content_digests": false,
+      "report_contains_raw_api_responses": false,
+      "source_embedded_catalog_methods": 4
+    },
+    "astronomy_scientific_workflow": {
+      "artifact": "atlas/reports/axiom_scientific_workflow_20250925_010548.json",
+      "artifact_sha256": "fea22471f4a72493896710a47cc086aad0e0ef7d73bf5b2f0ca10ff45f41854f",
+      "content_digest_fields": [],
+      "declared_data_sources": [
+        "iss",
+        "astronauts",
+        "stars",
+        "exoplanets",
+        "solar_system"
+      ],
+      "habitability_is_descriptive_for_embedded_four_planet_sample": true,
+      "habitability_statistics": {
+        "habitability_rate": 50.0,
+        "habitable_count": 2,
+        "total_planets": 4
+      },
+      "source_revision_fields": [],
+      "total_objects": 22
+    },
+    "autonomous_hf_report": {
+      "artifact": "atlas/archive/json_results/axiom_autonomous_research_report_hf.json",
+      "artifact_sha256": "4add3592225f67b368ccbba976aeba52832ded1007d6d59dbdf78a24d980f13d",
+      "authentication_fields": [],
+      "history_records_prompt_and_response_lengths_only": true,
+      "immutable_model_identity_fields": [],
+      "interpretation": "Provider/model labels and generated text are inspectable, but aliases without endpoint/revision/digest and full exchange metadata do not permit immutable model attribution or bitwise replay.",
+      "model_aliases": [
+        "codellama:7b",
+        "llama3:8b",
+        "mistral:7b",
+        "qwen:7b"
+      ],
+      "provider_labels": [
+        "huggingface"
+      ],
+      "seed_fields": [],
+      "source_revision_fields": [],
+      "workflow_steps": 5
+    },
+    "capability_claim_summary": {
+      "artifact": "atlas/artifacts/reports/axiom_complete_analysis_summary.json",
+      "artifact_sha256": "fbc4045c90207ddf2c99366c743833ca2349dd0b513b7198b0471d56dd4d1236",
+      "content_digest_fields": [],
+      "final_verdict": "AXIOM is revolutionary and fully functional",
+      "identified_producer": false,
+      "provenance_fields": [],
+      "scientific_impact_claims": {
+        "breakthrough_potential": "Autonomous discovery of novel catalysts",
+        "discovery_acceleration": "100x faster than traditional methods",
+        "industrial_application": "Patent-ready catalyst candidates",
+        "publication_readiness": "Papers generated automatically for Nature/Science",
+        "validation_rigor": "Multi-method DFT + literature validation"
+      }
+    },
+    "failed_upstream_but_final_true": {
+      "artifact": "atlas/artifacts/demos/axiom_complete_demo_20250921_213324.json",
+      "artifact_sha256": "6160a8cf81c2a5e03134a4cc0396d8255f92bf439e87fdeb927f904d6bfb52d1",
+      "contradiction_count": 3,
+      "contradictions": [
+        {
+          "claim": "hypothesis_generated",
+          "final_assessment": true,
+          "upstream_success": false
+        },
+        {
+          "claim": "research_cycle_completed",
+          "final_assessment": true,
+          "upstream_success": false
+        },
+        {
+          "claim": "tools_corroborated",
+          "final_assessment": true,
+          "upstream_success": false
+        }
+      ],
+      "dft_validation_is_not_linked_to_an_executable_record": true,
+      "named_peer_reviewers_are_unauthenticated_strings": true
+    },
+    "literal_multidomain_real_data_demo": {
+      "artifact": "atlas/artifacts/demos/axiom_real_data_comprehensive_demo.json",
+      "interpretation": "This establishes source-embedded demo data and simulated outputs, not fabrication of external experiments; the artifact must not be cited as measured evidence.",
+      "peer_review_explicitly_labeled_simulation_in_source": true,
+      "producer": "atlas/scripts/experiments/axiom_real_data_demo.py",
+      "producer_network_call_count": 0,
+      "producer_random_call_count": 0,
+      "producer_sha256": "56262a10c59ffe331ede0476887e234786f26e0f7b11778c3d4be3826c113080",
+      "real_data_examples_exactly_equal_source_return_literal": true,
+      "source_literal_subtree_match_count": 22,
+      "source_literal_subtree_matches": [
+        {
+          "canonical_bytes": 2829,
+          "canonical_sha256": "889670043598a70af92e7b84e1edc91767c28bf09f52a0165116c8415668f7c9",
+          "json_path": "$.real_data_examples",
+          "source_function": "load_real_data_examples",
+          "source_line": 26,
+          "source_variable": "$return:load_real_data_examples"
+        },
+        {
+          "canonical_bytes": 246,
+          "canonical_sha256": "42459e9d78b23ccc28b6afd271d92ff61ad01a7f00486bbc8a40c4ca0a020bcf",
+          "json_path": "$.results_by_area.biology.insights",
+          "source_function": "demonstrate_biology_with_real_data",
+          "source_line": 254,
+          "source_variable": "insights"
+        },
+        {
+          "canonical_bytes": 139,
+          "canonical_sha256": "b20054a2e95eb450c29586f4ba2bf2ee81cfdaedf1511a02ddffcfe38338628a",
+          "json_path": "$.results_by_area.biology.predictions.expression",
+          "source_function": "demonstrate_biology_with_real_data",
+          "source_line": 235,
+          "source_variable": "expression_pred"
+        },
+        {
+          "canonical_bytes": 86,
+          "canonical_sha256": "3f42b290c869517b58ba6c6d8cff8468d040da8d2a825760f6089bdd62aefe80",
+          "json_path": "$.results_by_area.biology.validation",
+          "source_function": "demonstrate_biology_with_real_data",
+          "source_line": 247,
+          "source_variable": "validation"
+        },
+        {
+          "canonical_bytes": 181,
+          "canonical_sha256": "ca1f1ed33e027ca6c2f82fd0334225d12201ec2d12495173a62a163a3817495b",
+          "json_path": "$.results_by_area.chemistry.computations.dft",
+          "source_function": "demonstrate_chemistry_with_real_data",
+          "source_line": 157,
+          "source_variable": "dft_results"
+        },
+        {
+          "canonical_bytes": 175,
+          "canonical_sha256": "55df4c620c5f866c03bc7ebfa47ffe7b8e31b8d06d49a7d784e57b52546d4f4a",
+          "json_path": "$.results_by_area.chemistry.computations.electrocatalytic",
+          "source_function": "demonstrate_chemistry_with_real_data",
+          "source_line": 166,
+          "source_variable": "electrocatalytic_props"
+        },
+        {
+          "canonical_bytes": 263,
+          "canonical_sha256": "57a8ef0070d6d09dc28f80c7da7988372379c05fcf84ecf2e0e812e57255003c",
+          "json_path": "$.results_by_area.chemistry.insights",
+          "source_function": "demonstrate_chemistry_with_real_data",
+          "source_line": 186,
+          "source_variable": "insights"
+        },
+        {
+          "canonical_bytes": 121,
+          "canonical_sha256": "69a6fad2ba6e31acca45e0151753ab3d55865c49a5c657599ce08a5c794481b8",
+          "json_path": "$.results_by_area.chemistry.validation",
+          "source_function": "demonstrate_chemistry_with_real_data",
+          "source_line": 177,
+          "source_variable": "validation"
+        },
+        {
+          "canonical_bytes": 198,
+          "canonical_sha256": "438a7ed23eab1160a9b5a37bd7b1641d2146949bad227782c21a8b7c14e4363f",
+          "json_path": "$.results_by_area.climate_science.insights",
+          "source_function": "demonstrate_climate_with_real_data",
+          "source_line": 579,
+          "source_variable": "insights"
+        },
+        {
+          "canonical_bytes": 197,
+          "canonical_sha256": "f87443ee5f9c5c931f10957b33d9c3fed847ecd5fbaf6d29a1d85d1bf587d6a1",
+          "json_path": "$.results_by_area.climate_science.models",
+          "source_function": "demonstrate_climate_with_real_data",
+          "source_line": 548,
+          "source_variable": "models"
+        },
+        {
+          "canonical_bytes": 179,
+          "canonical_sha256": "da5acf46235ddcc82cd67eb52993722e8852d9be190d5e1e04e34003655c6db7",
+          "json_path": "$.results_by_area.climate_science.projections",
+          "source_function": "demonstrate_climate_with_real_data",
+          "source_line": 565,
+          "source_variable": "projections"
+        },
+        {
+          "canonical_bytes": 273,
+          "canonical_sha256": "829b19cc0d2ff46a19ce3422ac9792487fcec997b8c51912a3d9714c4cc91334",
+          "json_path": "$.results_by_area.literature_peer_review.insights",
+          "source_function": "demonstrate_literature_with_real_data",
+          "source_line": 649,
+          "source_variable": "insights"
+        },
+        {
+          "canonical_bytes": 387,
+          "canonical_sha256": "30e4f96fa8900e581d8de776d843884782610c189b5c80b8e0814c6c3445bef8",
+          "json_path": "$.results_by_area.literature_peer_review.reviews",
+          "source_function": "demonstrate_literature_with_real_data",
+          "source_line": 629,
+          "source_variable": "reviews"
+        },
+        {
+          "canonical_bytes": 219,
+          "canonical_sha256": "d9169152062fc5bf49a35338093a0b1a4afdd51e8d2e0ac92359d3cfff65f53d",
+          "json_path": "$.results_by_area.materials.insights",
+          "source_function": "demonstrate_materials_with_real_data",
+          "source_line": 316,
+          "source_variable": "insights"
+        },
+        {
+          "canonical_bytes": 143,
+          "canonical_sha256": "0d0c1b1cfd0fda15f6cdeef8757de3ed67331101ec8cc81de1bea36041af60ff",
+          "json_path": "$.results_by_area.materials.predictions.gnome",
+          "source_function": "demonstrate_materials_with_real_data",
+          "source_line": 289,
+          "source_variable": "gnome_predictions"
+        },
+        {
+          "canonical_bytes": 117,
+          "canonical_sha256": "e5aacaf6a318c5c8fc5180f9ebc24dd747c52f8699059a9c9c05a4d318dc8d3d",
+          "json_path": "$.results_by_area.materials.predictions.optimization",
+          "source_function": "demonstrate_materials_with_real_data",
+          "source_line": 300,
+          "source_variable": "optimization"
+        },
+        {
+          "canonical_bytes": 223,
+          "canonical_sha256": "5c20f36d9b785ca3481a6e5dc9d9afec2d82d5e915ea9e6e395baaaadbe6032c",
+          "json_path": "$.results_by_area.mathematics.conjectures",
+          "source_function": "demonstrate_mathematics_with_real_data",
+          "source_line": 500,
+          "source_variable": "conjectures"
+        },
+        {
+          "canonical_bytes": 258,
+          "canonical_sha256": "9d860f89a61da0229489632e58644f220e129fa4db285700b6d3a36ba007191d",
+          "json_path": "$.results_by_area.mathematics.insights",
+          "source_function": "demonstrate_mathematics_with_real_data",
+          "source_line": 514,
+          "source_variable": "insights"
+        },
+        {
+          "canonical_bytes": 367,
+          "canonical_sha256": "a47144e1acea3a74b092a191020d1495c4a256383ab91d6837db4b40c2a519a8",
+          "json_path": "$.results_by_area.medical_imaging.diagnosis",
+          "source_function": "demonstrate_medical_with_real_data",
+          "source_line": 372,
+          "source_variable": "diagnosis"
+        },
+        {
+          "canonical_bytes": 203,
+          "canonical_sha256": "fcaab532d9f9764e15f1f43f3cf24e4be3415a1fac21ac7b19b0e4a630ebe445",
+          "json_path": "$.results_by_area.medical_imaging.insights",
+          "source_function": "demonstrate_medical_with_real_data",
+          "source_line": 386,
+          "source_variable": "insights"
+        },
+        {
+          "canonical_bytes": 232,
+          "canonical_sha256": "bc79bef71b5bcdfdc95932f337533caa65cc2e0779e35e5eb55d0e3888725802",
+          "json_path": "$.results_by_area.quantum_physics.insights",
+          "source_function": "demonstrate_quantum_with_real_data",
+          "source_line": 451,
+          "source_variable": "insights"
+        },
+        {
+          "canonical_bytes": 207,
+          "canonical_sha256": "208acd7628d932cbf783ee43998a99c4a8283286042f9448c507b5fcd9320b74",
+          "json_path": "$.results_by_area.quantum_physics.predictions",
+          "source_function": "demonstrate_quantum_with_real_data",
+          "source_line": 437,
+          "source_variable": "predictions"
+        }
+      ]
+    },
+    "scientific_http_demo": {
+      "artifact": "atlas/data/results/axiom_scientific_demo_results.json",
+      "artifact_sha256": "23a7203a179ff6a55d951ab43254cc03e75572d37e881f920d0953b424a1c43f",
+      "authentication_fields": [],
+      "content_digest_fields": [],
+      "failed_result_flags": 0,
+      "nonempty_result_groups": {
+        "chemistry": 2,
+        "quantum_computing": 2,
+        "quantum_physics": 2,
+        "scientific_ai": 0
+      },
+      "successful_result_flags": 6
+    },
+    "zero_data_positive_reports": {
+      "count": 2,
+      "reports": [
+        {
+          "objects_analyzed": 0,
+          "path": "atlas/reports/axiom_demo_report_20250925_005737.json",
+          "positive_findings": [
+            "Verificación exitosa de parámetros estelares para objetos de referencia",
+            "Confirmación de exoplanetas conocidos en sistemas multiples",
+            "Correlación cruzada exitosa entre catálogos astronómicos",
+            "Demostración de capacidades de análisis en tiempo real"
+          ],
+          "successful_connections": 0,
+          "total_queries": 0
+        },
+        {
+          "objects_analyzed": 0,
+          "path": "atlas/reports/axiom_demo_report_20250925_005837.json",
+          "positive_findings": [
+            "Verificación exitosa de parámetros estelares para objetos de referencia",
+            "Confirmación de exoplanetas conocidos en sistemas multiples",
+            "Correlación cruzada exitosa entre catálogos astronómicos",
+            "Demostración de capacidades de análisis en tiempo real"
+          ],
+          "successful_connections": 0,
+          "total_queries": 0
+        }
+      ]
+    }
+  },
+  "project_boundary": {
+    "deployment": {
+      "compose_declared_context": ".",
+      "compose_declared_dockerfile": "Dockerfile",
+      "compose_explicit_latest_images": [
+        "prom/prometheus:latest",
+        "grafana/grafana:latest",
+        "jaegertracing/all-in-one:latest"
+      ],
+      "compose_file_relative_dockerfile_exists": true,
+      "compose_images": [
+        "postgres:15-alpine",
+        "redis:7-alpine",
+        "nginx:alpine",
+        "docker.elastic.co/elasticsearch/elasticsearch:8.11.0",
+        "docker.elastic.co/logstash/logstash:8.11.0",
+        "docker.elastic.co/kibana/kibana:8.11.0",
+        "prom/prometheus:latest",
+        "grafana/grafana:latest",
+        "jaegertracing/all-in-one:latest"
+      ],
+      "compose_images_pinned_by_digest": 0,
+      "credential_values_recorded": false,
+      "direct_import_syntax_blockers": [
+        {
+          "entry_module": "atlas/main.py",
+          "error": "SyntaxError",
+          "imported_module": "app.middleware.setup",
+          "imported_path": "atlas/app/middleware/setup.py",
+          "line": 29,
+          "offset": 250,
+          "parseable": false,
+          "sha256": "a830a61b2b9214394752c7c937f752c2ed8942ded14bab1b439dcaff80bc1a7b"
+        },
+        {
+          "entry_module": "atlas/app/main.py",
+          "error": "SyntaxError",
+          "imported_module": "app.middleware.setup",
+          "imported_path": "atlas/app/middleware/setup.py",
+          "line": 29,
+          "offset": 250,
+          "parseable": false,
+          "sha256": "a830a61b2b9214394752c7c937f752c2ed8942ded14bab1b439dcaff80bc1a7b"
+        }
+      ],
+      "docker_base_images": [
+        "python:3.13-slim",
+        "python:3.13-slim"
+      ],
+      "docker_base_images_pinned_by_digest": 0,
+      "docker_entry_point": "main:app",
+      "docker_entry_point_has_direct_syntax_blocker": true,
+      "hardcoded_credential_like_variable_names": [
+        "DATABASE_URL",
+        "GF_SECURITY_ADMIN_PASSWORD",
+        "POSTGRES_PASSWORD",
+        "SECRET_KEY"
+      ]
+    },
+    "fastapi_apps": {
+      "atlas/app/main.py": [
+        {
+          "description": null,
+          "line": 42,
+          "title": "A.M.Y API",
+          "version": "4.1"
+        }
+      ],
+      "atlas/main.py": [
+        {
+          "description": "A.M.Y autonomous scientific research platform",
+          "line": 273,
+          "title": "A.M.Y API",
+          "version": "2.0.0"
+        }
+      ]
+    },
+    "function_evidence": {
+      "detailed_status": {
+        "end_line": 325,
+        "found": true,
+        "source": "async def detailed_status():\n    \"\"\"Status endpoint detallado\"\"\"\n    return {\n        \"service\": \"A.M.Y\",\n        \"version\": \"2.0.0\",\n        \"architecture\": \"modular_refactored\",\n        \"health\": \"healthy\",\n        \"modules\": {\n            \"orchestration\": \"active\",\n            \"router_registry\": \"active\",\n            \"monitoring\": \"active\",\n            \"database\": \"active\"\n        },\n        \"performance\": {\n            \"startup_time\": \"< 30s (estimated)\",\n            \"memory_usage\": \"< 300MB (estimated)\",\n            \"concurrent_users\": \"1000+ (estimated)\"\n        }\n    }\n",
+        "source_sha256": "13163ce859f0d47d5490b83384a651f08929ccc7313999cb3bf6c997c54be968",
+        "start_line": 307
+      },
+      "get_metrics": {
+        "end_line": 349,
+        "found": true,
+        "source": "async def get_metrics():\n    \"\"\"Metrics endpoint\"\"\"\n    return {\n        \"platform\": \"A.M.Y v2.0.0\",\n        \"architecture\": \"Modular Refactored\",\n        \"improvements\": {\n            \"startup_time_reduction\": \"60-80%\",\n            \"memory_usage_reduction\": \"40-60%\",\n            \"maintainability\": \"Significantly improved\",\n            \"scalability\": \"Enhanced\",\n            \"development_speed\": \"2-3x faster\"\n        },\n        \"features\": [\n            \"Auto router registration\",\n            \"Lazy loading\",\n            \"Modular services\",\n            \"Health monitoring\",\n            \"Performance metrics\",\n            \"Centralized configuration\"\n        ]\n    }\n",
+        "source_sha256": "d6e6e9183ecf6dbc4681c80ec04ee062864488889af0980e804d413cef4ff70a",
+        "start_line": 329
+      },
+      "health_check": {
+        "end_line": 303,
+        "found": true,
+        "source": "async def health_check():\n    \"\"\"Health check endpoint mejorado\"\"\"\n    return {\n        \"status\": \"healthy\",\n        \"service\": \"A.M.Y\",\n        \"version\": \"2.0.0\",\n        \"timestamp\": time.time(),\n        \"architecture\": \"modular_refactored\",\n        \"features\": [\n            \"Modular architecture\",\n            \"Auto router registry\",\n            \"Lazy loading\",\n            \"Health monitoring\",\n            \"Performance metrics\"\n        ]\n    }\n",
+        "source_sha256": "f954a9702120fce4d4a328fa11f2e420358d51160d0a40beb167f07521808c1b",
+        "start_line": 288
+      },
+      "lifespan": {
+        "end_line": 173,
+        "found": true,
+        "source": "async def lifespan(app: FastAPI):\n    \"\"\"Gestión del ciclo de vida de la aplicación\"\"\"\n    # Startup\n    logger.info(\"🚀 Iniciando AXIOM ATLAS...\")\n    startup_start_time = time.time()\n\n    # Inicializar servicios modulares\n    logger.info(\"📦 Inicializando servicios modulares...\")\n\n    # Importar servicios modulares\n    try:\n        from app.services.master_orchestration_service_refactored import MasterOrchestrationService\n        from app.services.orchestration.monitoring import ResourceMonitor\n        from app.core.database import init_database\n        from app.core.logging_config import setup_logging\n\n        # Configurar logging avanzado\n        setup_logging()\n\n        # Inicializar base de datos\n        init_database()\n        logger.info(\"✅ Base de datos inicializada\")\n\n        # Inicializar servicios base\n        orchestration_service = MasterOrchestrationService()\n\n        logger.info(\"✅ Servicios modulares inicializados\")\n\n    except Exception as e:\n        logger.error(\"❌ Error inicializando servicios: %s\", e)\n        # Continuar sin servicios modulares en caso de error\n\n    # Registrar routers automáticamente usando el sistema modular\n    logger.info(\"🔗 Registrando routers automáticamente...\")\n\n    try:\n        # Importar el sistema de router registry\n        from app.routers.router_registry import register_routers, get_router_info\n\n        # Obtener información de routers disponibles\n        router_info = get_router_info()\n        logger.info(f\"📊 Routers disponibles: {router_info['total_routers']} en {len(router_info['domains'])} dominios\")\n\n        # Configuración de registro de routers\n        router_config = {\n            'domains': ['mathematics', 'scientific', 'infrastructure', 'medical'],\n            'lazy_load': True,  # Usar lazy loading para mejor performance\n            'max_routers_per_domain': 50  # Límite por dominio\n        }\n\n        # Registrar routers\n        register_routers(app, router_config)\n\n        logger.info(\"✅ Routers registrados exitosamente\")\n\n    except ImportError as e:\n        logger.warning(f\"Router registry no disponible: {e}. Usando configuración legacy.\")\n\n        # Fallback: importar routers manualmente (legacy)\n        await register_legacy_routers(app)\n\n    startup_time = time.time() - startup_start_time\n    logger.info(f\"✅ AXIOM ATLAS iniciado exitosamente en {startup_time:.2f} segundos\")\n\n    # Health check background task\n    import asyncio\n    asyncio.create_task(perform_periodic_health_checks())\n\n    yield\n\n    # Shutdown\n    logger.info(\"👋 Cerrando AXIOM ATLAS...\")\n",
+        "source_sha256": "c85052722d7910a4545c3491f79ec6a08d11dee122ea3f0a3663d7c56abfc322",
+        "start_line": 102
+      }
+    },
+    "independent_axiom_surface": {
+      "axiom_named_classes": [
+        {
+          "class": "AxiomChemistryService",
+          "line": 57,
+          "path": "atlas/app/autonomous/enhanced/enhanced_chemistry_loop.py"
+        },
+        {
+          "class": "AxiomChemistryService",
+          "line": 40,
+          "path": "atlas/app/autonomous/pipelines/enhanced_chemistry_loop.py"
+        },
+        {
+          "class": "AxiomIntegrationConfig",
+          "line": 272,
+          "path": "atlas/app/domains/medicine/domain_config.py"
+        },
+        {
+          "class": "AxiomRealDataIntegration",
+          "line": 38,
+          "path": "atlas/examples/axiom_complete_real_data_demo.py"
+        },
+        {
+          "class": "AxiomRealDataDemo",
+          "line": 31,
+          "path": "atlas/examples/axiom_real_data_comprehensive_demo.py"
+        },
+        {
+          "class": "AxiomMathematicsDemo",
+          "line": 25,
+          "path": "atlas/examples/demo_axiom_mathematics.py"
+        },
+        {
+          "class": "AxiomResearchClient",
+          "line": 21,
+          "path": "atlas/examples/full_research_workflow_example.py"
+        },
+        {
+          "class": "AXIOMScientificDemo",
+          "line": 13,
+          "path": "atlas/examples/scientific_demo.py"
+        },
+        {
+          "class": "AxiomOllamaDemo",
+          "line": 11,
+          "path": "atlas/scripts/demo_axiom_ollama_real.py"
+        },
+        {
+          "class": "AxiomChemistryService",
+          "line": 48,
+          "path": "atlas/scripts/enhanced_chemistry_loop_implementation.py"
+        },
+        {
+          "class": "AxiomComprehensiveDemo",
+          "line": 36,
+          "path": "atlas/scripts/experiments/axiom_comprehensive_real_data_demo.py"
+        },
+        {
+          "class": "AxiomRealDataDemo",
+          "line": 17,
+          "path": "atlas/scripts/experiments/axiom_real_data_demo.py"
+        },
+        {
+          "class": "AxiomImprovementsInstaller",
+          "line": 21,
+          "path": "atlas/scripts/utils/install_improvements.py"
+        }
+      ],
+      "console_entry_point_count": 0,
+      "interpretation": "Within the scanned source tree, AXIOM is a package/project and class/demo label over Atlas app code; no separate top-level axiom package, console entry point, or /axiom route literal was found.",
+      "route_string_literals_starting_with_axiom": [],
+      "top_level_axiom_python_package_exists": false
+    },
+    "package_metadata": {
+      "console_entry_points": {},
+      "development_status_classifiers": [
+        "Development Status :: 3 - Alpha"
+      ],
+      "name": "axiom-atlas",
+      "setuptools_package_include": [
+        "app*",
+        "scripts*"
+      ],
+      "version": "4.1.0"
+    },
+    "python_scan": {
+      "files": 1676,
+      "imports_or_executes_atlas": false,
+      "parse_failures": [
+        {
+          "error": "SyntaxError",
+          "path": "atlas/app/core/telemetry.py"
+        },
+        {
+          "error": "SyntaxError",
+          "path": "atlas/app/domains/chemistry/routers/xray_crystallography.py"
+        },
+        {
+          "error": "SyntaxError",
+          "path": "atlas/app/domains/mathematics/routers/advanced_algebra_old.py"
+        },
+        {
+          "error": "SyntaxError",
+          "path": "atlas/app/domains/medicine/routers/websocket_router.py"
+        },
+        {
+          "error": "SyntaxError",
+          "path": "atlas/app/domains/neuroscience/routers/analysis/advanced_neuroimaging.py"
+        },
+        {
+          "error": "SyntaxError",
+          "path": "atlas/app/domains/neuroscience/routers/simulation/brain_computer_interface.py"
+        },
+        {
+          "error": "SyntaxError",
+          "path": "atlas/app/domains/neuroscience/routers/simulation/multi_scale_modeling.py"
+        },
+        {
+          "error": "SyntaxError",
+          "path": "atlas/app/domains/neuroscience/routers/simulation/neuromorphic.py"
+        },
+        {
+          "error": "SyntaxError",
+          "path": "atlas/app/mathlab/topology/shape_analysis.py"
+        },
+        {
+          "error": "SyntaxError",
+          "path": "atlas/app/middleware/setup.py"
+        },
+        {
+          "error": "SyntaxError",
+          "path": "atlas/app/monitoring/service_profiler.py"
+        },
+        {
+          "error": "SyntaxError",
+          "path": "atlas/app/observability/otel_init.py"
+        },
+        {
+          "error": "SyntaxError",
+          "path": "atlas/app/routers/evidence_synthesis.py"
+        },
+        {
+          "error": "SyntaxError",
+          "path": "atlas/app/routers/experimental_design.py"
+        },
+        {
+          "error": "SyntaxError",
+          "path": "atlas/app/routers/mathematical_verification_router.py"
+        },
+        {
+          "error": "SyntaxError",
+          "path": "atlas/app/routers/scheduler.py"
+        },
+        {
+          "error": "IndentationError",
+          "path": "atlas/app/services/infrastructure/lean4_installer_improved.py"
+        },
+        {
+          "error": "SyntaxError",
+          "path": "atlas/app/services/ml/mlflow_auto_promotion_service.py"
+        },
+        {
+          "error": "SyntaxError",
+          "path": "atlas/examples/gpu_acceleration_demo.py"
+        },
+        {
+          "error": "SyntaxError",
+          "path": "atlas/examples/pde_advanced_examples.py"
+        },
+        {
+          "error": "SyntaxError",
+          "path": "atlas/scripts/database/detect_unclosed_sessions.py"
+        },
+        {
+          "error": "SyntaxError",
+          "path": "atlas/scripts/maintenance/complete_async_migration.py"
+        },
+        {
+          "error": "SyntaxError",
+          "path": "atlas/scripts/maintenance/ultra_specific_async_fixes.py"
+        }
+      ],
+      "scope": [
+        "atlas/*.py",
+        "atlas/app/**/*.py",
+        "atlas/scripts/**/*.py",
+        "atlas/examples/**/*.py"
+      ]
+    },
+    "source_facts": {
+      "root_health_reports_amy_2_0_0": true,
+      "root_health_returns_literal_healthy": true,
+      "root_metrics_contains_unmeasured_improvement_ranges": true,
+      "root_status_hardcodes_modules_active": true,
+      "root_status_uses_estimated_performance_strings": true,
+      "startup_catches_general_exception_and_continues": true
+    },
+    "source_sha256": {
+      "atlas/Dockerfile": "09e6fe73480be5e1ccb7ee41689773a8a1b3be2b999c1c82559c25a2f175460c",
+      "atlas/app/main.py": "7ea1a9917bbcdbf501c0ecfd749d5ae6ef26d819bbe555ec10d86de6d8809217",
+      "atlas/config/docker-compose.yml": "89645601464ff8e9ebc4e250e0d087b0fa0baf9cc08783d34aa7b7d6b3951697",
+      "atlas/main.py": "d2d6aae7aa2afa606ea355475db46824db66543f9db72caf2dbf8c2c6ad31501",
+      "atlas/pyproject.toml": "f659ce86e3be1f1d91ac0fa7237b852e55b3e7a3d0fcdae156c3e2851ea9d170"
+    },
+    "tracked_source_files": 5
+  },
+  "repository": {
+    "git_commit": "40663854cfc2a2cf8e8e828cc0ac7c031db58963",
+    "git_describe": "v1.0.0-68-g4066385-dirty",
+    "git_object_format": "sha1",
+    "tracked_status_sha256": "ab70f5f4c18a3e9a3d705e55a9b86b95dcec39bc06a3638ad218b7c64c43e6b5",
+    "tracked_worktree_dirty": true
+  },
+  "safety": {
+    "executes_product_code": false,
+    "imports_atlas_or_axiom": false,
+    "loads_models": false,
+    "mutates_audited_artifacts": false,
+    "reads_runtime_secret_values": false,
+    "records_credential_values": false,
+    "runs_demos_or_experiments": false,
+    "uses_network": false
+  },
+  "schema_version": "axiom.integrity-audit.v1",
+  "trust_boundary": {
+    "authentication": "not established for the retained AXIOM scientific or claim artifacts",
+    "current_byte_integrity": "auditor-computed SHA-256 inventories current bytes only",
+    "historical_time": "not established by mutable local timestamps",
+    "independent_peer_review": "not established by simulated or unauthenticated reviewer-name strings",
+    "independent_reproduction": "not performed by this audit",
+    "project_identity": "derived from current package, entry-point, route, deployment, and source bytes",
+    "scientific_truth": "never inferred from labels, successful HTTP status, digests, signatures, or generated prose"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "schema_version": "amy.r0-base-validation-failure.v1",
+  "validated_at": "2026-07-13T06:52:08Z",
+  "valid": false,
+  "attempt_disposition": "retained_exploratory_failed_attempt_not_evidence_of_valid_R0_run",
+  "base_archives_affected": false,
+  "result_records_affected": 24,
+  "error_classes": [
+    {
+      "class": "RESULT_SCHEMA_INVALID",
+      "count": 24,
+      "detail": "case_id used R0::<base>::CLEAN, which violates the frozen draft pattern ^[A-Z0-9-]+$."
+    },
+    {
+      "class": "VALIDATOR_FIELD_PATH_BUG",
+      "count": 24,
+      "detail": "The first validator draft looked for case_archive_sha256 at the result root instead of input.case_archive_sha256."
+    }
+  ],
+  "remediation": [
+    "Changed generated case IDs to R0-<BASE-ID>-CLEAN.",
+    "Made the constructor validate every result against verifier-result.schema.json before retaining it.",
+    "Corrected the independent validator to read input.case_archive_sha256.",
+    "Required a new output directory and retained this failed attempt unchanged."
+  ]
+}

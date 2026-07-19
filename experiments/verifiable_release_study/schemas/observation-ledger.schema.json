@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://amy.example/schemas/observation-ledger.schema.json",
+  "title": "A.M.Y planned observation ledger",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "classification", "design", "rows"],
+  "properties": {
+    "schema_version": {"const": "amy.observation-ledger.v1-draft"},
+    "classification": {
+      "enum": ["dummy_no_confirmatory_evidence", "confirmatory_R1"]
+    },
+    "design": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attack_catalog_sha256", "compatibility_matrix_sha256",
+        "oracle_sha256", "proposition_matrix_sha256", "profile_ids",
+        "required_environment_ids", "planned_compatibility_state",
+        "row_order", "source_is_outcome_blind"
+      ],
+      "properties": {
+        "attack_catalog_sha256": {"$ref": "#/$defs/sha256"},
+        "compatibility_matrix_sha256": {"$ref": "#/$defs/sha256"},
+        "oracle_sha256": {"$ref": "#/$defs/sha256"},
+        "proposition_matrix_sha256": {"$ref": "#/$defs/sha256"},
+        "profile_ids": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "P0"}, {"const": "P1"}, {"const": "P2"}, {"const": "P3"}
+          ],
+          "items": false,
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "required_environment_ids": {
+          "type": "array",
+          "prefixItems": [{"const": "ENV-AUTHOR"}, {"const": "ENV-LINUX-PINNED"}],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "planned_compatibility_state": {"const": "COMPATIBLE"},
+        "row_order": {
+          "const": "base_id_operator_id_environment_id_profile_id_ascii"
+        },
+        "source_is_outcome_blind": {"const": true}
+      }
+    },
+    "rows": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/row"}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "row": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "row_id", "unit_id", "base_id", "operator_id", "operator_family",
+        "operator_kind", "stratum", "profile_id", "environment_id",
+        "expected_decision", "expected_primary_reason", "target_decision",
+        "generation_status", "execution_status", "decision", "primary_reason",
+        "case_archive_sha256", "trust_policy_sha256",
+        "external_reproduction", "production_control_kind"
+      ],
+      "properties": {
+        "row_id": {"type": "string", "pattern": "^[A-Za-z0-9._-]+$"},
+        "unit_id": {"type": "string", "minLength": 1},
+        "base_id": {"type": "string", "pattern": "^B[0-9]{2}-[A-Z0-9-]+$"},
+        "operator_id": {"type": "string", "pattern": "^[A-Z0-9-]+-[0-9]{3}$"},
+        "operator_family": {"type": "string", "minLength": 1},
+        "operator_kind": {"enum": ["clean", "target_invalid"]},
+        "stratum": {"enum": ["S1-CONFORMANCE", "S2-PRODUCTION-SIGSTORE"]},
+        "profile_id": {"enum": ["P0", "P1", "P2", "P3"]},
+        "environment_id": {
+          "enum": ["ENV-AUTHOR", "ENV-LINUX-PINNED", "ENV-EXTERNAL"]
+        },
+        "expected_decision": {"enum": ["ACCEPT", "REJECT"]},
+        "expected_primary_reason": {"type": "string", "minLength": 1},
+        "target_decision": {"enum": ["ACCEPT", "REJECT"]},
+        "generation_status": {"enum": ["GENERATED", "GENERATION_FAILURE"]},
+        "execution_status": {"enum": ["TERMINAL", "MISSING_EXECUTION"]},
+        "decision": {"type": ["string", "null"], "enum": ["ACCEPT", "REJECT", "ERROR", null]},
+        "primary_reason": {"type": ["string", "null"]},
+        "case_archive_sha256": {
+          "oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+        },
+        "trust_policy_sha256": {
+          "oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+        },
+        "external_reproduction": {"type": "boolean"},
+        "production_control_kind": {"enum": ["none", "clean", "negative"]}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"generation_status": {"const": "GENERATION_FAILURE"}}},
+          "then": {
+            "properties": {
+              "execution_status": {"const": "MISSING_EXECUTION"},
+              "decision": {"const": null},
+              "primary_reason": {"const": null},
+              "case_archive_sha256": {"const": null},
+              "trust_policy_sha256": {"const": null}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"execution_status": {"const": "MISSING_EXECUTION"}}},
+          "then": {
+            "properties": {"decision": {"const": null}, "primary_reason": {"const": null}}
+          }
+        },
+        {
+          "if": {"properties": {"execution_status": {"const": "TERMINAL"}}},
+          "then": {
+            "properties": {
+              "generation_status": {"const": "GENERATED"},
+              "decision": {"enum": ["ACCEPT", "REJECT", "ERROR"]},
+              "primary_reason": {"type": "string", "minLength": 1},
+              "case_archive_sha256": {"$ref": "#/$defs/sha256"},
+              "trust_policy_sha256": {"$ref": "#/$defs/sha256"}
+            }
+          }
+        }
+      ]
+    }
+  }
+}
