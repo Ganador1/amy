@@ -150,3 +150,11 @@ atlas/data/experiments/
 # __pycache__ under force-included experiments/ (the !/experiments/ rule above
 # would otherwise re-include compiled bytecode)
 experiments/**/__pycache__/
+experiments/**/.DS_Store
+experiments/**/*.log
+
+# Local experiment executions. The verifiable-release study has its own
+# narrower retention policy; these other trees are reproducible runtime output.
+experiments/autonomous_runs/
+experiments/e2e_validation/e2e_*.json
+experiments/e2e_validation/papers/

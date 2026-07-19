@@ -214,6 +214,22 @@ def test_atlas_tools_allows_mixed_evidence_reports_with_real_successes():
     assert "mixed evidence report" in assessment["warnings"]
 
 
+def test_atlas_tools_rejects_orchestrator_report_without_real_evidence():
+    from core.atlas_tools import assess_tool_output
+
+    assessment = assess_tool_output(
+        "ToolEvidenceOrchestrator corroboration (mathematics):\n"
+        "- support_score: 0\n"
+        "- real_success_count: 0\n"
+        "- tier_counts: {'mock': 3}",
+        tool_name="evidence_corroborate_mathematics",
+    )
+
+    assert assessment["usable"] is False
+    assert assessment["evidence_level"] == "none"
+    assert "no real evidence" in assessment["markers"]
+
+
 async def test_heartbeat_rejects_unusable_atlas_tool_output():
     heartbeat = object.__new__(Heartbeat)
     heartbeat._atlas_tools = None

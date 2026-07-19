@@ -12,6 +12,8 @@ import urllib.error
 from pathlib import Path
 
 import audit_papers
+import pytest
+import communication.paper_enhancer as paper_enhancer_module
 from communication.paper_enhancer import (
     DOMAIN_INSIGHTS,
     PeerReviewer,
@@ -42,6 +44,16 @@ def _reset_tmp():
     shutil.rmtree(TMP_DIR, ignore_errors=True)
     TMP_PAPER.unlink(missing_ok=True)
     TMP_DIR.mkdir(parents=True, exist_ok=True)
+
+
+@pytest.fixture(autouse=True)
+def _cleanup_persistent_test_artifacts():
+    """Keep these legacy path-based tests from mutating the real audit corpus."""
+    try:
+        yield
+    finally:
+        shutil.rmtree(TMP_DIR, ignore_errors=True)
+        TMP_PAPER.unlink(missing_ok=True)
 
 
 def test_audit_recognizes_modern_provenance_paths_and_hashes():
@@ -193,25 +205,17 @@ def test_audit_verifies_all_modern_provenance_hashes_not_just_first_two():
 def test_paper_generator_cites_real_full_provenance_output_hash():
     _reset_tmp()
     exp_id = "test_audit_tmp"
-    output = "tool output"
-    output_hash = hashlib.sha256(output.encode("utf-8")).hexdigest()
-    (TMP_DIR / "output.txt").write_text(output, encoding="utf-8")
-    (TMP_DIR / "provenance.json").write_text(
-        json.dumps(
-            {
-                "experiment_id": exp_id,
-                "tool": {
-                    "name": "test_tool",
-                    "input": "x",
-                    "output_hash": output_hash,
-                    "success": True,
-                },
-                "domain": "mathematics",
-                "provenance_version": "1.0",
-            }
-        ),
-        encoding="utf-8",
+    shutil.rmtree(TMP_DIR)
+    record = ProvenanceManager(base_dir=TMP_DIR.parent).record_execution(
+        "test_tool",
+        "x",
+        "tool output",
+        True,
+        0.1,
+        domain="mathematics",
+        experiment_id=exp_id,
     )
+    output_hash = record["tool"]["output_hash"]
 
     markdown = PaperGenerator(enhance=False)._build_markdown(
         "Test Paper",
@@ -404,7 +408,9 @@ def test_paper_generator_rejects_low_peer_review_score(monkeypatch):
         path.unlink(missing_ok=True)
 
 
-def test_paper_generator_rejects_pdf_render_failure(monkeypatch):
+def test_paper_generator_rejects_pdf_render_failure(monkeypatch, tmp_path):
+    import communication.paper_generator as paper_generator_module
+
     async def fake_render_pdf(*_args, **_kwargs):
         return False
 
@@ -413,7 +419,30 @@ def test_paper_generator_rejects_pdf_render_failure(monkeypatch):
 
     monkeypatch.setattr(PaperGenerator, "_render_pdf", fake_render_pdf)
     monkeypatch.setattr(PaperGenerator, "_render_latex", fake_render_latex)
-    monkeypatch.setattr(PaperGenerator, "_run_reflection_gate", staticmethod(lambda _md_content: None))
+    def passing_reflection(md_content):
+        return {
+            "annotated_md": md_content + "\n\n## Self-Review\n\nPassed.",
+            "score": 100.0,
+            "pass_overall": True,
+            "n_high": 0,
+            "n_medium": 0,
+            "n_low": 0,
+            "issues": [],
+        }
+
+    evidence_dir = tmp_path / "experiments"
+    record = ProvenanceManager(base_dir=evidence_dir).record_execution(
+        "pdf_gate_probe",
+        "input",
+        "retained result",
+        True,
+        0.1,
+        experiment_id="pdf_gate_evidence",
+    )
+    monkeypatch.setattr(paper_generator_module, "EXPERIMENTS_DIR", evidence_dir)
+    monkeypatch.setattr(
+        PaperGenerator, "_run_reflection_gate", staticmethod(passing_reflection)
+    )
 
     result = asyncio.run(
         PaperGenerator(enhance=False).generate_paper(
@@ -422,7 +451,7 @@ def test_paper_generator_rejects_pdf_render_failure(monkeypatch):
             sections=[{"heading": "Discussion", "content": "A conservative discussion."}],
             references=[],
             knowledge_facts=[],
-            experiment_ids=[],
+            experiment_ids=[record["experiment_id"]],
         )
     )
 
@@ -1440,39 +1469,32 @@ def test_astronomy_branch_contract_adds_grounded_predictions_and_non_claims():
     assert "without asserting novelty" in discussion
 
 
-def test_peer_review_reproducibility_uses_real_experiment_ids_without_rendered_data_section():
-    _reset_tmp()
-    exp_id = "test_audit_tmp"
-    output = "tool output"
-    (TMP_DIR / "output.txt").write_text(output, encoding="utf-8")
-    (TMP_DIR / "provenance.json").write_text(
-        json.dumps(
-            {
-                "experiment_id": exp_id,
-                "tool": {
-                    "name": "test_tool",
-                    "input": "x",
-                    "output_hash": hashlib.sha256(output.encode("utf-8")).hexdigest(),
-                    "success": True,
-                },
-                "domain": "mathematics",
-                "provenance_version": "1.0",
-            }
-        ),
-        encoding="utf-8",
+def test_peer_review_reproducibility_uses_integrity_checked_experiment_ids_without_rendered_data_section(
+    tmp_path,
+):
+    manager = ProvenanceManager(base_dir=tmp_path)
+    record = manager.record_execution(
+        "test_tool",
+        "x",
+        "tool output",
+        True,
+        0.1,
+        domain="mathematics",
+        experiment_id="test_audit_tmp",
     )
 
-    review = PeerReviewer().review_paper(
+    review = PeerReviewer(provenance_manager=manager).review_paper(
         "mathematics",
         "Reproducibility Gate",
         [{"tool": "test_tool", "result": "value = 1.23", "success": True}],
         [{"heading": "Methods", "content": "A method section before data availability rendering."}],
         [],
         ["Reference A", "Reference B", "Reference C"],
-        experiment_ids=[exp_id],
+        experiment_ids=[record["experiment_id"]],
     )
 
-    assert review["scores"]["reproducibility"] == 9.0
+    assert review["scores"]["reproducibility"] == 7.0
+    assert "unauthenticated" in " ".join(review["feedback"])
 
 
 def test_enhance_paper_builds_hypotheses_before_discussion():
@@ -1506,6 +1528,178 @@ def test_enhance_paper_builds_hypotheses_before_discussion():
     assert "prime gaps" in discussion["content"].lower()
     assert all("review" not in s["heading"].lower() for s in enhanced["sections"])
     assert enhanced["peer_review"]["overall_score"] >= 0
+
+
+def _enhancer_sections_with_result_text(result_text):
+    return [
+        {"heading": "Introduction", "content": "Intro"},
+        {"heading": "Methods", "content": "Methods"},
+        {"heading": "Results", "content": result_text},
+        {"heading": "Discussion", "content": result_text},
+        {"heading": "Conclusion", "content": "Conclusion"},
+    ]
+
+
+@pytest.mark.parametrize(
+    "invalid_result",
+    [
+        {
+            "tool": "prime_gap_analysis",
+            "result": "REJECTED_MISSING_SUCCESS prime gap mean: 5.9581",
+        },
+        {
+            "tool": "prime_gap_analysis",
+            "result": "REJECTED_FALSE_SUCCESS prime gap mean: 5.9581",
+            "success": False,
+        },
+        {
+            "tool": "prime_gap_analysis",
+            "result": "Error: REJECTED_OPERATIONAL_FAILURE",
+            "success": True,
+        },
+        {
+            "tool": "prime_gap_analysis",
+            "result": "REJECTED_PLACEHOLDER placeholder output",
+            "success": True,
+        },
+        {
+            "tool": "prime_gap_analysis",
+            "result": "REJECTED_MOCK mock output",
+            "success": True,
+        },
+    ],
+)
+def test_enhancer_excludes_non_explicit_or_unusable_outputs_from_scientific_prose(
+    invalid_result,
+):
+    poison = invalid_result["result"].split()[0]
+    enhanced = asyncio.run(
+        PaperEnhancer().enhance_paper(
+            domain="mathematics",
+            topic="Evidence gate",
+            results=[invalid_result],
+            sections=_enhancer_sections_with_result_text(invalid_result["result"]),
+            experiment_ids=[],
+        )
+    )
+
+    scientific_prose = "\n".join(
+        section["content"]
+        for section in enhanced["sections"]
+        if section["heading"] in {"Results", "Discussion"}
+    )
+    scientific_prose += "\n" + "\n".join(
+        hypothesis["hypothesis"] for hypothesis in enhanced["hypotheses"]
+    )
+
+    assert poison not in scientific_prose
+    assert enhanced["hypotheses"] == []
+    assert "no computational result is reported" in scientific_prose
+
+
+def test_enhancer_rebuilds_results_from_only_explicitly_usable_outputs():
+    accepted = {
+        "tool": "prime_gap_analysis",
+        "description": "Accepted finite observation",
+        "result": "ACCEPTED_OUTPUT prime gap mean: 5.9581",
+        "success": True,
+    }
+    rejected = {
+        "tool": "prime_gap_analysis",
+        "description": "Rejected mock",
+        "result": "REJECTED_OUTPUT mock output",
+        "success": True,
+    }
+
+    enhanced = asyncio.run(
+        PaperEnhancer().enhance_paper(
+            domain="mathematics",
+            topic="Mixed evidence gate",
+            results=[accepted, rejected],
+            sections=_enhancer_sections_with_result_text(
+                f"{accepted['result']}\n{rejected['result']}"
+            ),
+            experiment_ids=[],
+        )
+    )
+
+    results_section = next(
+        section for section in enhanced["sections"] if section["heading"] == "Results"
+    )
+    scientific_prose = "\n".join(
+        section["content"]
+        for section in enhanced["sections"]
+        if section["heading"] in {"Results", "Discussion"}
+    )
+    scientific_prose += "\n" + "\n".join(
+        hypothesis["hypothesis"] for hypothesis in enhanced["hypotheses"]
+    )
+
+    assert "ACCEPTED_OUTPUT" in scientific_prose
+    assert "REJECTED_OUTPUT" not in scientific_prose
+    assert enhanced["hypotheses"]
+
+
+def test_enhancer_fails_closed_when_tool_output_assessor_is_unavailable(monkeypatch):
+    monkeypatch.setattr(paper_enhancer_module, "assess_tool_output", None)
+    output = "UNASSESSED_OUTPUT prime gap mean: 5.9581"
+
+    enhanced = asyncio.run(
+        PaperEnhancer().enhance_paper(
+            domain="mathematics",
+            topic="Unavailable evidence gate",
+            results=[
+                {
+                    "tool": "prime_gap_analysis",
+                    "result": output,
+                    "success": True,
+                }
+            ],
+            sections=_enhancer_sections_with_result_text(output),
+            experiment_ids=[],
+        )
+    )
+
+    scientific_prose = "\n".join(
+        section["content"]
+        for section in enhanced["sections"]
+        if section["heading"] in {"Results", "Discussion"}
+    )
+    assert "UNASSESSED_OUTPUT" not in scientific_prose
+    assert enhanced["hypotheses"] == []
+
+
+def test_enhancer_requires_explicit_usable_true_from_assessor(monkeypatch):
+    monkeypatch.setattr(
+        paper_enhancer_module,
+        "assess_tool_output",
+        lambda _output, _tool: {"usable": False, "markers": ["test rejection"]},
+    )
+    output = "ASSESSOR_REJECTED_OUTPUT prime gap mean: 5.9581"
+
+    enhanced = asyncio.run(
+        PaperEnhancer().enhance_paper(
+            domain="mathematics",
+            topic="Classifier evidence gate",
+            results=[
+                {
+                    "tool": "prime_gap_analysis",
+                    "result": output,
+                    "success": True,
+                }
+            ],
+            sections=_enhancer_sections_with_result_text(output),
+            experiment_ids=[],
+        )
+    )
+
+    scientific_prose = "\n".join(
+        section["content"]
+        for section in enhanced["sections"]
+        if section["heading"] in {"Results", "Discussion"}
+    )
+    assert "ASSESSOR_REJECTED_OUTPUT" not in scientific_prose
+    assert enhanced["hypotheses"] == []
 
 
 def test_enhancer_uses_astronomy_domain_instead_of_mathematics_fallback():

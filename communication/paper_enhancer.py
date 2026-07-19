@@ -24,9 +24,66 @@ log = structlog.get_logger()
 
 try:
     from core.atlas_tools import assess_tool_output
-except ImportError:
-    def assess_tool_output(output: object, tool_name: str | None = None) -> dict:
-        return {"usable": bool(str(output or "").strip()), "markers": [], "warnings": []}
+except Exception:
+    assess_tool_output = None
+
+
+def _usable_tool_results(
+    results: list[dict],
+    *,
+    require_explicit_success: bool = True,
+) -> list[dict]:
+    """Return only explicitly successful outputs accepted by the evidence gate.
+
+    Scientific prose must fail closed when the shared classifier is unavailable,
+    raises, returns a malformed assessment, or does not explicitly set
+    ``usable=True``.
+    """
+    if not callable(assess_tool_output):
+        return []
+
+    usable = []
+    for result in results:
+        if not isinstance(result, dict):
+            continue
+        if require_explicit_success and result.get("success") is not True:
+            continue
+        if not require_explicit_success and result.get("success") is False:
+            continue
+        try:
+            assessment = assess_tool_output(
+                result.get("result", ""),
+                result.get("tool"),
+            )
+        except Exception as exc:
+            log.warning(
+                "paper_enhancer.tool_output_assessment_failed",
+                tool=result.get("tool"),
+                error=str(exc),
+            )
+            continue
+        if isinstance(assessment, dict) and assessment.get("usable") is True:
+            usable.append(result)
+    return usable
+
+
+def _render_usable_results(results: list[dict]) -> str:
+    """Render a Results section exclusively from outputs that passed the gate."""
+    if not results:
+        return (
+            "No tool output passed both the explicit success gate and the "
+            "scientific-usability assessment; no computational result is reported."
+        )
+
+    rendered = []
+    for index, result in enumerate(results, start=1):
+        label = (
+            str(result.get("description") or result.get("tool") or f"Result {index}")
+            .strip()
+        )
+        output = str(result.get("result", "")).strip()
+        rendered.append(f"### {label}\n\n{output}")
+    return "\n\n".join(rendered)
 
 # Import provenance manager for experiment ID verification
 try:
@@ -1222,7 +1279,12 @@ def generate_references(domain: str, results: list[dict]) -> list[str]:
 
 class PeerReviewer:
     """Automated peer review with scoring and feedback."""
-    
+
+    def __init__(self, provenance_manager=None):
+        self._provenance = (
+            provenance_manager if provenance_manager is not None else _provenance
+        )
+
     def review_paper(self, domain: str, topic: str, results: list[dict], 
                      sections: list[dict], hypotheses: list[dict],
                      references: list[str], experiment_ids: list[str] | None = None) -> dict:
@@ -1239,11 +1301,10 @@ class PeerReviewer:
         feedback = []
         
         # 1. Methodology (0-10) — penalize claiming independence when tools are the same
-        successful = [
-            r for r in results
-            if r.get("success", True)
-            and assess_tool_output(r.get("result", ""), r.get("tool")).get("usable", False)
-        ]
+        successful = _usable_tool_results(
+            results,
+            require_explicit_success=False,
+        )
         method_summary = _method_framework_summary(successful)
         num_tools = method_summary["n_total"]
         num_frameworks = method_summary["n_frameworks"]
@@ -1336,27 +1397,42 @@ class PeerReviewer:
         # Verify that experiment IDs have real provenance files
         provenance_verified_count = 0
         provenance_total = 0
-        if _provenance and experiment_ids:
+        if self._provenance and experiment_ids:
             for eid in experiment_ids:
                 provenance_total += 1
-                verification = _provenance.verify_experiment_id(eid)
-                if verification["exists"]:
+                try:
+                    verification = self._provenance.verify_experiment_id(eid)
+                except (OSError, ValueError):
+                    verification = {}
+                if verification.get("integrity_verified") is True:
                     provenance_verified_count += 1
         
         if has_real_hashes and (has_experiment_ids or provenance_total > 0):
             if provenance_total > 0 and provenance_verified_count == provenance_total:
-                scores["reproducibility"] = 9.0
-                feedback.append(f"[PASS] Excellent reproducibility: all {provenance_total} experiment IDs have real provenance files with SHA-256 hashes.")
+                scores["reproducibility"] = 8.0
+                feedback.append(
+                    f"[PASS] All {provenance_total} retained outputs pass local SHA-256 "
+                    "integrity checks. This does not authenticate provenance, prevent "
+                    "rollback, or establish scientific truth."
+                )
             elif provenance_total > 0 and provenance_verified_count > 0:
-                scores["reproducibility"] = 7.0
-                feedback.append(f"[NOTE] Good reproducibility: {provenance_verified_count}/{provenance_total} experiment IDs have provenance files. SHA-256 hashes provided for traceability.")
+                scores["reproducibility"] = 6.0
+                feedback.append(
+                    f"[NOTE] {provenance_verified_count}/{provenance_total} retained "
+                    "outputs pass local SHA-256 integrity checks; the remainder must "
+                    "not be treated as verified evidence."
+                )
             else:
                 scores["reproducibility"] = 5.0
                 feedback.append("[NOTE] SHA-256 hashes provided but provenance files not yet verified. Consider linking to persistent repositories.")
         elif (has_experiment_ids or provenance_total > 0) and has_tool_info:
             if provenance_total > 0 and provenance_verified_count == provenance_total:
-                scores["reproducibility"] = 9.0
-                feedback.append(f"[PASS] All {provenance_total} experiment IDs have verified provenance files. Consider adding SHA-256 output hashes for complete traceability.")
+                scores["reproducibility"] = 7.0
+                feedback.append(
+                    f"[PASS] All {provenance_total} retained outputs pass local digest "
+                    "checks, but the manuscript does not expose those hashes and the "
+                    "records remain unauthenticated."
+                )
             elif provenance_total > 0 and provenance_verified_count > 0:
                 scores["reproducibility"] = 5.0
                 feedback.append(f"[NOTE] Partial reproducibility: {provenance_verified_count}/{provenance_total} experiment IDs have provenance files. Missing SHA-256 hashes for output verification.")
@@ -1449,10 +1525,17 @@ class PaperEnhancer:
             domain_key = "mathematics"  # fallback
         
         domain_data = DOMAIN_INSIGHTS[domain_key]
-        successful = [r for r in results if r.get("success", True)]
+        successful = _usable_tool_results(results)
+        rejected_result_count = len(results) - len(successful)
+        if rejected_result_count:
+            log.warning(
+                "paper_enhancer.tool_outputs_rejected",
+                rejected=rejected_result_count,
+                accepted=len(successful),
+            )
         
         # 1. GENERATE HYPOTHESES — Predictions from results with explicit novelty status
-        hypotheses = generate_hypothesis(domain_key, successful)
+        hypotheses = generate_hypothesis(domain_key, successful) if successful else []
 
         # 1b. RANK HYPOTHESES — Google Co-Scientist-style Elo tournament so the
         #     paper foregrounds the strongest candidates. Falls back silently
@@ -1601,6 +1684,10 @@ class PaperEnhancer:
             elif "novelty" in heading:
                 # Merge novelty analysis into Results section (academic standard)
                 # Don't create a separate "Novelty Analysis" section
+                if rejected_result_count:
+                    # This prose cannot be reliably separated from rejected
+                    # evidence, so omit it instead of merging it into Results.
+                    continue
                 novelty_content = sec.get("content", "")
                 # Add novelty findings to the end of Results
                 results_sec = next((s for s in enhanced_sections if "results" in s.get("heading", "").lower()), None)
@@ -1608,6 +1695,16 @@ class PaperEnhancer:
                     results_sec["content"] += "\n\n" + novelty_content
                 else:
                     enhanced_sections.append({"heading": "Results", "content": novelty_content})
+            elif "results" in heading and rejected_result_count:
+                # The incoming section may contain prose derived from rejected
+                # outputs. Once any record fails the gate, rebuild Results only
+                # from the accepted records instead of trying to redact prose.
+                enhanced_sections.append(
+                    {
+                        "heading": "Results",
+                        "content": _render_usable_results(successful),
+                    }
+                )
             else:
                 enhanced_sections.append(sec)
         

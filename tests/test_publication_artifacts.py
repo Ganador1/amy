@@ -2,8 +2,10 @@ import asyncio
 import json
 from pathlib import Path
 
+import communication.paper_generator as paper_generator
 from communication.paper_generator import PaperGenerator
 from communication.publication_artifacts import PublicationArtifactBuilder
+from core.provenance import ProvenanceManager
 
 
 def _passing_reflection(md_content):
@@ -18,8 +20,23 @@ def _passing_reflection(md_content):
     }
 
 
+def _attach_evidence(monkeypatch, tmp_path):
+    experiments_dir = tmp_path / "experiments"
+    record = ProvenanceManager(base_dir=experiments_dir).record_execution(
+        "publication_artifact_fixture",
+        "deterministic input",
+        "deterministic retained output",
+        True,
+        0.01,
+        experiment_id="exp_publication_artifact",
+    )
+    monkeypatch.setattr(paper_generator, "EXPERIMENTS_DIR", experiments_dir)
+    return record["experiment_id"]
+
+
 def test_paper_generator_creates_publication_artifacts_from_numeric_tool_results(tmp_path, monkeypatch):
     monkeypatch.setattr(PaperGenerator, "_run_reflection_gate", staticmethod(_passing_reflection))
+    experiment_id = _attach_evidence(monkeypatch, tmp_path)
     generator = PaperGenerator(enhance=False, output_dir=tmp_path)
 
     result = asyncio.run(
@@ -34,6 +51,7 @@ def test_paper_generator_creates_publication_artifacts_from_numeric_tool_results
             ],
             references=["Su, W. P., Schrieffer, J. R. & Heeger, A. J. (1979). Solitons in polyacetylene."],
             domain="chemistry",
+            experiment_ids=[experiment_id],
             tool_results=[
                 {
                     "tool": "ssh_polyene_gap_map",
@@ -197,6 +215,7 @@ def test_dna_publication_figure_uses_base_composition_caption(tmp_path):
 
 def test_paper_generator_can_attach_literature_audit_with_search_callback(tmp_path, monkeypatch):
     monkeypatch.setattr(PaperGenerator, "_run_reflection_gate", staticmethod(_passing_reflection))
+    experiment_id = _attach_evidence(monkeypatch, tmp_path)
 
     async def fake_search(query, max_results=8):
         return {
@@ -230,6 +249,7 @@ def test_paper_generator_can_attach_literature_audit_with_search_callback(tmp_pa
             references=[],
             domain="chemistry",
             tool_results=[],
+            experiment_ids=[experiment_id],
         )
     )
 
@@ -324,7 +344,14 @@ def test_reportlab_pdf_embeds_markdown_image(tmp_path):
 
     rendered = asyncio.run(
         generator._render_pdf(
-            "unused",
+            (
+                "# Embedded Figure Test\n\n"
+                "## Abstract\n\n"
+                "Abstract.\n\n"
+                "## Figures\n\n"
+                f"![Diagnostic figure]({image_path})\n\n"
+                "Figure 1. Diagnostic figure."
+            ),
             pdf_path,
             "Embedded Figure Test",
             "Abstract.",

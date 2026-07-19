@@ -795,12 +795,27 @@ class DynamicToolRegistry:
 
             payload_raw = (input_data or "").strip()
             if not payload_raw:
-                return f"Error: service '{service_name}' requires JSON input (e.g., {{\"action\": \"status\"}})."
+                return f"Error: service '{service_name}' requires JSON input (e.g., {{\"operation\": \"service_info\"}})."
 
             try:
                 payload = json.loads(payload_raw)
             except Exception as e:
                 return f"Error: invalid JSON input for service '{service_name}': {e}"
+
+            if not isinstance(payload, dict):
+                return f"Error: service '{service_name}' requires a JSON object, got {type(payload).__name__}"
+
+            # Do not invent an extra field: closed service schemas may reject
+            # unknown keys. If both aliases are supplied, they must agree.
+            if (
+                "action" in payload
+                and "operation" in payload
+                and payload["action"] != payload["operation"]
+            ):
+                return (
+                    f"Error: conflicting 'action' and 'operation' values for "
+                    f"service '{service_name}'"
+                )
 
             if not hasattr(service, "process_request"):
                 return f"Error: Service '{service_name}' has no process_request(). Type: {type(service).__name__}"
@@ -2205,6 +2220,13 @@ a₀ coefficient: {a0}
                     })
                     if not isinstance(res, dict):
                         return str(res)
+                    if not res.get("success", False):
+                        status = res.get("status", "failed")
+                        error = res.get("error", "unknown orchestrator failure")
+                        return (
+                            f"Error: ToolEvidenceOrchestrator corroboration failed "
+                            f"({_domain}); status={status}; {error}"
+                        )
 
                     # Compact summary for LLM consumption
                     agg = res.get("aggregate", {}) or {}

@@ -9,7 +9,7 @@ este bridge la envía a Atlas para:
   4. Generar un paper académico revisado y aceptado
   5. Devolver el resultado a A.M.Y para actualizar su knowledge graph
 
-Atlas usa su propio venv (.venv_new) en /Volumes/Ganador disk/A.M.Y/atlas/
+Atlas usa su propio venv local en ``atlas/.venv_new``.
 Se invoca via subprocess para evitar conflictos de dependencias.
 """
 import asyncio
@@ -27,6 +27,54 @@ log = structlog.get_logger()
 ATLAS_ROOT = Path(__file__).parent.parent / "atlas"
 ATLAS_VENV_PYTHON = ATLAS_ROOT / ".venv_new" / "bin" / "python3"
 ATLAS_RUNNER = Path(__file__).parent / "atlas_runner.py"
+
+_SAFE_ATLAS_SUBPROCESS_ENV_KEYS = frozenset(
+    {
+        "PATH",
+        "PYTHONPATH",
+        "VIRTUAL_ENV",
+        "LANG",
+        "LC_ALL",
+        "LC_CTYPE",
+        "HOME",
+        "TMPDIR",
+        "USER",
+        "LOGNAME",
+        "SHELL",
+        "TERM",
+        "PYTHONNOUSERSITE",
+    }
+)
+
+
+def _build_atlas_subprocess_env(*, ollama_api_key: str = "") -> dict[str, str]:
+    """Build the Atlas child environment without inheriting parent secrets.
+
+    The local allowlist is a fail-closed fallback for installations where the
+    shared hardening module cannot be imported. Ollama credentials are never
+    inherited implicitly; callers must provide the key for this invocation.
+    """
+    extra = {
+        "ENABLE_REDIS_CACHE": "false",
+        "OLLAMA_BASE_URL": "https://ollama.com",
+    }
+    try:
+        from core.security_hardening_v2 import sanitize_subprocess_env
+    except ImportError:
+        env = {
+            key: os.environ[key]
+            for key in _SAFE_ATLAS_SUBPROCESS_ENV_KEYS
+            if key in os.environ
+        }
+        env.update(extra)
+        if ollama_api_key:
+            env["OLLAMA_API_KEY"] = ollama_api_key
+        return env
+
+    return sanitize_subprocess_env(
+        extra=extra,
+        include_ollama_key=ollama_api_key,
+    )
 
 
 def _evaluate_research_safety_or_fail_closed(
@@ -256,8 +304,10 @@ class AtlasBridge:
 
         out_path = payload_path + ".result.json"
 
-        amy_key = _primary_ollama_api_key()
-
+        # Security hardening: the API key is passed via the subprocess env
+        # (set below in the env dict), NOT interpolated into the generated code.
+        # The generated code reads it from os.environ, preventing code injection
+        # if the key ever contained special characters.
         runner_code = f"""
 import sys, os, json, asyncio
 sys.path.insert(0, {repr(str(self.atlas_root))})
@@ -265,16 +315,9 @@ os.chdir({repr(str(self.atlas_root))})
 
 # Point Atlas at Ollama Cloud (same as A.M.Y) and disable Redis
 # OllamaProvider appends /api/generate itself, so base_url NO debe tener /api
-os.environ["OLLAMA_BASE_URL"] = "https://ollama.com"
-os.environ["OLLAMA_API_KEY"] = {repr(amy_key)}
-os.environ["ENABLE_REDIS_CACHE"] = "false"
-
-# Cargar .env de Atlas (sin sobrescribir vars ya seteadas)
-try:
-    from dotenv import load_dotenv
-    load_dotenv({repr(str(self.atlas_root / '.env'))}, override=False)
-except Exception:
-    pass
+os.environ.setdefault("OLLAMA_BASE_URL", "https://ollama.com")
+# OLLAMA_API_KEY is already set in the subprocess env by the caller
+os.environ.setdefault("ENABLE_REDIS_CACHE", "false")
 
 payload = json.load(open({repr(payload_path)}))
 
@@ -299,10 +342,9 @@ json.dump(result if result else {{"success": False, "error": "no result"}}, open
             f.write(runner_code)
 
         try:
-            env = os.environ.copy()
-            env["OLLAMA_BASE_URL"] = "https://ollama.com"
-            env["OLLAMA_API_KEY"] = _primary_ollama_api_key()
-            env["ENABLE_REDIS_CACHE"] = "false"
+            env = _build_atlas_subprocess_env(
+                ollama_api_key=_primary_ollama_api_key()
+            )
 
             proc = subprocess.run(
                 [self.python, script_path],

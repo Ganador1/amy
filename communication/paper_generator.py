@@ -8,7 +8,9 @@ Format follows standard scientific paper structure:
 Abstract → Introduction → Methods → Results → Discussion → Conclusion → References
 """
 import asyncio
+import hashlib
 import json
+import math
 import os
 import re
 from datetime import datetime
@@ -42,21 +44,327 @@ def _sanitize_filename(title: str) -> str:
 
 
 def _provenance_output_hash(experiment_id: str) -> str | None:
-    """Return the real SHA-256 output hash recorded in provenance, if present."""
-    prov_path = EXPERIMENTS_DIR / experiment_id / "provenance.json"
+    """Return an output hash only from a fully integrity-checked v1.1 record."""
+    from core.security_hardening_v2 import require_valid_experiment_id
+    from core.provenance import ProvenanceManager
+
     try:
-        record = json.loads(prov_path.read_text(encoding="utf-8"))
-    except OSError as exc:
-        log.warning("provenance.read_error", experiment_id=experiment_id, error=str(exc))
-        return None
-    except json.JSONDecodeError as exc:
-        log.warning("provenance.json_error", experiment_id=experiment_id, error=str(exc))
+        experiment_id = require_valid_experiment_id(experiment_id)
+    except ValueError:
         return None
 
+    verification = ProvenanceManager(base_dir=EXPERIMENTS_DIR).verify_experiment_id(
+        experiment_id
+    )
+    if not verification.get("integrity_verified"):
+        return None
+    record = verification.get("record") or {}
     output_hash = record.get("tool", {}).get("output_hash")
     if isinstance(output_hash, str) and re.fullmatch(r"[a-fA-F0-9]{64}", output_hash):
         return output_hash.lower()
     return None
+
+
+def _retained_experiment_output(experiment_id: str) -> tuple[bytes, str] | None:
+    """Return non-empty retained bytes only when their recorded digest matches."""
+    from core.security_hardening_v2 import require_valid_experiment_id
+
+    try:
+        experiment_id = require_valid_experiment_id(experiment_id)
+    except ValueError:
+        return None
+
+    experiment_dir = EXPERIMENTS_DIR / experiment_id
+    output_path = experiment_dir / "output.txt"
+    if experiment_dir.is_symlink() or output_path.is_symlink():
+        return None
+    try:
+        output_raw = output_path.read_bytes()
+    except OSError:
+        return None
+    if not output_raw.strip():
+        return None
+
+    recorded_hash = _provenance_output_hash(experiment_id)
+    retained_hash = hashlib.sha256(output_raw).hexdigest()
+    if recorded_hash is None or retained_hash != recorded_hash:
+        return None
+    return output_raw, retained_hash
+
+
+def _fact_claim_text(fact: dict) -> str | None:
+    """Return the exact claim whose evidence binding must be verified."""
+    for key in ("claim", "content"):
+        value = fact.get(key)
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+
+    parts = [fact.get("subject"), fact.get("predicate"), fact.get("object")]
+    if all(isinstance(part, str) and part.strip() for part in parts):
+        return " ".join(part.strip() for part in parts)
+    return None
+
+
+def _json_pointer_value(document: object, pointer: str) -> object:
+    """Resolve a minimal RFC 6901 JSON pointer without executing user code."""
+    if pointer == "":
+        return document
+    if not pointer.startswith("/"):
+        raise ValueError("JSON pointer must start with '/'")
+
+    current = document
+    for raw_token in pointer[1:].split("/"):
+        token = raw_token.replace("~1", "/").replace("~0", "~")
+        if isinstance(current, dict):
+            if token not in current:
+                raise KeyError(token)
+            current = current[token]
+        elif isinstance(current, list):
+            if not token.isdigit():
+                raise ValueError("list pointer token must be an integer")
+            current = current[int(token)]
+        else:
+            raise ValueError("pointer traverses a scalar")
+    return current
+
+
+def _claim_binding_matches_output(
+    fact: dict,
+    output_raw: bytes,
+    retained_hash: str,
+) -> bool:
+    """Verify an explicit, deterministic claim-to-output binding.
+
+    Supported contracts deliberately avoid semantic inference:
+
+    - ``exact_fragment_v1``: the exact claim text occurs in ``output.txt``.
+    - ``citation_v1``: the exact claim text equals the cited character range.
+    - ``json_pointer_v1``: a JSON pointer extracts a scalar equal to the claim.
+
+    Merely attaching an experiment ID and its digest is never sufficient.
+    Unknown or malformed binding contracts fail closed.
+    """
+    binding = fact.get("evidence_binding") or fact.get("claim_binding")
+    claim = _fact_claim_text(fact)
+    if not isinstance(binding, dict) or claim is None:
+        return False
+
+    binding_claim = binding.get("claim")
+    if not isinstance(binding_claim, str) or binding_claim.strip() != claim:
+        return False
+
+    binding_eid = binding.get("experiment_id")
+    if binding_eid is not None and binding_eid != fact.get("experiment_id"):
+        return False
+    binding_hash = binding.get("output_sha256")
+    if binding_hash is not None and (
+        not isinstance(binding_hash, str)
+        or binding_hash.lower() != retained_hash
+    ):
+        return False
+
+    try:
+        output_text = output_raw.decode("utf-8")
+    except UnicodeDecodeError:
+        return False
+
+    binding_type = binding.get("type") or binding.get("method")
+    if binding_type in {"exact_fragment", "exact_fragment_v1"}:
+        fragment = binding.get("fragment")
+        return isinstance(fragment, str) and fragment == claim and fragment in output_text
+
+    if binding_type in {"citation", "citation_v1"}:
+        quote = binding.get("quote")
+        start = binding.get("start")
+        end = binding.get("end")
+        return (
+            isinstance(quote, str)
+            and quote == claim
+            and isinstance(start, int)
+            and not isinstance(start, bool)
+            and isinstance(end, int)
+            and not isinstance(end, bool)
+            and 0 <= start < end <= len(output_text)
+            and output_text[start:end] == quote
+        )
+
+    if binding_type in {"extractor", "json_pointer_v1"}:
+        if binding_type == "extractor" and binding.get("extractor") != "json_pointer_v1":
+            return False
+        pointer = binding.get("pointer")
+        if not isinstance(pointer, str):
+            return False
+        try:
+            extracted = _json_pointer_value(json.loads(output_text), pointer)
+        except (json.JSONDecodeError, KeyError, IndexError, TypeError, ValueError):
+            return False
+        if isinstance(extracted, (dict, list)):
+            return False
+        extracted_text = (
+            json.dumps(extracted, ensure_ascii=False, separators=(",", ":"))
+            if extracted is None or isinstance(extracted, (bool, int, float))
+            else str(extracted)
+        )
+        return extracted_text == claim
+
+    return False
+
+
+def _evidence_bound_facts(
+    knowledge_facts: list[dict] | None,
+    experiment_ids: list[str] | None,
+) -> list[dict]:
+    """Keep only facts bound to retained output bytes used by this paper.
+
+    The runtime knowledge graph is exploratory memory. A confidence score or a
+    ``cycle_N`` source is not scientific evidence. A fact enters manuscript
+    synthesis only when it names an allowed experiment, declares that
+    experiment's output SHA-256, the retained ``output.txt`` bytes match, and
+    an explicit claim binding can be recomputed from those bytes.
+    """
+    allowed = set(experiment_ids or [])
+    if not allowed:
+        return []
+
+    bound: list[dict] = []
+    for fact in knowledge_facts or []:
+        eid = fact.get("experiment_id")
+        declared_hash = fact.get("output_sha256")
+        if (
+            not isinstance(eid, str)
+            or eid not in allowed
+            or not isinstance(declared_hash, str)
+            or not re.fullmatch(r"[a-fA-F0-9]{64}", declared_hash)
+        ):
+            continue
+
+        from core.security_hardening_v2 import require_valid_experiment_id
+        try:
+            eid = require_valid_experiment_id(eid)
+        except ValueError:
+            continue
+
+        retained = _retained_experiment_output(eid)
+        if retained is None:
+            continue
+        output_raw, retained_hash = retained
+        if (
+            declared_hash.lower() == retained_hash
+            and _claim_binding_matches_output(fact, output_raw, retained_hash)
+        ):
+            bound.append(dict(fact))
+    return bound
+
+
+def _canonical_markdown_blocks(md_content: str) -> list[dict]:
+    """Parse the final Markdown into the shared PDF/LaTeX render model."""
+    blocks: list[dict] = []
+    paragraph: list[str] = []
+    code_lines: list[str] = []
+    comment_lines: list[str] = []
+    in_code = False
+    in_comment = False
+
+    def flush_paragraph() -> None:
+        if paragraph:
+            blocks.append({"kind": "paragraph", "text": "\n".join(paragraph).strip()})
+            paragraph.clear()
+
+    for line in md_content.splitlines():
+        stripped = line.strip()
+
+        if in_code:
+            if stripped.startswith("```"):
+                blocks.append({"kind": "code", "text": "\n".join(code_lines)})
+                code_lines.clear()
+                in_code = False
+            else:
+                code_lines.append(line)
+            continue
+
+        if in_comment:
+            if "-->" in line:
+                before, _, after = line.partition("-->")
+                comment_lines.append(before)
+                blocks.append(
+                    {
+                        "kind": "metadata",
+                        "text": "\n".join(comment_lines).strip(),
+                    }
+                )
+                comment_lines.clear()
+                in_comment = False
+                if after.strip():
+                    paragraph.append(after.strip())
+            else:
+                comment_lines.append(line)
+            continue
+
+        if "<!--" in line:
+            flush_paragraph()
+            before, _, after = line.partition("<!--")
+            if before.strip():
+                paragraph.append(before.strip())
+                flush_paragraph()
+            if "-->" in after:
+                content, _, tail = after.partition("-->")
+                blocks.append({"kind": "metadata", "text": content.strip()})
+                if tail.strip():
+                    paragraph.append(tail.strip())
+            else:
+                in_comment = True
+                comment_lines.append(after)
+            continue
+
+        if stripped.startswith("```"):
+            flush_paragraph()
+            in_code = True
+            continue
+
+        heading = re.match(r"^(#{1,6})\s+(.+)$", stripped)
+        if heading:
+            flush_paragraph()
+            blocks.append(
+                {
+                    "kind": "heading",
+                    "level": len(heading.group(1)),
+                    "text": heading.group(2).strip(),
+                }
+            )
+            continue
+
+        image = re.fullmatch(r"!\[([^\]]*)\]\(([^)]+)\)", stripped)
+        if image:
+            flush_paragraph()
+            blocks.append(
+                {
+                    "kind": "image",
+                    "alt": image.group(1),
+                    "path": image.group(2),
+                }
+            )
+            continue
+
+        if re.match(r"^[-*]\s+", stripped):
+            flush_paragraph()
+            blocks.append({"kind": "bullet", "text": re.sub(r"^[-*]\s+", "", stripped)})
+            continue
+
+        if not stripped:
+            flush_paragraph()
+            continue
+        if re.fullmatch(r"-{3,}", stripped):
+            flush_paragraph()
+            blocks.append({"kind": "separator", "text": ""})
+            continue
+        paragraph.append(line)
+
+    flush_paragraph()
+    if in_code:
+        blocks.append({"kind": "code", "text": "\n".join(code_lines)})
+    if in_comment:
+        blocks.append({"kind": "metadata", "text": "\n".join(comment_lines).strip()})
+    return blocks
 
 
 class PaperGenerator:
@@ -102,6 +410,8 @@ class PaperGenerator:
         Returns paths to generated files.
         """
         enhanced_peer_review = None
+        enhancement_review_required = bool(self.enhance and domain and tool_results)
+        knowledge_facts = _evidence_bound_facts(knowledge_facts, experiment_ids)
 
         # Enhance paper if domain and tool_results are provided
         if self.enhance and domain and tool_results:
@@ -168,56 +478,70 @@ class PaperGenerator:
             md_content = numeric_v.mark_flagged(md_content, num_result["flagged"])
 
         gate = self._prepublication_gate(md_content, experiment_ids or [])
-        if not gate["passed"]:
+        peer_review_gate = self._peer_review_gate(
+            enhanced_peer_review,
+            required=enhancement_review_required,
+        )
+
+        try:
+            reflection_summary = self._run_reflection_gate(md_content)
+        except Exception as exc:
+            log.warning("paper_generator.reflection_failed", error=str(exc))
+            reflection_summary = None
+        reflection_gate = self._validate_reflection_summary(
+            reflection_summary,
+            original_md=md_content,
+        )
+        rejection_reasons = [
+            *gate["reasons"],
+            *peer_review_gate["reasons"],
+            *reflection_gate["reasons"],
+        ]
+        if rejection_reasons:
+            rejected_md = md_content
+            if isinstance(reflection_summary, dict):
+                annotated_md = reflection_summary.get("annotated_md")
+                if isinstance(annotated_md, str) and annotated_md.startswith(md_content):
+                    rejected_md = annotated_md
             return self._reject_draft(
                 title=title,
                 md_path=md_path,
-                md_content=md_content,
+                md_content=rejected_md,
                 section_count=len(render_sections),
-                reasons=gate["reasons"],
+                reasons=list(dict.fromkeys(rejection_reasons)),
                 grounding_repair=grounding_repair,
                 publication_artifacts=publication_artifacts,
             )
 
-        peer_review_gate = self._peer_review_gate(enhanced_peer_review)
-        if not peer_review_gate["passed"]:
-            return self._reject_draft(
-                title=title,
-                md_path=md_path,
-                md_content=md_content,
-                section_count=len(render_sections),
-                reasons=peer_review_gate["reasons"],
-                grounding_repair=grounding_repair,
-                publication_artifacts=publication_artifacts,
-            )
-
-        reflection_summary = self._run_reflection_gate(md_content)
-        if reflection_summary is not None:
-            if self.include_internal_review:
-                md_content = reflection_summary["annotated_md"]
-            log.info("paper_generator.reflection_done",
-                     score=reflection_summary["score"],
-                     pass_overall=reflection_summary["pass_overall"],
-                     n_high=reflection_summary["n_high"])
-            if not reflection_summary["pass_overall"]:
-                reasons = ["reflection gate failed"]
-                if reflection_summary["n_high"] > 0:
-                    reasons.append("reflection high-severity issues")
-                return self._reject_draft(
-                    title=title,
-                    md_path=md_path,
-                    md_content=reflection_summary["annotated_md"],
-                    section_count=len(render_sections),
-                    reasons=reasons,
-                    grounding_repair=grounding_repair,
-                    publication_artifacts=publication_artifacts,
-                )
+        if self.include_internal_review:
+            md_content = reflection_summary["annotated_md"]
+        log.info(
+            "paper_generator.reflection_done",
+            score=reflection_summary["score"],
+            pass_overall=reflection_summary["pass_overall"],
+            n_high=reflection_summary["n_high"],
+        )
 
         md_content = self._append_watermark(
             md_content,
             title,
             includes_internal_review=self.include_internal_review,
         )
+
+        # Verify watermark integrity after appending
+        from core.security_hardening_v2 import verify_paper_watermark
+        watermark_ok = verify_paper_watermark(md_content)
+        if not watermark_ok:
+            log.warning("paper_generator.watermark_integrity_failed")
+            return self._reject_draft(
+                title=title,
+                md_path=md_path,
+                md_content=md_content,
+                section_count=len(render_sections),
+                reasons=["watermark integrity verification failed"],
+                grounding_repair=grounding_repair,
+                publication_artifacts=publication_artifacts,
+            )
 
         pdf_ok = await self._render_pdf(md_content, pdf_path, title, abstract, render_sections, references)
         if not pdf_ok:
@@ -238,7 +562,22 @@ class PaperGenerator:
             render_sections,
             references,
             publication_artifacts=publication_artifacts,
+            md_content=md_content,
         )
+        if not tex_ok:
+            try:
+                pdf_path.unlink(missing_ok=True)
+            except OSError:
+                pass
+            return self._reject_draft(
+                title=title,
+                md_path=md_path,
+                md_content=md_content,
+                section_count=len(render_sections),
+                reasons=["latex render failed"],
+                grounding_repair=grounding_repair,
+                publication_artifacts=publication_artifacts,
+            )
 
         md_path.write_text(md_content, encoding="utf-8")
         log.info("paper_generator.markdown_written", path=str(md_path), chars=len(md_content))
@@ -283,12 +622,21 @@ class PaperGenerator:
         """Reject drafts that cite experiments without verifiable provenance."""
         reasons = []
 
-        missing_hash_ids = [
-            eid for eid in dict.fromkeys(experiment_ids)
-            if not _provenance_output_hash(eid)
-        ]
-        if missing_hash_ids:
-            reasons.append("missing provenance output hash")
+        unique_ids = list(dict.fromkeys(experiment_ids))
+        if not unique_ids:
+            reasons.append("no experiment evidence supplied")
+        else:
+            invalid_evidence_ids = [
+                eid for eid in unique_ids
+                if _retained_experiment_output(eid) is None
+            ]
+            if invalid_evidence_ids:
+                reasons.extend(
+                    [
+                        "missing provenance output hash",
+                        "missing, empty, or integrity-invalid experiment evidence",
+                    ]
+                )
 
         code_blocks = re.findall(r"```(?:[a-zA-Z0-9_-]+)?\n(.*?)```", md_content, flags=re.DOTALL)
         unusable_blocks = []
@@ -308,13 +656,21 @@ class PaperGenerator:
         return {"passed": not reasons, "reasons": reasons}
 
     @staticmethod
-    def _peer_review_gate(peer_review: dict | None) -> dict:
-        """Reject enhanced drafts whose own reviewer score is below paper quality."""
+    def _peer_review_gate(
+        peer_review: dict | None,
+        *,
+        required: bool = False,
+    ) -> dict:
+        """Validate enhancement review whenever enhancement was attempted."""
         if not peer_review:
+            if required:
+                return {"passed": False, "reasons": ["enhancement peer review missing"]}
             return {"passed": True, "reasons": []}
         try:
             score = float(peer_review.get("overall_score"))
         except (TypeError, ValueError):
+            return {"passed": False, "reasons": ["peer review score missing or invalid"]}
+        if not math.isfinite(score):
             return {"passed": False, "reasons": ["peer review score missing or invalid"]}
         if score < MIN_PUBLICATION_PEER_REVIEW_SCORE:
             return {
@@ -324,6 +680,60 @@ class PaperGenerator:
                     f"({score:.1f} < {MIN_PUBLICATION_PEER_REVIEW_SCORE:.1f})"
                 ],
             }
+        return {"passed": True, "reasons": []}
+
+    @staticmethod
+    def _validate_reflection_summary(
+        reflection_summary: dict | None,
+        *,
+        original_md: str,
+    ) -> dict:
+        """Require a structurally valid, passing reflection result."""
+        if not isinstance(reflection_summary, dict):
+            return {"passed": False, "reasons": ["reflection review unavailable or invalid"]}
+
+        required_keys = {
+            "annotated_md",
+            "score",
+            "pass_overall",
+            "n_high",
+            "n_medium",
+            "n_low",
+            "issues",
+        }
+        if not required_keys.issubset(reflection_summary):
+            return {"passed": False, "reasons": ["reflection review unavailable or invalid"]}
+
+        annotated_md = reflection_summary.get("annotated_md")
+        pass_overall = reflection_summary.get("pass_overall")
+        issues = reflection_summary.get("issues")
+        try:
+            score = float(reflection_summary.get("score"))
+        except (TypeError, ValueError):
+            score = float("nan")
+
+        counts_valid = all(
+            isinstance(reflection_summary.get(key), int)
+            and not isinstance(reflection_summary.get(key), bool)
+            and reflection_summary[key] >= 0
+            for key in ("n_high", "n_medium", "n_low")
+        )
+        structurally_valid = (
+            isinstance(annotated_md, str)
+            and annotated_md.startswith(original_md)
+            and isinstance(pass_overall, bool)
+            and isinstance(issues, list)
+            and math.isfinite(score)
+            and 0.0 <= score <= 100.0
+            and counts_valid
+        )
+        if not structurally_valid:
+            return {"passed": False, "reasons": ["reflection review unavailable or invalid"]}
+        if not pass_overall:
+            reasons = ["reflection gate failed"]
+            if reflection_summary["n_high"] > 0:
+                reasons.append("reflection high-severity issues")
+            return {"passed": False, "reasons": reasons}
         return {"passed": True, "reasons": []}
 
     def _reject_draft(
@@ -408,10 +818,9 @@ class PaperGenerator:
     def _run_reflection_gate(md_content: str) -> dict | None:
         """Run the Reflection Agent and annotate the draft with its findings.
 
-        This is an *advisory* gate — it does not reject the draft, but it
-        surfaces concrete weaknesses (missing limitations, ungrounded numbers,
-        weak hypotheses) and embeds them in the manuscript as a Self-Review
-        section so a downstream reviewer (or the author) can act on them.
+        The caller treats absence, exceptions, malformed output, and a failing
+        review as publication rejection. Passing review details may be embedded
+        in the manuscript or retained in the review sidecar.
         """
         try:
             from cognition.reflection_agent import reflect
@@ -760,10 +1169,12 @@ class PaperGenerator:
             lines += [
                 "## Data Availability",
                 "",
-                "All computational data supporting this study are publicly available. ",
-                "The following experiment records contain full provenance information ",
-                "including input parameters, complete output, execution environment, ",
-                "and SHA-256 output hashes:",
+                "The computational data cited by this draft are retained in its local ",
+                "evidence package. Public availability is not claimed until a released ",
+                "packet URL and digest are supplied. The following records contain input ",
+                "parameters, retained output, execution-environment metadata, and local ",
+                "SHA-256 integrity digests; these digests do not authenticate authorship ",
+                "or establish scientific truth:",
                 "",
             ]
             for eid in experiment_ids:
@@ -857,7 +1268,7 @@ class PaperGenerator:
         sections: list[dict],
         references: list[str] | None,
     ) -> bool:
-        """Render PDF using reportlab."""
+        """Render the final canonical Markdown to PDF using ReportLab."""
         try:
             from reportlab.lib import colors
             from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY, TA_LEFT
@@ -882,6 +1293,7 @@ class PaperGenerator:
                 leftMargin=2.5 * cm,
                 topMargin=2.5 * cm,
                 bottomMargin=2.5 * cm,
+                pageCompression=0,
             )
 
             styles = getSampleStyleSheet()
@@ -893,16 +1305,14 @@ class PaperGenerator:
                 textColor=colors.HexColor("#1a1a2e"),
                 alignment=TA_CENTER,
             )
-            style_author = ParagraphStyle(
-                "Author",
-                parent=styles["Normal"],
-                fontSize=10,
-                spaceAfter=4,
-                textColor=colors.HexColor("#555555"),
-                alignment=TA_CENTER,
+            style_h1 = ParagraphStyle(
+                "CanonicalH1",
+                parent=style_title,
+                fontSize=18,
+                spaceAfter=10,
             )
             style_h2 = ParagraphStyle(
-                "H2",
+                "CanonicalH2",
                 parent=styles["Heading2"],
                 fontSize=13,
                 spaceBefore=14,
@@ -910,90 +1320,74 @@ class PaperGenerator:
                 textColor=colors.HexColor("#16213e"),
                 borderPad=4,
             )
+            style_h3 = ParagraphStyle(
+                "CanonicalH3",
+                parent=styles["Heading3"],
+                fontSize=11,
+                spaceBefore=10,
+                spaceAfter=5,
+                textColor=colors.HexColor("#263b66"),
+            )
             style_body = ParagraphStyle(
-                "Body",
+                "CanonicalBody",
                 parent=styles["Normal"],
                 fontSize=10,
                 leading=15,
                 spaceAfter=8,
                 alignment=TA_JUSTIFY,
             )
-            style_abstract = ParagraphStyle(
-                "Abstract",
+            style_code = ParagraphStyle(
+                "CanonicalCode",
                 parent=styles["Normal"],
-                fontSize=10,
-                leading=14,
-                leftIndent=30,
-                rightIndent=30,
-                spaceAfter=12,
+                fontName="Courier",
+                fontSize=7.5,
+                leading=10,
+                leftIndent=10,
+                rightIndent=10,
+                spaceAfter=8,
                 textColor=colors.HexColor("#333333"),
-                alignment=TA_JUSTIFY,
+                alignment=TA_LEFT,
             )
-
-            now = datetime.now().strftime("%B %d, %Y")
-            story = [
-                Paragraph(title, style_title),
-                Spacer(1, 0.3 * cm),
-                Paragraph("A.M.Y Computational Research System [1]", style_author),
-                Paragraph(f"AXIOM Atlas Platform, Autonomous Computational Research · {now}", style_author),
-                Spacer(1, 0.5 * cm),
-                HRFlowable(width="100%", thickness=1, color=colors.HexColor("#1a1a2e")),
-                Spacer(1, 0.5 * cm),
-                Paragraph("Abstract", style_h2),
-            ]
-
-            # Split abstract into safe paragraphs
-            for para in abstract.split("\n\n"):
-                para = para.strip()
-                if para:
-                    story.append(Paragraph(_safe_para(para), style_abstract))
-
-            story.append(HRFlowable(width="100%", thickness=0.5, color=colors.HexColor("#cccccc")))
-
-            for sec in sections:
-                story.append(Paragraph(sec.get("heading", ""), style_h2))
-                content = sec.get("content", "")
-                for para in content.split("\n\n"):
-                    para = para.strip()
-                    if not para:
-                        continue
-                    image_match = re.fullmatch(
-                        r"!\[[^\]]*\]\(([^)]+)\)",
-                        para,
+            story = []
+            for block in _canonical_markdown_blocks(md_content):
+                kind = block["kind"]
+                if kind == "heading":
+                    level = block["level"]
+                    style = style_h1 if level == 1 else style_h2 if level == 2 else style_h3
+                    story.append(Paragraph(_safe_para(block["text"]), style))
+                elif kind == "paragraph":
+                    text = block["text"].replace("\n", " ")
+                    story.append(Paragraph(_safe_para(text), style_body))
+                elif kind == "bullet":
+                    story.append(Paragraph(f"• {_safe_para(block['text'])}", style_body))
+                elif kind in {"code", "metadata"}:
+                    text = block["text"].replace("\n", "<br/>")
+                    story.append(Paragraph(_safe_para(text), style_code))
+                elif kind == "separator":
+                    story.append(
+                        HRFlowable(
+                            width="100%",
+                            thickness=0.5,
+                            color=colors.HexColor("#cccccc"),
+                        )
                     )
-                    if image_match:
-                        image_path = Path(image_match.group(1))
-                        if not image_path.is_absolute():
-                            image_path = pdf_path.parent / image_path
-                        if image_path.is_file():
-                            image = Image(str(image_path))
-                            image._restrictSize(16 * cm, 12 * cm)
-                            story.append(image)
-                            story.append(Spacer(1, 0.2 * cm))
-                        continue
-                    # Render bullet points
-                    if para.startswith("- ") or para.startswith("* "):
-                        for line in para.split("\n"):
-                            line = line.lstrip("-* ").strip()
-                            if line:
-                                story.append(Paragraph(f"• {_safe_para(line)}", style_body))
-                    else:
-                        story.append(Paragraph(_safe_para(para), style_body))
-                story.append(Spacer(1, 0.2 * cm))
-
-            if references:
-                story.append(Paragraph("References", style_h2))
-                for i, ref in enumerate(references, 1):
-                    story.append(Paragraph(f"{i}. {_safe_para(ref)}", style_body))
-
-            story.append(Spacer(1, 1 * cm))
-            story.append(HRFlowable(width="100%", thickness=0.5, color=colors.HexColor("#cccccc")))
-            story.append(
-                Paragraph(
-                    "<i>Computational research report with provenance-linked results and cited references.</i>",
-                    style_author,
-                )
-            )
+                    story.append(Spacer(1, 0.2 * cm))
+                elif kind == "image":
+                    image_path = Path(block["path"])
+                    if not image_path.is_absolute():
+                        image_path = pdf_path.parent / image_path
+                    if image_path.is_file():
+                        image = Image(str(image_path))
+                        image._restrictSize(16 * cm, 12 * cm)
+                        story.append(image)
+                        if block.get("alt"):
+                            story.append(
+                                Paragraph(
+                                    _safe_para(block["alt"]),
+                                    style_body,
+                                )
+                            )
+                        story.append(Spacer(1, 0.2 * cm))
 
             doc.build(story)
             log.info("paper_generator.pdf_written", path=str(pdf_path))
@@ -1011,9 +1405,14 @@ class PaperGenerator:
         sections: list[dict],
         references: list[str] | None,
         publication_artifacts: dict | None = None,
+        md_content: str | None = None,
     ) -> bool:
-        """Render paper to LaTeX format."""
+        """Render the final canonical Markdown to LaTeX."""
         try:
+            if not isinstance(md_content, str) or not md_content.strip():
+                log.error("paper_generator.latex_error", error="canonical markdown missing")
+                return False
+
             lines = [
                 "\\documentclass[11pt,a4paper]{article}",
                 "\\usepackage[utf8]{inputenc}",
@@ -1034,61 +1433,56 @@ class PaperGenerator:
                 "\\begin{document}",
                 "\\maketitle",
                 "",
-                "\\begin{abstract}",
-                self._escape_latex(abstract),
-                "\\end{abstract}",
-                "",
             ]
 
-            for sec in sections:
-                heading = sec.get("heading", "")
-                content = sec.get("content", "")
-                if heading:
-                    lines.append(f"\\section{{{self._escape_latex(heading)}}}")
-                
-                in_list = False
-                for para in content.split("\n\n"):
-                    para = para.strip()
-                    if not para:
-                        continue
-                    if para.startswith("- ") or para.startswith("* "):
-                        if not in_list:
-                            lines.append("\\begin{itemize}")
-                            in_list = True
-                        for item in para.split("\n"):
-                            item = item.lstrip("-* ").strip()
-                            if item:
-                                lines.append(f"\\item {self._escape_latex(item)}")
-                    else:
-                        if in_list:
-                            lines.append("\\end{itemize}")
-                            in_list = False
-                        lines.append(self._escape_latex(para))
-                        lines.append("")
-                
-                if in_list:
+            in_list = False
+            first_h1_skipped = False
+            for block in _canonical_markdown_blocks(md_content):
+                kind = block["kind"]
+                if kind != "bullet" and in_list:
                     lines.append("\\end{itemize}")
                     lines.append("")
-                lines.append("")
+                    in_list = False
 
-            for figure in (publication_artifacts or {}).get("figures", []):
-                figure_path = str(figure.get("display_path") or figure.get("path", ""))
-                caption = str(figure.get("caption", ""))
-                if figure_path:
+                if kind == "heading":
+                    level = block["level"]
+                    heading = self._escape_latex(block["text"])
+                    if level == 1 and not first_h1_skipped:
+                        first_h1_skipped = True
+                        continue
+                    command = "section" if level <= 2 else "subsection" if level == 3 else "subsubsection"
+                    lines.append(f"\\{command}{{{heading}}}")
+                elif kind == "paragraph":
+                    lines.append(self._escape_latex(block["text"].replace("\n", " ")))
+                    lines.append("")
+                elif kind == "bullet":
+                    if not in_list:
+                        lines.append("\\begin{itemize}")
+                        in_list = True
+                    lines.append(f"\\item {self._escape_latex(block['text'])}")
+                elif kind in {"code", "metadata"}:
+                    lines += [
+                        "\\begin{quote}\\ttfamily\\small",
+                        self._escape_latex(block["text"]).replace("\n", "\\\\\n"),
+                        "\\end{quote}",
+                        "",
+                    ]
+                elif kind == "separator":
+                    lines += ["\\hrule", "\\vspace{0.5em}", ""]
+                elif kind == "image":
+                    figure_path = block["path"]
                     lines += [
                         "\\begin{figure}[htbp]",
                         "\\centering",
                         f"\\includegraphics[width=0.95\\linewidth]{{\\detokenize{{{figure_path}}}}}",
-                        f"\\caption{{{self._escape_latex(caption)}}}",
+                        f"\\caption{{{self._escape_latex(block.get('alt', ''))}}}",
                         "\\end{figure}",
                         "",
                     ]
 
-            if references:
-                lines.append("\\begin{thebibliography}{99}")
-                for i, ref in enumerate(references, 1):
-                    lines.append(f"\\bibitem{{ref{i}}} {self._escape_latex(ref)}")
-                lines.append("\\end{thebibliography}")
+            if in_list:
+                lines.append("\\end{itemize}")
+                lines.append("")
 
             lines.append("\\end{document}")
             
@@ -1149,17 +1543,32 @@ class PaperGenerator:
             log.error("paper_generator.no_reasoning_engine")
             return {"error": "No reasoning engine attached"}
 
+        from core.security_hardening import shield_tool_output
+        from core.security_hardening_v2 import sanitize_feedback_text
+
+        evidence_facts = _evidence_bound_facts(knowledge_facts, experiment_ids)
         facts_text = "\n".join(
-            f"- {f.get('subject','')} {f.get('predicate','')} {f.get('object','')} (conf={float(f.get('confidence',0)):.0%})"
-            for f in knowledge_facts[:30]
+            "- "
+            + sanitize_feedback_text(
+                f"{f.get('subject','')} {f.get('predicate','')} {f.get('object','')} "
+                f"(experiment_id={f.get('experiment_id')}, output_sha256={f.get('output_sha256')})"
+            )
+            for f in evidence_facts[:30]
+        ) or "- No knowledge-graph fact had a verified experiment/output binding."
+        thoughts_text = "\n".join(
+            f"- {sanitize_feedback_text(str(t))}"
+            for t in recent_thoughts[-10:]
         )
-        thoughts_text = "\n".join(f"- {t}" for t in recent_thoughts[-10:])
+        safe_topic = sanitize_feedback_text(topic)
+        safe_breakthrough = sanitize_feedback_text(breakthrough_content[:600])
 
         # Include tool results in the prompt
         tools_text = ""
         if tool_sections:
             tools_text = "\n\nComputational Evidence:\n" + "\n\n".join(
-                f"### {s['heading']}\n{s['content']}" for s in tool_sections
+                f"### {sanitize_feedback_text(str(s.get('heading', 'Evidence')))}\n"
+                f"{shield_tool_output(str(s.get('content', '')), str(s.get('heading', 'tool_section')))}"
+                for s in tool_sections
             )
 
         # Include real literature references in the prompt
@@ -1167,12 +1576,13 @@ class PaperGenerator:
         if literature_papers:
             lit_lines = ["\n\nReal literature references found (use these as citations in the paper):"]
             for i, p in enumerate(literature_papers[:6], 1):
-                title = p.get("title", "Unknown")
+                title = sanitize_feedback_text(str(p.get("title", "Unknown")))
                 authors = p.get("authors", "")
-                year = p.get("year", "")
-                venue = p.get("venue", "")
+                year = sanitize_feedback_text(str(p.get("year", "")))
+                venue = sanitize_feedback_text(str(p.get("venue", "")))
                 if isinstance(authors, list):
                     authors = ", ".join(str(a) for a in authors[:3])
+                authors = sanitize_feedback_text(str(authors))
                 lit_lines.append(f"  [{i}] {authors} ({year}). {title}. {venue}.")
             literature_text = "\n".join(lit_lines)
 
@@ -1190,10 +1600,10 @@ class PaperGenerator:
             {
                 "role": "user",
                 "content": (
-                    f"Research topic: {topic}\n\n"
-                    f"Established facts:\n{facts_text}\n\n"
-                    f"Recent synthesis thoughts:\n{thoughts_text}\n\n"
-                    f"Key breakthrough:\n{breakthrough_content[:600]}\n"
+                    f"Research topic: {safe_topic}\n\n"
+                    f"Evidence-bound facts (unbound runtime memory is excluded):\n{facts_text}\n\n"
+                    f"Exploratory synthesis context (not evidence):\n{thoughts_text}\n\n"
+                    f"Candidate summary signal (not evidence):\n{safe_breakthrough}\n"
                     f"{tools_text}"
                     f"{literature_text}\n\n"
                     "Write a structured academic paper. Use the real literature references above as citations. "
@@ -1255,7 +1665,7 @@ class PaperGenerator:
                 abstract=data["abstract"],
                 sections=sections,
                 references=data.get("references", []),
-                knowledge_facts=knowledge_facts,
+                knowledge_facts=evidence_facts,
                 experiment_ids=experiment_ids,
             )
         except Exception as e:
@@ -1274,7 +1684,7 @@ class PaperGenerator:
     ) -> dict:
         """Generate a deterministic paper when no model client is available."""
         title = topic.strip() or "A.M.Y Computational Research Report"
-        facts = knowledge_facts or []
+        facts = _evidence_bound_facts(knowledge_facts, experiment_ids)
         tool_sections = tool_sections or []
         experiment_ids = experiment_ids or []
         literature_papers = literature_papers or []

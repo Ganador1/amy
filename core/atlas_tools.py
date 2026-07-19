@@ -42,6 +42,24 @@ ATLAS_ROOT = _resolve_atlas_root()
 ATLAS_VENV_PYTHON = _resolve_atlas_python(ATLAS_ROOT)
 ATLAS_RESULT_MARKER = "__ATLAS_RESULT__"
 
+_SAFE_ATLAS_SUBPROCESS_ENV_KEYS = frozenset(
+    {
+        "PATH",
+        "PYTHONPATH",
+        "VIRTUAL_ENV",
+        "LANG",
+        "LC_ALL",
+        "LC_CTYPE",
+        "HOME",
+        "TMPDIR",
+        "USER",
+        "LOGNAME",
+        "SHELL",
+        "TERM",
+        "PYTHONNOUSERSITE",
+    }
+)
+
 UNUSABLE_TOOL_OUTPUT_MARKERS = (
     "atlas no disponible",
     "tool not found",
@@ -164,6 +182,32 @@ def _primary_ollama_api_key() -> str:
         )
 
 
+def _build_atlas_subprocess_env(*, ollama_api_key: str = "") -> dict[str, str]:
+    """Build a minimal Atlas environment, including Ollama only explicitly."""
+    extra = {
+        "ENABLE_REDIS_CACHE": "false",
+        "MPLBACKEND": "Agg",
+        "OLLAMA_BASE_URL": "https://ollama.com",
+    }
+    try:
+        from core.security_hardening_v2 import sanitize_subprocess_env
+    except ImportError:
+        env = {
+            key: os.environ[key]
+            for key in _SAFE_ATLAS_SUBPROCESS_ENV_KEYS
+            if key in os.environ
+        }
+        env.update(extra)
+        if ollama_api_key:
+            env["OLLAMA_API_KEY"] = ollama_api_key
+        return env
+
+    return sanitize_subprocess_env(
+        extra=extra,
+        include_ollama_key=ollama_api_key,
+    )
+
+
 def assess_tool_output(output: object, tool_name: str | None = None) -> dict:
     """
     Classify whether an Atlas tool output is safe to treat as a real result.
@@ -199,6 +243,10 @@ def assess_tool_output(output: object, tool_name: str | None = None) -> dict:
             markers = [marker for marker in markers if marker != "mock"]
             evidence_level = "mixed"
             warnings.append("mixed evidence report")
+        else:
+            evidence_level = "none"
+            markers.append("no real evidence")
+            warnings.append("orchestrator report contains no successful real evidence")
 
     normalized_tool = (tool_name or "").strip().lower()
     if normalized_tool in WEAK_EVIDENCE_TOOLS:
@@ -249,19 +297,16 @@ class AtlasTools:
         if self._lock is None:
             self._lock = asyncio.Lock()
         worker_script = Path(__file__).parent / "atlas_worker.py"
+        worker_env = _build_atlas_subprocess_env(
+            ollama_api_key=_primary_ollama_api_key()
+        )
         self._worker = await asyncio.create_subprocess_exec(
             str(ATLAS_VENV_PYTHON), str(worker_script),
             stdin=asyncio.subprocess.PIPE,
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.DEVNULL,
             cwd=str(ATLAS_ROOT),
-            env={
-                **os.environ,
-                "ENABLE_REDIS_CACHE": "false",
-                "MPLBACKEND": "Agg",
-                "OLLAMA_BASE_URL": "https://ollama.com",
-                "OLLAMA_API_KEY": _primary_ollama_api_key(),
-            },
+            env=worker_env,
         )
         # Verificar que el worker responda
         response = await self._send_request({"id": self._next_id(), "action": "ping"})
@@ -539,11 +584,9 @@ class AtlasTools:
 
     def _run_subprocess(self, code: str, timeout: int = 120) -> str:
         """Ejecuta código Python en el venv de Atlas y retorna stdout."""
-        env = os.environ.copy()
-        env["OLLAMA_BASE_URL"] = "https://ollama.com"
-        env["OLLAMA_API_KEY"] = _primary_ollama_api_key()
-        env["ENABLE_REDIS_CACHE"] = "false"
-        env["MPLBACKEND"] = "Agg"
+        env = _build_atlas_subprocess_env(
+            ollama_api_key=_primary_ollama_api_key()
+        )
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
             f.write(code)

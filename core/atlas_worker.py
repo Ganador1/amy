@@ -114,9 +114,15 @@ class AtlasWorker:
                 result = self.describe_tools(request.get("domain"))
                 return {"id": req_id, "result": result}
             elif action == "run_tool":
+                # Validate and preserve the exact tool name before execution.
+                from core.security_hardening_v2 import require_valid_tool_name
+                tool_name = require_valid_tool_name(request["tool_name"])
+                tool_input = request["tool_input"]
+                if not isinstance(tool_input, str):
+                    raise ValueError("invalid tool_input")
                 result = self.run_tool(
-                    request["tool_name"],
-                    request["tool_input"],
+                    tool_name,
+                    tool_input,
                 )
                 return {"id": req_id, "result": result}
             elif action == "ping":
