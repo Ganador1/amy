@@ -57,7 +57,7 @@ jobs:
       - name: Show environment
         run: |
           python --version
-          python -c "import pytest, yaml, rich, structlog, numpy, scipy, sympy, networkx, httpx, reportlab; print('deps ok')"
+          uv run --no-sync python -c "import pytest, yaml, rich, structlog, numpy, scipy, sympy, networkx, httpx, reportlab; print('deps ok')"
 
       - name: Run hermetic test suite
         # CI has no Atlas venv (atlas/.venv_new), so tests that spawn the Atlas
@@ -110,7 +110,7 @@ jobs:
             -q --tb=short -p no:cacheprovider
 
       - name: Verify every Atlas tool computes (no mocks, deterministic)
-        run: python scripts/diagnostics/verify_atlas_tools.py
+        run: uv run --no-sync python scripts/diagnostics/verify_atlas_tools.py
 
   hygiene:
     name: Public release hygiene
