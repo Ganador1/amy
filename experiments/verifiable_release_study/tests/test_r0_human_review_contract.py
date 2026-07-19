@@ -193,6 +193,13 @@ def test_subject_list_is_explicit_sorted_and_covers_every_required_role() -> Non
         "test",
     }
     assert all((STUDY_ROOT / path).is_file() for path in paths)
+    distribution_paths = [path for path, _ in builder.DISTRIBUTION_SUBJECTS]
+    assert distribution_paths == sorted(
+        distribution_paths, key=lambda value: value.encode("utf-8")
+    )
+    assert all(
+        (STUDY_ROOT.parents[1] / path).is_file() for path in distribution_paths
+    )
 
 
 def test_subject_list_closes_local_python_import_dependencies() -> None:
@@ -243,7 +250,9 @@ def test_deterministic_rebuild_is_byte_identical(deterministic_builds) -> None:
     assert first["status"] == "preparation_only_unreviewed_not_frozen"
     assert first["independent_human_review_performed"] is False
     assert first["confirmatory_outputs_read"] is False
-    assert first["archive_member_count"] == len(builder.SUBJECTS) + 1
+    assert first["archive_member_count"] == (
+        len(builder.SUBJECTS) + len(builder.DISTRIBUTION_SUBJECTS) + 1
+    )
 
 
 def test_archive_members_are_exact_manifest_identities_and_normalized_ustar(
@@ -262,7 +271,11 @@ def test_archive_members_are_exact_manifest_identities_and_normalized_ustar(
     assert packet_raw[257:263] == b"ustar\x00"
 
     expected_names = sorted(
-        [builder.SUBJECT_MANIFEST_NAME, *(path for path, _ in builder.SUBJECTS)],
+        [
+            builder.SUBJECT_MANIFEST_NAME,
+            *(path for path, _ in builder.SUBJECTS),
+            *(path for path, _ in builder.DISTRIBUTION_SUBJECTS),
+        ],
         key=lambda value: value.encode("utf-8"),
     )
     with tarfile.open(packet_path, mode="r:") as archive:
@@ -283,14 +296,23 @@ def test_archive_members_are_exact_manifest_identities_and_normalized_ustar(
 
     assert archived[builder.SUBJECT_MANIFEST_NAME] == manifest_raw
     records = manifest["artifacts"]
+    expected_subjects = sorted(
+        (*builder.SUBJECTS, *builder.DISTRIBUTION_SUBJECTS),
+        key=lambda item: item[0].encode("utf-8"),
+    )
     assert [record["path"] for record in records] == [
-        path for path, _ in builder.SUBJECTS
+        path for path, _ in expected_subjects
     ]
-    assert manifest["artifact_count"] == len(records) == len(builder.SUBJECTS)
-    roles = dict(builder.SUBJECTS)
+    assert manifest["artifact_count"] == len(records) == len(expected_subjects)
+    roles = dict(expected_subjects)
     for record in records:
         raw = archived[record["path"]]
-        assert raw == (STUDY_ROOT / record["path"]).read_bytes()
+        source_root = (
+            STUDY_ROOT.parents[1]
+            if record["path"] in dict(builder.DISTRIBUTION_SUBJECTS)
+            else STUDY_ROOT
+        )
+        assert raw == (source_root / record["path"]).read_bytes()
         assert record["raw_sha256"] == hashlib.sha256(raw).hexdigest()
         assert record["byte_length"] == len(raw)
         assert record["role"] == roles[record["path"]]
@@ -558,6 +580,7 @@ def test_no_confirmatory_or_run_output_path_can_enter_the_packet(
     assert manifest["read_boundary"] == {
         "explicit_subject_paths_only": True,
         "directory_discovery_used": False,
+        "repository_distribution_files_read": True,
         "synthetic_engineering_receipts_read": False,
         "empirical_or_confirmatory_run_outputs_read": False,
         "confirmatory_outputs_read": False,
@@ -573,6 +596,8 @@ def test_no_confirmatory_or_run_output_path_can_enter_the_packet(
             tmp_path / "forbidden-output",
             study_root=root,
             subjects=(("confirmatory_outputs/result.json", "test.forbidden"),),
+            repository_root=tmp_path,
+            distribution_subjects=(),
         )
 
 
@@ -598,6 +623,8 @@ def test_host_local_absolute_paths_cannot_enter_public_packet(
             tmp_path / "packet",
             study_root=root,
             subjects=(("subject.txt", "test.local_path"),),
+            repository_root=tmp_path,
+            distribution_subjects=(),
         )
 
 

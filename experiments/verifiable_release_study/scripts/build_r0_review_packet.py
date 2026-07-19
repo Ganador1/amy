@@ -304,9 +304,17 @@ SUBJECTS: tuple[tuple[str, str], ...] = (
     ("uv.lock", "implementation.dependency_lock"),
 )
 
+# Distribution/governance files live at the repository root. They remain an
+# explicit, bounded packet surface and use the same stable no-symlink reader.
+DISTRIBUTION_SUBJECTS: tuple[tuple[str, str], ...] = (
+    ("CONTRIBUTING.md", "distribution.contribution_instructions"),
+    ("LICENSE", "distribution.license"),
+    ("SECURITY.md", "distribution.security_contact"),
+)
+
 ROLE_PATTERN = re.compile(
-    r"^(?:base|catalog|compatibility|implementation|oracle|policy|proposition|"
-    r"protocol|schema|test)(?:\.[a-z0-9_]+)+$"
+    r"^(?:base|catalog|compatibility|distribution|implementation|oracle|policy|"
+    r"proposition|protocol|schema|test)(?:\.[a-z0-9_]+)+$"
 )
 FORBIDDEN_OUTPUT_ROOTS = frozenset(
     {
@@ -492,7 +500,11 @@ def _collect_subjects(
     return records, contents
 
 
-def _subject_manifest(records: list[dict[str, object]]) -> dict[str, object]:
+def _subject_manifest(
+    records: list[dict[str, object]],
+    *,
+    repository_distribution_files_read: bool,
+) -> dict[str, object]:
     categories = sorted(
         {str(record["role"]).split(".", 1)[0] for record in records},
         key=_path_sort_key,
@@ -521,6 +533,9 @@ def _subject_manifest(records: list[dict[str, object]]) -> dict[str, object]:
         "read_boundary": {
             "explicit_subject_paths_only": True,
             "directory_discovery_used": False,
+            "repository_distribution_files_read": (
+                repository_distribution_files_read
+            ),
             "synthetic_engineering_receipts_read": False,
             "empirical_or_confirmatory_run_outputs_read": False,
             "confirmatory_outputs_read": False,
@@ -556,16 +571,41 @@ def build(
     *,
     study_root: Path = STUDY_ROOT,
     subjects: Sequence[tuple[str, str]] = SUBJECTS,
+    repository_root: Path | None = None,
+    distribution_subjects: Sequence[tuple[str, str]] = DISTRIBUTION_SUBJECTS,
 ) -> dict[str, object]:
     """Write exactly one canonical manifest and one deterministic USTAR packet."""
 
     study_root = study_root.absolute()
+    repository_root = (
+        repository_root.absolute()
+        if repository_root is not None
+        else study_root.parents[1]
+    )
     output = output.absolute()
     if os.path.lexists(output):
         raise FileExistsError(f"output already exists: {output}")
 
     records, contents = _collect_subjects(study_root, subjects)
-    manifest_raw = rfc8785.dumps(_subject_manifest(records))
+    distribution_records, distribution_contents = _collect_subjects(
+        repository_root,
+        distribution_subjects,
+    )
+    duplicate_paths = set(contents) & set(distribution_contents)
+    if duplicate_paths:
+        raise ValueError(
+            "duplicate packet subject path across study and repository roots: "
+            + ", ".join(sorted(duplicate_paths, key=_path_sort_key))
+        )
+    records.extend(distribution_records)
+    records.sort(key=lambda record: _path_sort_key(str(record["path"])))
+    contents.update(distribution_contents)
+    manifest_raw = rfc8785.dumps(
+        _subject_manifest(
+            records,
+            repository_distribution_files_read=bool(distribution_subjects),
+        )
+    )
     members = dict(contents)
     if SUBJECT_MANIFEST_NAME in members or PACKET_NAME in members:
         raise ValueError("subject path collides with a reserved packet member")

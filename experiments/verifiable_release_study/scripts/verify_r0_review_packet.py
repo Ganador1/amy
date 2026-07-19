@@ -32,8 +32,8 @@ MAX_PACKET_BYTES = 256 * 1024 * 1024
 MAX_REVIEW_RECORD_BYTES = 16 * 1024 * 1024
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 ROLE_RE = re.compile(
-    r"^(?:base|catalog|compatibility|implementation|oracle|policy|proposition|"
-    r"protocol|schema|test)(?:\.[a-z0-9_]+)+$"
+    r"^(?:base|catalog|compatibility|distribution|implementation|oracle|policy|"
+    r"proposition|protocol|schema|test)(?:\.[a-z0-9_]+)+$"
 )
 
 
@@ -220,6 +220,7 @@ def _validate_manifest_shape(manifest: Any, errors: list[str]) -> list[dict[str,
     expected_boundary = {
         "explicit_subject_paths_only": True,
         "directory_discovery_used": False,
+        "repository_distribution_files_read": True,
         "synthetic_engineering_receipts_read": False,
         "empirical_or_confirmatory_run_outputs_read": False,
         "confirmatory_outputs_read": False,
