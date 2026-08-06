@@ -245,6 +245,7 @@ class DoubleBlindEvaluator:
         output_dir: Path = OUTPUT_DIR,
         review_delay_seconds: float = 2.0,
         retry_delay_seconds: float = 5.0,
+        client=None,
     ):
         self.papers_dir = papers_dir
         self.output_dir = output_dir
@@ -252,17 +253,28 @@ class DoubleBlindEvaluator:
         self.retry_delay_seconds = retry_delay_seconds
         self.output_dir.mkdir(parents=True, exist_ok=True)
         
-        config = _load_config()
-        self.client = OllamaCloudClient({
-            "base_url": config.get("base_url", "https://ollama.com/api"),
-        })
+        # Creating an evaluator for assignment/statistical analysis must not
+        # require network credentials.  Initialize the model client only when a
+        # review is actually requested; callers may inject a hermetic client.
+        self.client = client
         
         self.session_id = datetime.now().strftime("dblind_%Y%m%d_%H%M%S")
         self.assignments: dict[str, dict] = {}  # paper_id → reviewer assignments
         self.reviews: dict[str, dict] = {}      # review_key → review data
         
     async def close(self):
-        await self.client.close()
+        if self.client is not None:
+            close = getattr(self.client, "close", None)
+            if close is not None:
+                await close()
+
+    def _get_client(self):
+        if self.client is None:
+            config = _load_config()
+            self.client = OllamaCloudClient({
+                "base_url": config.get("base_url", "https://ollama.com/api"),
+            })
+        return self.client
     
     def _find_paper_pairs(self) -> list[tuple[Path, Path, str]]:
         """Find pre-gate and post-gate paper pairs.
@@ -365,7 +377,7 @@ class DoubleBlindEvaluator:
         max_retries = 3
         for attempt in range(max_retries):
             try:
-                result = await self.client.chat(
+                result = await self._get_client().chat(
                     model=model,
                     messages=messages,
                     temperature=0.3,  # Low temperature for consistent evaluation
