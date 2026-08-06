@@ -56,3 +56,20 @@ def test_missing_custom_config_raises_clear_error(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     with pytest.raises(FileNotFoundError):
         amy.resolve_config(["--config", "does_not_exist.yaml"])
+
+
+def test_default_config_falls_back_to_installed_data_file(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    data_root = tmp_path / "installed"
+    installed_config = data_root / "share" / "amy" / "config.yaml"
+    installed_config.parent.mkdir(parents=True)
+    _write_cfg(installed_config, goal="installed default")
+    monkeypatch.setattr(
+        amy.sysconfig,
+        "get_path",
+        lambda name: str(data_root) if name == "data" else None,
+    )
+
+    cfg = amy.resolve_config([])
+
+    assert cfg["mission"]["goal"] == "installed default"

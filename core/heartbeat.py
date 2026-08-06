@@ -32,6 +32,25 @@ def _action_details(thought: dict) -> dict:
     return details if isinstance(details, dict) else {}
 
 
+def _belief_to_research_fact(belief) -> dict:
+    """Preserve belief content and source when handing evidence to Atlas."""
+    if all(hasattr(belief, attr) for attr in ("subject", "predicate", "obj")):
+        return {
+            "subject": belief.subject,
+            "predicate": belief.predicate,
+            "object": belief.obj,
+            "confidence": getattr(belief, "confidence", 0.5),
+            "source": getattr(belief, "source", "world_model"),
+        }
+    return {
+        "subject": "WorldModelBelief",
+        "predicate": "states",
+        "object": getattr(belief, "content", str(belief)),
+        "confidence": getattr(belief, "confidence", 0.5),
+        "source": getattr(belief, "source", "world_model"),
+    }
+
+
 class CognitiveState(Enum):
     PERCEIVING = "perceiving"
     ATTENDING = "attending"
@@ -208,6 +227,17 @@ class Heartbeat:
         """Gracefully stop the heartbeat."""
         log.info("heartbeat.stopping", total_cycles=self.ctx.cycle_number)
         self._running = False
+        # AtlasTools owns a subprocess and asyncio streams tied to this
+        # heartbeat's event loop.  Reap it before the loop closes so a later
+        # mission cannot inherit stale loop-bound futures or a zombie worker.
+        atlas_tools = getattr(self, "_atlas_tools", None)
+        self._atlas_tools = None
+        close_atlas = getattr(atlas_tools, "close", None)
+        if close_atlas is not None:
+            try:
+                await close_atlas()
+            except Exception as exc:
+                log.warning("heartbeat.atlas_tools_close_failed", error=str(exc))
         # Flush the debounced knowledge graph here too: the mission-complete
         # path reaches heartbeat.stop() but NOT amy.stop(), so without this the
         # final <save_interval window of facts would be silently dropped.
@@ -715,12 +745,7 @@ class Heartbeat:
 
         # Gather knowledge context
         facts = [
-            {
-                "subject": b.subject if hasattr(b, "subject") else str(b.content)[:40],
-                "predicate": b.predicate if hasattr(b, "predicate") else "",
-                "object": b.obj if hasattr(b, "obj") else "",
-                "confidence": b.confidence if hasattr(b, "confidence") else 0.5,
-            }
+            _belief_to_research_fact(b)
             for b in list(self.world_model.beliefs.values())[:30]
         ]
 
@@ -807,6 +832,9 @@ class Heartbeat:
                 pass
             
             if papers_raw:
+                # ``search_literature`` already applies a conservative
+                # domain/topic relevance gate.  Keep that audit metadata and
+                # never refill the six slots with results it discarded.
                 for p in papers_raw[:6]:
                     if isinstance(p, dict):
                         literature_papers.append(p)
@@ -842,6 +870,8 @@ class Heartbeat:
                     "pdf_path": result.get("pdf_path"),
                     "word_count": result.get("word_count", 0),
                     "tools_used": [t.get("tool_name") for t in tool_results[-10:]],
+                    "publication_status": result.get("publication_status"),
+                    "duplicate_draft": result.get("duplicate_draft", False),
                 },
             )
             # Feed this paper's reviews into the meta-review feedback loop so the
@@ -884,6 +914,8 @@ class Heartbeat:
             started = time.monotonic()
             result = await self._atlas_tools.run_scientific_tool(tool_name, tool_input, domain)
             duration_seconds = time.monotonic() - started
+            worker_metrics_fn = getattr(self._atlas_tools, "worker_metrics", None)
+            worker_metrics = worker_metrics_fn() if callable(worker_metrics_fn) else {}
             assessment = assess_tool_output(result, tool_name=tool_name)
             if not assessment["usable"]:
                 log.warning(
@@ -924,6 +956,8 @@ class Heartbeat:
                     "result": str(result)[:500],
                     "experiment_id": experiment_id,
                     "provenance_path": f"data/experiments/{experiment_id}/provenance.json",
+                    "duration_seconds": round(duration_seconds, 3),
+                    "atlas_worker": worker_metrics,
                 },
             )
 
@@ -940,6 +974,8 @@ class Heartbeat:
                 "result": result,
                 "timestamp": time.time(),
                 "experiment_id": experiment_id,
+                "duration_seconds": duration_seconds,
+                "atlas_worker": worker_metrics,
             })
 
             return {
@@ -949,6 +985,8 @@ class Heartbeat:
                 "result": result,
                 "experiment_id": experiment_id,
                 "provenance_path": f"data/experiments/{experiment_id}/provenance.json",
+                "duration_seconds": duration_seconds,
+                "atlas_worker": worker_metrics,
             }
         except Exception as e:
             log.error("heartbeat.scientific_tool_error", tool=tool_name, error=str(e))
@@ -968,7 +1006,13 @@ class Heartbeat:
         from core.atlas_bridge import AtlasBridge
 
         if self._atlas_bridge is None:
-            self._atlas_bridge = AtlasBridge()
+            atlas_config = self.config.get("atlas", {})
+            if not isinstance(atlas_config, dict):
+                atlas_config = {}
+            self._atlas_bridge = AtlasBridge(
+                timeout_seconds=atlas_config.get("peer_review_timeout_seconds"),
+                model_name=atlas_config.get("model"),
+            )
 
         if not self._atlas_bridge.available:
             log.warning("heartbeat.atlas_not_available")
@@ -1014,13 +1058,8 @@ class Heartbeat:
 
         # Gather key facts as context
         facts = [
-            {
-                "subject": b.subject if hasattr(b, "subject") else str(b.content)[:40],
-                "predicate": b.predicate if hasattr(b, "predicate") else "",
-                "object": b.obj if hasattr(b, "obj") else "",
-                "confidence": b.confidence if hasattr(b, "confidence") else 0.5,
-            }
-            for b in list(self.world_model.beliefs.values())[:20]
+            _belief_to_research_fact(b)
+            for b in list(self.world_model.beliefs.values())[:15]
         ]
 
         # ── INTEGRACIÓN: Incluir resultados de herramientas en el peer review ──
@@ -1031,8 +1070,10 @@ class Heartbeat:
                 facts.append({
                     "subject": f"Tool:{tr.get('tool_name', 'unknown')}",
                     "predicate": "executed_with_result",
-                    "object": str(tr.get("result", ""))[:100],
+                    "object": str(tr.get("result", ""))[:500],
                     "confidence": 0.95,
+                    "source": "atlas_tool_execution",
+                    "experiment_id": tr.get("experiment_id", ""),
                 })
         # ─────────────────────────────────────────────────────────────────────
 
@@ -1077,7 +1118,10 @@ class Heartbeat:
                 f"## Peer Review\n\n{review_text or feedback or '(no review text)'}\n"
             )
             gate = AtlasPaperQualityGate(**self.config.get("atlas_quality_gate", {}))
-            quality_decision = gate.evaluate(
+            # Citation verification is network-bound and exposes a synchronous
+            # compatibility API.  Keep it off the cognitive event loop.
+            quality_decision = await asyncio.to_thread(
+                gate.evaluate,
                 paper_text=content_body,
                 domain=domain,
                 atlas_result=result,

@@ -12,8 +12,8 @@ Simula una misión científica completa con múltiples ciclos cognitivos:
 Dominio: Análisis de propiedades físico-químicas de moléculas
 """
 import asyncio
-import json
 import sys
+import tempfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -42,6 +42,10 @@ TEST_CONFIG = {
         "idle_interval_seconds": 5.0,
         "max_cycles_before_reflection": 10,
         "adaptive_interval": False,
+        "atlas": {
+            "peer_review_timeout_seconds": 20,
+            "model": "glm-5.2",
+        },
     },
     "mission": {
         "goal": "Investigate molecular properties of common compounds",
@@ -187,7 +191,7 @@ class MockReasoningEngine:
         return "print('mock experiment')"
 
 
-async def test_full_mission_simulation():
+async def _run_full_mission_simulation(tmp_path=None):
     """Simulate a complete multi-cycle scientific mission."""
     print("=" * 70)
     print("FULL MISSION SIMULATION — MULTI-CYCLE END-TO-END")
@@ -195,11 +199,28 @@ async def test_full_mission_simulation():
     print("\nMisión: Análisis computacional de propiedades moleculares")
     print("Ciclos: 6 (recolección → análisis → paper → peer review)")
 
+    # Isolate persistent memory from the developer's real knowledge graph. The
+    # old test used unused keys such as ``semantic_db`` and silently fell back
+    # to ``data/knowledge_graph.json``.
+    temporary_context = None
+    if tmp_path is None:
+        temporary_context = tempfile.TemporaryDirectory(
+            prefix="amy-full-mission-"
+        )
+        tmp_path = Path(temporary_context.name)
+    memory_config = {
+        "episodic_log_path": str(tmp_path / "episodic_memory.jsonl"),
+        "knowledge_graph_path": str(tmp_path / "knowledge_graph.json"),
+        "vector_db_path": str(tmp_path / "vector_db"),
+        "max_episodic_before_consolidation": 1000,
+        "belief_confidence_threshold": 0.3,
+    }
+
     # Initialize
     print("\n[1/7] Initializing A.M.Y cognitive architecture...")
-    episodic = EpisodicMemory(TEST_CONFIG["memory"])
-    semantic = SemanticMemory(TEST_CONFIG["memory"])
-    procedural = ProceduralMemory(TEST_CONFIG["memory"])
+    episodic = EpisodicMemory(memory_config)
+    semantic = SemanticMemory(memory_config)
+    procedural = ProceduralMemory(memory_config)
     world_model = WorldModel(semantic_memory=semantic, episodic_memory=episodic)
     goal_stack = GoalStack(TEST_CONFIG["mission"])
     curiosity = CuriosityModule(TEST_CONFIG["curiosity"])
@@ -271,6 +292,7 @@ async def test_full_mission_simulation():
             "cycle": cycle + 1,
             "action_type": action_type,
             "success": success,
+            "payload": action_result,
         })
 
     # Verify tool results
@@ -315,9 +337,33 @@ async def test_full_mission_simulation():
     print("=" * 70)
     
     checks = [
-        ("Tool executions", len(tool_results) >= 3),
-        ("Paper generation", len(paper_results) >= 1),
-        ("Peer review", len(review_results) >= 1),
+        (
+            "Three usable tool executions",
+            len([result for result in tool_results if result["success"]]) >= 3,
+        ),
+        (
+            "Weak evidence was rejected",
+            any(
+                result["payload"].get("tool_name") == "validate_hypothesis"
+                and result["payload"].get("error") == "unusable_tool_output"
+                for result in tool_results
+            ),
+        ),
+        (
+            "Paper pipeline returned a substantive draft",
+            any(
+                result["payload"].get("result", {}).get("word_count", 0) >= 100
+                for result in paper_results
+            ),
+        ),
+        (
+            "Peer review completed or failed explicitly within its deadline",
+            any(
+                result["success"]
+                or bool(result["payload"].get("error"))
+                for result in review_results
+            ),
+        ),
         ("Memory storage", len(tool_events) >= 3),
         ("Tool history", len(tool_history) >= 3),
     ]
@@ -331,21 +377,29 @@ async def test_full_mission_simulation():
             print(f"  ❌ {name}")
 
     print(f"\nPassed: {passed}/{len(checks)}")
-    
-    if passed == len(checks):
-        print("\n🎉 FULL MISSION SIMULATION PASSED!")
-        print("\nPipeline verified:")
-        print("  1. ✅ Data collection (chemistry + physics + statistics)")
-        print("  2. ✅ Hypothesis validation")
-        print("  3. ✅ Paper generation with tool results")
-        print("  4. ✅ Peer review submission")
-        print("  5. ✅ Memory storage")
-        return True
-    else:
-        print(f"\n⚠️  {len(checks) - passed} check(s) failed")
-        return False
+    await heartbeat.stop()
+    if temporary_context is not None:
+        temporary_context.cleanup()
+
+    failed_checks = [name for name, check in checks if not check]
+    assert not failed_checks, (
+        "Full mission checks failed: " + ", ".join(failed_checks)
+    )
+
+    print("\n🎉 FULL MISSION SIMULATION PASSED!")
+    print("\nPipeline verified:")
+    print("  1. ✅ Data collection (chemistry + physics + statistics)")
+    print("  2. ✅ Weak-evidence rejection")
+    print("  3. ✅ Paper generation with tool results")
+    print("  4. ✅ Bounded peer review submission")
+    print("  5. ✅ Memory storage")
+    return True
+
+
+async def test_full_mission_simulation(tmp_path):
+    await _run_full_mission_simulation(tmp_path)
 
 
 if __name__ == "__main__":
-    success = asyncio.run(test_full_mission_simulation())
+    success = asyncio.run(_run_full_mission_simulation())
     sys.exit(0 if success else 1)

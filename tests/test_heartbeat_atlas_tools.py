@@ -12,6 +12,7 @@ PERCEIVE → ATTEND → THINK (suggests tool) → ACT (executes tool) → LEARN 
 """
 import asyncio
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -218,17 +219,29 @@ async def test_heartbeat_atlas_tool_invocation():
         print(f"⚠️  {total - passed} test(s) need attention")
 
     # Save report
+    tool_events_by_name = {
+        event.get("metadata", {}).get("tool_name"): event
+        for event in recent_events
+        if event.get("event_type") == "scientific_tool_execution"
+    }
+
+    def _tool_result_contains(tool_name: str, expected: str) -> bool:
+        event = tool_events_by_name.get(tool_name, {})
+        return expected in str(event.get("metadata", {}).get("result", ""))
+
     report = {
         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
         "tests_passed": passed,
         "tests_total": total,
         "direct_invocations": {
-            "sympy_prime_analysis": "is_prime:97" in str(recent_events[0].get("metadata", {}).get("result", "")) if recent_events else False,
-            "molecular_weight_calc": "180" in str(recent_events[1].get("metadata", {}).get("result", "")) if len(recent_events) > 1 else False,
-            "numpy_statistics": "5.5000" in str(recent_events[2].get("metadata", {}).get("result", "")) if len(recent_events) > 2 else False,
+            "sympy_prime_analysis": _tool_result_contains("sympy_prime_analysis", "True"),
+            "molecular_weight_calc": _tool_result_contains("molecular_weight_calc", "180"),
+            "numpy_statistics": _tool_result_contains("numpy_statistics", "5.5000"),
         },
     }
-    report_path = Path(__file__).parent / "heartbeat_atlas_test_report.json"
+    report_dir = Path(os.getenv("AMY_TEST_REPORT_DIR", "tmp/test_reports"))
+    report_dir.mkdir(parents=True, exist_ok=True)
+    report_path = report_dir / "heartbeat_atlas_test_report.json"
     with open(report_path, "w") as f:
         json.dump(report, f, indent=2)
     print(f"\nReport saved to: {report_path}")

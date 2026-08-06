@@ -173,13 +173,13 @@ This is the paper's mechanism for "feedback propagation and learning *without* b
 
 ## Atlas / AXIOM — the scientific platform underneath
 
-A.M.Y does not call SymPy or PySCF directly. It speaks JSON over stdin / stdout to a persistent worker process that owns the entire AXIOM Atlas platform. This isolation is deliberate: it keeps the A.M.Y cognitive state separate from heavy scientific imports, lets Atlas run on Python 3.13 while A.M.Y runs on Python 3.14, and makes every Atlas call a structured request/response with explicit timeouts and error handling.
+A.M.Y does not call SymPy or PySCF directly. It speaks JSON over stdin / stdout to a persistent worker process that owns the entire AXIOM Atlas platform. This isolation is deliberate: it keeps the A.M.Y cognitive state separate from heavy scientific imports, lets Atlas use its dedicated Python 3.13 environment while A.M.Y runs on Python 3.13 or 3.14, and makes every Atlas call a structured request/response with explicit timeouts and error handling.
 
 ### What AXIOM Atlas is
 
 AXIOM Atlas is a scientific research platform with three layers:
 
-- **Tool registry** (`atlas/app/run_agent_with_tools_legacy.py`, `atlas/app/extended_science_tools.py`) — 95 callable tools organised by domain. Each tool has a `name`, `domain`, `description`, `input_format`, and a callable. Adding a new tool is one `register_tool(ToolDescriptor(...))` call.
+- **Tool registry** (`atlas/app/run_agent_with_tools_legacy.py`, `atlas/app/extended_science_tools.py`) — 100+ callable tools are discovered at runtime across 23 domains. Each tool has a `name`, `domain`, `description`, `input_format`, and a callable. Adding a new tool is one `register_tool(ToolDescriptor(...))` call.
 - **Service layer** (`atlas/app/services/`, `atlas/app/domains/`) — services for heavier capabilities: GNoME materials discovery, additive manufacturing process configuration, gravitational lensing, light EEG band-power analysis, climate evidence orchestration, and more. **Maturity varies** — some are real, some heuristic, and a few (AlphaFold 3, ClinicalBERT in the `services/` path) are mock/keyword-only; see [Honest scope](#honest-scope-what-is-real-vs-heuristic) before relying on any service's numbers.
 - **Safety kernel** (`atlas/app/security/`) — the misuse guard, the actor-tracking risk policy, and the safety wrapper that every tool call must pass through. Fails closed by design.
 
@@ -391,26 +391,43 @@ A.M.Y/
 
 ```bash
 # 1. Set up environments (see ENVIRONMENT.md for the full layout)
-# The A.M.Y runtime venv MUST be Python 3.14 (the Atlas worker uses a separate
-# 3.13 venv at atlas/.venv_new, since parts of the science stack don't support 3.14 yet).
-python3.14 -m venv .venv
+# A.M.Y supports Python 3.13 and 3.14. Atlas uses a separate 3.13 venv because
+# parts of its scientific stack do not support 3.14 yet.
+python3.13 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 .venv/bin/pip install -e .
 
-# 2. Add your Ollama Cloud key
+# 2. Build the dedicated Atlas environment
+python3.13 -m venv atlas/.venv_new
+atlas/.venv_new/bin/pip install -r atlas/requirements.txt
+
+# 3. Add your Ollama Cloud key
 cp .env.example .env
 # edit .env with OLLAMA_CLOUD_API_KEY=...
 
-# 3. Run the cognitive loop with a goal
+# 4. Build the fail-closed experiment sandbox configured in config.yaml
+docker build -t amy-sandbox:latest sandbox/
+
+# 5. Run the cognitive loop with a goal
 .venv/bin/python amy.py --goal "Investigate prime-gap statistics across decades"
 
-# 4. Or generate a one-shot paper batch
+# 6. Or generate a one-shot paper batch
 .venv/bin/python experiments/all_domains/generate_all.py
 .venv/bin/python experiments/all_domains/generate_remaining.py
 
-# 5. Score the papers
+# 7. Score the papers
 .venv/bin/python experiments/all_domains/review_all.py
 ```
+
+The wheel contains the A.M.Y core, not the embedded Atlas source tree or its
+separate environment. Full scientific-tool operation therefore requires a
+source checkout (as above), or explicit `AMY_ATLAS_ROOT` and
+`AMY_ATLAS_PYTHON` paths to an Atlas installation.
+
+The default wheel dependency set is intentionally lean. Optional extras are
+available as `amy[memory]`, `amy[analysis]`, `amy[research]`, and `amy[ml]`;
+`amy[full]` installs all of them. The source-checkout command above uses the
+fully pinned `requirements.txt` for reproducible development.
 
 ## Configuration knobs
 
@@ -423,8 +440,22 @@ cp .env.example .env
 | `AMY_USE_LLM_ENHANCER=1` | Generate the paper Discussion with the LLM, grounded in real tool outputs + provenance (default: deterministic template). Falls back to the template if no model is reachable. |
 | `AMY_ENHANCER_MODEL` | Override the model used for the LLM Discussion write-up (defaults to `llm.reasoner` in `config.yaml`). |
 | `AMY_USE_LLM_METAREVIEW=1` | Allow the Meta-review agent to phrase its synthesized feedback via the LLM (content is still derived from real accumulated reviews). |
+| `AMY_ATLAS_ROOT` | Override the Atlas source-tree path. |
+| `AMY_ATLAS_PYTHON` | Override the dedicated Atlas interpreter path. |
+| `AMY_ATLAS_BRIDGE_TIMEOUT_SECONDS` | Override the full peer-review subprocess deadline. |
+| `AMY_ATLAS_MODEL` | Override the model used by the Atlas peer-review bridge. |
 | `ATLAS_ACTOR_ID` | Identity logged by Atlas misuse guard. |
 | `MPLBACKEND=Agg` | Forced by the worker for headless plotting. |
+
+### Mission-scoped memory
+
+`config.yaml` enables `memory.namespace_by_mission`. A stable slug plus hash of
+the mission goal selects `data/missions/<namespace>/`, isolating the knowledge
+graph, episodic log, vector store, and procedural memory from unrelated runs.
+Set an explicit `memory.mission_namespace` to keep several differently worded
+goals in one research campaign. Existing legacy files under `data/` are left
+untouched; set `namespace_by_mission: false` only when you intentionally want
+that shared legacy state.
 
 ## Design philosophy
 
@@ -490,10 +521,9 @@ The guard is enforced before any tool runs and again before any subprocess start
 
 ### Recommended sandbox profile (unattended / public deployment)
 
-The shipped `config.yaml` defaults to `use_docker: false` for **zero-setup local development**. That tier runs LLM-generated experiment code in a hardened subprocess (throwaway cwd + CPU rlimit) — it bounds accidental repo writes and runaway CPU, but it is **not** a security boundary against a determined adversary. For anything unattended (e.g. 24/7) or untrusted, run with the Docker tier in fail-closed mode:
+The shipped `config.yaml` uses the Docker tier in fail-closed mode. Generated experiment code runs in an ephemeral container with no network and a memory cap; if Docker is unavailable, A.M.Y refuses the experiment instead of silently weakening isolation:
 
 ```yaml
-# overlay these into your config's `sandbox:` block
 sandbox:
   use_docker: true          # ephemeral container, --network=none, memory cap
   require_isolation: true   # FAIL CLOSED: refuse to run if Docker is unavailable
@@ -501,7 +531,7 @@ sandbox:
   allow_subprocess: false
 ```
 
-Prerequisite: `docker build -t amy-sandbox:latest sandbox/` with the daemon running. With `require_isolation: true`, A.M.Y refuses to execute experiment code rather than silently downgrading to the weaker tier. Use the default (`use_docker: false`) only for trusted local development.
+Prerequisite: `docker build -t amy-sandbox:latest sandbox/` with the daemon running. For trusted local development only, you may explicitly set both `use_docker: false` and `require_isolation: false`; that hardened-subprocess tier bounds accidents but is not a security boundary.
 
 The capabilities A.M.Y orchestrates (PySCF, ASE, RDKit, AstroPy, BioPython, ClinicalBERT, etc.) are independently available in PyPI without guardrails. A.M.Y's contribution is orchestration, provenance, and refusal, not novel offensive capability.
 

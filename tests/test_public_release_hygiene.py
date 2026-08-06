@@ -57,7 +57,8 @@ def test_public_metadata_points_to_current_repository_and_license():
     assert "Pre-release" not in public_readme
     assert "v0.9.0" not in public_readme
     assert "84+" not in public_readme
-    assert "94" in public_readme
+    assert "100+" in public_readme
+    assert "94 herramientas" not in public_readme
 
 
 def test_public_readme_does_not_link_missing_repository_docs():

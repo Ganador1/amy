@@ -5,8 +5,10 @@ Entry point: starts the cognitive heartbeat and never stops.
 __version__ = "1.0.0"
 
 import asyncio
+import hashlib
+import re
 import signal
-import sys
+import sysconfig
 from pathlib import Path
 
 import yaml
@@ -33,8 +35,52 @@ log = structlog.get_logger()
 
 
 def load_config(path: str = "config.yaml") -> dict:
-    with open(path, "r") as f:
+    config_path = Path(path)
+    if not config_path.exists() and config_path == Path("config.yaml"):
+        installed_default = (
+            Path(sysconfig.get_path("data")) / "share" / "amy" / "config.yaml"
+        )
+        if installed_default.exists():
+            config_path = installed_default
+    with config_path.open("r", encoding="utf-8") as f:
         return yaml.safe_load(f)
+
+
+def scoped_memory_config(config: dict) -> dict:
+    """Return memory paths isolated to the active mission when configured.
+
+    Earlier releases reused one knowledge graph and episodic log for every
+    mission, allowing unrelated biomedical and mathematics facts to influence
+    each other.  Mission scoping leaves legacy files untouched and gives each
+    goal a stable directory under ``mission_memory_root``.
+    """
+    memory = dict(config.get("memory", {}))
+    if not memory.get("namespace_by_mission", False):
+        return memory
+
+    explicit = str(memory.get("mission_namespace", "")).strip()
+    goal = str(config.get("mission", {}).get("goal", "")).strip()
+    if explicit:
+        namespace = re.sub(r"[^a-z0-9_-]+", "-", explicit.lower()).strip("-")
+        if not namespace:
+            raise ValueError(
+                "memory.mission_namespace must contain at least one "
+                "letter or digit"
+            )
+    else:
+        slug = re.sub(r"[^a-z0-9]+", "-", goal.lower()).strip("-")
+        digest = hashlib.sha256(goal.encode("utf-8")).hexdigest()[:10]
+        namespace = f"{slug[:48] or 'mission'}-{digest}"
+
+    root = (
+        Path(memory.get("mission_memory_root", "./data/missions")).expanduser()
+        / namespace
+    )
+    memory["mission_namespace"] = namespace
+    memory["knowledge_graph_path"] = str(root / "knowledge_graph.json")
+    memory["episodic_log_path"] = str(root / "episodic_memory.jsonl")
+    memory["vector_db_path"] = str(root / "vector_db")
+    return memory
 
 
 class AMY:
@@ -50,9 +96,12 @@ class AMY:
         self.running = False
 
         # --- Memory Systems ---
-        self.episodic_memory = EpisodicMemory(config["memory"])
-        self.semantic_memory = SemanticMemory(config["memory"])
-        self.procedural_memory = ProceduralMemory(config["memory"])
+        # Scope persistent state to the mission so facts and episodes from an
+        # unrelated prior run cannot silently contaminate current reasoning.
+        memory_config = scoped_memory_config(config)
+        self.episodic_memory = EpisodicMemory(memory_config)
+        self.semantic_memory = SemanticMemory(memory_config)
+        self.procedural_memory = ProceduralMemory(memory_config)
 
         # --- World Model (Active Inference) ---
         self.world_model = WorldModel(
@@ -109,6 +158,7 @@ class AMY:
         heartbeat_config = dict(config["heartbeat"])
         heartbeat_config["sandbox"] = config.get("sandbox", {})
         heartbeat_config["atlas_quality_gate"] = config.get("atlas_quality_gate", {})
+        heartbeat_config["atlas"] = config.get("atlas", {})
 
         self.heartbeat = Heartbeat(
             config=heartbeat_config,

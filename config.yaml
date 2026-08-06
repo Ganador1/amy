@@ -58,6 +58,10 @@ heartbeat:
 
 # Memory
 memory:
+  # Keep unrelated missions in separate graph/log/vector directories. Existing
+  # legacy files below remain untouched and are used only when this is false.
+  namespace_by_mission: true
+  mission_memory_root: "./data/missions"
   # ChromaDB for vector search
   vector_db_path: "./data/chromadb"
   # Knowledge graph persistence
@@ -86,6 +90,14 @@ research:
     - semantic_scholar
   # Auto-download PDFs
   download_pdfs: false
+
+# Atlas integration
+atlas:
+  # Full Atlas peer review is a separate subprocess.  A bounded deadline keeps
+  # one slow provider/tool from freezing the cognitive loop.
+  peer_review_timeout_seconds: 90
+  # Keep the bridge aligned with the primary reasoning model.
+  model: "glm-5.2"
 
 # Curiosity / Intrinsic Motivation
 curiosity:
@@ -123,11 +135,15 @@ sandbox:
   #     NOTE: on macOS the per-process MEMORY cap is NOT enforceable in this
   #     tier (Darwin ignores RLIMIT_AS) — only Docker (--memory) caps memory
   #     on macOS. On Linux the subprocess tier caps memory too.
-  use_docker: false
+  use_docker: true
   # When true, refuse to run code if the requested Docker tier is unavailable
   # instead of silently downgrading to the weaker subprocess. Defaults to the
   # value of use_docker. Set explicitly to true for fail-closed operation.
-  require_isolation: false
+  require_isolation: true
+  # Generated experiments have neither network nor child-process access unless
+  # a trusted local configuration explicitly opts in.
+  allow_network: false
+  allow_subprocess: false
   # Maximum execution time per experiment (seconds) — also the CPU rlimit.
   max_execution_time: 300
   # Maximum memory per experiment — enforced via rlimit (subprocess) or

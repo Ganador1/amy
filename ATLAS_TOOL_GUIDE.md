@@ -18,7 +18,7 @@ A.M.Y Reasoning Engine
         └── AtlasBridge.run_research()          ← Full research cycle
                 │
                 ▼
-        DynamicToolRegistry (94 tools)
+        DynamicToolRegistry (100+ tools discovered at runtime)
                 │
         ┌───────┼───────┬───────────┬──────────┐
         │       │       │           │          │
@@ -30,7 +30,10 @@ A.M.Y Reasoning Engine
 
 ## Tool Input Formats
 
-All Atlas tools use **colon-separated** (`:`) input formats. Here's the complete reference:
+Many legacy Atlas tools use **colon-separated** (`:`) inputs, but formats vary
+by tool. Treat the live `input_format` returned by
+`await tools.describe_tools()` as authoritative; the examples below cover the
+most common static tools.
 
 ### Mathematics (20 tools)
 
@@ -109,8 +112,13 @@ from core.atlas_tools import AtlasTools
 
 tools = AtlasTools()
 
+# Optional: move the one-time worker startup cost outside a latency-sensitive
+# operation. The same owned worker is then reused until close().
+startup = await tools.warm_up()
+print(startup["last_startup_seconds"])
+
 # List available tools
-all_tools = await tools.list_tools()           # 94 tools
+all_tools = await tools.list_tools()           # live, discovery-driven count
 math_tools = await tools.list_tools("mathematics")  # Filter by domain
 
 # Execute a tool
@@ -120,6 +128,9 @@ result = await tools.run_scientific_tool(
     "mathematics"            # domain
 )
 # Returns: "97 is prime: True"
+
+# Reap the persistent worker before this event loop closes
+await tools.close()
 ```
 
 ### Literature Search
@@ -130,7 +141,12 @@ result = await tools.search_literature(
     domain="mathematics",
     max_results=8
 )
-# Returns: {"papers": [...], "support_score": float, "sources": [...]}
+# The domain/topic relevance gate runs before citation-count ranking. Each
+# retained paper includes relevance_score/relevance_matches; the envelope also
+# reports papers_filtered_irrelevant for audit.
+# Returns: {"papers": [...], "support_score": float,
+#           "relevance_filter_applied": True,
+#           "papers_filtered_irrelevant": int, ...}
 ```
 
 ### Hypothesis Verification
@@ -196,9 +212,14 @@ await heartbeat._act_peer_review_paper({
 # - Quality gate evaluation with marked content
 ```
 
-## Test Results
+## Historical Test Results
 
-### Exhaustive Atlas Tool Validation (94/94 = 100%)
+The fixed counts below are a historical snapshot of the earlier 94-tool
+registry. The current registry is dynamic and exposes 100+ tools; use
+`AtlasTools.describe_tools()` or `scripts/diagnostics/verify_atlas_tools.py`
+for the authoritative count and current result on your installation.
+
+### Exhaustive Atlas Tool Validation (legacy 94/94 snapshot)
 
 All 94 tools in the DynamicToolRegistry pass with correct input formats.
 
@@ -207,7 +228,7 @@ All 94 tools in the DynamicToolRegistry pass with correct input formats.
 | Test | Result |
 |------|--------|
 | AtlasTools availability | ✅ PASS |
-| List tools (94 tools, 23 domains) | ✅ PASS |
+| List tools (legacy 94-tool snapshot, 23 domains) | ✅ PASS |
 | Direct tool execution (26 tools) | ✅ PASS |
 | Literature search | ✅ PASS |
 | Hypothesis verification | ✅ PASS |
@@ -317,9 +338,10 @@ All 94 tools in the DynamicToolRegistry pass with correct input formats.
 | No system freeze | ✅ PASS |
 | Clean process termination | ✅ PASS |
 
-**⚠️ Known Issue:** Peer review via AtlasBridge takes ~10 minutes and can cause system freeze if not using `asyncio.wait_for(timeout=30)`.
-
-**Solution:** Always wrap peer review in `asyncio.wait_for()` with timeout < 60s for tests.
+**Current behavior:** `AtlasBridge` has its own configurable deadline
+(`atlas.peer_review_timeout_seconds`, 90 seconds by default), terminates the
+whole subprocess group on timeout or cancellation, and reaps the direct child.
+Tests may still use a shorter configured deadline.
 
 ### Edge Cases & Error Handling (7/8 = 87.5%)
 
@@ -347,11 +369,11 @@ All 94 tools in the DynamicToolRegistry pass with correct input formats.
 | sympy_derivative | ✅ Derivative: 3*x**2 |
 | **Paper** | ✅ 360 words, 5 sections, all tools cited |
 
-## Complete Test Suite Summary
+## Historical Test Suite Summary
 
 | Test Suite | Tests | Pass Rate | Avg Quality |
 |------------|-------|-----------|-------------|
-| Atlas Exhaustive (94 tools) | 94/94 | 100% | N/A |
+| Atlas Exhaustive (legacy snapshot) | 94/94 | 100% | N/A |
 | A.M.Y → Atlas Integration | 6/6 | 100% | N/A |
 | Heartbeat → Atlas Tools | 6/6 | 100% | N/A |
 | Cognitive Cycle | 9/9 | 100% | N/A |
@@ -369,7 +391,7 @@ All 94 tools in the DynamicToolRegistry pass with correct input formats.
 
 ## Key Design Patterns
 
-1. **Colon-separated inputs**: All tools use `:` as the primary separator (e.g., `operation:data`)
+1. **Descriptor-driven inputs**: read each tool's live `input_format`; many legacy tools use `operation:data`
 2. **Semicolon for arrays**: `numpy_correlation` uses `;` to separate two arrays
 3. **Async-compatible**: `execute_tool()` handles both sync and async tool functions
 4. **Subprocess isolation**: Atlas runs in its own venv (`.venv_new`) to avoid dependency conflicts

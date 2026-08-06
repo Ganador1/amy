@@ -18,6 +18,7 @@ import re
 import subprocess
 import sys
 import tempfile
+import time
 from pathlib import Path
 
 import structlog
@@ -272,7 +273,12 @@ class AtlasTools:
     def __init__(self):
         self.available = ATLAS_VENV_PYTHON.exists() and ATLAS_ROOT.exists()
         self._worker = None
+        self._worker_ready = False
         self._lock = None
+        self._start_lock = None
+        self._owner_loop = None
+        self._startup_count = 0
+        self._last_startup_seconds = None
         # Monotonic per-instance request id. Hardcoded ids (ping/list/describe
         # all used id=0; run_tool used hash(tool_name)) could collide, so a
         # stale response left in the pipe after a timeout could be mis-matched
@@ -292,27 +298,94 @@ class AtlasTools:
         Leaves self._worker set ONLY if the worker started and passed the ping
         handshake; otherwise it is torn down and left None so callers can detect
         the failure (rather than dereferencing a half-dead worker)."""
-        if self._worker is not None:
+        loop = asyncio.get_running_loop()
+        owner_loop = getattr(self, "_owner_loop", None)
+        if owner_loop is not None and owner_loop is not loop:
+            if self._worker is not None:
+                raise RuntimeError(
+                    "AtlasTools is bound to another event loop; close it in "
+                    "its owning loop and create a new AtlasTools instance"
+                )
+            # No live worker: discard old-loop locks and safely rebind.
+            self._lock = None
+            self._start_lock = None
+        self._owner_loop = loop
+
+        if (
+            self._worker is not None
+            and getattr(self, "_worker_ready", False)
+            and self._worker.returncode is None
+            and not self._worker.stdin.is_closing()
+        ):
             return
-        if self._lock is None:
-            self._lock = asyncio.Lock()
-        worker_script = Path(__file__).parent / "atlas_worker.py"
-        worker_env = _build_atlas_subprocess_env(
-            ollama_api_key=_primary_ollama_api_key()
-        )
-        self._worker = await asyncio.create_subprocess_exec(
-            str(ATLAS_VENV_PYTHON), str(worker_script),
-            stdin=asyncio.subprocess.PIPE,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.DEVNULL,
-            cwd=str(ATLAS_ROOT),
-            env=worker_env,
-        )
-        # Verificar que el worker responda
-        response = await self._send_request({"id": self._next_id(), "action": "ping"})
-        if response.get("result") != "pong":
-            log.warning("atlas_tools.worker_no_pong", response=response)
-            await self._reset_worker()
+
+        if getattr(self, "_start_lock", None) is None:
+            self._start_lock = asyncio.Lock()
+        async with self._start_lock:
+            if (
+                self._worker is not None
+                and getattr(self, "_worker_ready", False)
+                and self._worker.returncode is None
+                and not self._worker.stdin.is_closing()
+            ):
+                return
+            if self._worker is not None:
+                await self._reset_worker()
+            if self._lock is None:
+                self._lock = asyncio.Lock()
+            startup_started = time.monotonic()
+            worker_script = Path(__file__).parent / "atlas_worker.py"
+            worker_env = _build_atlas_subprocess_env(
+                ollama_api_key=_primary_ollama_api_key()
+            )
+            self._worker = await asyncio.create_subprocess_exec(
+                str(ATLAS_VENV_PYTHON), str(worker_script),
+                stdin=asyncio.subprocess.PIPE,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.DEVNULL,
+                cwd=str(ATLAS_ROOT),
+                env=worker_env,
+            )
+            self._worker_ready = False
+            # Verificar que el worker responda before exposing it to callers
+            # waiting on the startup lock.
+            response = await self._send_request(
+                {"id": self._next_id(), "action": "ping"}
+            )
+            if response.get("result") != "pong":
+                log.warning("atlas_tools.worker_no_pong", response=response)
+                await self._reset_worker()
+            else:
+                self._worker_ready = True
+                self._startup_count = getattr(self, "_startup_count", 0) + 1
+                self._last_startup_seconds = round(
+                    time.monotonic() - startup_started, 3
+                )
+                log.info(
+                    "atlas_tools.worker_ready",
+                    startup_seconds=self._last_startup_seconds,
+                    startup_count=self._startup_count,
+                    cold_start=self._startup_count == 1,
+                )
+
+    async def warm_up(self) -> dict:
+        """Start and handshake the owned worker before latency-sensitive work."""
+        if not self.available:
+            return {"ready": False, "error": "Atlas unavailable", **self.worker_metrics()}
+        await self._ensure_worker()
+        return {"ready": bool(self._worker_ready), **self.worker_metrics()}
+
+    def worker_metrics(self) -> dict:
+        """Expose worker lifecycle latency without parsing logs."""
+        return {
+            "startup_count": getattr(self, "_startup_count", 0),
+            "last_startup_seconds": getattr(self, "_last_startup_seconds", None),
+            "worker_ready": bool(
+                self._worker is not None
+                and self._worker_ready
+                and self._worker.returncode is None
+            ),
+        }
 
     async def _reset_worker(self):
         """Terminate and reap the current worker, then clear the reference.
@@ -323,6 +396,7 @@ class AtlasTools:
         the pipe to be mis-matched to the next request."""
         proc = self._worker
         self._worker = None
+        self._worker_ready = False
         if proc is None or proc.returncode is not None:
             return
         try:
@@ -337,7 +411,11 @@ class AtlasTools:
 
     async def _send_request(self, request: dict, timeout: float = 120.0) -> dict:
         """Envía un request al worker y espera respuesta, ignorando lineas basura."""
-        if self._worker is None or self._worker.stdin.is_closing():
+        if (
+            self._worker is None
+            or self._worker.returncode is not None
+            or self._worker.stdin.is_closing()
+        ):
             await self._reset_worker()
             await self._ensure_worker()
         # _ensure_worker can fail the handshake and leave the worker None; do
@@ -347,15 +425,23 @@ class AtlasTools:
         async with self._lock:
             line = json.dumps(request) + "\n"
             self._worker.stdin.write(line.encode())
-            await self._worker.stdin.drain()
+            try:
+                await self._worker.stdin.drain()
+            except asyncio.CancelledError:
+                # The request may have been partially written. A fresh worker
+                # is the only safe way to avoid a late response poisoning the
+                # next request on this JSONL stream.
+                await self._reset_worker()
+                raise
 
             # Bucle para saltar logs u otras líneas hasta encontrar la respuesta al request.
             # Max non-JSON lines to skip prevents infinite loop if worker outputs garbage.
             max_skipped_lines = 500
             skipped = 0
-            start_time = asyncio.get_event_loop().time()
+            loop = asyncio.get_running_loop()
+            start_time = loop.time()
             while True:
-                time_left = timeout - (asyncio.get_event_loop().time() - start_time)
+                time_left = timeout - (loop.time() - start_time)
                 if time_left <= 0:
                     # Desync: the worker may still emit this request's response
                     # later, poisoning the next call. Reset so the next request
@@ -368,6 +454,9 @@ class AtlasTools:
                         self._worker.stdout.readline(), timeout=time_left
                     )
                 except asyncio.TimeoutError:
+                    await self._reset_worker()
+                    raise
+                except asyncio.CancelledError:
                     await self._reset_worker()
                     raise
                 if not response_bytes:
@@ -444,7 +533,11 @@ class AtlasTools:
         try:
             from core.literature_search import search_literature_async
 
-            result = await search_literature_async(query, max_results=max_results)
+            result = await search_literature_async(
+                query,
+                domain=domain,
+                max_results=max_results,
+            )
             # Only fall through to the legacy path if we got literally nothing
             # AND the Atlas worker is available to try.
             if result.get("papers") or not self.available:
@@ -691,12 +784,17 @@ asyncio.run(main())
         return {"support_score": 0, "raw": out[:500]}
 
 
-# Global singleton
-_atlas_tools: AtlasTools | None = None
-
-
 def get_atlas_tools() -> AtlasTools:
-    global _atlas_tools
-    if _atlas_tools is None:
-        _atlas_tools = AtlasTools()
-    return _atlas_tools
+    """Create an Atlas client for one owning component/event loop.
+
+    ``AtlasTools`` owns an asyncio subprocess, its stream readers, and an
+    ``asyncio.Lock``.  Those objects are bound to the event loop that created
+    them, so a process-wide singleton is unsafe: a later ``asyncio.run`` (or a
+    pytest test using a fresh loop) cannot reuse the first loop's worker.
+
+    Callers such as ``Heartbeat`` already retain the returned instance for
+    their lifetime and close it during shutdown.  Returning a fresh client here
+    therefore preserves worker reuse *within* a mission without leaking
+    loop-bound state *between* missions.
+    """
+    return AtlasTools()

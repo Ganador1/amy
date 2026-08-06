@@ -13,8 +13,8 @@
 | Area | Estado |
 |---|---|
 | Version | v1.0.0 |
-| Ultima validacion | May 21, 2026 |
-| Atlas | 94 herramientas cientificas en 23 dominios |
+| Ultima validacion | 23 de julio de 2026 |
+| Atlas | 100+ herramientas descubiertas en runtime, en 23 dominios |
 | Cobertura multi-dominio | 23 / 23 dominios generan papers end-to-end |
 | Provenance | SHA-256 verificable por experimento |
 | Licencia | Apache-2.0 |
@@ -34,32 +34,42 @@ El objetivo de A.M.Y no es producir texto plausible. El objetivo es ejecutar her
 
 ```bash
 git clone https://github.com/Ganador1/A.M.Y.git
-cd amy
+cd A.M.Y
 
 python -m venv .venv
 source .venv/bin/activate
 
 pip install -r requirements.txt
+pip install -e .
+
+python3.13 -m venv atlas/.venv_new
+atlas/.venv_new/bin/pip install -r atlas/requirements.txt
+
+docker build -t amy-sandbox:latest sandbox/
 cp .env.example .env
 ```
+
+Atlas usa su propio entorno Python 3.13 y el sandbox Docker se ejecuta sin red.
+Si Docker no esta disponible, la configuracion incluida rechaza el experimento
+en lugar de reducir silenciosamente el aislamiento.
 
 Edita `.env` con tus claves locales y ejecuta una verificacion rapida:
 
 ```bash
-python test_amy_quick.py
+python tests/test_amy_quick.py
 ```
 
 ### Ejecucion
 
 ```bash
 # Ciclo corto de depuracion
-python run_amy_debug.py
+python scripts/run/run_amy_debug.py
 
 # Mision completa con generacion de paper
-python run_amy_full_mission.py
+python scripts/run/run_amy_full_mission.py
 
 # Generacion enfocada de paper
-python run_amy_paper.py
+python scripts/run/run_amy_paper.py
 ```
 
 ## Arquitectura

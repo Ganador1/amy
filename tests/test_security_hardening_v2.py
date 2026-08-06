@@ -139,30 +139,42 @@ class TestAtlasSubprocessFallbacks:
         assert "OLLAMA_API_KEY" not in env
         assert "OLLAMA_CLOUD_API_KEY" not in env
 
-    def test_bridge_runner_does_not_load_atlas_dotenv(
+    @pytest.mark.asyncio
+    async def test_bridge_runner_does_not_load_atlas_dotenv(
         self, monkeypatch, tmp_path
     ):
         import core.atlas_bridge as atlas_bridge
 
         captured = {}
 
-        def fake_run(command, **kwargs):
+        class _FakeProcess:
+            returncode = 1
+
+            async def communicate(self):
+                return b"", b"expected"
+
+        async def fake_create_subprocess_exec(*command, **kwargs):
             captured["runner_code"] = Path(command[1]).read_text(encoding="utf-8")
             captured["env"] = kwargs["env"]
-            return SimpleNamespace(returncode=1, stderr="expected", stdout="")
+            return _FakeProcess()
 
         bridge = atlas_bridge.AtlasBridge.__new__(atlas_bridge.AtlasBridge)
         bridge.atlas_root = tmp_path
         bridge.python = os.fspath(tmp_path / "python")
+        bridge.timeout_seconds = 1
 
         monkeypatch.setenv("ATLAS_PRIVATE_SECRET", "must-not-leak")
         monkeypatch.setattr(
             atlas_bridge, "_primary_ollama_api_key", lambda: "per-call-key"
         )
-        monkeypatch.setattr(atlas_bridge.subprocess, "run", fake_run)
+        monkeypatch.setattr(
+            atlas_bridge.asyncio,
+            "create_subprocess_exec",
+            fake_create_subprocess_exec,
+        )
         self._block_hardening_v2_import(monkeypatch)
 
-        result = bridge._run_subprocess(
+        result = await bridge._run_subprocess(
             {
                 "domain": "mathematics",
                 "topic": "test",

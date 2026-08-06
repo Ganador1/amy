@@ -14,11 +14,18 @@ import hashlib
 import json
 import logging
 import re
+import threading
 import uuid
+
+try:  # POSIX process-level lock; A.M.Y currently targets macOS/Linux.
+    import fcntl
+except ImportError:  # pragma: no cover - defensive fallback for other platforms
+    fcntl = None
 
 # Use the stdlib logger (not structlog) so this kernel stays dependency-free
 # and importable from Atlas's separate venv. See module docstring.
 _log = logging.getLogger("amy.safety_kernel")
+_EVENT_LOG_LOCK = threading.Lock()
 
 
 @dataclass(frozen=True)
@@ -168,6 +175,38 @@ def blocked_message(decision: SafetyDecision | dict) -> str:
     return f"Blocked by safety policy: {reasons} (decision_id={data.get('decision_id')})"
 
 
+def _last_log_record(fh, *, chunk_size: int = 8192) -> bytes:
+    """Return only the final JSONL record, including its trailing newline.
+
+    Safety evaluation is a hot path.  Reading the complete audit file before
+    every append made the cost grow linearly with runtime.  This backward scan
+    keeps both memory and I/O bounded by the size of one record.
+    """
+    fh.seek(0, 2)
+    end = fh.tell()
+    if end == 0:
+        return b""
+
+    cursor = end
+    fh.seek(end - 1)
+    if fh.read(1) == b"\n":
+        cursor -= 1
+
+    while cursor > 0:
+        read_size = min(chunk_size, cursor)
+        cursor -= read_size
+        fh.seek(cursor)
+        block = fh.read(read_size)
+        delimiter = block.rfind(b"\n")
+        if delimiter >= 0:
+            start = cursor + delimiter + 1
+            fh.seek(start)
+            return fh.read(end - start)
+
+    fh.seek(0)
+    return fh.read(end)
+
+
 def record_safety_event(
     decision: SafetyDecision,
     *,
@@ -180,25 +219,44 @@ def record_safety_event(
     try:
         log_path = Path(__file__).resolve().parent.parent / "logs" / "safety_events.jsonl"
         log_path.parent.mkdir(parents=True, exist_ok=True)
-        previous_hash = ""
-        if log_path.exists():
-            with log_path.open("rb") as fh:
-                lines = fh.readlines()
-            if lines:
-                previous_hash = hashlib.sha256(lines[-1]).hexdigest()
-        event = {
-            "decision": decision.to_dict(),
-            "operation": operation,
-            "domain": domain,
-            "tool_name": tool_name,
-            "content_sha256": hashlib.sha256(str(content or "").encode("utf-8")).hexdigest(),
-            "content_length": len(str(content or "")),
-            "previous_event_hash": previous_hash,
-        }
-        serialized = json.dumps(event, sort_keys=True, ensure_ascii=False)
-        event["event_hash"] = hashlib.sha256(serialized.encode("utf-8")).hexdigest()
-        with log_path.open("a", encoding="utf-8") as fh:
-            fh.write(json.dumps(event, sort_keys=True, ensure_ascii=False) + "\n")
+        with _EVENT_LOG_LOCK, log_path.open("a+b") as fh:
+            if fcntl is not None:
+                fcntl.flock(fh.fileno(), fcntl.LOCK_EX)
+            try:
+                previous_record = _last_log_record(fh)
+                previous_hash = (
+                    hashlib.sha256(previous_record).hexdigest()
+                    if previous_record
+                    else ""
+                )
+                event = {
+                    "decision": decision.to_dict(),
+                    "operation": operation,
+                    "domain": domain,
+                    "tool_name": tool_name,
+                    "content_sha256": hashlib.sha256(
+                        str(content or "").encode("utf-8")
+                    ).hexdigest(),
+                    "content_length": len(str(content or "")),
+                    "previous_event_hash": previous_hash,
+                }
+                serialized = json.dumps(
+                    event,
+                    sort_keys=True,
+                    ensure_ascii=False,
+                )
+                event["event_hash"] = hashlib.sha256(
+                    serialized.encode("utf-8")
+                ).hexdigest()
+                record = (
+                    json.dumps(event, sort_keys=True, ensure_ascii=False) + "\n"
+                ).encode("utf-8")
+                fh.seek(0, 2)
+                fh.write(record)
+                fh.flush()
+            finally:
+                if fcntl is not None:
+                    fcntl.flock(fh.fileno(), fcntl.LOCK_UN)
     except Exception as exc:
         # Safety decisions must never fail open because logging failed.
         # But we do surface the failure so it is not completely silent.

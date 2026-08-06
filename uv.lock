@@ -117,35 +117,56 @@ name = "amy"
 version = "1.0.0"
 source = { editable = "." }
 dependencies = [
-    { name = "arxiv" },
-    { name = "beautifulsoup4" },
-    { name = "chromadb" },
-    { name = "feedparser" },
     { name = "httpx" },
-    { name = "jax" },
-    { name = "jaxlib" },
     { name = "matplotlib" },
     { name = "networkx" },
     { name = "numpy" },
-    { name = "pandas" },
     { name = "python-dotenv" },
     { name = "pyyaml" },
     { name = "reportlab" },
     { name = "rich" },
-    { name = "scikit-learn" },
     { name = "scipy" },
     { name = "structlog" },
-    { name = "torch" },
-    { name = "torchaudio" },
-    { name = "torchvision" },
 ]
 
 [package.optional-dependencies]
+analysis = [
+    { name = "pandas" },
+    { name = "scikit-learn" },
+]
 dev = [
     { name = "pytest" },
     { name = "pytest-asyncio" },
     { name = "pytest-timeout" },
     { name = "ruff" },
+]
+full = [
+    { name = "arxiv" },
+    { name = "beautifulsoup4" },
+    { name = "chromadb" },
+    { name = "feedparser" },
+    { name = "jax" },
+    { name = "jaxlib" },
+    { name = "pandas" },
+    { name = "scikit-learn" },
+    { name = "torch" },
+    { name = "torchaudio" },
+    { name = "torchvision" },
+]
+memory = [
+    { name = "chromadb" },
+]
+ml = [
+    { name = "jax" },
+    { name = "jaxlib" },
+    { name = "torch" },
+    { name = "torchaudio" },
+    { name = "torchvision" },
+]
+research = [
+    { name = "arxiv" },
+    { name = "beautifulsoup4" },
+    { name = "feedparser" },
 ]
 test = [
     { name = "pytest" },
@@ -174,17 +195,24 @@ ci = [
 
 [package.metadata]
 requires-dist = [
-    { name = "arxiv", specifier = ">=2.1.0" },
-    { name = "beautifulsoup4", specifier = ">=4.12.0" },
-    { name = "chromadb", specifier = ">=0.5.0" },
-    { name = "feedparser", specifier = ">=6.0" },
+    { name = "arxiv", marker = "extra == 'full'", specifier = ">=2.1.0" },
+    { name = "arxiv", marker = "extra == 'research'", specifier = ">=2.1.0" },
+    { name = "beautifulsoup4", marker = "extra == 'full'", specifier = ">=4.12.0" },
+    { name = "beautifulsoup4", marker = "extra == 'research'", specifier = ">=4.12.0" },
+    { name = "chromadb", marker = "extra == 'full'", specifier = ">=0.5.0" },
+    { name = "chromadb", marker = "extra == 'memory'", specifier = ">=0.5.0" },
+    { name = "feedparser", marker = "extra == 'full'", specifier = ">=6.0" },
+    { name = "feedparser", marker = "extra == 'research'", specifier = ">=6.0" },
     { name = "httpx", specifier = ">=0.27.0" },
-    { name = "jax", specifier = ">=0.4.20" },
-    { name = "jaxlib", specifier = ">=0.4.20" },
+    { name = "jax", marker = "extra == 'full'", specifier = ">=0.4.20" },
+    { name = "jax", marker = "extra == 'ml'", specifier = ">=0.4.20" },
+    { name = "jaxlib", marker = "extra == 'full'", specifier = ">=0.4.20" },
+    { name = "jaxlib", marker = "extra == 'ml'", specifier = ">=0.4.20" },
     { name = "matplotlib", specifier = ">=3.8.0" },
     { name = "networkx", specifier = ">=3.2" },
     { name = "numpy", specifier = ">=1.26.0" },
-    { name = "pandas", specifier = ">=2.1.0" },
+    { name = "pandas", marker = "extra == 'analysis'", specifier = ">=2.1.0" },
+    { name = "pandas", marker = "extra == 'full'", specifier = ">=2.1.0" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
     { name = "pytest", marker = "extra == 'test'", specifier = ">=8.0" },
     { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=0.23" },
@@ -196,14 +224,18 @@ requires-dist = [
     { name = "reportlab", specifier = ">=4.0" },
     { name = "rich", specifier = ">=13.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.4" },
-    { name = "scikit-learn", specifier = ">=1.4.0" },
+    { name = "scikit-learn", marker = "extra == 'analysis'", specifier = ">=1.4.0" },
+    { name = "scikit-learn", marker = "extra == 'full'", specifier = ">=1.4.0" },
     { name = "scipy", specifier = ">=1.12.0" },
     { name = "structlog", specifier = ">=24.1.0" },
-    { name = "torch", specifier = ">=2.2.0" },
-    { name = "torchaudio", specifier = ">=2.2.0" },
-    { name = "torchvision", specifier = ">=0.17.0" },
+    { name = "torch", marker = "extra == 'full'", specifier = ">=2.2.0" },
+    { name = "torch", marker = "extra == 'ml'", specifier = ">=2.2.0" },
+    { name = "torchaudio", marker = "extra == 'full'", specifier = ">=2.2.0" },
+    { name = "torchaudio", marker = "extra == 'ml'", specifier = ">=2.2.0" },
+    { name = "torchvision", marker = "extra == 'full'", specifier = ">=0.17.0" },
+    { name = "torchvision", marker = "extra == 'ml'", specifier = ">=0.17.0" },
 ]
-provides-extras = ["test", "dev"]
+provides-extras = ["test", "dev", "memory", "analysis", "research", "ml", "full"]
 
 [package.metadata.requires-dev]
 ci = [

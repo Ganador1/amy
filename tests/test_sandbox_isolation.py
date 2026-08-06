@@ -17,10 +17,24 @@ import sys
 from pathlib import Path
 
 import pytest
+import yaml
 
 from sandbox.executor import SandboxExecutor
 
 ROOT = Path(__file__).resolve().parent.parent
+
+
+def test_shipped_config_is_fail_closed_and_docker_image_matches_runtime():
+    config = yaml.safe_load((ROOT / "config.yaml").read_text(encoding="utf-8"))
+    sandbox = config["sandbox"]
+
+    assert sandbox["use_docker"] is True
+    assert sandbox["require_isolation"] is True
+    assert sandbox["allow_network"] is False
+    assert sandbox["allow_subprocess"] is False
+    assert (ROOT / "sandbox" / "Dockerfile").read_text(
+        encoding="utf-8"
+    ).startswith("FROM python:3.13-slim")
 
 
 # ── Throwaway-cwd containment (python + bash fallback tiers) ──────────────────
