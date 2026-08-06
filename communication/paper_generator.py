@@ -469,7 +469,7 @@ class PaperGenerator:
         # Run factual verifiers before saving
         citation_v = CitationVerifier()
         numeric_v = NumericVerifier()
-        cit_result = citation_v.verify_citations(md_content)
+        cit_result = await citation_v.verify_citations_async(md_content)
         num_result = numeric_v.verify_text(md_content, experiment_ids=experiment_ids or [])
 
         if cit_result.get("unverified"):
@@ -750,7 +750,22 @@ class PaperGenerator:
         self.rejected_dir.mkdir(parents=True, exist_ok=True)
         rejected_path = self.rejected_dir / md_path.name
         rejected_content = self._annotate_rejected_draft(md_content, reasons)
-        rejected_path.write_text(rejected_content, encoding="utf-8")
+        content_sha256 = hashlib.sha256(rejected_content.encode("utf-8")).hexdigest()
+        duplicate_path = None
+        # Repeated deterministic cognitive fixtures used to create many
+        # byte-identical drafts under timestamped names.  Reuse the first
+        # artifact so audit history remains stable without accumulating copies.
+        for candidate in self.rejected_dir.glob("*.md"):
+            try:
+                if hashlib.sha256(candidate.read_bytes()).hexdigest() == content_sha256:
+                    duplicate_path = candidate
+                    break
+            except OSError:
+                continue
+        if duplicate_path is not None:
+            rejected_path = duplicate_path
+        else:
+            rejected_path.write_text(rejected_content, encoding="utf-8")
         result = {
             "title": title,
             "markdown_path": str(rejected_path),
@@ -758,6 +773,8 @@ class PaperGenerator:
             "word_count": len(rejected_content.split()),
             "sections": section_count,
             "publication_status": "rejected",
+            "duplicate_draft": duplicate_path is not None,
+            "content_sha256": content_sha256,
             "rejection_reasons": reasons,
             "grounding_repair": grounding_repair,
             "publication_artifacts": publication_artifacts,

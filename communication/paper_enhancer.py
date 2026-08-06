@@ -110,7 +110,7 @@ DOMAIN_INSIGHTS = {
             "conjecture_engine": "Generated conjectures are ideation artifacts produced by an automated system. They require independent literature verification, larger-scale computation, and formal proof attempts before they can be treated as scientific claims. Well-known unsolved problems (Goldbach, Twin Prime, Collatz, Riemann) listed by the conjecture engine are not novel predictions; they are canonical open problems in number theory.",
         },
         "novelty_templates": [
-            "The observed gap distribution suggests a potential refinement of the Cramér model for prime spacing in the range [n, n+√n].",
+            "Finite-range prime-gap deviations should be quantified against explicit Cramér and Hardy-Littlewood baselines before any model refinement is proposed.",
             "The symmetry properties of the solutions may indicate an underlying group structure worth exploring through Galois theory.",
             "The derivative patterns suggest a connection to dynamical systems that could yield new insights into the function's long-term behavior.",
         ],
@@ -396,6 +396,35 @@ def _method_framework_summary(results: list[dict]) -> dict:
         "n_frameworks": n_frameworks,
         "description": description,
     }
+
+
+def _benchmark_guidance(domain: str) -> str:
+    """Return validation advice that cannot leak another domain's template."""
+    return {
+        "mathematics": (
+            "an independent implementation, formal analysis, or comparison "
+            "with established numerical bounds"
+        ),
+        "physics": (
+            "independent numerical methods, analytical predictions, or "
+            "experimental measurements"
+        ),
+        "chemistry": (
+            "independent quantum-chemistry calculations, spectroscopy, or "
+            "experimental measurements"
+        ),
+        "biology": (
+            "an independent dataset, orthogonal assay, or established "
+            "biological benchmark"
+        ),
+        "statistics": (
+            "held-out data, simulation-based calibration, or an independent "
+            "statistical implementation"
+        ),
+    }.get(
+        domain,
+        "an independent method, external dataset, or established domain benchmark",
+    )
 
 
 def _has_external_ssh_benchmark(results: list[dict]) -> bool:
@@ -1320,8 +1349,8 @@ class PeerReviewer:
             scores["methodology"] = 6.5
             feedback.append(
                 f"[NOTE] Adequate methodology with {framework_desc}. This supports limited "
-                f"triangulation but not full cross-validation; additional DFT, experiment, "
-                f"or higher-level ab initio benchmarks would strengthen the claim."
+                f"triangulation but not full cross-validation; validation against "
+                f"{_benchmark_guidance(domain)} would strengthen the claim."
             )
         elif num_frameworks == 1 and num_tools > 1:
             scores["methodology"] = 3.5
@@ -2056,10 +2085,9 @@ class PaperEnhancer:
             discussion_parts.append(
                 f"\n**Limited triangulation:** The run contains {method_summary['description']}. "
                 f"This is stronger than a single-method control, but it is not sufficient to "
-                f"sustain novelty on its own; external benchmarks such as DFT, experiment, "
-                f"GW/coupled-cluster calculations, or explicit literature comparisons remain "
-                f"required before the SSH/polyene observations can be promoted beyond "
-                f"candidate methodological observations."
+                f"sustain novelty on its own. Validation against {_benchmark_guidance(domain)} remains "
+                f"necessary before these results can be promoted beyond candidate "
+                f"methodological observations."
             )
         elif n_frameworks == 1 and len(results) > 1:
             label = method_summary["labels"][0] if method_summary["labels"] else "one framework"

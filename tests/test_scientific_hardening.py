@@ -1049,6 +1049,9 @@ def test_discussion_does_not_add_prime_gap_implication_without_gap_tool():
 
     assert "Cramér" not in discussion
     assert "prime spacing" not in discussion
+    assert "DFT" not in discussion
+    assert "coupled-cluster" not in discussion
+    assert "SSH/polyene" not in discussion
 
 
 def test_discussion_prefers_exact_prime_gap_pattern_over_fuzzy_sympy_match():
@@ -1923,7 +1926,7 @@ def main():
         test_peer_review_novelty_does_not_reward_known_controls,
         test_discussion_does_not_add_prime_gap_implication_without_gap_tool,
         test_discussion_prefers_exact_prime_gap_pattern_over_fuzzy_sympy_match,
-        test_peer_review_reproducibility_uses_real_experiment_ids_without_rendered_data_section,
+        test_peer_review_reproducibility_uses_integrity_checked_experiment_ids_without_rendered_data_section,
         test_enhance_paper_builds_hypotheses_before_discussion,
         test_enhancer_uses_astronomy_domain_instead_of_mathematics_fallback,
         test_prime_gap_detector_does_not_call_small_finite_cramer_gap_novel,

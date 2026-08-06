@@ -180,6 +180,27 @@ def test_paper_without_experiment_evidence_is_rejected(monkeypatch, tmp_path):
     assert result["pdf_path"] is None
 
 
+def test_identical_rejected_drafts_reuse_the_first_artifact(tmp_path):
+    generator = PaperGenerator(enhance=False, output_dir=tmp_path)
+    kwargs = {
+        "title": "Repeated deterministic fixture",
+        "md_content": "# Repeated deterministic fixture\n\nSame bytes.\n",
+        "section_count": 1,
+        "reasons": ["fixture rejection"],
+        "grounding_repair": {"repairs": 0, "items": []},
+        "publication_artifacts": {"tables": [], "figures": []},
+    }
+
+    first = generator._reject_draft(md_path=tmp_path / "first.md", **kwargs)
+    second = generator._reject_draft(md_path=tmp_path / "second.md", **kwargs)
+
+    assert first["duplicate_draft"] is False
+    assert second["duplicate_draft"] is True
+    assert second["markdown_path"] == first["markdown_path"]
+    assert second["content_sha256"] == first["content_sha256"]
+    assert len(list((tmp_path / "rejected").glob("*.md"))) == 1
+
+
 def test_reflection_exception_rejects_instead_of_publishing(monkeypatch, tmp_path):
     record = _record_paper_evidence(monkeypatch, tmp_path)
 

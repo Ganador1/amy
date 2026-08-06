@@ -1,10 +1,44 @@
-# External review request drafts
+# External review requests and routing drafts
 
-Status: draft only. Do not publish until the review packet is public, scrubbed,
-and identified by a final SHA-256 digest.
+Status checked against the public project pages on 2026-08-06. The OpenSSF
+request has been published; the in-toto and ReSA text remains draft-only. Do
+not repost the OpenSSF body or publish either remaining draft without checking
+the destination's current process.
 
-Routing checked against the public project pages on 2026-07-18. Recheck before
-posting because repository permissions and community processes can change.
+## Current public status
+
+- **Central tracker:** <https://github.com/Ganador1/A.M.Y/issues/11> remains
+  open and explicitly `NO-GO`. The frozen candidate is
+  `pre-r0-review-2026-07-18.1` at source commit `2e0738c38653682cc80c9a44c6ad3fcb732e6eb1`;
+  its packet SHA-256 is
+  `85bd38c39de65ed41401fbd8e4dd9647426f4d33a1685a9874aa7e3db6524098`
+  and its subject-manifest SHA-256 is
+  `95bc17435811a259d079176df8004989409df34f58b1d7c5f0005d3653a171fd`.
+  Ten blocking registration gates, 17 closure requirements, 54 compatibility
+  rows, and 47 TBD markers remain open. No confirmatory benchmark, detached
+  signature, or authorized human-review record exists.
+- **OpenSSF:** published on 2026-07-19 as
+  <https://github.com/ossf/wg-supply-chain-integrity/discussions/87>. It is
+  still marked `Unanswered`; its only comment is the author's correction from
+  the superseded release URL to `.1`. Do not post the draft below again.
+- **Local reviewer recruitment:**
+  <https://github.com/Ganador1/A.M.Y/discussions/12> has zero comments and one
+  participant.
+- **Implementation PR:** <https://github.com/Ganador1/A.M.Y/pull/10> remains a
+  draft with no reviews. Newer branch commits remain outside the frozen `.1`
+  review subject until a new packet and byte identity are explicitly created;
+  updating the PR branch does not silently redefine the frozen candidate.
+- **in-toto:** no A.M.Y routing comment or request has been posted. The related
+  <https://github.com/in-toto/attestation/issues/565> proposal remains open,
+  unassigned, and has no implementation PR. Draft 1 below is therefore still
+  available only for a concise routing question.
+- **ReSA:** no sent request is recorded locally. Its community-call page did
+  not expose a scheduled upcoming call during the 2026-08-06 check; use the
+  official contact route and verify again immediately before sending.
+
+The lack of replies is not evidence of review, approval, compatibility, or
+scientific validity. Follow-up should identify the exact frozen bytes and ask
+for routing or falsification, not endorsement.
 
 These requests deliberately ask for criticism of a bounded protocol. They do
 not claim that the protocol proves scientific truth, that registration has
@@ -34,7 +68,7 @@ occurred, or that a private repository is independently reproducible.
   community call, Slack, or the official contact route at
   <https://www.researchsoft.org/about/contact/> instead.
 
-## Draft 1 — in-toto/attestation issue #565 or Slack
+## Draft 1 — in-toto/attestation issue #565 or Slack (not sent)
 
 ### Short opening comment
 
@@ -99,7 +133,10 @@ the longer review:
 We are especially interested in findings that would falsify our current design,
 not endorsement. If this belongs elsewhere, a routing pointer is sufficient.
 
-## Draft 2 — OpenSSF Supply Chain Integrity WG
+## Published request — OpenSSF Supply Chain Integrity WG
+
+Published at <https://github.com/ossf/wg-supply-chain-integrity/discussions/87>.
+The text below is retained as a historical source, not as a request to repost.
 
 ### Title
 
@@ -166,3 +203,17 @@ claim that the protocol is already production-ready.
 - Post one focused request per community; do not cross-post identical text.
 - For in-toto, ask for routing first; do not paste the long request into issue
   #565 unless its participants invite that scope.
+
+## Follow-up checklist
+
+- Do not count a self-authored correction, reaction, or silence as external
+  review.
+- Before an OpenSSF follow-up, verify that discussion #87 is still unanswered,
+  then ask once for the appropriate meeting or narrower channel instead of
+  repeating the full request.
+- Send the in-toto short routing question only after rechecking issue #565 and
+  the repository's current contribution restrictions.
+- For ReSA, use the official contact route or a confirmed community call; keep
+  the ask focused on research-software reproducibility and archival practice.
+- Record every sent request here with date, immutable URL, destination,
+  response status, and exact packet/source hashes presented for review.
