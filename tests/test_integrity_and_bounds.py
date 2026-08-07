@@ -256,6 +256,10 @@ def test_pdf_and_latex_preserve_final_markdown_safety_content(monkeypatch, tmp_p
         "unmeasured": 4,
         "invalid": 0,
     }
+    for assessment in result["detector_assurance"]["assessments"]:
+        source_digest = assessment["detector"]["digest"]["sha256"]
+        assert len(source_digest) == 64
+        assert assessment["assurance_verified"] is False
     markdown = Path(result["markdown_path"]).read_text(encoding="utf-8")
     latex = Path(result["latex_path"]).read_text(encoding="utf-8")
     pdf_path = Path(result["pdf_path"])

@@ -47,7 +47,19 @@ destination's current process.
   with the tested local contract from commit
   `1e1d5056bac1cbfecea483a684aff5d5440d6a19`, its conservative policy, and a
   question about using a typed `characterizationRef` digest instead of inline
-  floats. That response is awaiting external follow-up.
+  floats. Proposal author `b7n0de` accepted that boundary at
+  <https://github.com/in-toto/attestation/issues/565#issuecomment-5219160942>,
+  implemented exact harness binding, no-default absence semantics, and an
+  explicit harness-capability non-claim in PR #575, and credited the discussion
+  with `@Ganador1` in
+  <https://github.com/in-toto/attestation/pull/575#issuecomment-5219192774>.
+  `ppcvote` then confirmed those corrections and explained the asymmetric
+  under-detection risk at
+  <https://github.com/in-toto/attestation/pull/575#issuecomment-5220651712>;
+  commit `b288ff26c5a8742f34cde6218e008143c51ad6e5` added that warning to the
+  proposed spec. These are substantive external design responses, but none is
+  a maintainer review or approval. PR #575 remains blocked with no maintainer
+  reviews or requested reviewers as of this check.
 - **ReSA:** no sent request is recorded locally. Its community-call page did
   not expose a scheduled upcoming call during the 2026-08-06 check; use the
   official contact route and verify again immediately before sending.

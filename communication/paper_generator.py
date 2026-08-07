@@ -867,7 +867,9 @@ class PaperGenerator:
             detector = record.get("detector") if isinstance(record, dict) else None
             detector = detector if isinstance(detector, dict) else {}
             name = detector.get("name", "unknown")
-            digest = detector.get("sha256", "unavailable")
+            digest_set = detector.get("digest")
+            digest_set = digest_set if isinstance(digest_set, dict) else {}
+            digest = digest_set.get("sha256", "unavailable")
             status = validation["status"]
             lines.append(f"- `{name}`: **{status}**; source SHA-256 `{digest}`.")
         if not records:

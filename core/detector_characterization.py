@@ -1,22 +1,29 @@
 """Machine-readable capability evidence for automated decision gates.
 
 A source digest identifies detector bytes; it does not establish how well the
-detector works.  This module keeps those concepts separate and makes missing
-measurements explicit instead of interpreting absence as perfect performance.
+detector works. Missing measurements make no claim, and issuer-declared
+assurance is never treated as independently verified evidence.
 """
 
 from __future__ import annotations
 
 import hashlib
-import math
 import re
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any
 
 
-SCHEMA_VERSION = "amy.detector-characterization.v1"
+SCHEMA_VERSION = "amy.detector-characterization.v2"
 _SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
-_ASSURANCE_LEVELS = {"self_attested", "third_party", "reproduced"}
+_DECIMAL_PROBABILITY_RE = re.compile(r"^(?:0(?:\.\d+)?|1(?:\.0+)?)$")
+_METRIC_TOLERANCE = Decimal("1e-12")
+_ASSURANCE_LEVELS = {
+    "self_attested",
+    "third_party",
+    "reproduced",
+    "enclave_attested",
+}
 _USE_CASES = {"safety", "scientific_publication", "capability_claim"}
 
 
@@ -42,7 +49,7 @@ def unmeasured_characterization(
         "detector": {
             "name": name,
             "version": version,
-            "sha256": sha256_file(path),
+            "digest": {"sha256": sha256_file(path)},
             "source": source_id or path.as_posix(),
         },
         "purpose": purpose,
@@ -69,9 +76,7 @@ def validate_characterization(record: object) -> dict[str, Any]:
         for field in ("name", "version"):
             if not _nonempty_string(detector.get(field)):
                 errors.append(f"detector.{field} must be a non-empty string")
-        digest = detector.get("sha256")
-        if not isinstance(digest, str) or not _SHA256_RE.fullmatch(digest):
-            errors.append("detector.sha256 must be a lowercase SHA-256 digest")
+        _validate_digest_set(detector.get("digest"), "detector.digest", errors)
 
     purpose = record.get("purpose")
     if purpose not in _USE_CASES:
@@ -94,24 +99,28 @@ def evaluate_characterization(
     record: object,
     *,
     use_case: str,
-    minimum_sensitivity_lower: float | None = None,
-    minimum_specificity_lower: float | None = None,
+    minimum_sensitivity_lower: str | None = None,
+    minimum_specificity_lower: str | None = None,
+    assurance_verification: object = None,
 ) -> dict[str, Any]:
     """Apply fail-safe policy to one detector characterization.
 
-    Safety decisions require valid measurements whose lower confidence bounds
-    meet policy. Scientific publication additionally requires independent or
-    reproduced assurance before automated external release. Capability claims
-    remain qualified because estimates are scoped to the declared task/set.
+    Policy thresholds use decimal strings to avoid JSON floating-point
+    ambiguity. ``asserted_assurance_level`` remains producer testimony; a
+    separate, digest-bound verification result must authenticate and authorize
+    the referenced evidence before it can satisfy safety or release policy.
     """
     if use_case not in _USE_CASES:
         raise ValueError(f"unsupported use_case: {use_case}")
+    parsed_thresholds: dict[str, Decimal | None] = {}
     for label, value in (
         ("minimum_sensitivity_lower", minimum_sensitivity_lower),
         ("minimum_specificity_lower", minimum_specificity_lower),
     ):
-        if value is not None and not _probability(value):
-            raise ValueError(f"{label} must be between 0 and 1")
+        parsed = _parse_decimal_probability(value) if value is not None else None
+        if value is not None and parsed is None:
+            raise ValueError(f"{label} must be a decimal string between 0 and 1")
+        parsed_thresholds[label] = parsed
 
     validation = validate_characterization(record)
     status = validation["status"]
@@ -119,11 +128,13 @@ def evaluate_characterization(
     base = {
         "status": status,
         "use_case": use_case,
+        "risk_direction": _risk_direction(use_case),
         "detector": dict(detector) if isinstance(detector, dict) else None,
         "purpose": record.get("purpose") if isinstance(record, dict) else None,
         "eligible": False,
         "external_release_eligible": False,
         "manual_review_required": True,
+        "assurance_verified": False,
         "errors": validation["errors"],
     }
     if status == "invalid":
@@ -139,60 +150,74 @@ def evaluate_characterization(
         }
 
     measured = record  # validated as a dict above
-    if use_case in {"safety", "scientific_publication"} and (
-        minimum_sensitivity_lower is None or minimum_specificity_lower is None
+    assurance_verified, assurance_reason = _verify_assurance_evidence(
+        measured,
+        assurance_verification,
+    )
+    base["assurance_verified"] = assurance_verified
+    base["asserted_assurance_level"] = measured["asserted_assurance_level"]
+
+    if use_case in {"safety", "scientific_publication"} and any(
+        threshold is None for threshold in parsed_thresholds.values()
     ):
         return {
             **base,
             "decision": "block" if use_case == "safety" else "manual_review_required",
             "reason": "no explicit lower-confidence-bound acceptance policy was supplied",
         }
-    sensitivity_lower = measured["estimates"]["sensitivity"]["ci95_lower"]
-    specificity_lower = measured["estimates"]["specificity"]["ci95_lower"]
-    thresholds_met = (
-        sensitivity_lower >= (minimum_sensitivity_lower or 0.0)
-        and specificity_lower >= (minimum_specificity_lower or 0.0)
-    )
-    if not thresholds_met:
-        return {
-            **base,
-            "decision": "block",
-            "reason": "lower confidence bound is below policy threshold",
-        }
 
-    assurance = measured["assurance_level"]
-    independently_assured = assurance in {"third_party", "reproduced"}
+    sensitivity_lower = _parse_decimal_probability(
+        measured["estimates"]["sensitivity"]["ci95_lower"]
+    )
+    specificity_lower = _parse_decimal_probability(
+        measured["estimates"]["specificity"]["ci95_lower"]
+    )
+    if use_case in {"safety", "scientific_publication"}:
+        thresholds_met = (
+            sensitivity_lower >= parsed_thresholds["minimum_sensitivity_lower"]
+            and specificity_lower >= parsed_thresholds["minimum_specificity_lower"]
+        )
+        if not thresholds_met:
+            return {
+                **base,
+                "decision": "block",
+                "reason": "lower confidence bound is below policy threshold",
+            }
+
     if use_case == "safety":
         return {
             **base,
-            "decision": "allow" if independently_assured else "block",
-            "eligible": independently_assured,
-            "external_release_eligible": independently_assured,
-            "manual_review_required": not independently_assured,
+            "decision": "allow" if assurance_verified else "block",
+            "eligible": assurance_verified,
+            "external_release_eligible": assurance_verified,
+            "manual_review_required": not assurance_verified,
             "reason": (
-                "measured lower bounds and independent-assurance policy satisfied"
-                if independently_assured
-                else "self-attested measurements do not satisfy safety assurance"
+                "measured lower bounds and separately verified assurance policy satisfied"
+                if assurance_verified
+                else assurance_reason
             ),
         }
     if use_case == "scientific_publication":
         return {
             **base,
-            "decision": "allow" if independently_assured else "manual_review_required",
-            "eligible": independently_assured,
-            "external_release_eligible": independently_assured,
-            "manual_review_required": not independently_assured,
+            "decision": "allow" if assurance_verified else "manual_review_required",
+            "eligible": assurance_verified,
+            "external_release_eligible": assurance_verified,
+            "manual_review_required": not assurance_verified,
             "reason": (
-                "measured characterization has independent or reproduced assurance"
-                if independently_assured
-                else "self-attested measurements require external review"
+                "measured characterization has separately verified assurance evidence"
+                if assurance_verified
+                else assurance_reason
             ),
         }
     return {
         **base,
         "decision": "qualify",
         "eligible": True,
-        "reason": "capability estimate is valid only for the declared scope and evaluation set",
+        "reason": (
+            "capability estimate is scoped to the declared task and evaluation set; "
+            "under-detection can conservatively understate capability"
+        ),
     }
 
 
@@ -200,19 +225,24 @@ def summarize_characterizations(
     records: list[object],
     *,
     use_case: str = "scientific_publication",
-    minimum_sensitivity_lower: float | None = None,
-    minimum_specificity_lower: float | None = None,
+    minimum_sensitivity_lower: str | None = None,
+    minimum_specificity_lower: str | None = None,
+    verification_by_evidence_digest: dict[str, object] | None = None,
 ) -> dict[str, Any]:
     """Summarize all gates; an empty inventory never becomes implicit success."""
-    assessments = [
-        evaluate_characterization(
-            record,
-            use_case=use_case,
-            minimum_sensitivity_lower=minimum_sensitivity_lower,
-            minimum_specificity_lower=minimum_specificity_lower,
+    verifications = verification_by_evidence_digest or {}
+    assessments = []
+    for record in records:
+        evidence_digest = _evidence_sha256(record)
+        assessments.append(
+            evaluate_characterization(
+                record,
+                use_case=use_case,
+                minimum_sensitivity_lower=minimum_sensitivity_lower,
+                minimum_specificity_lower=minimum_specificity_lower,
+                assurance_verification=verifications.get(evidence_digest),
+            )
         )
-        for record in records
-    ]
     if not assessments:
         return {
             "use_case": use_case,
@@ -258,18 +288,23 @@ def _validate_measured_fields(record: dict[str, Any], errors: list[str]) -> None
         for field in ("positive_class", "negative_class", "scope"):
             if not _nonempty_string(task.get(field)):
                 errors.append(f"task.{field} must be a non-empty string")
-        if not _probability(task.get("decision_threshold")):
-            errors.append("task.decision_threshold must be between 0 and 1")
+        if _parse_decimal_probability(task.get("decision_threshold")) is None:
+            errors.append("task.decision_threshold must be a decimal string between 0 and 1")
 
     evaluation_set = record.get("evaluation_set")
     counts: dict[str, int] | None = None
     if not isinstance(evaluation_set, dict):
         errors.append("evaluation_set must be an object")
     else:
-        digest = evaluation_set.get("sha256")
-        if not isinstance(digest, str) or not _SHA256_RE.fullmatch(digest):
-            errors.append("evaluation_set.sha256 must be a lowercase SHA-256 digest")
-        values = {field: evaluation_set.get(field) for field in ("sample_size", "positives", "negatives")}
+        _validate_digest_set(
+            evaluation_set.get("digest"),
+            "evaluation_set.digest",
+            errors,
+        )
+        values = {
+            field: evaluation_set.get(field)
+            for field in ("sample_size", "positives", "negatives")
+        }
         if not all(_nonnegative_int(value) for value in values.values()):
             errors.append("evaluation-set counts must be non-negative integers")
         else:
@@ -298,6 +333,7 @@ def _validate_measured_fields(record: dict[str, Any], errors: list[str]) -> None
                 errors.append("confusion matrix does not match evaluation-set class counts")
 
     estimates = record.get("estimates")
+    parsed_estimates: dict[str, dict[str, Decimal]] = {}
     if not isinstance(estimates, dict):
         errors.append("estimates must be an object")
     else:
@@ -306,12 +342,17 @@ def _validate_measured_fields(record: dict[str, Any], errors: list[str]) -> None
             if not isinstance(estimate, dict):
                 errors.append(f"estimates.{metric} must be an object")
                 continue
-            values = [estimate.get(field) for field in ("value", "ci95_lower", "ci95_upper")]
-            if not all(_probability(value) for value in values):
-                errors.append(f"estimates.{metric} values must be finite probabilities")
+            parsed = {
+                field: _parse_decimal_probability(estimate.get(field))
+                for field in ("value", "ci95_lower", "ci95_upper")
+            }
+            if any(value is None for value in parsed.values()):
+                errors.append(
+                    f"estimates.{metric} values must be decimal strings between 0 and 1"
+                )
                 continue
-            value, lower, upper = values
-            if not lower <= value <= upper:
+            parsed_estimates[metric] = parsed
+            if not parsed["ci95_lower"] <= parsed["value"] <= parsed["ci95_upper"]:
                 errors.append(f"estimates.{metric} confidence interval must contain value")
 
         if (
@@ -320,31 +361,109 @@ def _validate_measured_fields(record: dict[str, Any], errors: list[str]) -> None
             and matrix_values["tn"] + matrix_values["fp"] > 0
         ):
             expected = {
-                "sensitivity": matrix_values["tp"] / (matrix_values["tp"] + matrix_values["fn"]),
-                "specificity": matrix_values["tn"] / (matrix_values["tn"] + matrix_values["fp"]),
+                "sensitivity": Decimal(matrix_values["tp"])
+                / Decimal(matrix_values["tp"] + matrix_values["fn"]),
+                "specificity": Decimal(matrix_values["tn"])
+                / Decimal(matrix_values["tn"] + matrix_values["fp"]),
             }
             for metric, expected_value in expected.items():
-                estimate = estimates.get(metric)
-                if isinstance(estimate, dict) and _probability(estimate.get("value")):
-                    if not math.isclose(estimate["value"], expected_value, abs_tol=1e-12):
-                        errors.append(f"estimates.{metric}.value does not match confusion matrix")
+                if metric in parsed_estimates and (
+                    abs(parsed_estimates[metric]["value"] - expected_value)
+                    > _METRIC_TOLERANCE
+                ):
+                    errors.append(f"estimates.{metric}.value does not match confusion matrix")
 
-    if record.get("assurance_level") not in _ASSURANCE_LEVELS:
-        errors.append(f"assurance_level must be one of {sorted(_ASSURANCE_LEVELS)}")
+    if record.get("asserted_assurance_level") not in _ASSURANCE_LEVELS:
+        errors.append(
+            "asserted_assurance_level must be one of "
+            f"{sorted(_ASSURANCE_LEVELS)}"
+        )
     evidence_ref = record.get("evidence_ref")
     if not isinstance(evidence_ref, dict):
         errors.append("evidence_ref must be an object")
     else:
         if not _nonempty_string(evidence_ref.get("predicate_type")):
             errors.append("evidence_ref.predicate_type must be a non-empty string")
-        digest = evidence_ref.get("sha256")
-        if not isinstance(digest, str) or not _SHA256_RE.fullmatch(digest):
-            errors.append("evidence_ref.sha256 must be a lowercase SHA-256 digest")
+        _validate_digest_set(
+            evidence_ref.get("digest"),
+            "evidence_ref.digest",
+            errors,
+        )
     limitations = record.get("limitations")
     if not isinstance(limitations, list) or not limitations or not all(
         _nonempty_string(item) for item in limitations
     ):
         errors.append("limitations must be a non-empty list of strings")
+
+
+def _verify_assurance_evidence(
+    record: dict[str, Any],
+    verification: object,
+) -> tuple[bool, str]:
+    asserted = record["asserted_assurance_level"]
+    if asserted == "self_attested":
+        return False, "self-attested assurance does not satisfy independent policy"
+    if not isinstance(verification, dict):
+        return False, "asserted assurance has no separate verification result"
+    if verification.get("status") != "verified":
+        return False, "assurance evidence verification did not pass"
+    if verification.get("signature_verified") is not True:
+        return False, "assurance evidence signature was not verified"
+    if verification.get("authorized_issuer") is not True:
+        return False, "assurance evidence issuer was not authorized"
+    verifier = verification.get("verifier")
+    if not isinstance(verifier, dict) or not _nonempty_string(verifier.get("id")):
+        return False, "assurance verifier identity is missing"
+    if verification.get("evidence_ref") != record.get("evidence_ref"):
+        return False, "assurance verification is not bound to the referenced evidence"
+    digest_errors: list[str] = []
+    _validate_digest_set(
+        verification.get("verification_result_digest"),
+        "verification_result_digest",
+        digest_errors,
+    )
+    if digest_errors:
+        return False, "assurance verification result is not digest-bound"
+    return True, "assurance evidence was separately verified and authorized"
+
+
+def _risk_direction(use_case: str) -> str:
+    if use_case == "safety":
+        return "under-detection can produce a false passing safety verdict"
+    if use_case == "capability_claim":
+        return "under-detection can conservatively understate capability"
+    return "risk depends on claim semantics; safety-shaped claims can false-pass"
+
+
+def _evidence_sha256(record: object) -> str | None:
+    if not isinstance(record, dict):
+        return None
+    evidence_ref = record.get("evidence_ref")
+    if not isinstance(evidence_ref, dict):
+        return None
+    digest = evidence_ref.get("digest")
+    if not isinstance(digest, dict):
+        return None
+    value = digest.get("sha256")
+    return value if isinstance(value, str) else None
+
+
+def _validate_digest_set(value: object, path: str, errors: list[str]) -> None:
+    if not isinstance(value, dict):
+        errors.append(f"{path} must be a DigestSet object")
+        return
+    sha256 = value.get("sha256")
+    if not isinstance(sha256, str) or not _SHA256_RE.fullmatch(sha256):
+        errors.append(f"{path}.sha256 must be a lowercase SHA-256 digest")
+
+
+def _parse_decimal_probability(value: object) -> Decimal | None:
+    if not isinstance(value, str) or not _DECIMAL_PROBABILITY_RE.fullmatch(value):
+        return None
+    try:
+        return Decimal(value)
+    except InvalidOperation:
+        return None
 
 
 def _nonempty_string(value: object) -> bool:
@@ -353,12 +472,3 @@ def _nonempty_string(value: object) -> bool:
 
 def _nonnegative_int(value: object) -> bool:
     return isinstance(value, int) and not isinstance(value, bool) and value >= 0
-
-
-def _probability(value: object) -> bool:
-    return (
-        isinstance(value, (int, float))
-        and not isinstance(value, bool)
-        and math.isfinite(value)
-        and 0.0 <= value <= 1.0
-    )
