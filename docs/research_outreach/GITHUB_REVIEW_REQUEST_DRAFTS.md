@@ -1,9 +1,9 @@
 # External review requests and routing drafts
 
-Status checked against the public project pages on 2026-08-06. The OpenSSF
-request has been published; the in-toto and ReSA text remains draft-only. Do
-not repost the OpenSSF body or publish either remaining draft without checking
-the destination's current process.
+Status checked against the public project pages on 2026-08-07. The OpenSSF and
+in-toto routing requests have been published; the ReSA text remains draft-only.
+Do not repost a published body or send the remaining draft without checking the
+destination's current process.
 
 ## Current public status
 
@@ -28,10 +28,20 @@ the destination's current process.
   draft with no reviews. Newer branch commits remain outside the frozen `.1`
   review subject until a new packet and byte identity are explicitly created;
   updating the PR branch does not silently redefine the frozen candidate.
-- **in-toto:** no A.M.Y routing comment or request has been posted. The related
-  <https://github.com/in-toto/attestation/issues/565> proposal remains open,
-  unassigned, and has no implementation PR. Draft 1 below is therefore still
-  available only for a concise routing question.
+- **in-toto:** A.M.Y posted the routing request on 2026-07-19 at
+  <https://github.com/in-toto/attestation/issues/565#issuecomment-5013940356>.
+  Proposal author `b7n0de` replied with a composition-by-digest recommendation
+  at <https://github.com/in-toto/attestation/issues/565#issuecomment-5014647211>;
+  A.M.Y accepted that boundary and repeated its maintainer-routing question at
+  <https://github.com/in-toto/attestation/issues/565#issuecomment-5016458855>.
+  No maintainer has answered that routing follow-up. Implementation PR
+  <https://github.com/in-toto/attestation/pull/575> is open and mergeable but
+  blocked, with no reviews or requested reviewers as of this check. A new
+  external comment by `ppcvote` at
+  <https://github.com/in-toto/attestation/issues/565#issuecomment-5214755378>
+  correctly notes that harness identity does not establish detector capability
+  and proposes optional sensitivity/specificity metadata. This is relevant
+  technical input, not a maintainer decision or formal review.
 - **ReSA:** no sent request is recorded locally. Its community-call page did
   not expose a scheduled upcoming call during the 2026-08-06 check; use the
   official contact route and verify again immediately before sending.
@@ -68,7 +78,10 @@ occurred, or that a private repository is independently reproducible.
   community call, Slack, or the official contact route at
   <https://www.researchsoft.org/about/contact/> instead.
 
-## Draft 1 — in-toto/attestation issue #565 or Slack (not sent)
+## Sent request — in-toto/attestation issue #565
+
+The short opening comment was sent on 2026-07-19. The longer context remains
+historical draft material and must not be posted without a direct invitation.
 
 ### Short opening comment
 
@@ -211,8 +224,8 @@ claim that the protocol is already production-ready.
 - Before an OpenSSF follow-up, verify that discussion #87 is still unanswered,
   then ask once for the appropriate meeting or narrower channel instead of
   repeating the full request.
-- Send the in-toto short routing question only after rechecking issue #565 and
-  the repository's current contribution restrictions.
+- Do not resend the in-toto routing question. Track maintainer routing and PR
+  #575 separately from useful comments by non-maintainers.
 - For ReSA, use the official contact route or a confirmed community call; keep
   the ask focused on research-software reproducibility and archival practice.
 - Record every sent request here with date, immutable URL, destination,

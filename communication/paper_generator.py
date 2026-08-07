@@ -7,7 +7,7 @@ into structured academic papers (PDF + Markdown).
 Format follows standard scientific paper structure:
 Abstract → Introduction → Methods → Results → Discussion → Conclusion → References
 """
-import asyncio
+import copy
 import hashlib
 import json
 import math
@@ -23,6 +23,11 @@ from communication.grounding_repair import repair_unsupported_decimal_claims
 from communication.numeric_verifier import NumericVerifier
 from communication.publication_artifacts import PublicationArtifactBuilder
 from communication.paper_enhancer import PaperEnhancer
+from core.detector_characterization import (
+    summarize_characterizations,
+    unmeasured_characterization,
+    validate_characterization,
+)
 
 try:
     from core.atlas_tools import assess_tool_output
@@ -376,6 +381,7 @@ class PaperGenerator:
         include_literature_audit: bool | None = None,
         literature_search=None,
         output_dir: Path | str | None = None,
+        detector_characterizations: list[dict] | None = None,
     ):
         self.reasoning = reasoning_engine
         self.enhance = enhance
@@ -386,6 +392,7 @@ class PaperGenerator:
             else os.getenv("AMY_PUBLICATION_LITERATURE_AUDIT", "0").lower() in {"1", "true", "yes", "on"}
         )
         self.literature_search = literature_search
+        self.detector_characterizations = copy.deepcopy(detector_characterizations)
         self._enhancer = PaperEnhancer()
         # Where generated papers (and their rejected counterparts) are written.
         # Defaults to the package-level PAPERS_DIR; pass output_dir to give a
@@ -456,7 +463,18 @@ class PaperGenerator:
             if artifact_section:
                 render_sections.append(artifact_section)
 
+        detector_records = self._publication_detector_characterizations(
+            include_peer_reviewer=enhancement_review_required,
+        )
+        detector_assurance = summarize_characterizations(
+            detector_records,
+            use_case="scientific_publication",
+        )
         md_content = self._build_markdown(title, abstract, render_sections, references, knowledge_facts, experiment_ids, tool_results)
+        md_content += self._render_detector_assurance(
+            detector_records,
+            detector_assurance,
+        )
         grounding_repair = {"repairs": 0, "items": []}
         if experiment_ids:
             md_content, grounding_repair = repair_unsupported_decimal_claims(
@@ -511,6 +529,7 @@ class PaperGenerator:
                 reasons=list(dict.fromkeys(rejection_reasons)),
                 grounding_repair=grounding_repair,
                 publication_artifacts=publication_artifacts,
+                detector_assurance=detector_assurance,
             )
 
         if self.include_internal_review:
@@ -541,6 +560,7 @@ class PaperGenerator:
                 reasons=["watermark integrity verification failed"],
                 grounding_repair=grounding_repair,
                 publication_artifacts=publication_artifacts,
+                detector_assurance=detector_assurance,
             )
 
         pdf_ok = await self._render_pdf(md_content, pdf_path, title, abstract, render_sections, references)
@@ -553,6 +573,7 @@ class PaperGenerator:
                 reasons=["pdf render failed"],
                 grounding_repair=grounding_repair,
                 publication_artifacts=publication_artifacts,
+                detector_assurance=detector_assurance,
             )
 
         tex_ok = await self._render_latex(
@@ -577,6 +598,7 @@ class PaperGenerator:
                 reasons=["latex render failed"],
                 grounding_repair=grounding_repair,
                 publication_artifacts=publication_artifacts,
+                detector_assurance=detector_assurance,
             )
 
         md_path.write_text(md_content, encoding="utf-8")
@@ -614,6 +636,9 @@ class PaperGenerator:
             "internal_review_path": str(review_path) if review_path else None,
             "grounding_repair": grounding_repair,
             "publication_artifacts": publication_artifacts,
+            "detector_assurance": detector_assurance,
+            "external_release_eligible": detector_assurance["external_release_eligible"],
+            "manual_review_required": detector_assurance["manual_review_required"],
         }
         log.info("paper_generator.paper_complete", **result)
         return result
@@ -746,6 +771,7 @@ class PaperGenerator:
         reasons: list[str],
         grounding_repair: dict,
         publication_artifacts: dict,
+        detector_assurance: dict | None = None,
     ) -> dict:
         self.rejected_dir.mkdir(parents=True, exist_ok=True)
         rejected_path = self.rejected_dir / md_path.name
@@ -766,6 +792,10 @@ class PaperGenerator:
             rejected_path = duplicate_path
         else:
             rejected_path.write_text(rejected_content, encoding="utf-8")
+        detector_assurance = detector_assurance or summarize_characterizations(
+            [],
+            use_case="scientific_publication",
+        )
         result = {
             "title": title,
             "markdown_path": str(rejected_path),
@@ -778,9 +808,82 @@ class PaperGenerator:
             "rejection_reasons": reasons,
             "grounding_repair": grounding_repair,
             "publication_artifacts": publication_artifacts,
+            "detector_assurance": detector_assurance,
+            "external_release_eligible": False,
+            "manual_review_required": True,
         }
         log.warning("paper_generator.prepublication_rejected", **result)
         return result
+
+    def _publication_detector_characterizations(
+        self,
+        *,
+        include_peer_reviewer: bool,
+    ) -> list[dict]:
+        """Return explicit capability records for every automated paper gate."""
+        if self.detector_characterizations is not None:
+            return copy.deepcopy(self.detector_characterizations)
+
+        project_root = Path(__file__).resolve().parents[1]
+        detector_sources = [
+            ("citation_verifier", "communication/citation_verifier.py"),
+            ("numeric_verifier", "communication/numeric_verifier.py"),
+            ("prepublication_gate", "communication/paper_generator.py"),
+            ("reflection_agent", "cognition/reflection_agent.py"),
+        ]
+        if include_peer_reviewer:
+            detector_sources.append(("peer_reviewer", "communication/paper_enhancer.py"))
+
+        reason = (
+            "No digest-bound benchmark with class definitions, confusion matrix, "
+            "and confidence intervals has been completed for this release."
+        )
+        return [
+            unmeasured_characterization(
+                name=name,
+                version="source-digest",
+                source_path=project_root / relative_path,
+                source_id=relative_path,
+                purpose="scientific_publication",
+                reason=reason,
+            )
+            for name, relative_path in detector_sources
+        ]
+
+    @staticmethod
+    def _render_detector_assurance(records: list[dict], summary: dict) -> str:
+        """Render detector status into every canonical manuscript format."""
+        lines = [
+            "\n\n## Automated Gate Characterization",
+            "",
+            "A source digest identifies the gate implementation; it does not establish "
+            "sensitivity, specificity, or scientific correctness. Missing capability "
+            "measurements are treated as unmeasured, never as perfect performance. "
+            "In short: identity is not capability.",
+            "",
+        ]
+        for record in records:
+            validation = validate_characterization(record)
+            detector = record.get("detector") if isinstance(record, dict) else None
+            detector = detector if isinstance(detector, dict) else {}
+            name = detector.get("name", "unknown")
+            digest = detector.get("sha256", "unavailable")
+            status = validation["status"]
+            lines.append(f"- `{name}`: **{status}**; source SHA-256 `{digest}`.")
+        if not records:
+            lines.append("- No detector characterization records were supplied.")
+        lines.extend(
+            [
+                "",
+                f"Policy decision: **{summary['decision']}**. Automatic external release "
+                f"eligible: **{str(summary['external_release_eligible']).lower()}**. "
+                f"Manual review required: **{str(summary['manual_review_required']).lower()}**.",
+                "",
+                "This status qualifies the automated checks; it does not convert an "
+                "internal self-review into independent scientific validation.",
+            ]
+        )
+        return "\n".join(lines)
 
     @staticmethod
     def _append_watermark(
@@ -1075,8 +1178,8 @@ class PaperGenerator:
         lines = [
             f"# {title}",
             "",
-            f"**Authors:** A.M.Y Computational Research System [1]",
-            f"**Affiliation:** [1] AXIOM Atlas Platform, Autonomous Computational Research",
+            "**Authors:** A.M.Y Computational Research System [1]",
+            "**Affiliation:** [1] AXIOM Atlas Platform, Autonomous Computational Research",
             f"**Date:** {now}",
             f"**Classification:** {template['classification']}",
             f"**Keywords:** {template['keywords']}",
@@ -1295,12 +1398,9 @@ class PaperGenerator:
             from reportlab.platypus import (
                 HRFlowable,
                 Image,
-                PageBreak,
                 Paragraph,
                 SimpleDocTemplate,
                 Spacer,
-                Table,
-                TableStyle,
             )
 
             doc = SimpleDocTemplate(

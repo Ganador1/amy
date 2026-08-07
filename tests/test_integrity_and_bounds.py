@@ -249,6 +249,13 @@ def test_pdf_and_latex_preserve_final_markdown_safety_content(monkeypatch, tmp_p
     )
 
     assert result["publication_status"] == "published", result
+    assert result["external_release_eligible"] is False
+    assert result["manual_review_required"] is True
+    assert result["detector_assurance"]["counts"] == {
+        "measured": 0,
+        "unmeasured": 4,
+        "invalid": 0,
+    }
     markdown = Path(result["markdown_path"]).read_text(encoding="utf-8")
     latex = Path(result["latex_path"]).read_text(encoding="utf-8")
     pdf_path = Path(result["pdf_path"])
@@ -270,6 +277,9 @@ def test_pdf_and_latex_preserve_final_markdown_safety_content(monkeypatch, tmp_p
         "Provenance Watermark",
         "Self-Review",
         "AMY-WATERMARK",
+        "Automated Gate Characterization",
+        "identity is not capability",
+        "Manual",
     )
     for marker in required_ascii_markers:
         assert marker in markdown
@@ -277,6 +287,10 @@ def test_pdf_and_latex_preserve_final_markdown_safety_content(monkeypatch, tmp_p
         assert marker.encode("ascii") in pdf_bytes
         if pdf_text is not None:
             assert marker in pdf_text
+    assert "Manual review required" in markdown
+    assert "Manual review required" in latex
+    if pdf_text is not None:
+        assert "Manual\nreview required" in pdf_text
 
 
 # ── Safety-event audit log: hash-chained, no plaintext ───────────────────────
