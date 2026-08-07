@@ -41,7 +41,13 @@ destination's current process.
   <https://github.com/in-toto/attestation/issues/565#issuecomment-5214755378>
   correctly notes that harness identity does not establish detector capability
   and proposes optional sensitivity/specificity metadata. This is relevant
-  technical input, not a maintainer decision or formal review.
+  technical input, not a maintainer decision or formal review. A.M.Y replied on
+  2026-08-07 at
+  <https://github.com/in-toto/attestation/issues/565#issuecomment-5216804741>
+  with the tested local contract from commit
+  `1e1d5056bac1cbfecea483a684aff5d5440d6a19`, its conservative policy, and a
+  question about using a typed `characterizationRef` digest instead of inline
+  floats. That response is awaiting external follow-up.
 - **ReSA:** no sent request is recorded locally. Its community-call page did
   not expose a scheduled upcoming call during the 2026-08-06 check; use the
   official contact route and verify again immediately before sending.
