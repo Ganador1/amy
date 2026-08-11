@@ -57,9 +57,15 @@ destination's current process.
   under-detection risk at
   <https://github.com/in-toto/attestation/pull/575#issuecomment-5220651712>;
   commit `b288ff26c5a8742f34cde6218e008143c51ad6e5` added that warning to the
-  proposed spec. These are substantive external design responses, but none is
-  a maintainer review or approval. PR #575 remains blocked with no maintainer
-  reviews or requested reviewers as of this check.
+  proposed spec. `b7n0de` then corrected the wording at
+  <https://github.com/in-toto/attestation/pull/575#issuecomment-5223027140>:
+  error direction follows the measured positive class and passing rule, not a
+  broad “safety” or “capability” label. Commit
+  `35c83da45c5ad59d1d42a343e9c718b32838a829` carries that correction, after
+  which the author stated the diff would remain stable for maintainer review.
+  These are substantive external design responses, but none is a maintainer
+  review or approval. As rechecked on 2026-08-11, PR #575 remains blocked with
+  no maintainer reviews or requested reviewers.
 - **ReSA:** no sent request is recorded locally. Its community-call page did
   not expose a scheduled upcoming call during the 2026-08-06 check; use the
   official contact route and verify again immediately before sending.

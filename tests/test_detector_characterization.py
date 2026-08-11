@@ -68,6 +68,22 @@ def _verified_assurance(record: dict) -> dict:
     }
 
 
+def _failure_absence_semantics(record: dict) -> dict:
+    return {
+        "positive_class": record["task"]["positive_class"],
+        "detected_positive_role": "failure_evidence",
+        "pass_condition": "absence_of_detected_positives",
+    }
+
+
+def _capability_presence_semantics(record: dict) -> dict:
+    return {
+        "positive_class": record["task"]["positive_class"],
+        "detected_positive_role": "capability_evidence",
+        "pass_condition": "presence_of_detected_positives",
+    }
+
+
 def test_unmeasured_record_never_implies_perfect_performance(tmp_path):
     source = tmp_path / "detector.py"
     source.write_text("def detect(value): return bool(value)\n", encoding="utf-8")
@@ -110,7 +126,8 @@ def test_missing_or_unmeasured_safety_characterization_fails_closed(tmp_path):
     assessment = evaluate_characterization(unmeasured, use_case="safety")
     assert assessment["decision"] == "block"
     assert assessment["eligible"] is False
-    assert "false passing safety verdict" in assessment["risk_direction"]
+    assert assessment["claim_semantics_status"] == "missing"
+    assert "unknown" in assessment["risk_direction"]
 
 
 def test_declared_third_party_assurance_alone_never_authorizes_release():
@@ -120,6 +137,7 @@ def test_declared_third_party_assurance_alone_never_authorizes_release():
         use_case="safety",
         minimum_sensitivity_lower="0.80",
         minimum_specificity_lower="0.80",
+        claim_semantics=_failure_absence_semantics(record),
     )
     assert assessment["decision"] == "block"
     assert assessment["assurance_verified"] is False
@@ -135,6 +153,7 @@ def test_measured_detector_requires_thresholds_and_verified_assurance():
         minimum_sensitivity_lower="0.80",
         minimum_specificity_lower="0.80",
         assurance_verification=_verified_assurance(record),
+        claim_semantics=_failure_absence_semantics(record),
     )
     assert accepted["decision"] == "allow"
     assert accepted["eligible"] is True
@@ -146,6 +165,7 @@ def test_measured_detector_requires_thresholds_and_verified_assurance():
         minimum_sensitivity_lower="0.90",
         minimum_specificity_lower="0.80",
         assurance_verification=_verified_assurance(record),
+        claim_semantics=_failure_absence_semantics(record),
     )
     assert rejected["decision"] == "block"
     assert rejected["eligible"] is False
@@ -161,6 +181,7 @@ def test_mismatched_or_unauthorized_assurance_evidence_fails_closed():
         minimum_sensitivity_lower="0.80",
         minimum_specificity_lower="0.80",
         assurance_verification=verification,
+        claim_semantics=_failure_absence_semantics(record),
     )
     assert mismatched["decision"] == "block"
     assert "not bound" in mismatched["reason"]
@@ -173,6 +194,7 @@ def test_mismatched_or_unauthorized_assurance_evidence_fails_closed():
         minimum_sensitivity_lower="0.80",
         minimum_specificity_lower="0.80",
         assurance_verification=verification,
+        claim_semantics=_failure_absence_semantics(record),
     )
     assert unauthorized["decision"] == "block"
     assert "not authorized" in unauthorized["reason"]
@@ -186,6 +208,7 @@ def test_self_attested_measurement_does_not_authorize_external_release():
         minimum_sensitivity_lower="0.80",
         minimum_specificity_lower="0.80",
         assurance_verification=_verified_assurance(record),
+        claim_semantics=_failure_absence_semantics(record),
     )
     assert assessment["decision"] == "manual_review_required"
     assert assessment["external_release_eligible"] is False
@@ -197,6 +220,7 @@ def test_measurement_without_explicit_acceptance_threshold_is_not_auto_release()
         record,
         use_case="scientific_publication",
         assurance_verification=_verified_assurance(record),
+        claim_semantics=_failure_absence_semantics(record),
     )
     assert assessment["decision"] == "manual_review_required"
     assert assessment["external_release_eligible"] is False
@@ -250,21 +274,59 @@ def test_invalid_metrics_and_digest_sets_are_rejected():
     assert "detector.digest.sha256 must be a lowercase SHA-256 digest" in validation["errors"]
 
 
-def test_capability_and_safety_report_asymmetric_under_detection_risk():
+def test_risk_direction_follows_bound_class_semantics_not_use_case():
+    record = _measured_record()
     capability = evaluate_characterization(
-        _measured_record(),
+        record,
         use_case="capability_claim",
+        claim_semantics=_capability_presence_semantics(record),
     )
     assert capability["decision"] == "qualify"
-    assert "conservatively understate capability" in capability["risk_direction"]
+    assert "understate capability" in capability["risk_direction"]
 
+    record = _measured_record()
     safety = evaluate_characterization(
-        _measured_record(),
+        record,
         use_case="safety",
         minimum_sensitivity_lower="0.80",
         minimum_specificity_lower="0.80",
+        claim_semantics=_failure_absence_semantics(record),
     )
-    assert "false passing safety verdict" in safety["risk_direction"]
+    assert "passing verdict" in safety["risk_direction"]
+
+    same_use_case_different_semantics = evaluate_characterization(
+        record,
+        use_case="safety",
+        minimum_sensitivity_lower="0.80",
+        minimum_specificity_lower="0.80",
+        claim_semantics=_capability_presence_semantics(record),
+    )
+    assert "understate capability" in same_use_case_different_semantics["risk_direction"]
+
+
+def test_missing_mismatched_or_ambiguous_claim_semantics_prevents_release():
+    record = _measured_record()
+    policy = {
+        "use_case": "safety",
+        "minimum_sensitivity_lower": "0.80",
+        "minimum_specificity_lower": "0.80",
+        "assurance_verification": _verified_assurance(record),
+    }
+    missing = evaluate_characterization(record, **policy)
+    assert missing["decision"] == "block"
+    assert missing["reason"] == "claim semantics were not supplied"
+
+    mismatched = _failure_absence_semantics(record)
+    mismatched["positive_class"] = "different class"
+    result = evaluate_characterization(record, claim_semantics=mismatched, **policy)
+    assert result["decision"] == "block"
+    assert "not bound" in result["reason"]
+
+    ambiguous = _failure_absence_semantics(record)
+    ambiguous["pass_condition"] = "presence_of_detected_positives"
+    result = evaluate_characterization(record, claim_semantics=ambiguous, **policy)
+    assert result["decision"] == "block"
+    assert result["claim_semantics_status"] == "context_dependent"
 
 
 def test_summary_binds_verification_by_evidence_digest():
@@ -277,6 +339,9 @@ def test_summary_binds_verification_by_evidence_digest():
         minimum_specificity_lower="0.80",
         verification_by_evidence_digest={
             evidence_sha256: _verified_assurance(record),
+        },
+        claim_semantics_by_evidence_digest={
+            evidence_sha256: _failure_absence_semantics(record),
         },
     )
     assert summary["decision"] == "allow"

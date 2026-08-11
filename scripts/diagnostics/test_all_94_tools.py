@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
+"""Exercise the live Atlas registry with explicit, representative fixtures."""
+
 import asyncio
-import sys
-import os
 import json
-import traceback
+import os
+import sys
 import time
+import traceback
 
 # Add project root to path
 sys.path.insert(0, os.path.abspath("."))
@@ -40,19 +42,36 @@ INPUT_MAPPING = {
     "numpy_correlation": "[1,2,3,4,5];[2,4,6,8,10]",
     "correlation_analysis": "[1,2,3,4,5];[2,4,6,8,10]",
     "hypothesis_tester": "ttest:[1,2,3,4,5]:[6,7,8,9,10]",
+    "two_sample_effect_power": "[1,2,3,4,5];[3,4,5,6,7]",
 
     # ── Chemistry ──
     "molecular_orbital_energy": "6:1.4",
+    "huckel_polyene_scaling": "4,6,8,10",
+    "bond_alternated_polyene_scaling": "4,6,8,10;strong=-2.7;weak=-2.3",
+    "ssh_polyene_gap_map": (
+        "4,6,8,10;deltas=0,0.05,0.1;orientations=trivial,topological;beta=-2.5"
+    ),
+    "ssh_edge_localization_map": (
+        "20,40;deltas=0.05,0.1;orientations=trivial,topological;"
+        "beta=-2.5;edge_sites=2;localization_threshold=0.25"
+    ),
+    "ssh_disorder_diagnostic_benchmark": (
+        "20,40;deltas=0.1;strengths=0,0.2;disorders=off_diagonal,diagonal;"
+        "orientations=trivial,topological;realizations=4;namespace=diagnostic;"
+        f"protocol_sha256={'a' * 64}"
+    ),
     "bond_energy_analyzer": "C-H",
     "molecular_weight_calc": "H2O",
     "computational_chemistry": "analyze_molecule:C6H6",
     "pyscf_hf_energy": "H 0 0 0; H 0 0 0.74",
+    "pyscf_polyene_hf_gap": "4,6;basis=sto-3g",
     "pyscf_dft_energy": "H 0 0 0; H 0 0 0.74",
     "ase_optimize": "H2",
     "ase_thermochemistry": "H2:298",
 
     # ── Biology ──
     "dna_analyzer": "GC_content:ATGCATGC",
+    "gc_at_panel_comparison": "gc=GCGCGC,GCCGGC;at=ATATAT,AATTAA",
     "protein_properties": "MKVL",
     "dnabert2_analysis": "motifs:TATAATAAATTGACA",
 
@@ -62,6 +81,7 @@ INPUT_MAPPING = {
 
     # ── Physics ──
     "quantum_energy_levels": "hydrogen:1",
+    "rydberg_scaling_comparison": "1,2,3,5,10;delta=0.05",
     "quantum_circuit": "bell:2",
     "astropy_constants": "G",
     "astropy_unit_convert": "1:pc:lyr",
@@ -69,16 +89,14 @@ INPUT_MAPPING = {
     # ── Astronomy ──
     "astropy_cosmology": "luminosity_distance:1.0",
     "astropy_blackbody": "5778",
+    "cosmology_residual_comparison": "0.01,0.1,0.5,1,2;threshold=5",
 
     # ── Research/Meta ──
     "literature_search": "prime gaps distribution",
     "literature_verify_hypothesis_plus": '{"hypothesis": "Global temperatures are rising", "k": 2}',
     "validate_hypothesis": "medicine:mRNA vaccines are effective",
+    "prime_gap_model_comparison": "10000,100000,1000000",
 }
-
-# Add default status check for all service_ tools
-# These tools wrap FastAPI microservices and expect a JSON request
-SERVICE_PAYLOAD = '{"action": "status"}'
 
 # Representative scientific hypothesis for corroboration tools
 CORROBORATE_PAYLOAD = "Global average temperature has risen since the Industrial Revolution"
@@ -135,12 +153,18 @@ async def test_tool(atlas, tool_info):
     # Determine the payload
     if name in INPUT_MAPPING:
         payload = INPUT_MAPPING[name]
-    elif name.startswith("service_"):
-        payload = SERVICE_PAYLOAD
     elif name.startswith("evidence_corroborate_"):
         payload = CORROBORATE_PAYLOAD
     else:
-        payload = "test"
+        return {
+            "name": name,
+            "domain": domain,
+            "payload": None,
+            "status": "UNTESTED (NO FIXTURE)",
+            "reason": "No representative input is defined; execution was skipped.",
+            "elapsed_seconds": 0.0,
+            "output_preview": "",
+        }
         
     # Dynamic timeout: 35s for heavy tools, 15s for fast tools
     is_heavy = (
@@ -206,7 +230,7 @@ async def test_tool(atlas, tool_info):
 
 async def main():
     print("=" * 80)
-    print("      AXIOM/Atlas 94-Tool Diagnostics Runner (Sequential)")
+    print("      AXIOM/Atlas Live-Registry Diagnostics Runner (Sequential)")
     print("=" * 80)
     
     # Resolve a writable location for the tool registry snapshot. Prefer the
@@ -230,7 +254,12 @@ async def main():
 
     # Self-generate the tool registry from the live worker. This makes the
     # diagnostic reproducible from a fresh clone — no pre-fetched author file.
-    if os.path.exists(tools_path):
+    reuse_snapshot = os.environ.get("AMY_REUSE_WORKER_TOOLS", "").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+    }
+    if reuse_snapshot and os.path.exists(tools_path):
         with open(tools_path, "r") as f:
             tools = json.load(f)
         print(f"Loaded {len(tools)} tools from {tools_path}.")
@@ -241,6 +270,19 @@ async def main():
         with open(tools_path, "w") as f:
             json.dump(tools, f, indent=2)
         print(f"Discovered {len(tools)} tools and cached them to {tools_path}.")
+
+    requested_names = {
+        name.strip()
+        for name in os.environ.get("AMY_TOOLS_FILTER", "").split(",")
+        if name.strip()
+    }
+    if requested_names:
+        discovered_names = {tool["name"] for tool in tools}
+        missing_names = sorted(requested_names - discovered_names)
+        if missing_names:
+            raise RuntimeError(f"Requested tools are not registered: {', '.join(missing_names)}")
+        tools = [tool for tool in tools if tool["name"] in requested_names]
+        print(f"Filtered run to {len(tools)} requested tools.")
         
     print(f"Beginning sequential tests of {len(tools)} tools...")
     
@@ -282,7 +324,7 @@ async def main():
     
     # Clean up the worker at the end
     await kill_worker(atlas)
+    return 1 if any(result["status"].startswith("FAIL") for result in results) else 0
 
 if __name__ == "__main__":
-    asyncio.run(main())
-
+    sys.exit(asyncio.run(main()))

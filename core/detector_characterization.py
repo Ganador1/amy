@@ -25,6 +25,12 @@ _ASSURANCE_LEVELS = {
     "enclave_attested",
 }
 _USE_CASES = {"safety", "scientific_publication", "capability_claim"}
+_POSITIVE_CLASS_ROLES = {"capability_evidence", "failure_evidence", "other"}
+_PASS_CONDITIONS = {
+    "presence_of_detected_positives",
+    "absence_of_detected_positives",
+    "other",
+}
 
 
 def sha256_file(path: Path | str) -> str:
@@ -102,6 +108,7 @@ def evaluate_characterization(
     minimum_sensitivity_lower: str | None = None,
     minimum_specificity_lower: str | None = None,
     assurance_verification: object = None,
+    claim_semantics: object = None,
 ) -> dict[str, Any]:
     """Apply fail-safe policy to one detector characterization.
 
@@ -125,10 +132,13 @@ def evaluate_characterization(
     validation = validate_characterization(record)
     status = validation["status"]
     detector = record.get("detector") if isinstance(record, dict) else None
+    semantics = _assess_claim_semantics(record, claim_semantics)
     base = {
         "status": status,
         "use_case": use_case,
-        "risk_direction": _risk_direction(use_case),
+        "risk_direction": semantics["risk_direction"],
+        "claim_semantics_status": semantics["status"],
+        "claim_semantics": semantics["claim_semantics"],
         "detector": dict(detector) if isinstance(detector, dict) else None,
         "purpose": record.get("purpose") if isinstance(record, dict) else None,
         "eligible": False,
@@ -150,6 +160,14 @@ def evaluate_characterization(
         }
 
     measured = record  # validated as a dict above
+    if use_case in {"safety", "scientific_publication"} and semantics[
+        "status"
+    ] != "actionable":
+        return {
+            **base,
+            "decision": "block" if use_case == "safety" else "manual_review_required",
+            "reason": semantics["reason"],
+        }
     assurance_verified, assurance_reason = _verify_assurance_evidence(
         measured,
         assurance_verification,
@@ -216,7 +234,7 @@ def evaluate_characterization(
         "eligible": True,
         "reason": (
             "capability estimate is scoped to the declared task and evaluation set; "
-            "under-detection can conservatively understate capability"
+            + semantics["risk_direction"]
         ),
     }
 
@@ -228,9 +246,11 @@ def summarize_characterizations(
     minimum_sensitivity_lower: str | None = None,
     minimum_specificity_lower: str | None = None,
     verification_by_evidence_digest: dict[str, object] | None = None,
+    claim_semantics_by_evidence_digest: dict[str, object] | None = None,
 ) -> dict[str, Any]:
     """Summarize all gates; an empty inventory never becomes implicit success."""
     verifications = verification_by_evidence_digest or {}
+    claim_semantics = claim_semantics_by_evidence_digest or {}
     assessments = []
     for record in records:
         evidence_digest = _evidence_sha256(record)
@@ -241,6 +261,7 @@ def summarize_characterizations(
                 minimum_sensitivity_lower=minimum_sensitivity_lower,
                 minimum_specificity_lower=minimum_specificity_lower,
                 assurance_verification=verifications.get(evidence_digest),
+                claim_semantics=claim_semantics.get(evidence_digest),
             )
         )
     if not assessments:
@@ -427,12 +448,63 @@ def _verify_assurance_evidence(
     return True, "assurance evidence was separately verified and authorized"
 
 
-def _risk_direction(use_case: str) -> str:
-    if use_case == "safety":
-        return "under-detection can produce a false passing safety verdict"
-    if use_case == "capability_claim":
-        return "under-detection can conservatively understate capability"
-    return "risk depends on claim semantics; safety-shaped claims can false-pass"
+def _assess_claim_semantics(record: object, semantics: object) -> dict[str, Any]:
+    unknown = "under-detection consequence is unknown without bound claim semantics"
+    if not isinstance(semantics, dict):
+        return {
+            "status": "missing",
+            "risk_direction": unknown,
+            "reason": "claim semantics were not supplied",
+            "claim_semantics": None,
+        }
+    task = record.get("task") if isinstance(record, dict) else None
+    expected_positive = task.get("positive_class") if isinstance(task, dict) else None
+    if semantics.get("positive_class") != expected_positive:
+        return {
+            "status": "invalid",
+            "risk_direction": unknown,
+            "reason": "claim semantics are not bound to the characterized positive class",
+            "claim_semantics": dict(semantics),
+        }
+    role = semantics.get("detected_positive_role")
+    pass_condition = semantics.get("pass_condition")
+    if role not in _POSITIVE_CLASS_ROLES or pass_condition not in _PASS_CONDITIONS:
+        return {
+            "status": "invalid",
+            "risk_direction": unknown,
+            "reason": "claim semantics contain an unsupported role or pass condition",
+            "claim_semantics": dict(semantics),
+        }
+    if (
+        role == "capability_evidence"
+        and pass_condition == "presence_of_detected_positives"
+    ):
+        return {
+            "status": "actionable",
+            "risk_direction": "missed positives can understate capability",
+            "reason": "claim semantics bind detected positives to capability evidence",
+            "claim_semantics": dict(semantics),
+        }
+    if (
+        role == "failure_evidence"
+        and pass_condition == "absence_of_detected_positives"
+    ):
+        return {
+            "status": "actionable",
+            "risk_direction": (
+                "missed failures can yield a passing verdict even though failures occurred"
+            ),
+            "reason": "claim semantics bind passing to absence of detected failures",
+            "claim_semantics": dict(semantics),
+        }
+    return {
+        "status": "context_dependent",
+        "risk_direction": (
+            "under-detection consequence remains context-dependent for this class/rule pair"
+        ),
+        "reason": "claim semantics do not determine an actionable under-detection direction",
+        "claim_semantics": dict(semantics),
+    }
 
 
 def _evidence_sha256(record: object) -> str | None:

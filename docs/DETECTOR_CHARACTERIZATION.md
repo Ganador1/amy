@@ -98,22 +98,49 @@ Authenticity, authorization, freshness, and rollback protection remain inputs
 from their respective verification systems; this contract does not invent
 them.
 
+## Bound claim semantics
+
+The same characterized detector can support claims with different error
+directions. Policy must therefore receive claim semantics separately and bind
+them to the characterization's exact `positive_class`:
+
+```json
+{
+  "positive_class": "unsafe output",
+  "detected_positive_role": "failure_evidence",
+  "pass_condition": "absence_of_detected_positives"
+}
+```
+
+`detected_positive_role` is `capability_evidence`, `failure_evidence`, or
+`other`. `pass_condition` is `presence_of_detected_positives`,
+`absence_of_detected_positives`, or `other`. A mismatched class, missing input,
+unsupported value, or context-dependent combination cannot authorize a safety
+decision or automatic external release.
+
+Claim semantics are a consumer/policy input rather than a property of the
+detector characterization: one detector can be reused by multiple evaluations
+whose positive-class convention and passing rule differ.
+
 ## Policy and asymmetric risk
 
 The non-claim is symmetric—the harness is not proven fit for purpose—but the
 consequence of under-detection depends on claim semantics:
 
-- For a capability claim (“the model achieves X”), under-detection generally
-  understates capability. The error is conservative, but the claim remains
-  qualified to the declared scope.
-- For a safety claim (“the model refuses X”), under-detection can yield a
-  portable `passed: true` while the unsafe behavior occurred. Missing,
-  unverified, or below-threshold characterization therefore blocks.
+- When detected positives are capability evidence and passing depends on their
+  presence, missed positives can understate capability.
+- When detected positives are failures and passing depends on their absence,
+  missed failures can yield a portable passing verdict even though failures
+  occurred.
+
+The labels “capability” and “safety” alone do not determine either direction.
+Missing, ambiguous, or unbound semantics therefore block safety and automatic
+external-release decisions.
 
 | Consumer | Unmeasured or absent | Invalid | Merely asserted assurance | Separately verified assurance |
 |---|---|---|---|---|
-| Safety decision | Block | Block | Block | Allow only if explicit lower confidence bounds pass |
-| Scientific publication | Manual review; no automatic external release | Block | Manual review | Eligible only if explicit lower confidence bounds pass |
+| Safety decision | Block | Block | Block | Allow only if claim semantics are actionable and explicit lower confidence bounds pass |
+| Scientific publication | Manual review; no automatic external release | Block | Manual review | Eligible only if claim semantics are actionable and explicit lower confidence bounds pass |
 | Capability statement | Qualify | Block | Qualify to declared scope | Qualify to declared scope |
 
 Detector characterization is necessary but not sufficient for scientific
@@ -130,6 +157,10 @@ them. Migrate as follows:
 - rename `assurance_level` to `asserted_assurance_level`;
 - provide a separate assurance-verification result when policy needs
   independent assurance.
+
+Callers of the v2 policy API must also supply claim semantics for any measured
+record that could authorize safety or external release. This is a policy-input
+hardening, not a reinterpretation of stored characterization bytes.
 
 ## Publication integration
 
