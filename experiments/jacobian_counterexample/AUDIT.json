@@ -1,0 +1,64 @@
+{
+  "experiment": "amy_alpoge_fable_exact_audit_v1",
+  "map": {
+    "variables": [
+      "x",
+      "y",
+      "z"
+    ],
+    "components": [
+      "x**3*y**3*z + 3*x**2*y**4 + 3*x**2*y**2*z + 7*x*y**3 + 3*x*y*z + 4*y**2 + z",
+      "3*x**3*y**2*z + 9*x**2*y**3 + 6*x**2*y*z + 12*x*y**2 + 3*x*z + y",
+      "-x**3*z - 3*x**2*y + 2*x"
+    ],
+    "total_degrees": [
+      7,
+      6,
+      4
+    ]
+  },
+  "jacobian": {
+    "determinant": "-2",
+    "is_nonzero_constant": true
+  },
+  "official_collision": {
+    "valid": true,
+    "distinct_inputs": true,
+    "common_output": [
+      "-1/4",
+      "0",
+      "0"
+    ],
+    "reason": "exact rational collision verified"
+  },
+  "independent_collision": {
+    "valid": true,
+    "distinct_inputs": true,
+    "common_output": [
+      "-1",
+      "1",
+      "-1"
+    ],
+    "reason": "exact rational collision verified"
+  },
+  "certificate_sha256": "60c39d46b91498a0d5010aa00186d356c0fdaecaed08cb603484b1603766bff5",
+  "counterexample_conditions_verified": true,
+  "method": {
+    "arithmetic": "exact SymPy integer/rational polynomial arithmetic",
+    "determinant_check": "symbolic expansion of det(JF) + 2 to zero",
+    "collision_check": "exact substitution at two disjoint three-point fibers"
+  },
+  "claim_status": {
+    "published_counterexample_replicated": true,
+    "new_counterexample_claimed": false,
+    "global_novelty_certified": false,
+    "plane_case_resolved": false
+  },
+  "provenance": {
+    "experiment_id": "mathematics_jacobian_counterexample_audit_v1",
+    "record_hash": "ca5351ccb78643788fbdc1e55331c73425600cebddf8dab81a32dca0716880e5",
+    "output_hash": "5033cd69a655fa2f2ee010505efc9c5d5b56c630cc3e5fd35c8ba0280626bbe0",
+    "authenticated": false,
+    "truth_verified": false
+  }
+}
