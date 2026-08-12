@@ -14,6 +14,7 @@ This validates the complete cognitive architecture end-to-end.
 """
 import asyncio
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -377,7 +378,9 @@ async def test_full_cognitive_cycle():
         "tools_executed": len(tool_events),
         "beliefs_formed": len(beliefs),
     }
-    report_path = Path(__file__).parent / "cognitive_cycle_test_report.json"
+    report_dir = Path(os.getenv("AMY_TEST_REPORT_DIR", "tmp/test_reports"))
+    report_dir.mkdir(parents=True, exist_ok=True)
+    report_path = report_dir / "cognitive_cycle_test_report.json"
     with open(report_path, "w") as f:
         json.dump(report, f, indent=2)
     print(f"\nReport saved to: {report_path}")

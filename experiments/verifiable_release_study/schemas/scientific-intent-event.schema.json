@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Ganador1/amy/experiments/verifiable_release_study/schemas/scientific-intent-event.schema.json",
+  "title": "A.M.Y local scientific-intent event",
+  "description": "One canonical hash-chained local event persisted before a contract-test child spawn. Local fsync ordering does not establish external time, rollback resistance, same-UID immutability, power-loss durability, outcome blindness, or confirmatory permission.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "classification",
+    "event_type",
+    "guard_epoch_id",
+    "sequence",
+    "parent_event_sha256",
+    "spawn_id",
+    "command",
+    "boundaries"
+  ],
+  "properties": {
+    "schema_version": {"const": "amy.scientific-intent-event.v1-draft"},
+    "classification": {"const": "contract_test_no_confirmatory_evidence"},
+    "event_type": {"const": "SCIENTIFIC_INTENT"},
+    "guard_epoch_id": {
+      "type": "string",
+      "pattern": "^contract-test-[0-9a-f]{32}$"
+    },
+    "sequence": {"type": "integer", "minimum": 1, "maximum": 1000000000000},
+    "parent_event_sha256": {
+      "oneOf": [
+        {"$ref": "#/$defs/sha256"},
+        {"type": "null"}
+      ]
+    },
+    "spawn_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "command": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "argv_jcs_sha256",
+        "executable_sha256",
+        "environment_jcs_sha256",
+        "cwd_root_identity_jcs_sha256",
+        "output_name"
+      ],
+      "properties": {
+        "argv_jcs_sha256": {"$ref": "#/$defs/sha256"},
+        "executable_sha256": {"$ref": "#/$defs/sha256"},
+        "environment_jcs_sha256": {"$ref": "#/$defs/sha256"},
+        "cwd_root_identity_jcs_sha256": {"$ref": "#/$defs/sha256"},
+        "output_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9._-]+$"
+        }
+      }
+    },
+    "boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "local_file_and_directory_fsync_completed_before_spawn",
+        "advisory_append_lock_held_through_spawn",
+        "same_uid_tamper_excluded",
+        "rollback_detection_established",
+        "external_time_order_established",
+        "power_loss_durability_established",
+        "confirmatory_execution_permitted"
+      ],
+      "properties": {
+        "local_file_and_directory_fsync_completed_before_spawn": {"const": true},
+        "advisory_append_lock_held_through_spawn": {"const": true},
+        "same_uid_tamper_excluded": {"const": false},
+        "rollback_detection_established": {"const": false},
+        "external_time_order_established": {"const": false},
+        "power_loss_durability_established": {"const": false},
+        "confirmatory_execution_permitted": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

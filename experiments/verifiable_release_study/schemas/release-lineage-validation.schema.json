@@ -1,0 +1,296 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Ganador1/amy/experiments/verifiable_release_study/schemas/release-lineage-validation.schema.json",
+  "title": "A.M.Y release-lineage contract validation result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "classification",
+    "validity_scope",
+    "valid",
+    "release_freeze_permitted",
+    "record_status",
+    "lineage_id",
+    "decision",
+    "contract_sha256",
+    "contract_schema_sha256",
+    "validation_schema_sha256",
+    "source_ledger_sha256",
+    "validator_sha256",
+    "command_contract",
+    "normative_source_count",
+    "normative_sources_resolved",
+    "required_identity_field_count",
+    "software_component_status",
+    "stage_status",
+    "unresolved_field_count",
+    "parent_link_requirements",
+    "cryptographic_boundary_checks",
+    "read_scope",
+    "errors",
+    "warnings"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "amy.release-lineage-validation.v1-draft"
+    },
+    "classification": {
+      "const": "same_author_static_contract_validation_no_release_execution"
+    },
+    "validity_scope": {
+      "const": "internal_contract_consistency_not_release_readiness_or_independent_review"
+    },
+    "valid": {
+      "type": "boolean"
+    },
+    "release_freeze_permitted": {
+      "type": "boolean"
+    },
+    "record_status": {
+      "enum": [
+        "draft_not_frozen",
+        "frozen"
+      ]
+    },
+    "lineage_id": {
+      "type": "string",
+      "pattern": "^amy-verifiable-release-study-lineage-[0-9]{3}$"
+    },
+    "decision": {
+      "enum": [
+        "GO",
+        "NO-GO"
+      ]
+    },
+    "contract_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "contract_schema_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "validation_schema_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "source_ledger_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "validator_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "command_contract": {
+      "const": "uv run --frozen --extra pilot python scripts/validate_release_lineage_contract.py --compact"
+    },
+    "normative_source_count": {
+      "type": "integer",
+      "minimum": 10
+    },
+    "normative_sources_resolved": {
+      "type": "boolean"
+    },
+    "required_identity_field_count": {
+      "const": 18
+    },
+    "software_component_status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "A.M.Y",
+        "Atlas",
+        "AXIOM"
+      ],
+      "properties": {
+        "A.M.Y": {
+          "$ref": "#/$defs/componentStatus"
+        },
+        "Atlas": {
+          "$ref": "#/$defs/componentStatus"
+        },
+        "AXIOM": {
+          "$ref": "#/$defs/componentStatus"
+        }
+      }
+    },
+    "stage_status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "R0",
+        "R1",
+        "R2"
+      ],
+      "properties": {
+        "R0": {
+          "$ref": "#/$defs/stageStatus"
+        },
+        "R1": {
+          "$ref": "#/$defs/stageStatus"
+        },
+        "R2": {
+          "$ref": "#/$defs/stageStatus"
+        }
+      }
+    },
+    "unresolved_field_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "parent_link_requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "R0",
+        "R1",
+        "R2"
+      ],
+      "properties": {
+        "R0": {
+          "const": []
+        },
+        "R1": {
+          "const": [
+            "R0"
+          ]
+        },
+        "R2": {
+          "const": [
+            "R0",
+            "R1"
+          ]
+        }
+      }
+    },
+    "cryptographic_boundary_checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "software_label_not_execution_identity",
+        "latest_forbidden_as_identity",
+        "git_oid_distinct_from_artifact_sha256",
+        "exact_byte_sha256_required",
+        "policy_digest_required",
+        "trusted_root_digest_required",
+        "attestation_bundle_digest_required",
+        "result_schema_digest_required",
+        "transport_archive_digest_required",
+        "self_hash_forbidden",
+        "new_bytes_new_version",
+        "signature_truth_claim_forbidden",
+        "stateless_rollback_claim_forbidden"
+      ],
+      "properties": {
+        "software_label_not_execution_identity": {
+          "const": true
+        },
+        "latest_forbidden_as_identity": {
+          "const": true
+        },
+        "git_oid_distinct_from_artifact_sha256": {
+          "const": true
+        },
+        "exact_byte_sha256_required": {
+          "const": true
+        },
+        "policy_digest_required": {
+          "const": true
+        },
+        "trusted_root_digest_required": {
+          "const": true
+        },
+        "attestation_bundle_digest_required": {
+          "const": true
+        },
+        "result_schema_digest_required": {
+          "const": true
+        },
+        "transport_archive_digest_required": {
+          "const": true
+        },
+        "self_hash_forbidden": {
+          "const": true
+        },
+        "new_bytes_new_version": {
+          "const": true
+        },
+        "signature_truth_claim_forbidden": {
+          "const": true
+        },
+        "stateless_rollback_claim_forbidden": {
+          "const": true
+        }
+      }
+    },
+    "read_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract",
+        "contract_schema",
+        "validation_schema",
+        "source_ledger",
+        "confirmatory_artifacts_read",
+        "verifier_results_read",
+        "network_used",
+        "independent_review_performed"
+      ],
+      "properties": {
+        "contract": {
+          "const": "protocol/RELEASE_LINEAGE_CONTRACT_DRAFT.json"
+        },
+        "contract_schema": {
+          "const": "schemas/release-lineage-contract.schema.json"
+        },
+        "validation_schema": {
+          "const": "schemas/release-lineage-validation.schema.json"
+        },
+        "source_ledger": {
+          "const": "evidence/SOURCE_LEDGER.md"
+        },
+        "confirmatory_artifacts_read": {
+          "const": false
+        },
+        "verifier_results_read": {
+          "const": false
+        },
+        "network_used": {
+          "const": false
+        },
+        "independent_review_performed": {
+          "const": false
+        }
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "componentStatus": {
+      "enum": [
+        "unresolved_before_R0",
+        "frozen"
+      ]
+    },
+    "stageStatus": {
+      "enum": [
+        "not_created",
+        "draft_not_frozen",
+        "frozen_unpublished",
+        "published"
+      ]
+    }
+  }
+}

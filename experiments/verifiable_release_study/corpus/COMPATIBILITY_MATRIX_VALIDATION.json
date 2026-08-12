@@ -1,0 +1,28 @@
+{
+  "schema_version": "amy.compatibility-matrix-validation.v1",
+  "validated_at": "2026-07-13T07:09:30Z",
+  "valid": true,
+  "matrix_sha256": "19c219f1a2bdc65d033ed7717c9924c3f503016463539eb22d250df3e576a921",
+  "candidate_unit_count": 204,
+  "compatibility_counts": {
+    "COMPATIBLE": 174,
+    "PENDING": 24,
+    "NOT_COMPATIBLE": 6
+  },
+  "outcome_blinded": true,
+  "fresh_generator_output_matches_retained_canonical_json": true,
+  "errors": [],
+  "source_sha256": {
+    "scripts/build_compatibility_matrix.py": "2edd0c72aec3ac443d5f4c7fd207c2b7ab56ab6475fd682d5560bba8ccb58dd4",
+    "scripts/validate_compatibility_matrix.py": "8df2a6b24af8211cfb7993f136123a5d1eef9e181cb69d5e4185812a1b0f913a",
+    "protocol/PREREQUISITE_REGISTRY_DRAFT.json": "7bb7d65d24f38f648d4bcd198cdd66f2dfe32b810a3818a4c85fa8b7a5abe903",
+    "protocol/ATTACK_CATALOG.json": "409213b0660263467947dc611933352cea145a03d536224181d94a3107c8c46d"
+  },
+  "limitations": [
+    "The matrix is a draft R0 metadata artifact and is not frozen for registration.",
+    "Twenty-four rows remain PENDING because four normative policy values are not frozen.",
+    "Filesystem compatibility is supported by separately retained, hash-bound probes for both planned environments; matrix validation itself does not execute those probes.",
+    "Six public-keyless transparency rows are structurally NOT_COMPATIBLE with S1 and must be tested in S2.",
+    "Compatibility does not predict or use any verifier outcome."
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "schema_version": "amy.filesystem-capability-probe.v1",
+  "classification": "R0_environment_compatibility_evidence",
+  "environment_id": "ENV-AUTHOR",
+  "recorded_at": "2026-07-13T07:04:01Z",
+  "expected_image": null,
+  "runtime": {
+    "os_name": "posix",
+    "system": "Darwin",
+    "release": "25.5.0",
+    "machine": "arm64",
+    "python": "3.12.12",
+    "python_implementation": "CPython"
+  },
+  "network_required_by_probe": false,
+  "capabilities": {
+    "regular_files": true,
+    "filesystem_supports_symlink": true,
+    "filesystem_supports_hardlink": true,
+    "filesystem_supports_fifo": true,
+    "dir_fd": true,
+    "O_NOFOLLOW": true
+  },
+  "all_required_supported": true,
+  "probe_details": {
+    "regular_files": {"supported": true, "details": {"is_regular": true, "bytes": 7}},
+    "symlink": {"supported": true, "details": {"is_symlink": true, "target": "symlink-target.txt"}},
+    "O_NOFOLLOW": {"supported": true, "details": {"symlink_open_blocked": true, "errno": 62, "errno_name": "ELOOP"}},
+    "hardlink": {"supported": true, "details": {"same_device_inode": true, "minimum_link_count": 2}},
+    "fifo": {"supported": true, "details": {"is_fifo": true}},
+    "dir_fd": {"supported": true, "details": {"relative_open_succeeded": true}}
+  }
+}

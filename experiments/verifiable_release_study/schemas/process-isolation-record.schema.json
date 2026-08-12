@@ -1,0 +1,494 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Ganador1/amy/experiments/verifiable_release_study/schemas/process-isolation-record.schema.json",
+  "title": "A.M.Y process-isolation contract-test record",
+  "description": "Closed contract for the nonconfirmatory record emitted by run_contract_test_process. It verifies registered command commitments before spawn, records recomputable bounded-wait timing and re-verifies retained bytes. It does not claim outcome blindness, network isolation, filesystem sandboxing, transitive cwd integrity, or process-tree containment.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "classification",
+    "clock",
+    "command",
+    "scientific_intent",
+    "isolation",
+    "process",
+    "raw_artifacts",
+    "boundaries"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "amy.process-isolation-record.v1-draft"
+    },
+    "classification": {
+      "const": "contract_test_no_confirmatory_evidence"
+    },
+    "clock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clock_id",
+        "resolution_ns",
+        "started_continuous_us",
+        "ended_continuous_us",
+        "elapsed_us",
+        "deadline_continuous_us",
+        "timeout_limit_us",
+        "termination_grace_limit_us",
+        "reap_limit_us",
+        "sigterm_sent_continuous_us",
+        "sigkill_sent_continuous_us",
+        "capture_pipes_closed_continuous_us",
+        "direct_child_reaped_continuous_us",
+        "elapsed_equals_end_minus_start",
+        "all_waits_bounded",
+        "started_wall_utc",
+        "ended_wall_utc"
+      ],
+      "properties": {
+        "clock_id": {
+          "$ref": "#/$defs/continuousClockId"
+        },
+        "resolution_ns": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "started_continuous_us": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "ended_continuous_us": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "elapsed_us": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "deadline_continuous_us": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "timeout_limit_us": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 60000000
+        },
+        "termination_grace_limit_us": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000000
+        },
+        "reap_limit_us": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000000
+        },
+        "sigterm_sent_continuous_us": {
+          "type": ["integer", "null"],
+          "minimum": 0
+        },
+        "sigkill_sent_continuous_us": {
+          "type": ["integer", "null"],
+          "minimum": 0
+        },
+        "capture_pipes_closed_continuous_us": {
+          "type": ["integer", "null"],
+          "minimum": 0
+        },
+        "direct_child_reaped_continuous_us": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "elapsed_equals_end_minus_start": {
+          "const": true
+        },
+        "all_waits_bounded": {
+          "const": true
+        },
+        "started_wall_utc": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "ended_wall_utc": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "command": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "argv_jcs_sha256",
+        "executable_sha256",
+        "environment_jcs_sha256",
+        "cwd_root_identity_jcs_sha256",
+        "pre_spawn_commitments_verified"
+      ],
+      "properties": {
+        "argv_jcs_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "executable_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "environment_jcs_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "cwd_root_identity_jcs_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "pre_spawn_commitments_verified": {
+          "const": true
+        }
+      }
+    },
+    "scientific_intent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "log_path",
+        "event_path",
+        "guard_epoch_id",
+        "sequence",
+        "event_sha256",
+        "parent_event_sha256",
+        "persisted_before_spawn",
+        "log_revalidated_before_spawn",
+        "advisory_append_lock_held_through_spawn"
+      ],
+      "properties": {
+        "log_path": {"const": ".scientific-intent-log"},
+        "event_path": {
+          "type": "string",
+          "pattern": "^\\.scientific-intent-log/intent-[0-9]{16}\\.jcs\\.json$"
+        },
+        "guard_epoch_id": {
+          "type": "string",
+          "pattern": "^contract-test-[0-9a-f]{32}$"
+        },
+        "sequence": {"type": "integer", "minimum": 1, "maximum": 1000000000000},
+        "event_sha256": {"$ref": "#/$defs/sha256"},
+        "parent_event_sha256": {
+          "oneOf": [
+            {"$ref": "#/$defs/sha256"},
+            {"type": "null"}
+          ]
+        },
+        "persisted_before_spawn": {"const": true},
+        "log_revalidated_before_spawn": {"const": true},
+        "advisory_append_lock_held_through_spawn": {"const": true}
+      }
+    },
+    "isolation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "shell_used",
+        "start_new_session",
+        "close_fds",
+        "stdin_devnull",
+        "pass_fds_empty",
+        "umask_077",
+        "network_isolation_verified_by_runner",
+        "filesystem_sandbox_verified_by_runner",
+        "process_tree_containment_verified_by_runner",
+        "transitive_cwd_snapshot_verified_by_runner"
+      ],
+      "properties": {
+        "shell_used": {
+          "const": false
+        },
+        "start_new_session": {
+          "const": true
+        },
+        "close_fds": {
+          "const": true
+        },
+        "stdin_devnull": {
+          "const": true
+        },
+        "pass_fds_empty": {
+          "const": true
+        },
+        "umask_077": {
+          "const": true
+        },
+        "network_isolation_verified_by_runner": {
+          "const": false
+        },
+        "filesystem_sandbox_verified_by_runner": {
+          "const": false
+        },
+        "process_tree_containment_verified_by_runner": {
+          "const": false
+        },
+        "transitive_cwd_snapshot_verified_by_runner": {
+          "const": false
+        }
+      }
+    },
+    "process": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "spawned",
+        "pid",
+        "exit_code",
+        "exit_signal",
+        "timeout_triggered",
+        "output_limit_exceeded",
+        "sigterm_sent",
+        "sigkill_sent",
+        "capture_pipes_forcibly_closed",
+        "reaped"
+      ],
+      "properties": {
+        "spawned": {
+          "const": true
+        },
+        "pid": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "exit_code": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "exit_signal": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "timeout_triggered": {
+          "type": "boolean"
+        },
+        "output_limit_exceeded": {
+          "type": "boolean"
+        },
+        "sigterm_sent": {
+          "type": "boolean"
+        },
+        "sigkill_sent": {
+          "type": "boolean"
+        },
+        "capture_pipes_forcibly_closed": {
+          "type": "boolean",
+          "description": "True only when the bounded post-SIGKILL drain deadline expired with inherited capture pipes still open."
+        },
+        "reaped": {
+          "const": true
+        }
+      },
+      "oneOf": [
+        {
+          "required": [
+            "exit_code",
+            "exit_signal"
+          ],
+          "properties": {
+            "exit_code": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "exit_signal": {
+              "type": "null"
+            }
+          }
+        },
+        {
+          "required": [
+            "exit_code",
+            "exit_signal"
+          ],
+          "properties": {
+            "exit_code": {
+              "type": "null"
+            },
+            "exit_signal": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        }
+      ],
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "sigkill_sent"
+            ],
+            "properties": {
+              "sigkill_sent": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "sigterm_sent": {
+                "const": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    "raw_artifacts": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/stdoutArtifact"
+        },
+        {
+          "$ref": "#/$defs/stderrArtifact"
+        }
+      ],
+      "items": false
+    },
+    "boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "confirmatory_execution_permitted",
+        "confirmatory_outcomes_read",
+        "result_bytes_decoded",
+        "oracle_read",
+        "independent_review_performed",
+        "same_uid_external_read_or_mutation_excluded",
+        "outcome_blindness_established"
+      ],
+      "properties": {
+        "confirmatory_execution_permitted": {
+          "const": false
+        },
+        "confirmatory_outcomes_read": {
+          "const": false
+        },
+        "result_bytes_decoded": {
+          "const": false
+        },
+        "oracle_read": {
+          "const": false
+        },
+        "independent_review_performed": {
+          "const": false
+        },
+        "same_uid_external_read_or_mutation_excluded": {
+          "const": false
+        },
+        "outcome_blindness_established": {
+          "const": false
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "continuousClockId": {
+      "enum": [
+        "linux_CLOCK_BOOTTIME",
+        "darwin_mach_continuous_time"
+      ]
+    },
+    "stdoutArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "role",
+        "observed_bytes",
+        "captured_bytes",
+        "sha256",
+        "truncated",
+        "decoded_by_runner",
+        "final_bytes_reverified_by_runner"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._-]+/stdout\\.raw$"
+        },
+        "role": {
+          "const": "stdout"
+        },
+        "observed_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "captured_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 16777216
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "truncated": {
+          "type": "boolean"
+        },
+        "decoded_by_runner": {
+          "const": false
+        },
+        "final_bytes_reverified_by_runner": {
+          "const": true
+        }
+      }
+    },
+    "stderrArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "role",
+        "observed_bytes",
+        "captured_bytes",
+        "sha256",
+        "truncated",
+        "decoded_by_runner",
+        "final_bytes_reverified_by_runner"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._-]+/stderr\\.raw$"
+        },
+        "role": {
+          "const": "stderr"
+        },
+        "observed_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "captured_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 16777216
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "truncated": {
+          "type": "boolean"
+        },
+        "decoded_by_runner": {
+          "const": false
+        },
+        "final_bytes_reverified_by_runner": {
+          "const": true
+        }
+      }
+    }
+  }
+}

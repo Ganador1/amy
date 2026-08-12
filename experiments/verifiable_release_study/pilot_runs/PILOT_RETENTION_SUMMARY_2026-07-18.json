@@ -1,0 +1,29 @@
+{
+  "schema_version": "amy.pilot-retention-summary.v1",
+  "classification": "derived_historical_index_not_independent_validation",
+  "source_artifact": {
+    "path": "pilot_runs/pilot_20260713T054931Z",
+    "tree_hash_algorithm": "sha256-rfc8785-member-tree-v1",
+    "tree_sha256": "08190bdceb9a3489e432f3dcf32575e57ad77d30c1474408ab0fead2ae62a73b",
+    "member_count": 620,
+    "byte_count": 18394494,
+    "source_git": false
+  },
+  "retained_summary": {
+    "path": "pilot_runs/pilot_20260713T054931Z/summary.json",
+    "raw_sha256": "36cd38ea31630dd52271a992f824926cbff1edbc36b401554057737b57cd328c",
+    "result_count": 136,
+    "profile_conformance_mismatches": 0,
+    "clean_failures": 0,
+    "pilot_only": true,
+    "confirmatory_evidence": false
+  },
+  "boundaries": {
+    "raw_run_present_in_source_git": false,
+    "summary_values_independently_recomputed_here": false,
+    "authentication_established": false,
+    "authorization_established": false,
+    "scientific_truth_established": false,
+    "confirmatory_claims_authorized": false
+  }
+}

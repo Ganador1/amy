@@ -1,0 +1,731 @@
+{
+  "classification": "exploratory_pre_registration_read_only",
+  "key_handling": {
+    "private_key": {
+      "bytes": 119,
+      "content_or_digest_recorded": false,
+      "exists": true,
+      "git_ignored": true,
+      "group_or_other_readable": true,
+      "mode_octal": "0644",
+      "path": "atlas/keys/private/ed25519_private.key"
+    },
+    "public_keys": [
+      {
+        "bytes": 113,
+        "git_ignored": true,
+        "mode_octal": "0644",
+        "path": "atlas/keys/ed25519_public_default.pem"
+      },
+      {
+        "bytes": 113,
+        "git_ignored": true,
+        "mode_octal": "0644",
+        "path": "atlas/keys/public/ed25519_public.pem"
+      }
+    ]
+  },
+  "manifests_and_artifacts": {
+    "manifests": [
+      {
+        "artifacts": [
+          {
+            "actual_bytes": 1863,
+            "actual_sha256": "c393616656c14587ac2927b955a9bffec6c4d2ea8ec165f4b5d802504fdc00c0",
+            "declared_path": "models/plausibility_v4_logreg.pkl",
+            "digest_matches": true,
+            "expected_bytes": 1863,
+            "expected_sha256": "c393616656c14587ac2927b955a9bffec6c4d2ea8ec165f4b5d802504fdc00c0",
+            "project_root_resolution_exists": true,
+            "second_validator_resolution": "atlas/models/models/plausibility_v4_logreg.pkl",
+            "second_validator_resolution_exists": false,
+            "size_matches": true
+          }
+        ],
+        "file_sha256": "8cbfbcfcc62ba3d403317450709398b684f74e2cbe1bd172b7afed390d260b0c",
+        "first_validator_hash_matches": false,
+        "git_commit": "0000000",
+        "git_commit_exists": false,
+        "path": "atlas/models/plausibility_v4_logreg.manifest.json",
+        "second_validator_hash_matches": false,
+        "second_validator_payload_sha256": "25077521d917f2cf38d5dcf8a465d5799c1be9f91a0a6eca4a8dd76fe9051a57",
+        "signature_payload_sha256": "9a6edf7b0818a46042c5cb10f4e2e0183fcf85ec34b2d3fa8303541fc51af575",
+        "signatures": [
+          {
+            "algorithm_declared": "ed25519",
+            "fingerprint": "25c7a15472815b86addb077aa5797afa6785c4d096adfcbc43fb8d9fcd06d007",
+            "public_key_available": true,
+            "signature_valid": true,
+            "timestamp_present": true,
+            "timestamp_tamper_signature_valid": true
+          }
+        ],
+        "stored_manifest_sha256": "3f38d90f13ac872626c3df1752e75ed1e243e17bc724a2351bb7dc63d4c960fd"
+      },
+      {
+        "artifacts": [
+          {
+            "actual_bytes": 1334275,
+            "actual_sha256": "83361476a78590795c46a6197270c521529f1ddf50a440c7681d17773a0fdf85",
+            "declared_path": "models/plausibility_v4_rf.pkl",
+            "digest_matches": false,
+            "expected_bytes": 1334275,
+            "expected_sha256": "96620b6de5f0467e4d68e66d55233aaab61110ff17c75057c1fc43ccf30d32fe",
+            "project_root_resolution_exists": true,
+            "second_validator_resolution": "atlas/models/models/plausibility_v4_rf.pkl",
+            "second_validator_resolution_exists": false,
+            "size_matches": true
+          }
+        ],
+        "file_sha256": "67aa8d08d0da160237cbe3d25943c7c190a9d5448b9748fa23060bdc33b1b358",
+        "first_validator_hash_matches": false,
+        "git_commit": "0000000",
+        "git_commit_exists": false,
+        "path": "atlas/models/plausibility_v4_rf.manifest.json",
+        "second_validator_hash_matches": false,
+        "second_validator_payload_sha256": "c69858f0d5e4d9a800ca8c6eef0249cb0de1c3cd3676ebab7fa574b742304749",
+        "signature_payload_sha256": "fcc16fce245d479a85534438a03c7b56174466acc401c99afc73c929a9b8e5b9",
+        "signatures": [
+          {
+            "algorithm_declared": "ed25519",
+            "fingerprint": "25c7a15472815b86addb077aa5797afa6785c4d096adfcbc43fb8d9fcd06d007",
+            "public_key_available": true,
+            "signature_valid": true,
+            "timestamp_present": true,
+            "timestamp_tamper_signature_valid": true
+          }
+        ],
+        "stored_manifest_sha256": "1de7fa70308bacc46b6dd51b241d84331417afd032a69108e89bd19a666e59c6"
+      },
+      {
+        "artifacts": [
+          {
+            "actual_bytes": 315911,
+            "actual_sha256": "3c3d2b1c15dbd07ffb10315fbc51ecf524b8d142a997a50befb303ab416b36a9",
+            "declared_path": "models/plausibility_v4_rf_regularized.pkl",
+            "digest_matches": true,
+            "expected_bytes": 315911,
+            "expected_sha256": "3c3d2b1c15dbd07ffb10315fbc51ecf524b8d142a997a50befb303ab416b36a9",
+            "project_root_resolution_exists": true,
+            "second_validator_resolution": "atlas/models/models/plausibility_v4_rf_regularized.pkl",
+            "second_validator_resolution_exists": false,
+            "size_matches": true
+          }
+        ],
+        "file_sha256": "321910b99f995a67fbdd238e93fdaf23c33bb3ce96de33f9a6f86e0377e81fe6",
+        "first_validator_hash_matches": false,
+        "git_commit": "0000000",
+        "git_commit_exists": false,
+        "path": "atlas/models/plausibility_v4_rf_regularized.manifest.json",
+        "second_validator_hash_matches": false,
+        "second_validator_payload_sha256": "40e1569d8a79fb757ca25c48fbcfa0e84e3ca6650d94814c98b6775b71847699",
+        "signature_payload_sha256": "5ff011b27e8a5597bc8390161d7ed7f1e1336fc65cab7830f948418d5de9e8a9",
+        "signatures": [
+          {
+            "algorithm_declared": "ed25519",
+            "fingerprint": "25c7a15472815b86addb077aa5797afa6785c4d096adfcbc43fb8d9fcd06d007",
+            "public_key_available": true,
+            "signature_valid": true,
+            "timestamp_present": true,
+            "timestamp_tamper_signature_valid": true
+          }
+        ],
+        "stored_manifest_sha256": "c4a642acac9a6c33870ba470e72afe22016421a3e0a45da58fbaa440faf3b277"
+      }
+    ],
+    "public_key_fingerprints": [
+      "25c7a15472815b86addb077aa5797afa6785c4d096adfcbc43fb8d9fcd06d007"
+    ],
+    "summary": {
+      "artifact_digest_failures": 1,
+      "artifact_digest_matches": 2,
+      "artifacts_checked": 3,
+      "cryptographically_valid_signatures": 3,
+      "declared_git_commits_resolved": 0,
+      "manifest_count": 3,
+      "manifest_self_hash_matches_first_validator": 0,
+      "manifest_self_hash_matches_second_validator": 0,
+      "signature_count": 3
+    }
+  },
+  "model_lineage": {
+    "current_model_sha256": "83361476a78590795c46a6197270c521529f1ddf50a440c7681d17773a0fdf85",
+    "interpretation_limit": "The parameter comparison concerns manifest metadata and producer source; it does not establish the internal parameter of the current pickle.",
+    "manifest_declared_n_estimators": 500,
+    "manifest_expected_sha256": "96620b6de5f0467e4d68e66d55233aaab61110ff17c75057c1fc43ccf30d32fe",
+    "model_object_deserialized_for_this_audit": false,
+    "model_version_events": [
+      {
+        "checksum": "96620b6de5f0467e4d68e66d55233aaab61110ff17c75057c1fc43ccf30d32fe",
+        "created_at": "2025-09-17T07:32:06.984713",
+        "data_path": "models/plausibility_v4_rf.pkl",
+        "size_bytes": 1334275,
+        "tags": [
+          "update_dataset.py"
+        ],
+        "version_id": "v_20250917_073206_96620b6d"
+      },
+      {
+        "checksum": "83361476a78590795c46a6197270c521529f1ddf50a440c7681d17773a0fdf85",
+        "created_at": "2025-09-17T07:32:27.623056",
+        "data_path": "models/plausibility_v4_rf.pkl",
+        "size_bytes": 1334275,
+        "tags": [
+          "train_plausibility_model_v4.py"
+        ],
+        "version_id": "v_20250917_073227_83361476"
+      }
+    ],
+    "training_script_n_estimators_sites": [
+      {
+        "line": 101,
+        "n_estimators": 300
+      },
+      {
+        "line": 141,
+        "n_estimators": 300
+      },
+      {
+        "line": 188,
+        "n_estimators": 200
+      },
+      {
+        "line": 237,
+        "n_estimators": 300
+      }
+    ],
+    "versions_file": "atlas/data/versions.json"
+  },
+  "publication_packages": {
+    "algorithm_actually_instantiated": "BLAKE2b-512",
+    "algorithm_documented_by_code": "BLAKE3",
+    "packages": [
+      {
+        "blockchain_validation": null,
+        "current_implementation_hash": "e7ad4021e9583250c9a444f485ae1dc9e1cf38937fc90dc5c0a896053874b0e39c7a98869b7f71e4080fed4c8e496da4c5989d0a563c95bd04b387c85b8de36f",
+        "current_matches_stored": false,
+        "manifest_matches_stored": false,
+        "manifest_package_hash": null,
+        "path": "atlas/publications/publication_05a86a4c",
+        "proof_matches_stored": false,
+        "proof_package_hash": null,
+        "regular_file_count": 10,
+        "self_referential_files_present": [],
+        "stored_hash": null
+      },
+      {
+        "blockchain_validation": true,
+        "current_implementation_hash": "90d94f1a96efc902637f11907a444c1129608d5b5af57667d972fd76a695a083578fe74a4cf8cd107953c9ce105058635599ab9eda49b1467b77e24bd971645c",
+        "current_matches_stored": false,
+        "manifest_matches_stored": true,
+        "manifest_package_hash": "2a21d70e9096701072ec516c6d8ff104b78b0b8f7d5546730d5222a103aac043fa74abf5d690f2ca233210c431c3f6b9e92bb90e7868219fe2881f0fdcbbdd3f",
+        "path": "atlas/publications/publication_09bcbb9a",
+        "proof_matches_stored": false,
+        "proof_package_hash": "60d29f0438301b99450d2d3b6c93cbcca4999ea008db1b8fa0132469a50c1ee1a47a5d569f1c37779b2cee16fc145d2069ce06e89e2e81e5929fb0cdee0b8c5f",
+        "regular_file_count": 13,
+        "self_referential_files_present": [
+          "integrity_proof.json",
+          "manifest.json",
+          "package_hash.txt"
+        ],
+        "stored_hash": "2a21d70e9096701072ec516c6d8ff104b78b0b8f7d5546730d5222a103aac043fa74abf5d690f2ca233210c431c3f6b9e92bb90e7868219fe2881f0fdcbbdd3f"
+      },
+      {
+        "blockchain_validation": true,
+        "current_implementation_hash": "cad308cf8470fbb7c67464c86675d5b6983fda0ea0f1e83a83ddc3cf7fee5e7915297f6efddaa5a05bd984eea98f61c341d2ee41140e40aec3fabd7727668637",
+        "current_matches_stored": false,
+        "manifest_matches_stored": true,
+        "manifest_package_hash": "e5d628678299d5a61dd330ec36f9f055707a1a9cc22a8c52152d6131b7b30400998d9b985d6d87e1bb343f3fd4ad0c43a399eb35863b773f6d4d4de26ae61ce9",
+        "path": "atlas/publications/publication_2348ddb9",
+        "proof_matches_stored": false,
+        "proof_package_hash": "c110e81f78d1d6d7eabf997d2c7c522feb0fcdc9687a2c3081faa4b206c4e90d72ed6b0cc24430a0226ebb3385ae6e9c6bb20a663aa48e3cb0845e7a2cf5b70a",
+        "regular_file_count": 6,
+        "self_referential_files_present": [
+          "integrity_proof.json",
+          "manifest.json",
+          "package_hash.txt"
+        ],
+        "stored_hash": "e5d628678299d5a61dd330ec36f9f055707a1a9cc22a8c52152d6131b7b30400998d9b985d6d87e1bb343f3fd4ad0c43a399eb35863b773f6d4d4de26ae61ce9"
+      },
+      {
+        "blockchain_validation": null,
+        "current_implementation_hash": "786a02f742015903c6c6fd852552d272912f4740e15847618a86e217f71f5419d25e1031afee585313896444934eb04b903a685b1448b755d56f701afe9be2ce",
+        "current_matches_stored": false,
+        "manifest_matches_stored": false,
+        "manifest_package_hash": null,
+        "path": "atlas/publications/publication_35549c7b",
+        "proof_matches_stored": false,
+        "proof_package_hash": null,
+        "regular_file_count": 0,
+        "self_referential_files_present": [],
+        "stored_hash": null
+      },
+      {
+        "blockchain_validation": true,
+        "current_implementation_hash": "fd008a91c72fea18d8769731fb3115864534a7e3d739ac955601072fe3cda1e628fa62572b05d005f9c71c5e0762d9b706f8e4162491fccc0ee50e8822e64742",
+        "current_matches_stored": false,
+        "manifest_matches_stored": true,
+        "manifest_package_hash": "a8005b22d761b2a5efec3a60ce7094eb50de678fc386c70861bd32a44e52a7cf96803bfdba3c7c4c23c4bfd10f62aef5a888cb9a0fafa82e7af4fb9dd307f040",
+        "path": "atlas/publications/publication_4d363ee6",
+        "proof_matches_stored": false,
+        "proof_package_hash": "8b11858f6db3307e0d22a23b91d2bba575d0b483718de9240aeeb880894aad42c815a5e443786eff73e2af16d94debfd040a74179b64bcc9b03536a804ccbb6f",
+        "regular_file_count": 6,
+        "self_referential_files_present": [
+          "integrity_proof.json",
+          "manifest.json",
+          "package_hash.txt"
+        ],
+        "stored_hash": "a8005b22d761b2a5efec3a60ce7094eb50de678fc386c70861bd32a44e52a7cf96803bfdba3c7c4c23c4bfd10f62aef5a888cb9a0fafa82e7af4fb9dd307f040"
+      },
+      {
+        "blockchain_validation": true,
+        "current_implementation_hash": "4f176f883de425e29c39358aa177ed357712cb700aaecad06f2de977ff3839d8a6af90b0e9760aa3807bf41b9905795ae32d4186df010837df44fc1aefb7ccfa",
+        "current_matches_stored": false,
+        "manifest_matches_stored": true,
+        "manifest_package_hash": "dba40cc3cba4c55193b5442217e3e46676e687d057a4ebdb1f8ab5598dc789e65857a0dbd7d108dff07075564d66d614122b1d8a5852c8de44cac25b7facb6d9",
+        "path": "atlas/publications/publication_4d47ff6d",
+        "proof_matches_stored": false,
+        "proof_package_hash": "6d2e6b273995965c2bd6b8d83041b457487bc1154b25a5154260e42ac29c9a94efb54f896fd39fd9872e6b7860e266f8b7571651159aee5bc3966a116f16aa9e",
+        "regular_file_count": 6,
+        "self_referential_files_present": [
+          "integrity_proof.json",
+          "manifest.json",
+          "package_hash.txt"
+        ],
+        "stored_hash": "dba40cc3cba4c55193b5442217e3e46676e687d057a4ebdb1f8ab5598dc789e65857a0dbd7d108dff07075564d66d614122b1d8a5852c8de44cac25b7facb6d9"
+      },
+      {
+        "blockchain_validation": true,
+        "current_implementation_hash": "0d5900c882a0b8ce33c529254c70ef501f6e5902cc1606ca3b95e4c37f896bafe3f408bde249bfe9321127b7ce6e195d04fb201f69fe192484dd2995c25fe9c0",
+        "current_matches_stored": false,
+        "manifest_matches_stored": true,
+        "manifest_package_hash": "4fc5dc92d520f6b4a5ca47dc287ebd3e04bcd743b364461d29db1b31a143af7e9859fe0ac2d2931caeb36a71a624155cef47c3b5389b290fb59459f1ceb44c93",
+        "path": "atlas/publications/publication_67df99ad",
+        "proof_matches_stored": false,
+        "proof_package_hash": "e919a8fb941c5788fd97e9c9cf43b920d2573f52c0be84986419f80a9f1b114545437154b924d9e97e216665d4fe32e1eaeb4cf091a33a1a02572b800fd8cc63",
+        "regular_file_count": 6,
+        "self_referential_files_present": [
+          "integrity_proof.json",
+          "manifest.json",
+          "package_hash.txt"
+        ],
+        "stored_hash": "4fc5dc92d520f6b4a5ca47dc287ebd3e04bcd743b364461d29db1b31a143af7e9859fe0ac2d2931caeb36a71a624155cef47c3b5389b290fb59459f1ceb44c93"
+      },
+      {
+        "blockchain_validation": true,
+        "current_implementation_hash": "b5a953c5908dd425b39566b7204e719de07216127aae4e36bbe3785bcdc8aee4eb51d5ddadb3effa3fddb7e58edaae7739ddbde60b330d58ba6806f3c278af83",
+        "current_matches_stored": false,
+        "manifest_matches_stored": true,
+        "manifest_package_hash": "4ff40a6f9c356769ee7cd2f3e2e1ae3a7f749aeb21333523df92c8f6691ebe709102eded5875ef2ecc08fb7c324341e2a133fb2c860dda0120fa3a1e0726d37e",
+        "path": "atlas/publications/publication_872f0150",
+        "proof_matches_stored": false,
+        "proof_package_hash": "51b920b79e4eb06e4eaab553650acfa874dff39ba5a580baed48e15085c0202db27adc5bcf859f66909f817fbe5414a5bb15c0a8684a4256f8a0202ec4ea4968",
+        "regular_file_count": 6,
+        "self_referential_files_present": [
+          "integrity_proof.json",
+          "manifest.json",
+          "package_hash.txt"
+        ],
+        "stored_hash": "4ff40a6f9c356769ee7cd2f3e2e1ae3a7f749aeb21333523df92c8f6691ebe709102eded5875ef2ecc08fb7c324341e2a133fb2c860dda0120fa3a1e0726d37e"
+      },
+      {
+        "blockchain_validation": false,
+        "current_implementation_hash": "6a5acedb9605dad91ac2ad561cd63f132091a6a7112b68b350bf8239371cedd313c432f1cf426bf39d0a34ec229d38cf76c8366eefcb79518520ee2b15fdab4d",
+        "current_matches_stored": false,
+        "manifest_matches_stored": true,
+        "manifest_package_hash": "79ce35fa966b106f0562ef46af55dee6a03ec02625df599a2ebc5342902f947fb928878d75703b122c56ea42f644451a2f1ed5b0b6d7d583b1d660720055b139",
+        "path": "atlas/publications/publication_b2113bb7",
+        "proof_matches_stored": false,
+        "proof_package_hash": "867358e48fcfec82d4797af402135c22e74b1c3330675fb9974336038d7f2f3db6697895e066624757324feb3f9e224f905285ac98feb43d745867d30a26c7fa",
+        "regular_file_count": 14,
+        "self_referential_files_present": [
+          "integrity_proof.json",
+          "manifest.json",
+          "package_hash.txt"
+        ],
+        "stored_hash": "79ce35fa966b106f0562ef46af55dee6a03ec02625df599a2ebc5342902f947fb928878d75703b122c56ea42f644451a2f1ed5b0b6d7d583b1d660720055b139"
+      },
+      {
+        "blockchain_validation": true,
+        "current_implementation_hash": "95d694a3df1a243abee76b08f09923f745cb52f64c80aabc14abe5258c860d1aa5e01e2135218ba3540c0df30d39777052514a34bf3bdfa67108baeea3753b5a",
+        "current_matches_stored": false,
+        "manifest_matches_stored": true,
+        "manifest_package_hash": "bdbe1b7f559aec71bfa5982298f202e9f7bb87522834ee5f190f11c1905afaf9a545e20b323b0ac2a069c212a9b7f0ddde9383a94a6ce4440f390f815d7d8f2d",
+        "path": "atlas/publications/publication_b4e59f3e",
+        "proof_matches_stored": false,
+        "proof_package_hash": "29a81f24bf207df921bdf86a64a8add4b40af4a77732c1bf73581a5b0561af976295766ca7666b54ac60aa78b4e22a19f30c356ac1925ea3654d7989c005d343",
+        "regular_file_count": 6,
+        "self_referential_files_present": [
+          "integrity_proof.json",
+          "manifest.json",
+          "package_hash.txt"
+        ],
+        "stored_hash": "bdbe1b7f559aec71bfa5982298f202e9f7bb87522834ee5f190f11c1905afaf9a545e20b323b0ac2a069c212a9b7f0ddde9383a94a6ce4440f390f815d7d8f2d"
+      },
+      {
+        "blockchain_validation": null,
+        "current_implementation_hash": "786a02f742015903c6c6fd852552d272912f4740e15847618a86e217f71f5419d25e1031afee585313896444934eb04b903a685b1448b755d56f701afe9be2ce",
+        "current_matches_stored": false,
+        "manifest_matches_stored": false,
+        "manifest_package_hash": null,
+        "path": "atlas/publications/publication_c02f86e5",
+        "proof_matches_stored": false,
+        "proof_package_hash": null,
+        "regular_file_count": 0,
+        "self_referential_files_present": [],
+        "stored_hash": null
+      },
+      {
+        "blockchain_validation": true,
+        "current_implementation_hash": "e542ae0ef29d35ce832f2a0fc29800061dac07794b95da59abc480f404e60cadda8bc73acbdb35cbbab1fb51a65d727ce94a98b9397df4452b57bc34cb818517",
+        "current_matches_stored": false,
+        "manifest_matches_stored": true,
+        "manifest_package_hash": "786e98752ce735098e54be018c67ffc05c169c897125638988780134275a2e3fa430adb1af7932cdb6d9f0f348ef1ebd1e5f60691fa461cc62f6e22713ad8b06",
+        "path": "atlas/publications/publication_c43e0b43",
+        "proof_matches_stored": false,
+        "proof_package_hash": "d86d0d418166e4e2bf0b8755606d02544b5ca03e0345614934538801226b81c86110d77d1443a550c9581c6de4d4871698d153c3d65bb8811f920bbf1fd79bd7",
+        "regular_file_count": 6,
+        "self_referential_files_present": [
+          "integrity_proof.json",
+          "manifest.json",
+          "package_hash.txt"
+        ],
+        "stored_hash": "786e98752ce735098e54be018c67ffc05c169c897125638988780134275a2e3fa430adb1af7932cdb6d9f0f348ef1ebd1e5f60691fa461cc62f6e22713ad8b06"
+      },
+      {
+        "blockchain_validation": null,
+        "current_implementation_hash": "6657e1c00fd3a6785c4906c8f71b957ab1bca132085e02019d94fb84358e8bacec053f43eab782000a1db2848c8e6df60b06a93fa21143ab1ca1658aae4b5c89",
+        "current_matches_stored": false,
+        "manifest_matches_stored": false,
+        "manifest_package_hash": null,
+        "path": "atlas/publications/publication_e677b76d",
+        "proof_matches_stored": false,
+        "proof_package_hash": null,
+        "regular_file_count": 10,
+        "self_referential_files_present": [],
+        "stored_hash": null
+      }
+    ],
+    "summary": {
+      "blockchain_validation_true": 8,
+      "current_hash_matches": 0,
+      "manifest_matches_stored": 9,
+      "packages_with_stored_hash": 9,
+      "proof_matches_stored": 0,
+      "publication_directories": 13
+    }
+  },
+  "repository": {
+    "git_commit": "40663854cfc2a2cf8e8e828cc0ac7c031db58963",
+    "git_describe": "v1.0.0-68-g4066385-dirty",
+    "git_object_format": "sha1",
+    "tracked_status_sha256": "ab70f5f4c18a3e9a3d705e55a9b86b95dcec39bc06a3638ad218b7c64c43e6b5",
+    "tracked_worktree_dirty": true
+  },
+  "safety": {
+    "deserializes_pickle_or_joblib": false,
+    "imports_atlas": false,
+    "mutates_audited_artifacts": false,
+    "reads_private_key_content": false
+  },
+  "schema_version": "amy.atlas-integrity-audit.v1",
+  "static_code": {
+    "ci": {
+      "active_root_mentions_artifact_manifest_validator": false,
+      "active_root_mentions_manifest_signature_verifier": false,
+      "active_root_workflows": [
+        ".github/workflows/cd.yml",
+        ".github/workflows/ci.yml",
+        ".github/workflows/release-hygiene.yml"
+      ],
+      "nested_atlas_workflows": [
+        "atlas/.github/workflows/ci.yml",
+        "atlas/.github/workflows/dsc-tests.yml",
+        "atlas/.github/workflows/generate-api-docs.yml",
+        "atlas/.github/workflows/security-scan.yml"
+      ]
+    },
+    "direct_hashlib_constructor_counts": {
+      "blake2b": 6,
+      "md5": 54,
+      "new": 1,
+      "pbkdf2_hmac": 6,
+      "sha1": 1,
+      "sha256": 167
+    },
+    "overbroad_publication_claim_locations": [
+      {
+        "line": 31,
+        "needle": "All results are cryptographically verifiable",
+        "path": "atlas/publications/template.tex"
+      },
+      {
+        "line": 36,
+        "needle": "All artifacts, datasets, and computational steps are cryptographically signed",
+        "path": "atlas/publications/template.tex"
+      },
+      {
+        "line": 49,
+        "needle": "Distributed consensus",
+        "path": "atlas/docs/guides/manuscript.md"
+      },
+      {
+        "line": 65,
+        "needle": "All results were validated using the AXIOM blockchain",
+        "path": "atlas/docs/guides/manuscript.md"
+      }
+    ],
+    "source_sha256": {
+      ".github/workflows/ci.yml": "0392cf639b052e24a9d950122f314e72167c9cd1c5cdd5f66f17b6a3124b151c",
+      "atlas/.github/workflows/ci.yml": "7770fff6726a931fb4529f74426d0d561d37f28e0551384c1691b0402c48388c",
+      "atlas/app/security/hmac_integrity.py": "0b0bef33be1eb2a116b24456d6c2f81d5e3e125b28a1be9720ca5f176fd66eda",
+      "atlas/app/security/integrity_core.py": "fa9a777a4ae89355efb79511826399ae545057cfdde941cd8ba01590fc0d3a44",
+      "atlas/app/services/literature/publication_generator.py": "8ebc9a879d7103d9e614652886ade393cb4e5488c7e3ff60366c6a3cb34b47b1",
+      "atlas/app/validation/blockchain_validation.py": "6f48ac52c96d2d0b10ad0445ac1f33d1f6b445a7f5d39467c4771808d1ce6077",
+      "atlas/data/versions.json": "974ebd2191f4d4a59109f090a6c6ea248546dc179c4e532f92be20b6ca6a4e9f",
+      "atlas/docs/guides/manuscript.md": "451bd022c520e7f1eba59e748de5de77cceb1540e9ca8e1a80ae32be3f0203c8",
+      "atlas/models/plausibility_v4_rf.manifest.json": "67aa8d08d0da160237cbe3d25943c7c190a9d5448b9748fa23060bdc33b1b358",
+      "atlas/publications/template.tex": "88408a54c303fbe905864c8551e9c8cd26697fd5e4d87d8fc4736b6182b263b0",
+      "atlas/scripts/data_processing/train_plausibility_model_v4.py": "a46a0aa6f35ee8a23ee5b586ef289c3e46194efa55474d0afc629fe6efbeecd3",
+      "atlas/scripts/qa/validate_artifact_manifest.py": "ffdf33d7e1683d7c44e3cdc5c61f6bdb586fb76c506efc742147785352902792",
+      "atlas/scripts/qa/validate_manifests.py": "fcaea7d4886b259c80eadc59da160053c214dabda41003526ae8f4854f8fe958",
+      "atlas/scripts/qa/verify_manifest_signatures.py": "4816c5dec5553e983eda8832993a45a7cdd1acf69a9f1b4223c6ed3feee50164",
+      "atlas/scripts/tools/sign_manifest.py": "eeb0d423c39bb883c7141ca350bc78de64d5445052fdbe225317823f944f8c19",
+      "experiments/verifiable_release_study/scripts/audit_atlas_integrity.py": "de47d4ec01aab23f5e14174208314084da820f9061b3f0737995e4213cb32799"
+    },
+    "static_scan_scope": {
+      "excluded_directory_names": [
+        ".git",
+        ".mypy_cache",
+        ".pytest_cache",
+        ".ruff_cache",
+        ".tox",
+        ".venv",
+        "__pycache__",
+        "node_modules",
+        "site-packages",
+        "test_env",
+        "venv"
+      ],
+      "python_files_scanned": 4877
+    },
+    "unsafe_deserialization_call_sites": [
+      {
+        "code": "self.deserialize = lambda x: pickle.loads(base64.b64decode(x))",
+        "line": 99,
+        "path": "atlas/app/advanced_ops/advanced_redis_operations.py"
+      },
+      {
+        "code": "self.deserialize = lambda x: pickle.loads(base64.b64decode(x))",
+        "line": 95,
+        "path": "atlas/archive/backups/app_backup_20250925_152201/advanced_ops/advanced_redis_operations.py"
+      },
+      {
+        "code": "return pickle.load(f)",
+        "line": 114,
+        "path": "atlas/archive/backups/app_backup_20250925_152201/services/literature_offline_cache.py"
+      },
+      {
+        "code": "self.model = joblib.load(self.model_path)",
+        "line": 184,
+        "path": "atlas/archive/backups/app_backup_20250925_152201/services/plausibility_scoring_service.py"
+      },
+      {
+        "code": "self._scaler = joblib.load(self._scaler_path)",
+        "line": 194,
+        "path": "atlas/archive/backups/app_backup_20250925_152201/services/plausibility_scoring_service.py"
+      },
+      {
+        "code": "self._pca = joblib.load(self._pca_path)",
+        "line": 196,
+        "path": "atlas/archive/backups/app_backup_20250925_152201/services/plausibility_scoring_service.py"
+      },
+      {
+        "code": "self._feature_selector = joblib.load(self._feature_selector_path)",
+        "line": 198,
+        "path": "atlas/archive/backups/app_backup_20250925_152201/services/plausibility_scoring_service.py"
+      },
+      {
+        "code": "self._platt_calibrator = joblib.load(self._platt_path)",
+        "line": 211,
+        "path": "atlas/archive/backups/app_backup_20250925_152201/services/plausibility_scoring_service.py"
+      },
+      {
+        "code": "self._isotonic_calibrator = joblib.load(self._isotonic_path)",
+        "line": 213,
+        "path": "atlas/archive/backups/app_backup_20250925_152201/services/plausibility_scoring_service.py"
+      },
+      {
+        "code": "self.model = joblib.load(self.model_path)",
+        "line": 102,
+        "path": "atlas/archive/backups/services_original/plausibility_scoring_service.py"
+      },
+      {
+        "code": "self._scaler = joblib.load(self._scaler_path)",
+        "line": 111,
+        "path": "atlas/archive/backups/services_original/plausibility_scoring_service.py"
+      },
+      {
+        "code": "self._pca = joblib.load(self._pca_path)",
+        "line": 113,
+        "path": "atlas/archive/backups/services_original/plausibility_scoring_service.py"
+      },
+      {
+        "code": "self._platt_calibrator = joblib.load(self._platt_path)",
+        "line": 124,
+        "path": "atlas/archive/backups/services_original/plausibility_scoring_service.py"
+      },
+      {
+        "code": "self._isotonic_calibrator = joblib.load(self._isotonic_path)",
+        "line": 126,
+        "path": "atlas/archive/backups/services_original/plausibility_scoring_service.py"
+      },
+      {
+        "code": "self.model = joblib.load(self.model_path)",
+        "line": 193,
+        "path": "atlas/archive/legacy_services/plausibility_scoring_service.py"
+      },
+      {
+        "code": "self._scaler = joblib.load(self._scaler_path)",
+        "line": 203,
+        "path": "atlas/archive/legacy_services/plausibility_scoring_service.py"
+      },
+      {
+        "code": "self._pca = joblib.load(self._pca_path)",
+        "line": 205,
+        "path": "atlas/archive/legacy_services/plausibility_scoring_service.py"
+      },
+      {
+        "code": "self._feature_selector = joblib.load(self._feature_selector_path)",
+        "line": 207,
+        "path": "atlas/archive/legacy_services/plausibility_scoring_service.py"
+      },
+      {
+        "code": "self._platt_calibrator = joblib.load(self._platt_path)",
+        "line": 220,
+        "path": "atlas/archive/legacy_services/plausibility_scoring_service.py"
+      },
+      {
+        "code": "self._isotonic_calibrator = joblib.load(self._isotonic_path)",
+        "line": 222,
+        "path": "atlas/archive/legacy_services/plausibility_scoring_service.py"
+      },
+      {
+        "code": "self.deserialize = lambda x: pickle.loads(base64.b64decode(x))",
+        "line": 95,
+        "path": "atlas/archive/migration_backup/advanced_ops/advanced_redis_operations.py"
+      },
+      {
+        "code": "entry_data = pickle.load(f)",
+        "line": 889,
+        "path": "atlas/archive/migration_backup/core/cache_improved.py"
+      },
+      {
+        "code": "return pickle.load(f)",
+        "line": 114,
+        "path": "atlas/archive/migration_backup/services/literature_offline_cache.py"
+      },
+      {
+        "code": "self.model = joblib.load(self.model_path)",
+        "line": 184,
+        "path": "atlas/archive/migration_backup/services/plausibility_scoring_service.py"
+      },
+      {
+        "code": "self._scaler = joblib.load(self._scaler_path)",
+        "line": 194,
+        "path": "atlas/archive/migration_backup/services/plausibility_scoring_service.py"
+      },
+      {
+        "code": "self._pca = joblib.load(self._pca_path)",
+        "line": 196,
+        "path": "atlas/archive/migration_backup/services/plausibility_scoring_service.py"
+      },
+      {
+        "code": "self._feature_selector = joblib.load(self._feature_selector_path)",
+        "line": 198,
+        "path": "atlas/archive/migration_backup/services/plausibility_scoring_service.py"
+      },
+      {
+        "code": "self._platt_calibrator = joblib.load(self._platt_path)",
+        "line": 211,
+        "path": "atlas/archive/migration_backup/services/plausibility_scoring_service.py"
+      },
+      {
+        "code": "self._isotonic_calibrator = joblib.load(self._isotonic_path)",
+        "line": 213,
+        "path": "atlas/archive/migration_backup/services/plausibility_scoring_service.py"
+      },
+      {
+        "code": "self.graph_data = pickle.load(f)",
+        "line": 133,
+        "path": "atlas/external_tools/ToolUniverse/src/tooluniverse/tool_graph_web_ui.py"
+      },
+      {
+        "code": "return pickle.loads(payload)",
+        "line": 88,
+        "path": "atlas/external_tools/ToolUniverse/src/tooluniverse/cache/sqlite_backend.py"
+      },
+      {
+        "code": "cache_data = pickle.load(f)",
+        "line": 427,
+        "path": "atlas/external_tools/ToolUniverse/src/tooluniverse/compose_scripts/tool_graph_composer.py"
+      },
+      {
+        "code": "self.meta_learning_model = pickle.load(f)",
+        "line": 187,
+        "path": "atlas/improvements/advanced_plausibility_scorer.py"
+      },
+      {
+        "code": "tfidf = joblib.load('data/tfidf_v4.pkl')",
+        "line": 91,
+        "path": "atlas/scripts/data_processing/query_faiss.py"
+      },
+      {
+        "code": "return joblib.load(path)",
+        "line": 34,
+        "path": "atlas/scripts/tools/compare_plausibility_models_v4.py"
+      },
+      {
+        "code": "model_bundle = joblib.load(MODEL_PATH)",
+        "line": 34,
+        "path": "atlas/scripts/tools/eval_plausibility_model_v4.py"
+      },
+      {
+        "code": "model_data = pickle.load(f)",
+        "line": 79,
+        "path": "atlas/scripts/tools/hybrid_confidence_filter.py"
+      },
+      {
+        "code": "model_data = pickle.load(f)",
+        "line": 280,
+        "path": "atlas/scripts/tools/hypothesis_quality_filter.py"
+      },
+      {
+        "code": "model_data = pickle.load(f)",
+        "line": 97,
+        "path": "atlas/scripts/tools/improved_hybrid_filter.py"
+      },
+      {
+        "code": "model = joblib.load(model_path)",
+        "line": 117,
+        "path": "atlas/scripts/tools/pipeline_metadata_v4.py"
+      },
+      {
+        "code": "mobj = joblib.load(MODEL)",
+        "line": 360,
+        "path": "atlas/scripts/tools/pipeline_metadata_v4.py"
+      },
+      {
+        "code": "model_data = pickle.load(f)",
+        "line": 26,
+        "path": "atlas/scripts/tools/pseudoscience_analysis.py"
+      },
+      {
+        "code": "model_data = pickle.load(f)",
+        "line": 192,
+        "path": "atlas/scripts/tools/pseudoscience_analysis.py"
+      }
+    ]
+  }
+}
+

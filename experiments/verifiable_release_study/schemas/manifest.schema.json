@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Ganador1/amy/experiments/verifiable_release_study/schemas/manifest.schema.json",
+  "title": "A.M.Y verifiable scientific release manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "release", "payloads"],
+  "properties": {
+    "schema_version": {"const": "0.1.0-draft"},
+    "release": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "kind"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"},
+        "version": {"type": "string", "pattern": "^(?:0|[1-9][0-9]*)\\.(?:0|[1-9][0-9]*)\\.(?:0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"},
+        "kind": {
+          "enum": [
+            "benchmark_case",
+            "scientific_paper",
+            "model_artifact",
+            "model_exchange",
+            "software_release",
+            "mixed_research_release"
+          ]
+        }
+      }
+    },
+    "payloads": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10000,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "bytes", "sha256", "media_type", "role"],
+        "properties": {
+          "path": {"type": "string", "minLength": 9, "maxLength": 240},
+          "bytes": {"type": "integer", "minimum": 0, "maximum": 5368709120},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "media_type": {"type": "string", "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*/[a-z0-9][a-z0-9!#$&^_.+-]*$", "maxLength": 127},
+          "role": {
+            "enum": [
+              "analysis_code",
+              "analysis_output",
+              "configuration",
+              "environment_lock",
+              "evidence_ledger",
+              "figure",
+              "log",
+              "manuscript_render",
+              "manuscript_source",
+              "model",
+              "model_exchange_request",
+              "model_exchange_response",
+              "model_metadata",
+              "prompt",
+              "raw_data",
+              "source_code",
+              "table"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

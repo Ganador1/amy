@@ -13,7 +13,49 @@ class _ReturningService:
         self.payload = payload
 
     async def process_request(self, request_data):
-        return dict(self.payload)
+        return dict(self.payload) if isinstance(self.payload, dict) else self.payload
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("value", ["not-a-number", "nan", "0", "601"])
+async def test_process_request_rejects_invalid_global_timeout(monkeypatch, value):
+    monkeypatch.setenv("ORCHESTRATOR_GLOBAL_TIMEOUT", value)
+    service = ToolEvidenceOrchestratorService()
+
+    result = await service.process_request(
+        {
+            "action": "corroborate",
+            "hypothesis": {"domain": "mathematics"},
+        }
+    )
+
+    assert result["success"] is False
+    assert result["status"] == "configuration_error"
+    assert "finite number" in result["error"]
+
+
+@pytest.mark.asyncio
+async def test_process_request_timeout_is_explicit_and_retains_no_partial_evidence(
+    monkeypatch,
+):
+    monkeypatch.setenv("ORCHESTRATOR_GLOBAL_TIMEOUT", "0.1")
+    service = ToolEvidenceOrchestratorService()
+
+    async def slow_corroborate(_request):
+        await __import__("asyncio").sleep(1)
+
+    monkeypatch.setattr(service, "_corroborate", slow_corroborate)
+    result = await service.process_request(
+        {
+            "action": "corroborate",
+            "hypothesis": {"domain": "mathematics"},
+        }
+    )
+
+    assert result["success"] is False
+    assert result["status"] == "timed_out"
+    assert result["partial_evidence_retained"] is False
+    assert result["background_sync_operations_may_continue"] is True
 
 
 @pytest.mark.asyncio
@@ -65,6 +107,121 @@ async def test_execute_spec_marks_paperqa_fallback_as_non_real_evidence():
     assert result["evidence_tier"] == "fallback"
     assert result["counts_as_real_evidence"] is False
     assert result["realism_factor"] == pytest.approx(0.1)
+
+
+@pytest.mark.asyncio
+async def test_execute_spec_empty_dict_cannot_become_real_local_evidence():
+    service = ToolEvidenceOrchestratorService()
+    spec = CallSpec(
+        service_factory=lambda: _ReturningService({}),
+        action="run_vqe",
+        params={},
+        weight=1.0,
+        description="regression for implicit success on empty payload",
+    )
+
+    result = await service._execute_spec(
+        spec,
+        hypothesis={"title": "Test hypothesis", "domain": "quantum_computing"},
+        domain="quantum_computing",
+    )
+
+    assert result["raw_result"] == {}
+    assert result["success"] is False
+    assert result["signal_strength"] == 0.0
+    assert result["evidence_tier"] == "unavailable"
+    assert result["counts_as_real_evidence"] is False
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "payload",
+    [
+        None,
+        {"success": True, "backend": "local", "operation": "run_vqe", "metadata": {"device": "cpu"}},
+        {"success": True, "error": "calculation failed", "results": {"eigenvalue": -1.23}},
+        {"success": True, "results": "placeholder"},
+        {"results": {"eigenvalue": -1.23}},
+    ],
+)
+async def test_execute_spec_rejects_non_evidentiary_payloads(payload):
+    service = ToolEvidenceOrchestratorService()
+    spec = CallSpec(
+        service_factory=lambda: _ReturningService(payload),
+        action="run_vqe",
+        params={},
+        weight=1.0,
+        description="reject invalid evidence envelopes",
+    )
+
+    result = await service._execute_spec(
+        spec,
+        hypothesis={"title": "Test hypothesis", "domain": "quantum_computing"},
+        domain="quantum_computing",
+    )
+
+    assert result["success"] is False
+    assert result["signal_strength"] == 0.0
+    assert result["evidence_tier"] == "unavailable"
+    assert result["counts_as_real_evidence"] is False
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("action", "params", "payload"),
+    [
+        (
+            "run_vqe",
+            {},
+            {
+                "success": True,
+                "operation": "power_analysis",
+                "results": {"eigenvalue": -1.23},
+            },
+        ),
+        (
+            "process_request",
+            {"operation": "run_qaoa"},
+            {
+                "success": True,
+                "operation": "compare_quantum_vs_classical",
+                "results": {"energy": -1.23},
+            },
+        ),
+        (
+            "run_vqe",
+            {},
+            {
+                "success": True,
+                "action": "power_analysis",
+                "results": {"eigenvalue": -1.23},
+            },
+        ),
+    ],
+)
+async def test_execute_spec_keeps_action_and_operation_conflicts_fail_closed(
+    action,
+    params,
+    payload,
+):
+    service = ToolEvidenceOrchestratorService()
+    spec = CallSpec(
+        service_factory=lambda: _ReturningService(payload),
+        action=action,
+        params=params,
+        weight=1.0,
+        description="reject conflicting action or operation",
+    )
+
+    result = await service._execute_spec(
+        spec,
+        hypothesis={"title": "Test hypothesis", "domain": "quantum_computing"},
+        domain="quantum_computing",
+    )
+
+    assert result["success"] is False
+    assert result["evidence_tier"] == "unavailable"
+    assert result["counts_as_real_evidence"] is False
 
 
 @pytest.mark.asyncio

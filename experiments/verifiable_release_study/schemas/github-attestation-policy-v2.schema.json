@@ -1,0 +1,535 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Ganador1/amy/experiments/verifiable_release_study/schemas/github-attestation-policy-v2.schema.json",
+  "title": "A.M.Y GitHub/Sigstore attestation policy v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "policy_version",
+    "status",
+    "policy_schema",
+    "tool",
+    "subject",
+    "identity",
+    "trust",
+    "statement",
+    "manifest",
+    "result",
+    "provenance",
+    "limits",
+    "workflow_dependency_assurance",
+    "workflow_dependencies"
+  ],
+  "properties": {
+    "schema_version": {"const": "amy.github-attestation-policy.v2-draft"},
+    "policy_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$"},
+    "status": {
+      "enum": [
+        "template_not_release_specific_not_valid_for_acceptance",
+        "release_specific_frozen"
+      ]
+    },
+    "policy_schema": {"$ref": "#/$defs/policySchemaIdentity"},
+    "tool": {"$ref": "#/$defs/tool"},
+    "subject": {"$ref": "#/$defs/subject"},
+    "identity": {"$ref": "#/$defs/identity"},
+    "trust": {"$ref": "#/$defs/trust"},
+    "statement": {"$ref": "#/$defs/statementPolicy"},
+    "manifest": {"$ref": "#/$defs/manifestPolicy"},
+    "result": {"$ref": "#/$defs/resultPolicy"},
+    "provenance": {"$ref": "#/$defs/provenance"},
+    "limits": {"$ref": "#/$defs/limits"},
+    "workflow_dependency_assurance": {"$ref": "#/$defs/workflowDependencyAssurance"},
+    "workflow_dependencies": {"$ref": "#/$defs/workflowDependencies"}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"status": {"const": "release_specific_frozen"}},
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "identity": {
+            "properties": {
+              "certificate_identity": {"type": "string", "format": "uri", "pattern": "^https://"},
+              "repository_id": {"$ref": "#/$defs/githubNumericIdentifier"},
+              "repository_owner_id": {"$ref": "#/$defs/githubNumericIdentifier"},
+              "signer_digest": {"$ref": "#/$defs/gitOid"},
+              "source_digest": {"$ref": "#/$defs/gitOid"},
+              "source_ref": {"type": "string", "pattern": "^refs/[^\\s]+$"}
+            }
+          },
+          "trust": {
+            "properties": {
+              "trusted_root_sha256": {"$ref": "#/$defs/sha256"}
+            }
+          },
+          "provenance": {
+            "properties": {
+              "source_revision": {"$ref": "#/$defs/gitOid"},
+              "source_ref": {"type": "string", "pattern": "^refs/[^\\s]+$"},
+              "builder_id": {"type": "string", "format": "uri", "pattern": "^https://"},
+              "resolved_source_dependency_uri": {"type": "string", "pattern": "^git\\+https://"},
+              "manifest_assertions": {
+                "properties": {
+                  "source": {
+                    "properties": {
+                      "revision": {"$ref": "#/$defs/gitOid"},
+                      "ref": {"type": "string", "pattern": "^refs/[^\\s]+$"},
+                      "tree": {"$ref": "#/$defs/gitOid"},
+                      "snapshot": {
+                        "properties": {
+                          "sha256": {"$ref": "#/$defs/sha256"}
+                        }
+                      }
+                    }
+                  },
+                  "dependency_lock": {
+                    "properties": {
+                      "sha256": {"$ref": "#/$defs/sha256"}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "gitOid": {"type": "string", "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$"},
+    "githubNumericIdentifier": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+    "tbdOrGithubNumericIdentifier": {
+      "oneOf": [
+        {"const": "TBD-BEFORE-REGISTRATION"},
+        {"$ref": "#/$defs/githubNumericIdentifier"}
+      ]
+    },
+    "tbdOrSha256": {
+      "oneOf": [
+        {"const": "TBD-BEFORE-REGISTRATION"},
+        {"$ref": "#/$defs/sha256"}
+      ]
+    },
+    "tbdOrGitOid": {
+      "oneOf": [
+        {"const": "TBD-BEFORE-REGISTRATION"},
+        {"$ref": "#/$defs/gitOid"}
+      ]
+    },
+    "tbdOrRef": {
+      "oneOf": [
+        {"const": "TBD-BEFORE-REGISTRATION"},
+        {"type": "string", "pattern": "^refs/[^\\s]+$"}
+      ]
+    },
+    "tbdOrHttpsUri": {
+      "oneOf": [
+        {"const": "TBD-BEFORE-REGISTRATION"},
+        {"type": "string", "format": "uri", "pattern": "^https://"}
+      ]
+    },
+    "tbdOrGitHttpsUri": {
+      "oneOf": [
+        {"const": "TBD-BEFORE-REGISTRATION"},
+        {"type": "string", "pattern": "^git\\+https://"}
+      ]
+    },
+    "policySchemaIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "schema_path", "schema_sha256"],
+      "properties": {
+        "schema_version": {"const": "amy.github-attestation-policy-schema.v2-draft"},
+        "schema_path": {"const": "schemas/github-attestation-policy-v2.schema.json"},
+        "schema_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "digestMap": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {"pattern": "^[a-z0-9]+-(?:x86_64|arm64)$"},
+      "additionalProperties": {"$ref": "#/$defs/sha256"}
+    },
+    "tool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version",
+        "release_url",
+        "archive_sha256_by_platform",
+        "binary_sha256_by_platform",
+        "binary_max_bytes",
+        "timeout_seconds"
+      ],
+      "properties": {
+        "name": {"const": "gh"},
+        "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "release_url": {"type": "string", "format": "uri", "pattern": "^https://github\\.com/cli/cli/releases/tag/v"},
+        "archive_sha256_by_platform": {"$ref": "#/$defs/digestMap"},
+        "binary_sha256_by_platform": {"$ref": "#/$defs/digestMap"},
+        "binary_max_bytes": {"type": "integer", "minimum": 1, "maximum": 536870912},
+        "timeout_seconds": {"type": "integer", "minimum": 1, "maximum": 600}
+      }
+    },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "digest_algorithm", "allow_additional_subjects"],
+      "properties": {
+        "name": {"const": "MANIFEST.jcs.json"},
+        "digest_algorithm": {"const": "sha256"},
+        "allow_additional_subjects": {"const": false}
+      }
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "repository_uri",
+        "repository_owner_uri",
+        "repository_id",
+        "repository_owner_id",
+        "certificate_identity",
+        "oidc_issuer",
+        "signer_digest",
+        "source_digest",
+        "source_ref",
+        "event_name",
+        "visibility"
+      ],
+      "properties": {
+        "repository": {"const": "Ganador1/amy"},
+        "repository_uri": {"const": "https://github.com/Ganador1/amy"},
+        "repository_owner_uri": {"const": "https://github.com/Ganador1"},
+        "repository_id": {"$ref": "#/$defs/tbdOrGithubNumericIdentifier"},
+        "repository_owner_id": {"$ref": "#/$defs/tbdOrGithubNumericIdentifier"},
+        "certificate_identity": {"$ref": "#/$defs/tbdOrHttpsUri"},
+        "oidc_issuer": {"const": "https://token.actions.githubusercontent.com"},
+        "signer_digest": {"$ref": "#/$defs/tbdOrGitOid"},
+        "source_digest": {"$ref": "#/$defs/tbdOrGitOid"},
+        "source_ref": {"$ref": "#/$defs/tbdOrRef"},
+        "event_name": {"const": "push"},
+        "visibility": {"const": "public"}
+      }
+    },
+    "trust": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "trusted_root_sha256",
+        "certificate_issuer_organization",
+        "required_timestamp_type",
+        "required_timestamp_uri",
+        "allowed_bundle_media_types",
+        "allowed_verification_result_media_types"
+      ],
+      "properties": {
+        "trusted_root_sha256": {"$ref": "#/$defs/tbdOrSha256"},
+        "certificate_issuer_organization": {"const": "sigstore.dev"},
+        "required_timestamp_type": {"const": "Tlog"},
+        "required_timestamp_uri": {"const": "https://rekor.sigstore.dev"},
+        "allowed_bundle_media_types": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"const": "application/vnd.dev.sigstore.bundle.v0.3+json"}
+        },
+        "allowed_verification_result_media_types": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"const": "application/vnd.dev.sigstore.verificationresult+json;version=0.1"}
+        }
+      }
+    },
+    "statementPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "p3_predicate_type", "attestation_mode", "workflow_assertion_location"],
+      "properties": {
+        "type": {"const": "https://in-toto.io/Statement/v1"},
+        "p3_predicate_type": {"const": "https://slsa.dev/provenance/v1"},
+        "attestation_mode": {"const": "actions_attest_default_slsa_provenance"},
+        "workflow_assertion_location": {"const": "/build_metadata"}
+      }
+    },
+    "roleArray": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "analysis_code",
+          "analysis_output",
+          "environment_lock",
+          "evidence_ledger",
+          "manuscript_render",
+          "manuscript_source",
+          "model",
+          "model_exchange_request",
+          "model_exchange_response",
+          "model_metadata",
+          "raw_data",
+          "source_code"
+        ]
+      }
+    },
+    "requiredRoles": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "benchmark_case",
+        "scientific_paper",
+        "model_artifact",
+        "model_exchange",
+        "software_release",
+        "mixed_research_release"
+      ],
+      "properties": {
+        "benchmark_case": {"$ref": "#/$defs/roleArray"},
+        "scientific_paper": {"$ref": "#/$defs/roleArray"},
+        "model_artifact": {"$ref": "#/$defs/roleArray"},
+        "model_exchange": {"$ref": "#/$defs/roleArray"},
+        "software_release": {"$ref": "#/$defs/roleArray"},
+        "mixed_research_release": {"$ref": "#/$defs/roleArray"}
+      }
+    },
+    "manifestPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "schema_path",
+        "schema_sha256",
+        "build_metadata_schema_version",
+        "assertion_scope",
+        "required_roles_by_release_kind"
+      ],
+      "properties": {
+        "schema_version": {"const": "0.2.0-draft"},
+        "schema_path": {"const": "schemas/manifest-production-v0.2.schema.json"},
+        "schema_sha256": {"$ref": "#/$defs/sha256"},
+        "build_metadata_schema_version": {"const": "amy.build-metadata.v1"},
+        "assertion_scope": {"const": "workflow-authored-not-independently-certified"},
+        "required_roles_by_release_kind": {"$ref": "#/$defs/requiredRoles"}
+      }
+    },
+    "resultPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "schema_path", "schema_sha256"],
+      "properties": {
+        "schema_version": {"const": "amy.production-verification-result.v2-draft"},
+        "schema_path": {"const": "schemas/github-production-verification-result-v2.schema.json"},
+        "schema_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "sourceSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "format", "assurance", "required_payload_role"],
+      "properties": {
+        "path": {"const": "payload/source/source.tar"},
+        "sha256": {"$ref": "#/$defs/tbdOrSha256"},
+        "format": {"const": "application/x-tar"},
+        "assurance": {"const": "exact-opaque-bytes-no-git-tree-equivalence-claim"},
+        "required_payload_role": {"const": "source_code"}
+      }
+    },
+    "assertedSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository_uri",
+        "revision",
+        "ref",
+        "git_object_format",
+        "tree",
+        "dirty",
+        "snapshot"
+      ],
+      "properties": {
+        "repository_uri": {"const": "https://github.com/Ganador1/amy"},
+        "revision": {"$ref": "#/$defs/tbdOrGitOid"},
+        "ref": {"$ref": "#/$defs/tbdOrRef"},
+        "git_object_format": {"enum": ["sha1", "sha256"]},
+        "tree": {"$ref": "#/$defs/tbdOrGitOid"},
+        "dirty": {"const": false},
+        "snapshot": {"$ref": "#/$defs/sourceSnapshot"}
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"git_object_format": {"const": "sha1"}},
+            "required": ["git_object_format"]
+          },
+          "then": {
+            "properties": {
+              "revision": {
+                "oneOf": [
+                  {"const": "TBD-BEFORE-REGISTRATION"},
+                  {"type": "string", "pattern": "^[0-9a-f]{40}$"}
+                ]
+              },
+              "tree": {
+                "oneOf": [
+                  {"const": "TBD-BEFORE-REGISTRATION"},
+                  {"type": "string", "pattern": "^[0-9a-f]{40}$"}
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {"git_object_format": {"const": "sha256"}},
+            "required": ["git_object_format"]
+          },
+          "then": {
+            "properties": {
+              "revision": {
+                "oneOf": [
+                  {"const": "TBD-BEFORE-REGISTRATION"},
+                  {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+                ]
+              },
+              "tree": {
+                "oneOf": [
+                  {"const": "TBD-BEFORE-REGISTRATION"},
+                  {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "dependencyLock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "required_payload_role"],
+      "properties": {
+        "path": {"const": "payload/environment/uv.lock"},
+        "sha256": {"$ref": "#/$defs/tbdOrSha256"},
+        "required_payload_role": {"const": "environment_lock"}
+      }
+    },
+    "executionImage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reference", "digest"],
+      "properties": {
+        "reference": {"type": "string", "minLength": 1},
+        "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      }
+    },
+    "manifestAssertions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "dependency_lock", "execution_image"],
+      "properties": {
+        "source": {"$ref": "#/$defs/assertedSource"},
+        "dependency_lock": {"$ref": "#/$defs/dependencyLock"},
+        "execution_image": {"$ref": "#/$defs/executionImage"}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "build_type",
+        "source_repository_uri",
+        "source_revision",
+        "source_ref",
+        "workflow_path",
+        "builder_id",
+        "resolved_source_dependency_uri",
+        "manifest_assertions"
+      ],
+      "properties": {
+        "build_type": {"const": "https://actions.github.io/buildtypes/workflow/v1"},
+        "source_repository_uri": {"const": "https://github.com/Ganador1/amy"},
+        "source_revision": {"$ref": "#/$defs/tbdOrGitOid"},
+        "source_ref": {"$ref": "#/$defs/tbdOrRef"},
+        "workflow_path": {"const": ".github/workflows/attest-verifiable-study.yml"},
+        "builder_id": {"$ref": "#/$defs/tbdOrHttpsUri"},
+        "resolved_source_dependency_uri": {"$ref": "#/$defs/tbdOrGitHttpsUri"},
+        "manifest_assertions": {"$ref": "#/$defs/manifestAssertions"}
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifest_max_bytes",
+        "attestation_max_bytes",
+        "trusted_root_max_bytes",
+        "dsse_statement_max_bytes",
+        "gh_output_max_bytes",
+        "json_max_depth",
+        "payload_file_max_count",
+        "single_payload_max_bytes",
+        "payload_total_max_bytes",
+        "path_max_utf8_bytes",
+        "path_max_components"
+      ],
+      "properties": {
+        "manifest_max_bytes": {"type": "integer", "minimum": 1, "maximum": 67108864},
+        "attestation_max_bytes": {"type": "integer", "minimum": 1, "maximum": 134217728},
+        "trusted_root_max_bytes": {"type": "integer", "minimum": 1, "maximum": 67108864},
+        "dsse_statement_max_bytes": {"type": "integer", "minimum": 1, "maximum": 67108864},
+        "gh_output_max_bytes": {"type": "integer", "minimum": 1, "maximum": 134217728},
+        "json_max_depth": {"type": "integer", "minimum": 1, "maximum": 256},
+        "payload_file_max_count": {"type": "integer", "minimum": 1, "maximum": 1000000},
+        "single_payload_max_bytes": {"type": "integer", "minimum": 1, "maximum": 1099511627776},
+        "payload_total_max_bytes": {"type": "integer", "minimum": 1, "maximum": 10995116277760},
+        "path_max_utf8_bytes": {"type": "integer", "minimum": 1, "maximum": 4096},
+        "path_max_components": {"type": "integer", "minimum": 1, "maximum": 1024}
+      }
+    },
+    "workflowDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["release", "commit"],
+      "properties": {
+        "release": {"type": "string", "pattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"}
+      }
+    },
+    "workflowDependencyAssurance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "verification_status",
+        "pins_are_authorization_evidence",
+        "evidence_binding"
+      ],
+      "properties": {
+        "verification_status": {
+          "const": "NO_GO_AUTHENTICATED_WORKFLOW_BYTES_ABSENT"
+        },
+        "pins_are_authorization_evidence": {"const": false},
+        "evidence_binding": {
+          "const": "workflow-identity-ref-and-source-commit-only-no-authenticated-workflow-content"
+        }
+      }
+    },
+    "workflowDependencies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["actions_checkout", "actions_attest", "actions_upload_artifact"],
+      "properties": {
+        "actions_checkout": {"$ref": "#/$defs/workflowDependency"},
+        "actions_attest": {"$ref": "#/$defs/workflowDependency"},
+        "actions_upload_artifact": {"$ref": "#/$defs/workflowDependency"}
+      }
+    }
+  }
+}

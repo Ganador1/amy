@@ -1,0 +1,70 @@
+{
+  "schema_version": "amy.selected-profile-fixture-policy.v1-draft",
+  "status": "controlled_fixture_only_not_frozen_not_production_sigstore",
+  "extends": {
+    "path": "protocol/GITHUB_ATTESTATION_POLICY_TEMPLATE.json",
+    "sha256": "68ea605c25a8e73ebe955a1bfd3977a309f13b40b9a112aee6b2e9bc5cd38c26"
+  },
+  "selected_profile": "standard_provenance_plus_authenticated_manifest_metadata",
+  "cryptographic_boundary": {
+    "backend": "deterministic_public_test_dsse_x509_pki",
+    "production_sigstore_conformance": false,
+    "private_material_secret": false,
+    "permitted_claim": "controlled S1 semantic and integration behavior only"
+  },
+  "identity": {
+    "repository": "Ganador1/amy",
+    "repository_uri": "https://github.com/Ganador1/amy",
+    "repository_owner_uri": "https://github.com/Ganador1",
+    "certificate_identity": "https://github.com/Ganador1/amy/.github/workflows/attest-verifiable-release.yml@refs/tags/paper-v0.1.0",
+    "oidc_issuer": "A.M.Y PILOT ROOT - DO NOT TRUST",
+    "signer_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "source_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "source_ref": "refs/tags/paper-v0.1.0",
+    "event_name": "pilot_fixture",
+    "visibility": "public"
+  },
+  "provenance": {
+    "source_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "source_ref": "refs/tags/paper-v0.1.0",
+    "workflow_path": ".github/workflows/attest-verifiable-release.yml",
+    "source_tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "execution_image_reference": "ghcr.io/amy/selected-profile-fixture",
+    "execution_image_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+  },
+  "payload_fixtures": {
+    "source_snapshot": {
+      "path": "payload/source/source.tar",
+      "recipe": {
+        "type": "ustar_single_utf8_file_v1",
+        "member_path": "SNAPSHOT.txt",
+        "utf8_text": "AMY selected-profile fixture source snapshot\n"
+      },
+      "bytes": 10240,
+      "sha256": "2bc8dc879609cf564b390de1036df57ea3e2dc6f6d16d7529a916d93eb58e8dd",
+      "media_type": "application/x-tar",
+      "role": "source_code",
+      "assurance": "exact-opaque-bytes-no-git-tree-equivalence-claim"
+    },
+    "dependency_lock": {
+      "path": "payload/provenance/dependency.lock",
+      "utf8_text": "version = 1\n",
+      "bytes": 12,
+      "sha256": "dbab12665d98aef021ba64953c61b0ed8a908cfb56a1c01e2fcb4b052b71a2a1",
+      "media_type": "text/plain",
+      "role": "environment_lock"
+    }
+  },
+  "contracts": {
+    "manifest_schema_path": "schemas/manifest-production-v0.2.schema.json",
+    "manifest_schema_sha256": "08f22071779168458fc89806a144c1aab89133c3a235f5deb3a40c5da8915562",
+    "production_reason_extension_path": "protocol/PRODUCTION_REASON_CODES_DRAFT.json",
+    "production_reason_extension_sha256": "4f1070c3d4cc3496ad14d023526b0b75d604d0dbe9cdcbc30e3c982ec9554c94"
+  },
+  "forbidden_claims": [
+    "This fixture is production Sigstore.",
+    "A fixture acceptance establishes a real A.M.Y release identity.",
+    "The opaque source tar reconstructs the declared Git tree.",
+    "Fixture behavior is a confirmatory result before registration."
+  ]
+}

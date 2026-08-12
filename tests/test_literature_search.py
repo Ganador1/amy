@@ -146,6 +146,51 @@ def test_papers_without_title_are_dropped():
     assert out["papers"][0]["title"] == "Real"
 
 
+def test_domain_filter_discards_popular_but_unrelated_papers():
+    sources = {
+        "mixed": _fake_source([
+            Paper(
+                title="Prime gap distributions and finite Cramer models",
+                abstract="We enumerate consecutive prime numbers.",
+                source="A",
+                citations=12,
+            ),
+            Paper(
+                title="Cancer survival after vaccine therapy",
+                abstract="A clinical human-genome cohort study.",
+                source="A",
+                citations=50_000,
+            ),
+        ])
+    }
+
+    out = asyncio.run(search_literature_async(
+        "prime gap distribution",
+        domain="mathematics",
+        sources=sources,
+    ))
+
+    assert [paper["title"] for paper in out["papers"]] == [
+        "Prime gap distributions and finite Cramer models"
+    ]
+    assert out["papers_filtered_irrelevant"] == 1
+    assert out["relevance_filter_applied"] is True
+    assert "prime" in out["papers"][0]["relevance_matches"]
+
+
+def test_domain_filter_is_not_applied_to_general_searches():
+    sources = {
+        "broad": _fake_source([
+            Paper(title="Unrelated but intentionally retained", source="A")
+        ])
+    }
+
+    out = asyncio.run(search_literature_async("prime gaps", sources=sources))
+
+    assert len(out["papers"]) == 1
+    assert out["relevance_filter_applied"] is False
+
+
 # ─── Live tests (opt-in) ──────────────────────────────────────────────────────
 
 _LIVE = os.getenv("RUN_LIVE_LITERATURE") == "1"

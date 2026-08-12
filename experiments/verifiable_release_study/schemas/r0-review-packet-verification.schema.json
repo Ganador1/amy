@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Ganador1/amy/experiments/verifiable_release_study/schemas/r0-review-packet-verification.schema.json",
+  "title": "A.M.Y R0 review-packet mechanical verification result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "valid",
+    "status",
+    "errors",
+    "subject_manifest",
+    "packet",
+    "artifact_count",
+    "archive_member_count",
+    "manifest_canonical",
+    "archive_contract_valid",
+    "review_record",
+    "detached_authentication_verified",
+    "reviewer_authorization_verified",
+    "reviewer_competence_verified",
+    "rg004_complete",
+    "confirmatory_outputs_read"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "amy.r0-review-packet-verification.v1-draft"
+    },
+    "valid": {
+      "type": "boolean"
+    },
+    "status": {
+      "enum": [
+        "mechanical_integrity_valid_unreviewed",
+        "mechanical_integrity_valid_submitted_record_present",
+        "invalid"
+      ]
+    },
+    "errors": {
+      "type": "array",
+      "maxItems": 1000,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 10000
+      }
+    },
+    "subject_manifest": {
+      "$ref": "#/$defs/boundFile"
+    },
+    "packet": {
+      "$ref": "#/$defs/boundFile"
+    },
+    "artifact_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "archive_member_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "manifest_canonical": {
+      "type": "boolean"
+    },
+    "archive_contract_valid": {
+      "type": "boolean"
+    },
+    "review_record": {
+      "$ref": "#/$defs/reviewRecord"
+    },
+    "detached_authentication_verified": {
+      "const": false
+    },
+    "reviewer_authorization_verified": {
+      "const": false
+    },
+    "reviewer_competence_verified": {
+      "const": false
+    },
+    "rg004_complete": {
+      "const": false
+    },
+    "confirmatory_outputs_read": {
+      "const": false
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "boundFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "expected_sha256",
+        "observed_sha256",
+        "byte_length",
+        "hash_matches"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 10000
+        },
+        "expected_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "observed_sha256": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "byte_length": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "hash_matches": {
+          "type": "boolean"
+        }
+      }
+    },
+    "reviewRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "supplied",
+        "path",
+        "schema_valid",
+        "record_status",
+        "subject_binding_matches",
+        "human_review_claimed"
+      ],
+      "properties": {
+        "supplied": {
+          "type": "boolean"
+        },
+        "path": {
+          "type": ["string", "null"],
+          "maxLength": 10000
+        },
+        "schema_valid": {
+          "type": ["boolean", "null"]
+        },
+        "record_status": {
+          "enum": ["template_unreviewed", "submitted", null]
+        },
+        "subject_binding_matches": {
+          "type": ["boolean", "null"]
+        },
+        "human_review_claimed": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "valid": {"const": true}
+        },
+        "required": ["valid"]
+      },
+      "then": {
+        "properties": {
+          "errors": {"maxItems": 0},
+          "subject_manifest": {
+            "properties": {"hash_matches": {"const": true}}
+          },
+          "packet": {
+            "properties": {"hash_matches": {"const": true}}
+          },
+          "manifest_canonical": {"const": true},
+          "archive_contract_valid": {"const": true}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {"const": "invalid"}
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "valid": {"const": false},
+          "errors": {"minItems": 1}
+        }
+      }
+    }
+  ]
+}

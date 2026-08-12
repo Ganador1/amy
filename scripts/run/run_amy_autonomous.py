@@ -28,6 +28,8 @@ from core.provenance import ProvenanceManager
 from communication.paper_generator import PaperGenerator
 from cognition.reasoning import ReasoningEngine
 
+MIN_MISSION_START_BUDGET_SECONDS = 60.0
+
 
 # Misiones por dominio — solo tools que funcionan (sin service_* ni service_* con JSON)
 MISSIONS = {
@@ -212,6 +214,23 @@ class AutonomousAMY:
         """Check if we should continue running."""
         elapsed = time.time() - self.start_time
         return elapsed < self.duration
+
+    def remaining_seconds(self) -> float:
+        """Return the remaining autonomous run budget."""
+        elapsed = time.time() - self.start_time
+        return max(0.0, self.duration - elapsed)
+
+    def mission_start_budget_seconds(self) -> float:
+        """Minimum remaining time required before starting another mission."""
+        return min(MIN_MISSION_START_BUDGET_SECONDS, float(self.duration))
+
+    def has_mission_start_budget(self) -> bool:
+        """Avoid launching a fresh mission when only a short tail remains."""
+        if not self.should_continue():
+            return False
+        if self.mission_count == 0:
+            return True
+        return self.remaining_seconds() >= self.mission_start_budget_seconds()
     
     def log(self, message: str):
         """Log with timestamp."""
@@ -424,11 +443,16 @@ class AutonomousAMY:
         self.log("=" * 70)
         
         while self.should_continue():
+            if not self.has_mission_start_budget():
+                self.log(
+                    "⏹️  Remaining time below mission start budget "
+                    f"({self.remaining_seconds():.0f}s < {self.mission_start_budget_seconds():.0f}s); stopping."
+                )
+                break
             try:
                 await self.run_mission()                
                 # Stats
-                elapsed = time.time() - self.start_time
-                remaining = self.duration - elapsed
+                remaining = self.remaining_seconds()
                 self.log(f"📊 Stats: {self.mission_count} missions, {self.tool_count} tools, {self.paper_count} papers")
                 self.log(f"⏱️  Remaining: {remaining/60:.0f} minutes")
                 

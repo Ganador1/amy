@@ -44,6 +44,8 @@ Diseño:
 from __future__ import annotations
 
 import asyncio
+import math
+import os
 import time
 from typing import Dict, Any, List, Callable
 from dataclasses import dataclass
@@ -1867,11 +1869,44 @@ class ToolEvidenceOrchestratorService(BaseService):
         return routes
 
     async def process_request(self, request_data: ProcessRequestResult) -> ProcessRequestResult:  # type: ignore[override]
+        global_timeout = 90.0
         try:
             action = request_data.get("action")
             if action == "corroborate":
-                return await self._corroborate(request_data)
+                # Enforce a global deadline so callers (e.g. AtlasTools with
+                # asyncio.wait_for) can actually time out. Without this, a
+                # domain with 15 routes × 30s per-route timeout can run for
+                # minutes, freezing the event loop.
+                raw_timeout = os.environ.get("ORCHESTRATOR_GLOBAL_TIMEOUT", "90")
+                try:
+                    global_timeout = float(raw_timeout)
+                except (TypeError, ValueError):
+                    return {
+                        "success": False,
+                        "status": "configuration_error",
+                        "error": "ORCHESTRATOR_GLOBAL_TIMEOUT must be a finite number between 0.1 and 600 seconds",
+                    }
+                if not math.isfinite(global_timeout) or not 0.1 <= global_timeout <= 600:
+                    return {
+                        "success": False,
+                        "status": "configuration_error",
+                        "error": "ORCHESTRATOR_GLOBAL_TIMEOUT must be a finite number between 0.1 and 600 seconds",
+                    }
+                return await asyncio.wait_for(
+                    self._corroborate(request_data),
+                    timeout=global_timeout,
+                )
             return {"success": False, "error": f"Unknown action: {action}", "available_actions": ["corroborate"]}
+        except asyncio.TimeoutError:
+            return {
+                "success": False,
+                "status": "timed_out",
+                "error": f"Orchestrator global timeout ({global_timeout}s) exceeded",
+                "aggregate": {"coverage": 0, "support_score": 0, "real_success_count": 0},
+                "evidence_items": [],
+                "partial_evidence_retained": False,
+                "background_sync_operations_may_continue": True,
+            }
         except BiologyError as e:
             return self.handle_error(e, "process_request")
 
@@ -2062,7 +2097,7 @@ class ToolEvidenceOrchestratorService(BaseService):
                 }
             pr = getattr(service_instance, "process_request", None)
             resolved_params = self._resolve_params(spec.params, hypothesis)
-            raw: Dict[str, Any]
+            raw: Any
             # Acciones personalizadas (no expuestas por process_request)
             if not pr or spec.action in {"vectorized_demo", "diff_polynomial", "symbolic_energy", "symbolic_growth", "stoichiometry_demo", "quick_sanity", "numerical_integration"}:
                 raw = await self._run_internal_action(spec, service_instance, resolved_params)
@@ -2070,24 +2105,33 @@ class ToolEvidenceOrchestratorService(BaseService):
                 call_payload = dict(resolved_params)
                 call_payload["action"] = spec.action
                 if asyncio.iscoroutinefunction(pr):
-                    raw = await asyncio.wait_for(pr(call_payload), timeout=30)
+                    raw = await asyncio.wait_for(pr(call_payload), timeout=12)
                 else:
                     loop = asyncio.get_running_loop()
                     raw = await loop.run_in_executor(None, lambda: pr(call_payload))  # type: ignore
-            available = not bool(raw.get("unavailable") or raw.get("missing_dependency"))
-            signal = self._compute_signal_strength(spec, raw)
+            payload_valid, payload_reason = self._validate_evidence_payload(spec, raw)
+            available = (
+                isinstance(raw, dict)
+                and not bool(raw.get("unavailable") or raw.get("missing_dependency"))
+            )
+            signal = self._compute_signal_strength(spec, raw) if payload_valid else 0.0
             tier, realism_factor, class_reason = self._classify_evidence_tier(spec, service_instance, raw, available=available)
+            if not payload_valid:
+                tier = "unavailable"
+                realism_factor = self.REALISM_FACTORS["unavailable"]
+                class_reason = payload_reason
+            counts_as_real_evidence = payload_valid and tier in self.REAL_EVIDENCE_TIERS
             item = {
                 "source": service_instance.__class__.__name__,
                 "operation": spec.action,
-                "success": bool(raw.get("success", False if raw.get("error") else True)),
+                "success": payload_valid,
                 "signal_strength": signal,
                 "raw_result": self._truncate(raw),
                 "reasoning": f"Resultado {spec.action} peso={spec.weight}",
                 "duration_seconds": round(time.time() - start, 3),
                 "evidence_tier": tier,
                 "realism_factor": realism_factor,
-                "counts_as_real_evidence": tier in self.REAL_EVIDENCE_TIERS,
+                "counts_as_real_evidence": counts_as_real_evidence,
                 "classification_reason": class_reason,
                 "_weight": spec.weight,
                 "_available": available
@@ -2102,7 +2146,7 @@ class ToolEvidenceOrchestratorService(BaseService):
                 "signal_strength": signal,
                 "evidence_tier": tier,
                 "realism_factor": realism_factor,
-                "counts_as_real_evidence": tier in self.REAL_EVIDENCE_TIERS,
+                "counts_as_real_evidence": counts_as_real_evidence,
                 "timestamp": time.time()
             })
             return item
@@ -2379,10 +2423,120 @@ class ToolEvidenceOrchestratorService(BaseService):
 
         return _SafeDict(context_data)
 
+    def _validate_evidence_payload(self, spec: CallSpec, raw: Any) -> tuple[bool, str]:
+        if not isinstance(raw, dict) or not raw:
+            return False, "La herramienta no devolvió un payload de evidencia no vacío."
+
+        if raw.get("success") is not True:
+            return False, "La herramienta no declaró success=true de forma explícita."
+
+        if raw.get("error") or raw.get("errors"):
+            return False, "El payload declaró un error y no puede contarse como evidencia."
+
+        if raw.get("unavailable") or raw.get("missing_dependency"):
+            return False, "La herramienta o una dependencia no estuvo disponible."
+
+        placeholder_flags = (
+            "placeholder",
+            "is_placeholder",
+            "mock",
+            "is_mock",
+            "stub",
+            "is_stub",
+        )
+        if any(raw.get(key) for key in placeholder_flags):
+            return False, "El payload se identificó como placeholder, mock o stub."
+
+        action = str(spec.action or "").strip().lower()
+        returned_action = str(raw.get("action") or "").strip().lower()
+        if returned_action and returned_action != action:
+            return False, "El action devuelto entra en conflicto con la acción solicitada."
+
+        returned_operation = str(raw.get("operation") or "").strip().lower()
+        expected_operation = (
+            str(spec.params.get("operation") or "").strip().lower()
+            if action == "process_request"
+            else action
+        )
+        if returned_operation and expected_operation and returned_operation != expected_operation:
+            return False, "La operation devuelta entra en conflicto con la operación solicitada."
+
+        metadata_keys = {
+            "success",
+            "status",
+            "message",
+            "detail",
+            "error",
+            "errors",
+            "unavailable",
+            "missing_dependency",
+            "backend",
+            "source",
+            "service",
+            "tool",
+            "action",
+            "operation",
+            "metadata",
+            "meta",
+            "timestamp",
+            "started_at",
+            "completed_at",
+            "duration",
+            "duration_seconds",
+            "request_id",
+            "trace_id",
+            "run_id",
+            "placeholder",
+            "is_placeholder",
+            "mock",
+            "is_mock",
+            "stub",
+            "is_stub",
+            "note",
+            "warning",
+            "warnings",
+            "version",
+        }
+        substantive_values = [
+            value for key, value in raw.items() if str(key).lower() not in metadata_keys
+        ]
+        if not any(self._has_substantive_evidence_value(value) for value in substantive_values):
+            return False, "El payload contiene sólo metadatos, errores o placeholders."
+
+        return True, "El payload declaró éxito explícito y contiene evidencia sustantiva."
+
+    def _has_substantive_evidence_value(self, value: Any) -> bool:
+        if value is None:
+            return False
+        if isinstance(value, str):
+            normalized = value.strip().lower()
+            if not normalized:
+                return False
+            placeholder_values = {
+                "placeholder",
+                "mock",
+                "stub",
+                "todo",
+                "tbd",
+                "not implemented",
+                "not available",
+                "n/a",
+                "unknown",
+            }
+            return normalized not in placeholder_values
+        if isinstance(value, dict):
+            return any(
+                self._has_substantive_evidence_value(nested)
+                for nested in value.values()
+            )
+        if isinstance(value, (list, tuple, set)):
+            return any(self._has_substantive_evidence_value(nested) for nested in value)
+        return True
+
     def _compute_signal_strength(self, spec: CallSpec, raw: Dict[str, Any]) -> float:
         if not isinstance(raw, dict):
             return 0.0
-        if not raw.get("success", True):
+        if raw.get("success") is not True:
             return 0.0
         # Métricas reales (si están presentes) ajustan base
         metric_bonus = 0.0
@@ -2543,12 +2697,16 @@ class ToolEvidenceOrchestratorService(BaseService):
         self,
         spec: CallSpec,
         service_instance: Any,
-        raw: Dict[str, Any],
+        raw: Any,
         *,
         available: bool,
     ) -> tuple[str, float, str]:
         if not available:
             return "unavailable", self.REALISM_FACTORS["unavailable"], "La herramienta o dependencia no estuvo disponible."
+
+        payload_valid, payload_reason = self._validate_evidence_payload(spec, raw)
+        if not payload_valid:
+            return "unavailable", self.REALISM_FACTORS["unavailable"], payload_reason
 
         action = str(spec.action or "")
         source = service_instance.__class__.__name__ if service_instance is not None else "UnavailableService"

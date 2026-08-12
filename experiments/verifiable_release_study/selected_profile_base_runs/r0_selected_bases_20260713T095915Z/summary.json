@@ -1,0 +1,242 @@
+{
+  "all_clean_profiles_accept": true,
+  "base_count": 6,
+  "base_records": [
+    {
+      "archive_bytes": 30720,
+      "archive_path": "archives/B01-TABULAR.tar",
+      "archive_sha256": "0fa82dc3309dff17f66137e148657ddab237db295c3d2feca10fe36c7004c3eb",
+      "attestation_sha256": "f563c3d7167aa109a7243e45b396ebfe43691052fccca5c30c4c717864bb13a8",
+      "base_id": "B01-TABULAR",
+      "blueprint_payload_count": 6,
+      "clean_profile_results": {
+        "P0": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK",
+          "result_sha256": "ee10a6e16c76cf1da5687aa7b749acae02172ebb56cd5868210ccc7ba088fe2e"
+        },
+        "P1": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK",
+          "result_sha256": "491751a142013c12863eeee8d821419e87d6fe34634fdcfbb9dcece42f8067ac"
+        },
+        "P2": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK",
+          "result_sha256": "3f5f4eeaf64b0a3ebd64d61bf0be1a571801e9fc3bfca42aa9a5df8ab6fe50bf"
+        },
+        "P3": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK",
+          "result_sha256": "e42ec6890f6e9a7c73bee1a2db93a9f595881ed248a6494ba93aba9205f3bf75"
+        }
+      },
+      "injected_fixture_payload_count": 2,
+      "manifest_sha256": "7598203c027eca6402434b9a88b9cda9e2d65371d0a3f76bc255ed7b1c5d94ca",
+      "release_kind": "benchmark_case",
+      "total_payload_count": 8,
+      "tree_sha256": "9ec2c5e7ed39b159763c158efec7d6a199303f709815817375aa49f71ff40a0e"
+    },
+    {
+      "archive_bytes": 40960,
+      "archive_path": "archives/B02-PAPER.tar",
+      "archive_sha256": "068908b4852c92ccec83893cb0f211b26d7e457b1ddc5d75e70bd7ef7f864535",
+      "attestation_sha256": "4dee4f69043517704b6dae7894530886e63266544d332df5c611cfbdbf29f3ee",
+      "base_id": "B02-PAPER",
+      "blueprint_payload_count": 9,
+      "clean_profile_results": {
+        "P0": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK",
+          "result_sha256": "e331f22a9a3a1ee191c3cdd6164753313588d801c990a4280fb1f476178939df"
+        },
+        "P1": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK",
+          "result_sha256": "8068cde7ddffe7a2999b68aac3bb7eee62024c91e6ef512c0445f85dff0d6a47"
+        },
+        "P2": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK",
+          "result_sha256": "41655da95ede6cdc9be577dfdadf328abc3a36cff8f0904f93a963a3c6b9fb2a"
+        },
+        "P3": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK",
+          "result_sha256": "ffb447f8ae57ec0649a056c1870774e81e0df3de7175b50da1e648c09f60f5ad"
+        }
+      },
+      "injected_fixture_payload_count": 2,
+      "manifest_sha256": "1a668502ee143ba81048b658e874262080ad2496d6a051dfabe0af3de813af55",
+      "release_kind": "scientific_paper",
+      "total_payload_count": 11,
+      "tree_sha256": "fa795c8d00010a8ec1d0dabe7ed0993dd04abaada4a4d6b2ab906ee058419bda"
+    },
+    {
+      "archive_bytes": 2129920,
+      "archive_path": "archives/B03-MODEL.tar",
+      "archive_sha256": "67e089e73b7795a70b9baa17460e15c16b2e64cb9445d1aa20e1c315cff34b2d",
+      "attestation_sha256": "227dab995edd1e53887e215a95540abc5f979980846033831c3d6b940e3a2e92",
+      "base_id": "B03-MODEL",
+      "blueprint_payload_count": 5,
+      "clean_profile_results": {
+        "P0": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK",
+          "result_sha256": "9af21af4a12aa59b6979e2f274dae77c8df7143e835c8e14e1357a2678575796"
+        },
+        "P1": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK",
+          "result_sha256": "1b1661c6fa3f892ac49e526fb4a09ce722e2ff56c04f791dd761f61a845ebb5a"
+        },
+        "P2": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK",
+          "result_sha256": "a960ca812317b46b570a5ac7ce2e69f9e25ba92a4d44b2caa81f14b5fbff98e8"
+        },
+        "P3": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK",
+          "result_sha256": "c60497c7bb46cff9ea26ecc7194da089c46c83f0bfa12fcdac9e7b7fa3acf67d"
+        }
+      },
+      "injected_fixture_payload_count": 2,
+      "manifest_sha256": "a9ce9a6593ad820a5531b98572d1a4bf1dd94db2c83b76d79f8a109229480bf5",
+      "release_kind": "model_artifact",
+      "total_payload_count": 7,
+      "tree_sha256": "aa07625b3ea5393701046708c91143ee0dc7766d0da8f2434b66e98a28cbeddf"
+    },
+    {
+      "archive_bytes": 30720,
+      "archive_path": "archives/B04-SOFTWARE.tar",
+      "archive_sha256": "52a3280383df8fd387cc264cba59bfdb9f6f80a221067fcbc82047a3430d0fc7",
+      "attestation_sha256": "87e3632cb9ecc743ee540f88ce918a4ee30669739951ea78fc12c104e343ddc0",
+      "base_id": "B04-SOFTWARE",
+      "blueprint_payload_count": 6,
+      "clean_profile_results": {
+        "P0": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK",
+          "result_sha256": "bb20f5372f432834e8133c10edaa5b1dae45ca82fd3f8fd8c2b93b15575200e5"
+        },
+        "P1": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK",
+          "result_sha256": "2d642bf5c44fab99390f06e79aa7ab317a2218c4847ef2a57e34069f44c0f7d6"
+        },
+        "P2": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK",
+          "result_sha256": "dfc65b9b2c26bd913b5c0aeb44b1bb91cce3d1de632c367d3463d3bd02d3a0ca"
+        },
+        "P3": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK",
+          "result_sha256": "c191102c2206d114f7abdf2298e9428e5e4358f4320906152e4ab09258f04466"
+        }
+      },
+      "injected_fixture_payload_count": 2,
+      "manifest_sha256": "a0b8170309d4962f9d368c8c89ce4d1f3060bbc0a6c796e5f7a4b31c0bcc4ac6",
+      "release_kind": "software_release",
+      "total_payload_count": 8,
+      "tree_sha256": "8581c668d4b1883f6b789fb69444c7cb867c9fd1bf0835610bc8e58c93987dd3"
+    },
+    {
+      "archive_bytes": 30720,
+      "archive_path": "archives/B05-MODEL-EXCHANGE.tar",
+      "archive_sha256": "a24f42053103361f8d1d275fb3c520adca5e823f05c1dd757255461bc933c78e",
+      "attestation_sha256": "a51ab05f0b981e3e20c334f2c48b021a813fd4e89bcf6c75ca7c25d32d264f1c",
+      "base_id": "B05-MODEL-EXCHANGE",
+      "blueprint_payload_count": 6,
+      "clean_profile_results": {
+        "P0": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK",
+          "result_sha256": "34a03e885f19bd4a03a58bf0e8d5a0760a6e959252d2b5873f295f74a15635e2"
+        },
+        "P1": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK",
+          "result_sha256": "e27abc7267c20640148935f0ab4d8d45050216c80dca8a168c9978538a056bd4"
+        },
+        "P2": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK",
+          "result_sha256": "aa4e954982b160d8bfff10a6931a7bd50add1e2b925c7b36b78dc6f0fa166a8c"
+        },
+        "P3": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK",
+          "result_sha256": "940e7872f2b85ef28b5a871b720aa2da8a6ac70fe1c1f09bafe6e654e91ea083"
+        }
+      },
+      "injected_fixture_payload_count": 2,
+      "manifest_sha256": "f7f3de31abc314d8c60f6d49d516db9979be40ab435557ac8d1464cd68abada1",
+      "release_kind": "model_exchange",
+      "total_payload_count": 8,
+      "tree_sha256": "28cb05c45de3f2dd9cb305eab9161c632834fbe8bc5c996074351f277cf20428"
+    },
+    {
+      "archive_bytes": 1085440,
+      "archive_path": "archives/B06-MIXED-RESEARCH.tar",
+      "archive_sha256": "d2cee2db286aa16ca15dd01ff2075edbb98884ad3ed3b6074ca87501f3c89830",
+      "attestation_sha256": "655302a6f83018a35a8537db3417a3a0876160a454578a6006f8b710a5d92a54",
+      "base_id": "B06-MIXED-RESEARCH",
+      "blueprint_payload_count": 9,
+      "clean_profile_results": {
+        "P0": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK",
+          "result_sha256": "df3dacb482f074fedfbcb74688eab3f1b73f0f50149234665de8ce5184e60e00"
+        },
+        "P1": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK",
+          "result_sha256": "1782f56fe8f04afa2c6f811f5f9d4d716552a21b3ce858d9920d2a8619a4e540"
+        },
+        "P2": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK",
+          "result_sha256": "e25c5e674bb0773c3f1f2956439be79813c032f72b4fa96be737b61d6ba7b7db"
+        },
+        "P3": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK",
+          "result_sha256": "cbc867548efbf8c24813dd2f21065fd4058773ff4d2299fab8a1c6d4d52a8738"
+        }
+      },
+      "injected_fixture_payload_count": 2,
+      "manifest_sha256": "d3586053ae2e94474df5e73be45b72f98d31e67a88d6f2fee4c982806475084f",
+      "release_kind": "mixed_research_release",
+      "total_payload_count": 11,
+      "tree_sha256": "237652ff5844f345a1aa58c0e1e22730a84ed566d330cfc3811865732a1a4ecd"
+    }
+  ],
+  "classification": "exploratory_R0_selected_profile_clean_bases_no_adversarial_cases",
+  "confirmatory_cases_generated": false,
+  "confirmatory_outcomes_read": false,
+  "input_sha256": {
+    "base_registry": "553352619f5b1f4e96b9ccc482070e0fba4398298ba15d9a27457698117dc015",
+    "effective_fixture_policy": "489640078266132833d8fbf0654d984f702052467bb29d22013fc08c32735e9d",
+    "manifest_schema": "08f22071779168458fc89806a144c1aab89133c3a235f5deb3a40c5da8915562",
+    "result_schema": "442553ed9bbb291bffd3de20b79d5beb4089dbbaa7ba629f8bb5172a3303930c",
+    "selected_fixture_overlay": "93830e93f18428df461bdb865557ada52a8c3dbfdb427d2ab524226f16898731"
+  },
+  "license_notice_sha256": "d69c6496d27338defdd27269b22f568b4ae3ccecfca5754d7c427412b1239549",
+  "limitations": [
+    "The cryptographic envelope is deterministic public test PKI, not production Sigstore.",
+    "The two injected provenance payloads are controlled fixtures, not observations about the six blueprints.",
+    "The source snapshot is a valid deterministic USTAR whose exact bytes are hashed; no Git-tree equivalence is claimed.",
+    "This R0 run contains clean bases only and must not be reported as confirmatory evidence."
+  ],
+  "production_sigstore_conformance": false,
+  "repository_commit": "40663854cfc2a2cf8e8e828cc0ac7c031db58963",
+  "repository_dirty": true,
+  "schema_version": "amy.selected-profile-r0-base-build.v1-draft",
+  "selected_profile": "standard_provenance_plus_authenticated_manifest_metadata",
+  "source_archive_path": "source/selected_base_generator_source.tar",
+  "source_archive_sha256": "84af1daab82ad987b291a753b5073f14e033c4cd7a215c63e8a0556aa98eff9e",
+  "source_manifest_path": "source/source_manifest.json",
+  "source_manifest_sha256": "9b5a5935584e72ceef383c670a8d79967632f31b13ecfdd275c17b257fee7507"
+}

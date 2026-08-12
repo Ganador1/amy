@@ -1,0 +1,94 @@
+[
+  {
+    "bytes": 2422,
+    "kind": "regular",
+    "path": "MANIFEST.jcs.json",
+    "sha256": "a0b8170309d4962f9d368c8c89ce4d1f3060bbc0a6c796e5f7a4b31c0bcc4ac6"
+  },
+  {
+    "bytes": 2421,
+    "kind": "regular",
+    "path": "attestation.sigstore.json",
+    "sha256": "87e3632cb9ecc743ee540f88ce918a4ee30669739951ea78fc12c104e343ddc0"
+  },
+  {
+    "kind": "directory",
+    "path": "payload"
+  },
+  {
+    "kind": "directory",
+    "path": "payload/config"
+  },
+  {
+    "bytes": 34,
+    "kind": "regular",
+    "path": "payload/config/default.json",
+    "sha256": "730ed338db99202d277baaab3e8e51906f25e88ec2036415263b218220ed854f"
+  },
+  {
+    "kind": "directory",
+    "path": "payload/environment"
+  },
+  {
+    "bytes": 58,
+    "kind": "regular",
+    "path": "payload/environment/uv.lock",
+    "sha256": "3e69e537fc82e750a03d0811b7091aaba310c66f69843f96fe9a7c043a4c20c6"
+  },
+  {
+    "kind": "directory",
+    "path": "payload/fixtures"
+  },
+  {
+    "bytes": 22,
+    "kind": "regular",
+    "path": "payload/fixtures/pair-a.txt",
+    "sha256": "db2b54a47b58b3dc4b68c9a95ec665a998a2ad8943e4a88b611ec955438ae71b"
+  },
+  {
+    "bytes": 22,
+    "kind": "regular",
+    "path": "payload/fixtures/pair-b.txt",
+    "sha256": "db2b54a47b58b3dc4b68c9a95ec665a998a2ad8943e4a88b611ec955438ae71b"
+  },
+  {
+    "kind": "directory",
+    "path": "payload/provenance"
+  },
+  {
+    "bytes": 12,
+    "kind": "regular",
+    "path": "payload/provenance/dependency.lock",
+    "sha256": "dbab12665d98aef021ba64953c61b0ed8a908cfb56a1c01e2fcb4b052b71a2a1"
+  },
+  {
+    "kind": "directory",
+    "path": "payload/source"
+  },
+  {
+    "bytes": 10240,
+    "kind": "regular",
+    "path": "payload/source/source.tar",
+    "sha256": "2bc8dc879609cf564b390de1036df57ea3e2dc6f6d16d7529a916d93eb58e8dd"
+  },
+  {
+    "kind": "directory",
+    "path": "payload/src"
+  },
+  {
+    "kind": "directory",
+    "path": "payload/src/lib"
+  },
+  {
+    "bytes": 70,
+    "kind": "regular",
+    "path": "payload/src/lib/normalize.py",
+    "sha256": "eece8c2b38099a2ff29d4dc291d740bafde928f692502c5605a23552ce5f31ac"
+  },
+  {
+    "bytes": 66,
+    "kind": "regular",
+    "path": "payload/src/main.py",
+    "sha256": "e89d5c28ca52401c35ec18560b1f61768ed291d3941735ea7d2bc31cc77978ce"
+  }
+]

@@ -1,0 +1,1 @@
+print('deterministic paper fixture')

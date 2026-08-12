@@ -1,0 +1,64 @@
+{
+  "schema_version": "amy.upstream-attestation-semantics-audit.v1",
+  "classification": "exploratory_design_audit_not_confirmatory_evidence",
+  "recorded_at": "2026-07-13T07:15:41Z",
+  "upstream": {
+    "repository": "https://github.com/actions/attest",
+    "release": "v4.1.1",
+    "commit": "a1948c3f048ba23858d222213b7c278aabede763",
+    "tree": "8a0e67ce04c1134637bb47765e864835cf99245c",
+    "bundled_actions_attest_version": "3.2.0",
+    "bundled_actions_attest_npm_integrity": "sha512-Mdpqfyfp4dp7VZt9lVBmQTlnpK0PBrIXSblzeseP4w6Gn4Bbl5bpScJ+8zgwOMfTz1049wPzSUda5XtTYIZloQ==",
+    "sha256": {
+      "dist/index.js": "13dd8b469bb6cd761c4a7a936326651d12f81a26716358c1c76e52848ae6fc1a",
+      "package-lock.json": "a9c2e3e79354cb93fdb52e8b2dd617a536b536ce18fd271ae749a89cb99e9a7b",
+      "README.md": "acbc34108fa53e82cfffa5d055d340e56ad4185d3de953632c0fd54d5c9afe53",
+      "src/provenance.ts": "14a74a43c75b3c99aaf55e27f0fefa18ef6ec626f0117a1d7d33bc04840bd58f",
+      "dist/index.js_lines_123497_123544_lf": "9aa161eb00d07bb76bbee2ec9c19d7fed5b7bbdd85c34c9a36b5515d861727ce"
+    },
+    "reproduction_commands": [
+      "git clone https://github.com/actions/attest.git actions-attest",
+      "git -C actions-attest checkout a1948c3f048ba23858d222213b7c278aabede763",
+      "jq -r '.packages[\"node_modules/@actions/attest\"].version' actions-attest/package-lock.json",
+      "sed -n '123497,123544p' actions-attest/dist/index.js"
+    ]
+  },
+  "observed_default_provenance": {
+    "predicate_type": "https://slsa.dev/provenance/v1",
+    "build_type": "https://actions.github.io/buildtypes/workflow/v1",
+    "external_parameter_keys": ["workflow"],
+    "workflow_keys": ["path", "ref", "repository"],
+    "internal_parameter_keys": ["github"],
+    "resolved_source_dependency_uri_template": "git+{server}/{repository}@{ref}",
+    "resolved_source_digest_key": "gitCommit",
+    "builder_id_source": "OIDC job_workflow_ref",
+    "absent_from_default_predicate": [
+      "externalParameters.source",
+      "externalParameters.source.dirty",
+      "A.M.Y source-snapshot material",
+      "A.M.Y dependency-lock material",
+      "A.M.Y execution-image material"
+    ]
+  },
+  "observed_action_modes": {
+    "default_provenance": "No predicate inputs; the action generates the SLSA predicate.",
+    "custom": "predicate-type plus predicate or predicate-path; the workflow supplies the predicate content."
+  },
+  "current_local_p3_contract": {
+    "implementation": "amy_verifier/github_attestation.py::_enforce_p3",
+    "requires_external_parameters": ["source", "workflow"],
+    "requires_source_keys": ["repository", "revision", "ref", "dirty"],
+    "requires_custom_materials": [
+      "amy:source-snapshot",
+      "amy:dependency-lock",
+      "oci:ghcr.io/astral-sh/uv"
+    ],
+    "compatible_with_pinned_default_predicate": false
+  },
+  "conclusion": "The pinned default actions/attest predicate cannot satisfy the current A.M.Y P3 semantic checks. Custom mode can authenticate workflow-supplied fields, but those fields must be labeled workflow assertions and must not be described as independently certified by GitHub or Sigstore.",
+  "limitations": [
+    "This is a source-level audit of the exact pinned action, not a real A.M.Y P3 execution.",
+    "It does not establish which replacement profile should be selected.",
+    "Certificate claims, standard SLSA predicate fields, and workflow-authored custom claims have different trust boundaries and must be reported separately."
+  ]
+}

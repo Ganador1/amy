@@ -1,0 +1,26 @@
+{
+  "byte_identical_after_canonicalization": true,
+  "classification": "same_environment_current_byte_replay",
+  "errors": [],
+  "fresh_canonical_json_sha256": "333e3cc70c5fb7550cefa680af8a842480708b009044d2711c579f3c181c995b",
+  "limitations": [
+    "Replay is on the same host and current dirty repository bytes, not an independent audit.",
+    "The external reference metadata comparison is a curated 2026-07-13 snapshot.",
+    "Canonical replay establishes deterministic accounting, not scientific truth or authorship."
+  ],
+  "record_path": "audit/LATEST_MANUSCRIPTS_DEEP_AUDIT_RAW_2026-07-13.json",
+  "retained_canonical_json_sha256": "333e3cc70c5fb7550cefa680af8a842480708b009044d2711c579f3c181c995b",
+  "retained_pretty_json_sha256": "f7121f209496bf9dc646d625663b523f7c573eabaab850d478269f44d1f9e245",
+  "scanner_sha256": "7f10dd0ed2657fdd3b53a53834b8afb6de86f01a85a622b046f25ae5f978eac3",
+  "schema_version": "amy.latest-manuscripts-audit-replay-validation.v2",
+  "summary": {
+    "amy_intended_records": 24,
+    "amy_prefix_records": 96,
+    "axiom_placeholders": 11,
+    "bond_records": 8,
+    "dna_missing_artifacts": 4,
+    "dna_pdf_reviewed_sha256": "b0cf19040da47d2635035237833219fe8be365de175804f6bd9742c69bd64d7f",
+    "formal_reference_entries": 14
+  },
+  "valid": true
+}

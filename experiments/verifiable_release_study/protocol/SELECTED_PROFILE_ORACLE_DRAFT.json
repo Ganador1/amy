@@ -1,0 +1,1184 @@
+{
+  "schema_version": "amy.selected-profile-oracle.v1-draft",
+  "status": "draft_same_author_not_independently_reviewed_not_frozen",
+  "source_catalog": {
+    "path": "protocol/ATTACK_CATALOG_SELECTED_PROFILE_DRAFT.json",
+    "sha256": "098563afc029f8c1532999e3cc5c058c8bf3bdc33cfcfd01423decf56f4693b1",
+    "catalog_version": "0.4.0-draft"
+  },
+  "result_contract": {
+    "path": "schemas/selected-profile-fixture-result.schema.json",
+    "sha256": "442553ed9bbb291bffd3de20b79d5beb4089dbbaa7ba629f8bb5172a3303930c"
+  },
+  "derivation_boundary": {
+    "source_fields": [
+      "cases[].id",
+      "cases[].profile_expectations"
+    ],
+    "observed_results_read": false,
+    "confirmatory_cases_read": false,
+    "confirmatory_cases_executed": false,
+    "target_decisions_used_as_profile_expectations": false,
+    "implementation_behavior_used_to_generate_rows": false,
+    "independent_human_review_complete": false,
+    "classification": "pre_registration_expected_implementation_behavior"
+  },
+  "profiles": [
+    "P0",
+    "P1",
+    "P2",
+    "P3"
+  ],
+  "case_count": 41,
+  "row_count": 164,
+  "rows": [
+    {
+      "case_id": "ATTESTATION-MALFORMED-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/0/profile_expectations/P0"
+    },
+    {
+      "case_id": "ATTESTATION-MALFORMED-001",
+      "profile_id": "P1",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/0/profile_expectations/P1"
+    },
+    {
+      "case_id": "ATTESTATION-MALFORMED-001",
+      "profile_id": "P2",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "ATTESTATION_INVALID",
+      "catalog_json_pointer": "/cases/0/profile_expectations/P2"
+    },
+    {
+      "case_id": "ATTESTATION-MALFORMED-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "ATTESTATION_INVALID",
+      "catalog_json_pointer": "/cases/0/profile_expectations/P3"
+    },
+    {
+      "case_id": "ATTESTATION-MISSING-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/1/profile_expectations/P0"
+    },
+    {
+      "case_id": "ATTESTATION-MISSING-001",
+      "profile_id": "P1",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/1/profile_expectations/P1"
+    },
+    {
+      "case_id": "ATTESTATION-MISSING-001",
+      "profile_id": "P2",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "ATTESTATION_MISSING",
+      "catalog_json_pointer": "/cases/1/profile_expectations/P2"
+    },
+    {
+      "case_id": "ATTESTATION-MISSING-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "ATTESTATION_MISSING",
+      "catalog_json_pointer": "/cases/1/profile_expectations/P3"
+    },
+    {
+      "case_id": "BUILD-DIRTY-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/2/profile_expectations/P0"
+    },
+    {
+      "case_id": "BUILD-DIRTY-001",
+      "profile_id": "P1",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/2/profile_expectations/P1"
+    },
+    {
+      "case_id": "BUILD-DIRTY-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/2/profile_expectations/P2"
+    },
+    {
+      "case_id": "BUILD-DIRTY-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "DIRTY_BUILD",
+      "catalog_json_pointer": "/cases/2/profile_expectations/P3"
+    },
+    {
+      "case_id": "BUILD-METADATA-MISSING-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/3/profile_expectations/P0"
+    },
+    {
+      "case_id": "BUILD-METADATA-MISSING-001",
+      "profile_id": "P1",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "SCHEMA_INVALID",
+      "catalog_json_pointer": "/cases/3/profile_expectations/P1"
+    },
+    {
+      "case_id": "BUILD-METADATA-MISSING-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/3/profile_expectations/P2"
+    },
+    {
+      "case_id": "BUILD-METADATA-MISSING-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "PROVENANCE_INVALID",
+      "catalog_json_pointer": "/cases/3/profile_expectations/P3"
+    },
+    {
+      "case_id": "BUILDER-PREDICATE-MISMATCH-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/4/profile_expectations/P0"
+    },
+    {
+      "case_id": "BUILDER-PREDICATE-MISMATCH-001",
+      "profile_id": "P1",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/4/profile_expectations/P1"
+    },
+    {
+      "case_id": "BUILDER-PREDICATE-MISMATCH-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/4/profile_expectations/P2"
+    },
+    {
+      "case_id": "BUILDER-PREDICATE-MISMATCH-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "BUILDER_UNAUTHORIZED",
+      "catalog_json_pointer": "/cases/4/profile_expectations/P3"
+    },
+    {
+      "case_id": "CERTIFICATE-TIME-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/5/profile_expectations/P0"
+    },
+    {
+      "case_id": "CERTIFICATE-TIME-001",
+      "profile_id": "P1",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/5/profile_expectations/P1"
+    },
+    {
+      "case_id": "CERTIFICATE-TIME-001",
+      "profile_id": "P2",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "CERTIFICATE_TIME_INVALID",
+      "catalog_json_pointer": "/cases/5/profile_expectations/P2"
+    },
+    {
+      "case_id": "CERTIFICATE-TIME-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "CERTIFICATE_TIME_INVALID",
+      "catalog_json_pointer": "/cases/5/profile_expectations/P3"
+    },
+    {
+      "case_id": "CLEAN-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/6/profile_expectations/P0"
+    },
+    {
+      "case_id": "CLEAN-001",
+      "profile_id": "P1",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/6/profile_expectations/P1"
+    },
+    {
+      "case_id": "CLEAN-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/6/profile_expectations/P2"
+    },
+    {
+      "case_id": "CLEAN-001",
+      "profile_id": "P3",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/6/profile_expectations/P3"
+    },
+    {
+      "case_id": "CONTENT-BITFLIP-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/7/profile_expectations/P0"
+    },
+    {
+      "case_id": "CONTENT-BITFLIP-001",
+      "profile_id": "P1",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "DIGEST_MISMATCH",
+      "catalog_json_pointer": "/cases/7/profile_expectations/P1"
+    },
+    {
+      "case_id": "CONTENT-BITFLIP-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/7/profile_expectations/P2"
+    },
+    {
+      "case_id": "CONTENT-BITFLIP-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "DIGEST_MISMATCH",
+      "catalog_json_pointer": "/cases/7/profile_expectations/P3"
+    },
+    {
+      "case_id": "CONTENT-SAME-SIZE-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/8/profile_expectations/P0"
+    },
+    {
+      "case_id": "CONTENT-SAME-SIZE-001",
+      "profile_id": "P1",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "DIGEST_MISMATCH",
+      "catalog_json_pointer": "/cases/8/profile_expectations/P1"
+    },
+    {
+      "case_id": "CONTENT-SAME-SIZE-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/8/profile_expectations/P2"
+    },
+    {
+      "case_id": "CONTENT-SAME-SIZE-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "DIGEST_MISMATCH",
+      "catalog_json_pointer": "/cases/8/profile_expectations/P3"
+    },
+    {
+      "case_id": "CONTENT-TRUNCATE-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/9/profile_expectations/P0"
+    },
+    {
+      "case_id": "CONTENT-TRUNCATE-001",
+      "profile_id": "P1",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "SIZE_MISMATCH",
+      "catalog_json_pointer": "/cases/9/profile_expectations/P1"
+    },
+    {
+      "case_id": "CONTENT-TRUNCATE-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/9/profile_expectations/P2"
+    },
+    {
+      "case_id": "CONTENT-TRUNCATE-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "SIZE_MISMATCH",
+      "catalog_json_pointer": "/cases/9/profile_expectations/P3"
+    },
+    {
+      "case_id": "EXECUTION-IMAGE-MISMATCH-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/10/profile_expectations/P0"
+    },
+    {
+      "case_id": "EXECUTION-IMAGE-MISMATCH-001",
+      "profile_id": "P1",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/10/profile_expectations/P1"
+    },
+    {
+      "case_id": "EXECUTION-IMAGE-MISMATCH-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/10/profile_expectations/P2"
+    },
+    {
+      "case_id": "EXECUTION-IMAGE-MISMATCH-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "MATERIAL_MISMATCH",
+      "catalog_json_pointer": "/cases/10/profile_expectations/P3"
+    },
+    {
+      "case_id": "IDENTITY-WORKFLOW-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/11/profile_expectations/P0"
+    },
+    {
+      "case_id": "IDENTITY-WORKFLOW-001",
+      "profile_id": "P1",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/11/profile_expectations/P1"
+    },
+    {
+      "case_id": "IDENTITY-WORKFLOW-001",
+      "profile_id": "P2",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "BUILDER_UNAUTHORIZED",
+      "catalog_json_pointer": "/cases/11/profile_expectations/P2"
+    },
+    {
+      "case_id": "IDENTITY-WORKFLOW-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "BUILDER_UNAUTHORIZED",
+      "catalog_json_pointer": "/cases/11/profile_expectations/P3"
+    },
+    {
+      "case_id": "INVENTORY-EXTRA-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/12/profile_expectations/P0"
+    },
+    {
+      "case_id": "INVENTORY-EXTRA-001",
+      "profile_id": "P1",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "UNEXPECTED_FILE",
+      "catalog_json_pointer": "/cases/12/profile_expectations/P1"
+    },
+    {
+      "case_id": "INVENTORY-EXTRA-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/12/profile_expectations/P2"
+    },
+    {
+      "case_id": "INVENTORY-EXTRA-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "UNEXPECTED_FILE",
+      "catalog_json_pointer": "/cases/12/profile_expectations/P3"
+    },
+    {
+      "case_id": "INVENTORY-MISSING-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/13/profile_expectations/P0"
+    },
+    {
+      "case_id": "INVENTORY-MISSING-001",
+      "profile_id": "P1",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "PAYLOAD_MISSING",
+      "catalog_json_pointer": "/cases/13/profile_expectations/P1"
+    },
+    {
+      "case_id": "INVENTORY-MISSING-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/13/profile_expectations/P2"
+    },
+    {
+      "case_id": "INVENTORY-MISSING-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "PAYLOAD_MISSING",
+      "catalog_json_pointer": "/cases/13/profile_expectations/P3"
+    },
+    {
+      "case_id": "INVENTORY-OMIT-ROLE-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/14/profile_expectations/P0"
+    },
+    {
+      "case_id": "INVENTORY-OMIT-ROLE-001",
+      "profile_id": "P1",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "REQUIRED_ROLE_MISSING",
+      "catalog_json_pointer": "/cases/14/profile_expectations/P1"
+    },
+    {
+      "case_id": "INVENTORY-OMIT-ROLE-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/14/profile_expectations/P2"
+    },
+    {
+      "case_id": "INVENTORY-OMIT-ROLE-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "REQUIRED_ROLE_MISSING",
+      "catalog_json_pointer": "/cases/14/profile_expectations/P3"
+    },
+    {
+      "case_id": "MANIFEST-DUPLICATE-KEY-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/15/profile_expectations/P0"
+    },
+    {
+      "case_id": "MANIFEST-DUPLICATE-KEY-001",
+      "profile_id": "P1",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "DUPLICATE_JSON_KEY",
+      "catalog_json_pointer": "/cases/15/profile_expectations/P1"
+    },
+    {
+      "case_id": "MANIFEST-DUPLICATE-KEY-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/15/profile_expectations/P2"
+    },
+    {
+      "case_id": "MANIFEST-DUPLICATE-KEY-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "DUPLICATE_JSON_KEY",
+      "catalog_json_pointer": "/cases/15/profile_expectations/P3"
+    },
+    {
+      "case_id": "MANIFEST-MALFORMED-001",
+      "profile_id": "P0",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "JSON_INVALID",
+      "catalog_json_pointer": "/cases/16/profile_expectations/P0"
+    },
+    {
+      "case_id": "MANIFEST-MALFORMED-001",
+      "profile_id": "P1",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "JSON_INVALID",
+      "catalog_json_pointer": "/cases/16/profile_expectations/P1"
+    },
+    {
+      "case_id": "MANIFEST-MALFORMED-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/16/profile_expectations/P2"
+    },
+    {
+      "case_id": "MANIFEST-MALFORMED-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "JSON_INVALID",
+      "catalog_json_pointer": "/cases/16/profile_expectations/P3"
+    },
+    {
+      "case_id": "MANIFEST-MISSING-001",
+      "profile_id": "P0",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "INPUT_MISSING",
+      "catalog_json_pointer": "/cases/17/profile_expectations/P0"
+    },
+    {
+      "case_id": "MANIFEST-MISSING-001",
+      "profile_id": "P1",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "INPUT_MISSING",
+      "catalog_json_pointer": "/cases/17/profile_expectations/P1"
+    },
+    {
+      "case_id": "MANIFEST-MISSING-001",
+      "profile_id": "P2",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "INPUT_MISSING",
+      "catalog_json_pointer": "/cases/17/profile_expectations/P2"
+    },
+    {
+      "case_id": "MANIFEST-MISSING-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "INPUT_MISSING",
+      "catalog_json_pointer": "/cases/17/profile_expectations/P3"
+    },
+    {
+      "case_id": "MANIFEST-NONCANONICAL-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/18/profile_expectations/P0"
+    },
+    {
+      "case_id": "MANIFEST-NONCANONICAL-001",
+      "profile_id": "P1",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "MANIFEST_NONCANONICAL",
+      "catalog_json_pointer": "/cases/18/profile_expectations/P1"
+    },
+    {
+      "case_id": "MANIFEST-NONCANONICAL-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/18/profile_expectations/P2"
+    },
+    {
+      "case_id": "MANIFEST-NONCANONICAL-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "MANIFEST_NONCANONICAL",
+      "catalog_json_pointer": "/cases/18/profile_expectations/P3"
+    },
+    {
+      "case_id": "MANIFEST-SCHEMA-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/19/profile_expectations/P0"
+    },
+    {
+      "case_id": "MANIFEST-SCHEMA-001",
+      "profile_id": "P1",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "SCHEMA_INVALID",
+      "catalog_json_pointer": "/cases/19/profile_expectations/P1"
+    },
+    {
+      "case_id": "MANIFEST-SCHEMA-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/19/profile_expectations/P2"
+    },
+    {
+      "case_id": "MANIFEST-SCHEMA-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "SCHEMA_INVALID",
+      "catalog_json_pointer": "/cases/19/profile_expectations/P3"
+    },
+    {
+      "case_id": "MANIFEST-SELF-HASH-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/20/profile_expectations/P0"
+    },
+    {
+      "case_id": "MANIFEST-SELF-HASH-001",
+      "profile_id": "P1",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "SCHEMA_INVALID",
+      "catalog_json_pointer": "/cases/20/profile_expectations/P1"
+    },
+    {
+      "case_id": "MANIFEST-SELF-HASH-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/20/profile_expectations/P2"
+    },
+    {
+      "case_id": "MANIFEST-SELF-HASH-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "SCHEMA_INVALID",
+      "catalog_json_pointer": "/cases/20/profile_expectations/P3"
+    },
+    {
+      "case_id": "MATERIAL-LOCK-MISMATCH-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/21/profile_expectations/P0"
+    },
+    {
+      "case_id": "MATERIAL-LOCK-MISMATCH-001",
+      "profile_id": "P1",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/21/profile_expectations/P1"
+    },
+    {
+      "case_id": "MATERIAL-LOCK-MISMATCH-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/21/profile_expectations/P2"
+    },
+    {
+      "case_id": "MATERIAL-LOCK-MISMATCH-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "MATERIAL_MISMATCH",
+      "catalog_json_pointer": "/cases/21/profile_expectations/P3"
+    },
+    {
+      "case_id": "PATH-DUPLICATE-NORMALIZED-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/22/profile_expectations/P0"
+    },
+    {
+      "case_id": "PATH-DUPLICATE-NORMALIZED-001",
+      "profile_id": "P1",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "DUPLICATE_PATH",
+      "catalog_json_pointer": "/cases/22/profile_expectations/P1"
+    },
+    {
+      "case_id": "PATH-DUPLICATE-NORMALIZED-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/22/profile_expectations/P2"
+    },
+    {
+      "case_id": "PATH-DUPLICATE-NORMALIZED-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "DUPLICATE_PATH",
+      "catalog_json_pointer": "/cases/22/profile_expectations/P3"
+    },
+    {
+      "case_id": "PATH-HARDLINK-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/23/profile_expectations/P0"
+    },
+    {
+      "case_id": "PATH-HARDLINK-001",
+      "profile_id": "P1",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "HARDLINK_FORBIDDEN",
+      "catalog_json_pointer": "/cases/23/profile_expectations/P1"
+    },
+    {
+      "case_id": "PATH-HARDLINK-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/23/profile_expectations/P2"
+    },
+    {
+      "case_id": "PATH-HARDLINK-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "HARDLINK_FORBIDDEN",
+      "catalog_json_pointer": "/cases/23/profile_expectations/P3"
+    },
+    {
+      "case_id": "PATH-NONREGULAR-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/24/profile_expectations/P0"
+    },
+    {
+      "case_id": "PATH-NONREGULAR-001",
+      "profile_id": "P1",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "NONREGULAR_FILE",
+      "catalog_json_pointer": "/cases/24/profile_expectations/P1"
+    },
+    {
+      "case_id": "PATH-NONREGULAR-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/24/profile_expectations/P2"
+    },
+    {
+      "case_id": "PATH-NONREGULAR-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "NONREGULAR_FILE",
+      "catalog_json_pointer": "/cases/24/profile_expectations/P3"
+    },
+    {
+      "case_id": "PATH-PARENT-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/25/profile_expectations/P0"
+    },
+    {
+      "case_id": "PATH-PARENT-001",
+      "profile_id": "P1",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "UNSAFE_PATH",
+      "catalog_json_pointer": "/cases/25/profile_expectations/P1"
+    },
+    {
+      "case_id": "PATH-PARENT-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/25/profile_expectations/P2"
+    },
+    {
+      "case_id": "PATH-PARENT-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "UNSAFE_PATH",
+      "catalog_json_pointer": "/cases/25/profile_expectations/P3"
+    },
+    {
+      "case_id": "PATH-SYMLINK-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/26/profile_expectations/P0"
+    },
+    {
+      "case_id": "PATH-SYMLINK-001",
+      "profile_id": "P1",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "SYMLINK_FORBIDDEN",
+      "catalog_json_pointer": "/cases/26/profile_expectations/P1"
+    },
+    {
+      "case_id": "PATH-SYMLINK-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/26/profile_expectations/P2"
+    },
+    {
+      "case_id": "PATH-SYMLINK-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "SYMLINK_FORBIDDEN",
+      "catalog_json_pointer": "/cases/26/profile_expectations/P3"
+    },
+    {
+      "case_id": "PREDICATE-WRONG-TYPE-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/27/profile_expectations/P0"
+    },
+    {
+      "case_id": "PREDICATE-WRONG-TYPE-001",
+      "profile_id": "P1",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/27/profile_expectations/P1"
+    },
+    {
+      "case_id": "PREDICATE-WRONG-TYPE-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/27/profile_expectations/P2"
+    },
+    {
+      "case_id": "PREDICATE-WRONG-TYPE-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "PREDICATE_TYPE_UNSUPPORTED",
+      "catalog_json_pointer": "/cases/27/profile_expectations/P3"
+    },
+    {
+      "case_id": "RESOURCE-MANIFEST-LIMIT-001",
+      "profile_id": "P0",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "RESOURCE_LIMIT",
+      "catalog_json_pointer": "/cases/28/profile_expectations/P0"
+    },
+    {
+      "case_id": "RESOURCE-MANIFEST-LIMIT-001",
+      "profile_id": "P1",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "RESOURCE_LIMIT",
+      "catalog_json_pointer": "/cases/28/profile_expectations/P1"
+    },
+    {
+      "case_id": "RESOURCE-MANIFEST-LIMIT-001",
+      "profile_id": "P2",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "RESOURCE_LIMIT",
+      "catalog_json_pointer": "/cases/28/profile_expectations/P2"
+    },
+    {
+      "case_id": "RESOURCE-MANIFEST-LIMIT-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "RESOURCE_LIMIT",
+      "catalog_json_pointer": "/cases/28/profile_expectations/P3"
+    },
+    {
+      "case_id": "SIGNATURE-ALGORITHM-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/29/profile_expectations/P0"
+    },
+    {
+      "case_id": "SIGNATURE-ALGORITHM-001",
+      "profile_id": "P1",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/29/profile_expectations/P1"
+    },
+    {
+      "case_id": "SIGNATURE-ALGORITHM-001",
+      "profile_id": "P2",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "ALGORITHM_UNAPPROVED",
+      "catalog_json_pointer": "/cases/29/profile_expectations/P2"
+    },
+    {
+      "case_id": "SIGNATURE-ALGORITHM-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "ALGORITHM_UNAPPROVED",
+      "catalog_json_pointer": "/cases/29/profile_expectations/P3"
+    },
+    {
+      "case_id": "SIGNATURE-CORRUPT-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/30/profile_expectations/P0"
+    },
+    {
+      "case_id": "SIGNATURE-CORRUPT-001",
+      "profile_id": "P1",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/30/profile_expectations/P1"
+    },
+    {
+      "case_id": "SIGNATURE-CORRUPT-001",
+      "profile_id": "P2",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "SIGNATURE_INVALID",
+      "catalog_json_pointer": "/cases/30/profile_expectations/P2"
+    },
+    {
+      "case_id": "SIGNATURE-CORRUPT-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "SIGNATURE_INVALID",
+      "catalog_json_pointer": "/cases/30/profile_expectations/P3"
+    },
+    {
+      "case_id": "SNAPSHOT-DIGEST-MISMATCH-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/31/profile_expectations/P0"
+    },
+    {
+      "case_id": "SNAPSHOT-DIGEST-MISMATCH-001",
+      "profile_id": "P1",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/31/profile_expectations/P1"
+    },
+    {
+      "case_id": "SNAPSHOT-DIGEST-MISMATCH-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/31/profile_expectations/P2"
+    },
+    {
+      "case_id": "SNAPSHOT-DIGEST-MISMATCH-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "MATERIAL_MISMATCH",
+      "catalog_json_pointer": "/cases/31/profile_expectations/P3"
+    },
+    {
+      "case_id": "SNAPSHOT-ROLE-MISMATCH-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/32/profile_expectations/P0"
+    },
+    {
+      "case_id": "SNAPSHOT-ROLE-MISMATCH-001",
+      "profile_id": "P1",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/32/profile_expectations/P1"
+    },
+    {
+      "case_id": "SNAPSHOT-ROLE-MISMATCH-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/32/profile_expectations/P2"
+    },
+    {
+      "case_id": "SNAPSHOT-ROLE-MISMATCH-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "MATERIAL_MISMATCH",
+      "catalog_json_pointer": "/cases/32/profile_expectations/P3"
+    },
+    {
+      "case_id": "SOURCE-TREE-MISMATCH-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/33/profile_expectations/P0"
+    },
+    {
+      "case_id": "SOURCE-TREE-MISMATCH-001",
+      "profile_id": "P1",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/33/profile_expectations/P1"
+    },
+    {
+      "case_id": "SOURCE-TREE-MISMATCH-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/33/profile_expectations/P2"
+    },
+    {
+      "case_id": "SOURCE-TREE-MISMATCH-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "MATERIAL_MISMATCH",
+      "catalog_json_pointer": "/cases/33/profile_expectations/P3"
+    },
+    {
+      "case_id": "SOURCE-WRONG-REVISION-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/34/profile_expectations/P0"
+    },
+    {
+      "case_id": "SOURCE-WRONG-REVISION-001",
+      "profile_id": "P1",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/34/profile_expectations/P1"
+    },
+    {
+      "case_id": "SOURCE-WRONG-REVISION-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/34/profile_expectations/P2"
+    },
+    {
+      "case_id": "SOURCE-WRONG-REVISION-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "SOURCE_MISMATCH",
+      "catalog_json_pointer": "/cases/34/profile_expectations/P3"
+    },
+    {
+      "case_id": "STATEMENT-MALFORMED-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/35/profile_expectations/P0"
+    },
+    {
+      "case_id": "STATEMENT-MALFORMED-001",
+      "profile_id": "P1",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/35/profile_expectations/P1"
+    },
+    {
+      "case_id": "STATEMENT-MALFORMED-001",
+      "profile_id": "P2",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "ATTESTATION_INVALID",
+      "catalog_json_pointer": "/cases/35/profile_expectations/P2"
+    },
+    {
+      "case_id": "STATEMENT-MALFORMED-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "ATTESTATION_INVALID",
+      "catalog_json_pointer": "/cases/35/profile_expectations/P3"
+    },
+    {
+      "case_id": "SUBJECT-REPLAY-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/36/profile_expectations/P0"
+    },
+    {
+      "case_id": "SUBJECT-REPLAY-001",
+      "profile_id": "P1",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/36/profile_expectations/P1"
+    },
+    {
+      "case_id": "SUBJECT-REPLAY-001",
+      "profile_id": "P2",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "SUBJECT_MISMATCH",
+      "catalog_json_pointer": "/cases/36/profile_expectations/P2"
+    },
+    {
+      "case_id": "SUBJECT-REPLAY-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "SUBJECT_MISMATCH",
+      "catalog_json_pointer": "/cases/36/profile_expectations/P3"
+    },
+    {
+      "case_id": "SUBSTITUTION-COHERENT-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/37/profile_expectations/P0"
+    },
+    {
+      "case_id": "SUBSTITUTION-COHERENT-001",
+      "profile_id": "P1",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/37/profile_expectations/P1"
+    },
+    {
+      "case_id": "SUBSTITUTION-COHERENT-001",
+      "profile_id": "P2",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "SUBJECT_MISMATCH",
+      "catalog_json_pointer": "/cases/37/profile_expectations/P2"
+    },
+    {
+      "case_id": "SUBSTITUTION-COHERENT-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "SUBJECT_MISMATCH",
+      "catalog_json_pointer": "/cases/37/profile_expectations/P3"
+    },
+    {
+      "case_id": "SUBSTITUTION-UNAUTHORIZED-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/38/profile_expectations/P0"
+    },
+    {
+      "case_id": "SUBSTITUTION-UNAUTHORIZED-001",
+      "profile_id": "P1",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/38/profile_expectations/P1"
+    },
+    {
+      "case_id": "SUBSTITUTION-UNAUTHORIZED-001",
+      "profile_id": "P2",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "SIGNER_UNAUTHORIZED",
+      "catalog_json_pointer": "/cases/38/profile_expectations/P2"
+    },
+    {
+      "case_id": "SUBSTITUTION-UNAUTHORIZED-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "SIGNER_UNAUTHORIZED",
+      "catalog_json_pointer": "/cases/38/profile_expectations/P3"
+    },
+    {
+      "case_id": "TRANSPARENCY-MISSING-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/39/profile_expectations/P0"
+    },
+    {
+      "case_id": "TRANSPARENCY-MISSING-001",
+      "profile_id": "P1",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/39/profile_expectations/P1"
+    },
+    {
+      "case_id": "TRANSPARENCY-MISSING-001",
+      "profile_id": "P2",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "TRANSPARENCY_INVALID",
+      "catalog_json_pointer": "/cases/39/profile_expectations/P2"
+    },
+    {
+      "case_id": "TRANSPARENCY-MISSING-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "TRANSPARENCY_INVALID",
+      "catalog_json_pointer": "/cases/39/profile_expectations/P3"
+    },
+    {
+      "case_id": "WORKFLOW-PARAMETER-MISMATCH-001",
+      "profile_id": "P0",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/40/profile_expectations/P0"
+    },
+    {
+      "case_id": "WORKFLOW-PARAMETER-MISMATCH-001",
+      "profile_id": "P1",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/40/profile_expectations/P1"
+    },
+    {
+      "case_id": "WORKFLOW-PARAMETER-MISMATCH-001",
+      "profile_id": "P2",
+      "expected_decision": "ACCEPT",
+      "expected_primary_reason": "OK",
+      "catalog_json_pointer": "/cases/40/profile_expectations/P2"
+    },
+    {
+      "case_id": "WORKFLOW-PARAMETER-MISMATCH-001",
+      "profile_id": "P3",
+      "expected_decision": "REJECT",
+      "expected_primary_reason": "BUILDER_UNAUTHORIZED",
+      "catalog_json_pointer": "/cases/40/profile_expectations/P3"
+    }
+  ]
+}

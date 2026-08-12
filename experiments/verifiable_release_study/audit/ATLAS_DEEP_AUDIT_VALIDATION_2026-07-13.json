@@ -1,0 +1,20 @@
+{
+  "schema_version": "amy.audit-replay-validation.v1",
+  "classification": "same_environment_exploratory_replay",
+  "validated_at": "2026-07-13T06:37:03Z",
+  "command_contract": "uv run --frozen --extra pilot python scripts/audit_atlas_integrity.py --compact",
+  "environment": {
+    "python": "3.12.12",
+    "uv": "0.9.17"
+  },
+  "scanner_sha256": "de47d4ec01aab23f5e14174208314084da820f9061b3f0737995e4213cb32799",
+  "retained_pretty_json_sha256": "949e1a5fb40fd85cc0267073d0b40eaa0832282f61ea481010e69a5f27abd8a7",
+  "fresh_canonical_json_sha256": "e7ca4fdf8d8c95a36732867b9bcb65a1c7559b370564f28f9775431134a6ac34",
+  "retained_canonical_json_sha256": "e7ca4fdf8d8c95a36732867b9bcb65a1c7559b370564f28f9775431134a6ac34",
+  "byte_identical_after_canonicalization": true,
+  "limitations": [
+    "The replay used the same host and working tree, not an independent environment.",
+    "The repository was dirty; relevant audited source hashes are retained in the raw result.",
+    "This validation establishes deterministic replay of the audit output, not correctness of every scientific interpretation."
+  ]
+}

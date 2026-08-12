@@ -1,0 +1,232 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Ganador1/amy/experiments/verifiable_release_study/schemas/github-production-verification-result.schema.json",
+  "title": "A.M.Y production GitHub/Sigstore verification result",
+  "oneOf": [
+    {"$ref": "#/$defs/accept"},
+    {"$ref": "#/$defs/reject"},
+    {"$ref": "#/$defs/error"}
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "schemaVersion": {"const": "amy.production-verification-result.v1-draft"},
+    "policyDigest": {"$ref": "#/$defs/sha256"},
+    "reasonCode": {
+      "enum": [
+        "RESOURCE_LIMIT",
+        "INPUT_MISSING",
+        "JSON_INVALID",
+        "DUPLICATE_JSON_KEY",
+        "MANIFEST_NONCANONICAL",
+        "SCHEMA_INVALID",
+        "UNSAFE_PATH",
+        "DUPLICATE_PATH",
+        "SYMLINK_FORBIDDEN",
+        "HARDLINK_FORBIDDEN",
+        "NONREGULAR_FILE",
+        "INPUT_CHANGED",
+        "REQUIRED_ROLE_MISSING",
+        "PAYLOAD_MISSING",
+        "UNEXPECTED_FILE",
+        "SIZE_MISMATCH",
+        "DIGEST_MISMATCH",
+        "ATTESTATION_MISSING",
+        "ATTESTATION_INVALID",
+        "ALGORITHM_UNAPPROVED",
+        "SIGNATURE_INVALID",
+        "CERTIFICATE_TIME_INVALID",
+        "TRANSPARENCY_INVALID",
+        "SIGNER_UNAUTHORIZED",
+        "BUILDER_UNAUTHORIZED",
+        "SUBJECT_MISMATCH",
+        "PREDICATE_TYPE_UNSUPPORTED",
+        "SOURCE_MISMATCH",
+        "DIRTY_BUILD",
+        "MATERIAL_MISMATCH",
+        "ATTESTATION_AMBIGUOUS",
+        "TRUST_ROOT_MISMATCH",
+        "PROVENANCE_INVALID"
+      ]
+    },
+    "p1Checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifest_json_syntax",
+        "manifest_canonicality",
+        "manifest_schema",
+        "path_safety",
+        "closed_world_inventory",
+        "payload_digests"
+      ],
+      "properties": {
+        "manifest_json_syntax": {"const": "PASS"},
+        "manifest_canonicality": {"const": "PASS"},
+        "manifest_schema": {"const": "PASS"},
+        "path_safety": {"const": "PASS"},
+        "closed_world_inventory": {"const": "PASS"},
+        "payload_digests": {"const": "PASS"}
+      }
+    },
+    "tool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "binary_sha256", "argv"],
+      "properties": {
+        "name": {"const": "gh"},
+        "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "binary_sha256": {"$ref": "#/$defs/sha256"},
+        "argv": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 128,
+          "items": {"type": "string", "maxLength": 4096}
+        }
+      }
+    },
+    "certificate": {
+      "type": "object",
+      "required": [
+        "certificateIssuer",
+        "issuer",
+        "subjectAlternativeName",
+        "sourceRepositoryURI",
+        "sourceRepositoryOwnerURI",
+        "buildSignerDigest",
+        "sourceRepositoryDigest",
+        "sourceRepositoryRef",
+        "runnerEnvironment",
+        "githubWorkflowTrigger",
+        "sourceRepositoryVisibilityAtSigning"
+      ],
+      "properties": {
+        "certificateIssuer": {"type": "string", "minLength": 1},
+        "issuer": {"type": "string", "format": "uri"},
+        "subjectAlternativeName": {"type": "string", "format": "uri"},
+        "sourceRepositoryURI": {"type": "string", "format": "uri"},
+        "sourceRepositoryOwnerURI": {"type": "string", "format": "uri"},
+        "buildSignerDigest": {"type": "string", "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$"},
+        "sourceRepositoryDigest": {"type": "string", "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$"},
+        "sourceRepositoryRef": {"type": "string", "minLength": 1},
+        "runnerEnvironment": {"const": "github-hosted"},
+        "githubWorkflowTrigger": {"type": "string", "minLength": 1},
+        "sourceRepositoryVisibilityAtSigning": {"type": "string", "minLength": 1}
+      }
+    },
+    "timestamp": {
+      "type": "object",
+      "required": ["type", "uri"],
+      "properties": {
+        "type": {"type": "string", "minLength": 1},
+        "uri": {"type": "string", "format": "uri"},
+        "timestamp": {"type": "string", "format": "date-time"}
+      }
+    },
+    "statement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["_type", "subject", "predicateType", "predicate"],
+      "properties": {
+        "_type": {"const": "https://in-toto.io/Statement/v1"},
+        "subject": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "digest"],
+            "properties": {
+              "name": {"type": "string", "minLength": 1},
+              "digest": {
+                "type": "object",
+                "minProperties": 1,
+                "additionalProperties": {"type": "string", "minLength": 1}
+              }
+            }
+          }
+        },
+        "predicateType": {"type": "string", "format": "uri"},
+        "predicate": {"type": "object"}
+      }
+    },
+    "accept": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "decision",
+        "profile_id",
+        "manifest_sha256",
+        "bundle_sha256",
+        "trusted_root_sha256",
+        "predicate_type",
+        "certificate",
+        "verified_timestamps",
+        "statement",
+        "tool",
+        "policy_sha256"
+      ],
+      "properties": {
+        "schema_version": {"$ref": "#/$defs/schemaVersion"},
+        "decision": {"const": "ACCEPT"},
+        "profile_id": {"enum": ["P2", "P3"]},
+        "manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "bundle_sha256": {"$ref": "#/$defs/sha256"},
+        "trusted_root_sha256": {"$ref": "#/$defs/sha256"},
+        "predicate_type": {"type": "string", "format": "uri"},
+        "certificate": {"$ref": "#/$defs/certificate"},
+        "verified_timestamps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/timestamp"}
+        },
+        "statement": {"$ref": "#/$defs/statement"},
+        "tool": {"$ref": "#/$defs/tool"},
+        "policy_sha256": {"$ref": "#/$defs/policyDigest"},
+        "manifest_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "p1_checks": {"$ref": "#/$defs/p1Checks"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"profile_id": {"const": "P3"}}, "required": ["profile_id"]},
+          "then": {"required": ["manifest_schema_sha256", "p1_checks"]}
+        },
+        {
+          "if": {"properties": {"profile_id": {"const": "P2"}}, "required": ["profile_id"]},
+          "then": {
+            "not": {
+              "anyOf": [
+                {"required": ["manifest_schema_sha256"]},
+                {"required": ["p1_checks"]}
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "reject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "decision", "code", "message", "details"],
+      "properties": {
+        "schema_version": {"$ref": "#/$defs/schemaVersion"},
+        "decision": {"const": "REJECT"},
+        "code": {"$ref": "#/$defs/reasonCode"},
+        "message": {"type": "string", "minLength": 1},
+        "details": {"type": "object"},
+        "policy_sha256": {"$ref": "#/$defs/policyDigest"}
+      }
+    },
+    "error": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "decision", "error"],
+      "properties": {
+        "schema_version": {"$ref": "#/$defs/schemaVersion"},
+        "decision": {"const": "ERROR"},
+        "error": {"type": "string", "minLength": 1},
+        "policy_sha256": {"$ref": "#/$defs/policyDigest"}
+      }
+    }
+  }
+}

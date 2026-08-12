@@ -28,8 +28,14 @@ jobs:
       - name: Install ruff
         run: python -m pip install --upgrade pip ruff
 
-      - name: Ruff check (non-blocking)
-        run: ruff check . --output-format=github --exit-zero
+      - name: Ruff correctness gate
+        # Enforce syntax/undefined-name failures now.  Broader style cleanup can
+        # proceed incrementally without making the embedded Atlas tree a blocker.
+        run: |
+          ruff check \
+            amy.py core cognition memory senses communication evolution sandbox skills tests \
+            --select E9,F63,F7,F82 \
+            --output-format=github
 
   unit-tests:
     name: Unit tests (Python ${{ matrix.python-version }})
@@ -47,71 +53,37 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: pip
 
-      - name: Install minimal runtime + test deps
+      - name: Install locked minimal runtime + test deps
         run: |
-          python -m pip install --upgrade pip
-          # CI-only minimal subset: heavy ML libs (torch/jax/chromadb) are NOT
-          # required by the hermetic test set. We install only what the fast
-          # tests actually load — adding sympy/scipy/numpy/networkx because
-          # core.atlas_real_tools exercises them on every run.
-          python -m pip install \
-            "pytest>=8.0" \
-            "pytest-asyncio>=0.23" \
-            "pytest-timeout>=2.3" \
-            "pyyaml>=6.0" \
-            "rich>=13.0" \
-            "python-dotenv>=1.0.0" \
-            "structlog>=24.1.0" \
-            "numpy>=1.26" \
-            "scipy>=1.12" \
-            "sympy>=1.12" \
-            "networkx>=3.2" \
-            "httpx>=0.27"
+          python -m pip install --upgrade "uv==0.9.17"
+          # The ci dependency group excludes heavy ML dependencies while
+          # uv.lock pins the complete transitive CI environment.
+          uv sync --locked --only-group ci
 
       - name: Show environment
         run: |
           python --version
-          python -c "import pytest, yaml, rich, structlog, numpy, scipy, sympy, networkx, httpx; print('deps ok')"
+          uv run --no-sync python -c "import pytest, yaml, rich, structlog, numpy, scipy, sympy, networkx, httpx, reportlab; print('deps ok')"
 
-      - name: Run hermetic test suite
-        # CI has no Atlas venv (atlas/.venv_new), so tests that spawn the Atlas
-        # worker cannot run here — `-m "not atlas"` deselects them. The hermetic
-        # tests inside these files (stub-based guardrail/misuse checks, etc.)
-        # still run. The non-atlas part of the suite is also covered by the
-        # broader marker query in the next step.
+      - name: Run complete fast hermetic suite
+        # Select by capability instead of maintaining a manual file list. This
+        # automatically picks up new tests and excludes files that spawn Atlas,
+        # call external services, or intentionally run long missions.
         run: |
-          python -m pytest \
-            tests/test_public_release_hygiene.py \
-            tests/test_science_gates.py \
-            tests/test_scientific_hardening.py \
-            tests/test_atlas_real_tools.py \
-            tests/test_atlas_no_mocks.py \
-            tests/test_atlas_tools_end_to_end.py \
-            tests/test_literature_search.py \
-            tests/test_core.py \
-            tests/test_security_guardrails.py \
-            tests/test_atlas_misuse_guard.py \
-            tests/test_reproducibility.py \
-            tests/test_sandbox_isolation.py \
-            tests/test_honesty_fixes.py \
-            tests/test_ranking_and_goal.py \
-            tests/test_atlas_bridge_robustness.py \
-            tests/test_robustness_fixes.py \
-            tests/test_integrity_and_bounds.py \
-            tests/test_episodic_persistence.py \
-            tests/test_semantic_persistence.py \
-            tests/test_consolidation_wired.py \
-            tests/test_web_sensor_async.py \
-            tests/test_rapid_round_fixes.py \
-            tests/test_embedding_recall.py \
-            tests/test_metrics.py \
-            tests/test_cli_config.py \
-            tests/test_learning_wired.py \
-            -m "not atlas" \
+          uv run --no-sync python -m pytest \
+            tests \
+            -m "not (slow or network or atlas)" \
+            -q --tb=short -p no:cacheprovider
+
+      - name: Run focused Atlas evidence-boundary tests
+        run: |
+          PYTHONPATH=atlas uv run --no-sync python -m pytest \
+            atlas/tests/unit/orchestration/test_tool_evidence_external_science.py \
+            --confcutdir=atlas/tests/unit/orchestration \
             -q --tb=short -p no:cacheprovider
 
       - name: Verify every Atlas tool computes (no mocks, deterministic)
-        run: python scripts/diagnostics/verify_atlas_tools.py
+        run: uv run --no-sync python scripts/diagnostics/verify_atlas_tools.py
 
   hygiene:
     name: Public release hygiene

@@ -1,0 +1,23 @@
+.venv/
+.pytest_cache/
+**/__pycache__/
+*.pyc
+.DS_Store
+
+# Local rendering scratch and generated review-packet builds. A packet is
+# published only after it is rebuilt from committed source bytes.
+tmp/
+reviews/r0_review_packet_draft_*/
+reviews/r0_review_packet_rebuild_*/
+
+# Exploratory model conversations are not protocol evidence. The retained
+# model_review_* attempt set is intentionally not ignored.
+reviews/exploratory_*/
+
+# Raw model-review exchanges can contain full prompts and source snapshots.
+# Protocol behavior is tested with generated transport-failure fixtures.
+reviews/model_review_*/
+
+# The two exploratory pilot trees contain adversarial FIFOs and are retained
+# outside Git. Their hashes and bounded aggregate are committed separately.
+pilot_runs/pilot_*/

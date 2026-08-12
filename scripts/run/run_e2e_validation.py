@@ -69,6 +69,24 @@ DOMAIN_PLANS: dict[str, dict[str, Any]] = {
         "topic": "SSH polyene finite-chain identifiability: Peierls gaps versus edge-state contamination",
         "calls": [
             (
+                "ssh_disorder_diagnostic_benchmark",
+                "20,40,80;deltas=0.05,0.1,0.2;"
+                "strengths=0,0.05,0.1,0.2,0.4;"
+                "disorders=off_diagonal,diagonal;"
+                "orientations=trivial,topological;realizations=128;"
+                "namespace=amy-ssh-disorder-v1-primary",
+                "Primary paired benchmark of gap-only versus joint SSH edge-state diagnostics under disorder",
+            ),
+            (
+                "ssh_disorder_diagnostic_benchmark",
+                "20,40,80;deltas=0.05,0.1,0.2;"
+                "strengths=0,0.05,0.1,0.2,0.4;"
+                "disorders=off_diagonal,diagonal;"
+                "orientations=trivial,topological;realizations=128;"
+                "namespace=amy-ssh-disorder-v1-replication",
+                "Independent hash-seed replication of the paired SSH disorder diagnostic benchmark",
+            ),
+            (
                 "ssh_polyene_gap_map",
                 "4,6,8,10,12,16,20,30,40,60,80,100;deltas=0,0.025,0.05,0.1,0.2,0.4;orientations=trivial,topological;beta=-2.5;threshold=0.05",
                 "SSH finite-chain gap identifiability map across Peierls alternation and boundary orientation",

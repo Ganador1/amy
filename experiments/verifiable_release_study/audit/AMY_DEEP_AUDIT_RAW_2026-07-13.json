@@ -1,0 +1,1619 @@
+{
+  "checksum_release_manifests": {
+    "audited_inventory_sha256": "c1c6835e469d41cbb40ba676cda9b636db7d7f7d9c6b78155fa82bd29826d1db",
+    "interpretation_limit": "A matching unsigned checksum manifest detects accidental change relative to its present declaration but does not authenticate an author, release identity, or publication time.",
+    "manifests": [
+      {
+        "entries": [
+          {
+            "actual_sha256": "fcb0941c390163725b9f9c2b510382d505323ee913647af135731239bcf1f9a5",
+            "declared_path": "condition_summaries.csv",
+            "exists": true,
+            "expected_sha256": "fcb0941c390163725b9f9c2b510382d505323ee913647af135731239bcf1f9a5",
+            "matches": true
+          },
+          {
+            "actual_sha256": "601f634ccaee1c7a4f2ace402ee8df23957e1f7a8983d2cc5d139ed50bee1334",
+            "declared_path": "condition_summaries.json",
+            "exists": true,
+            "expected_sha256": "601f634ccaee1c7a4f2ace402ee8df23957e1f7a8983d2cc5d139ed50bee1334",
+            "matches": true
+          },
+          {
+            "actual_sha256": "0fa041642c25be9b6629b9866cc64df55f78f3abe2cb7ccd58fa4232f6fb0ad1",
+            "declared_path": "determinism_check.json",
+            "exists": true,
+            "expected_sha256": "0fa041642c25be9b6629b9866cc64df55f78f3abe2cb7ccd58fa4232f6fb0ad1",
+            "matches": true
+          },
+          {
+            "actual_sha256": "408b2711ea2a92f1ce3b0c613b42ebba4d933d4ea174da133fa24339297376e5",
+            "declared_path": "figures/figure_1_paired_error.png",
+            "exists": true,
+            "expected_sha256": "408b2711ea2a92f1ce3b0c613b42ebba4d933d4ea174da133fa24339297376e5",
+            "matches": true
+          },
+          {
+            "actual_sha256": "69f4c777d70f00aaf267b42f6d0ee82bc7c68ad29bdee2f56f6449eb59b3049a",
+            "declared_path": "figures/figure_2_diagonal_negative_control.png",
+            "exists": true,
+            "expected_sha256": "69f4c777d70f00aaf267b42f6d0ee82bc7c68ad29bdee2f56f6449eb59b3049a",
+            "matches": true
+          },
+          {
+            "actual_sha256": "1557cf28cfdc5a876251bae5a68156f2eff41bbabea9a9dd7790f7560327b06f",
+            "declared_path": "literature_search.json",
+            "exists": true,
+            "expected_sha256": "1557cf28cfdc5a876251bae5a68156f2eff41bbabea9a9dd7790f7560327b06f",
+            "matches": true
+          },
+          {
+            "actual_sha256": "d0ce698062f8d308ea393c7fd4d2714be5bbe6f40170b360e955451202fc00a3",
+            "declared_path": "paper/Paired_finite-chain_SSH_diagnostic_reliability_under_quenche_20260709_013828.md",
+            "exists": true,
+            "expected_sha256": "d0ce698062f8d308ea393c7fd4d2714be5bbe6f40170b360e955451202fc00a3",
+            "matches": true
+          },
+          {
+            "actual_sha256": "f1ed9115891add74bbed9215e10a2f8e13ed591a4351dfd941e880744da4aa2b",
+            "declared_path": "paper/Paired_finite-chain_SSH_diagnostic_reliability_under_quenche_20260709_013828.pdf",
+            "exists": true,
+            "expected_sha256": "f1ed9115891add74bbed9215e10a2f8e13ed591a4351dfd941e880744da4aa2b",
+            "matches": true
+          },
+          {
+            "actual_sha256": "dd80ab7ed8841b5ad7cbc5ddd7d01a88527eef03fe9f9e7fd344eb8cc8eb3ea0",
+            "declared_path": "paper/Paired_finite-chain_SSH_diagnostic_reliability_under_quenche_20260709_013828.tex",
+            "exists": true,
+            "expected_sha256": "dd80ab7ed8841b5ad7cbc5ddd7d01a88527eef03fe9f9e7fd344eb8cc8eb3ea0",
+            "matches": true
+          },
+          {
+            "actual_sha256": "a92cb1f2ac4f0885cac9d90e971dde361abcc6136181ea433ba40462f366d9bc",
+            "declared_path": "paper/artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/figure_1_ssh_disorder_paired_error.png",
+            "exists": true,
+            "expected_sha256": "a92cb1f2ac4f0885cac9d90e971dde361abcc6136181ea433ba40462f366d9bc",
+            "matches": true
+          },
+          {
+            "actual_sha256": "5ead6abd5eab377fd6b665a1efb9c56e055affdec1176e34bb431d4f3398e77a",
+            "declared_path": "paper/artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/figure_2_ssh_diagonal_negative_control.png",
+            "exists": true,
+            "expected_sha256": "5ead6abd5eab377fd6b665a1efb9c56e055affdec1176e34bb431d4f3398e77a",
+            "matches": true
+          },
+          {
+            "actual_sha256": "3168168639c507c8d19630e2ed22a347ac89d8453486821c6315c88e0bdf6a86",
+            "declared_path": "paper/artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/manifest.json",
+            "exists": true,
+            "expected_sha256": "3168168639c507c8d19630e2ed22a347ac89d8453486821c6315c88e0bdf6a86",
+            "matches": true
+          },
+          {
+            "actual_sha256": "0090a39d83857a34d72e4d2565138eec708a8eb2919690e7b5a327cefc04336f",
+            "declared_path": "paper/artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/numeric_tool_results.csv",
+            "exists": true,
+            "expected_sha256": "0090a39d83857a34d72e4d2565138eec708a8eb2919690e7b5a327cefc04336f",
+            "matches": true
+          },
+          {
+            "actual_sha256": "f9ae7ab4565763dce0530f6b27ff49d25c653ce6fa9df1a7f598ff53fd888f46",
+            "declared_path": "paper/artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/numeric_tool_results.json",
+            "exists": true,
+            "expected_sha256": "f9ae7ab4565763dce0530f6b27ff49d25c653ce6fa9df1a7f598ff53fd888f46",
+            "matches": true
+          },
+          {
+            "actual_sha256": "4e13905410d22d155fa7245d57db153eb3bb2bbfb5b4ac2c50a2038f17ad5dbf",
+            "declared_path": "pooled_results.json",
+            "exists": true,
+            "expected_sha256": "4e13905410d22d155fa7245d57db153eb3bb2bbfb5b4ac2c50a2038f17ad5dbf",
+            "matches": true
+          },
+          {
+            "actual_sha256": "269f5c9d13bfe336c181fc9b72afc57131ba06765c7eb75c9b605d75651a5897",
+            "declared_path": "preregistration.json",
+            "exists": true,
+            "expected_sha256": "269f5c9d13bfe336c181fc9b72afc57131ba06765c7eb75c9b605d75651a5897",
+            "matches": true
+          },
+          {
+            "actual_sha256": "7cc1183a2916b3349f22773eeb22afacb90821060c498e7d32019f277b5b72ed",
+            "declared_path": "preregistration.sha256",
+            "exists": true,
+            "expected_sha256": "7cc1183a2916b3349f22773eeb22afacb90821060c498e7d32019f277b5b72ed",
+            "matches": true
+          },
+          {
+            "actual_sha256": "1aaeead1ada0732874dd05ee2c1e945cfbbe2de6ce45459d87882fae44ec1864",
+            "declared_path": "provenance/chemistry_ssh_disorder_amy-ssh-disorder-v1-primary_4/output.txt",
+            "exists": true,
+            "expected_sha256": "1aaeead1ada0732874dd05ee2c1e945cfbbe2de6ce45459d87882fae44ec1864",
+            "matches": true
+          },
+          {
+            "actual_sha256": "93d7ecae8d38bd3dca0ae64b8659db90a007ab114040adccf3baea79d52cf7b8",
+            "declared_path": "provenance/chemistry_ssh_disorder_amy-ssh-disorder-v1-primary_4/provenance.json",
+            "exists": true,
+            "expected_sha256": "93d7ecae8d38bd3dca0ae64b8659db90a007ab114040adccf3baea79d52cf7b8",
+            "matches": true
+          },
+          {
+            "actual_sha256": "744991204bb15dc9eafaf0966287b869538fc5c90d9c394a2c5366a673badd3e",
+            "declared_path": "provenance/chemistry_ssh_disorder_amy-ssh-disorder-v1-replication_4/output.txt",
+            "exists": true,
+            "expected_sha256": "744991204bb15dc9eafaf0966287b869538fc5c90d9c394a2c5366a673badd3e",
+            "matches": true
+          },
+          {
+            "actual_sha256": "2745c71db5921d891965a05285b82c807c04fdfd92da4e6e468d889bf9a1ea8d",
+            "declared_path": "provenance/chemistry_ssh_disorder_amy-ssh-disorder-v1-replication_4/provenance.json",
+            "exists": true,
+            "expected_sha256": "2745c71db5921d891965a05285b82c807c04fdfd92da4e6e468d889bf9a1ea8d",
+            "matches": true
+          },
+          {
+            "actual_sha256": "1aaeead1ada0732874dd05ee2c1e945cfbbe2de6ce45459d87882fae44ec1864",
+            "declared_path": "raw_primary_atlas.txt",
+            "exists": true,
+            "expected_sha256": "1aaeead1ada0732874dd05ee2c1e945cfbbe2de6ce45459d87882fae44ec1864",
+            "matches": true
+          },
+          {
+            "actual_sha256": "744991204bb15dc9eafaf0966287b869538fc5c90d9c394a2c5366a673badd3e",
+            "declared_path": "raw_replication_atlas.txt",
+            "exists": true,
+            "expected_sha256": "744991204bb15dc9eafaf0966287b869538fc5c90d9c394a2c5366a673badd3e",
+            "matches": true
+          },
+          {
+            "actual_sha256": "40ea1591f2e6a71ad218cc11a2d36ebd56bd6a106f1de47ed5512177bacde421",
+            "declared_path": "study_record.json",
+            "exists": true,
+            "expected_sha256": "40ea1591f2e6a71ad218cc11a2d36ebd56bd6a106f1de47ed5512177bacde421",
+            "matches": true
+          }
+        ],
+        "file_sha256": "dad237944d54626d3aec6196ed0db34b0b1ed78820279cc6bec0765043f12fcf",
+        "malformed_line_numbers": [],
+        "path": "experiments/ssh_disorder_study/release/MANIFEST.sha256"
+      }
+    ],
+    "summary": {
+      "checksum_manifest_files": 1,
+      "current_digest_failures": 0,
+      "current_digest_matches": 24,
+      "entries": 24,
+      "signed_or_attested_manifest_files": 0
+    }
+  },
+  "classification": "exploratory_pre_registration_read_only",
+  "directory_provenance": {
+    "audited_inventory_sha256": "eeb2cca4e83a2fefb7a7f9b972aa636242f9d5085b78ca02e4d75110f7de5264",
+    "authenticated_record_paths": [],
+    "coverage": {
+      "authentication_material": 0,
+      "container_image_digest": 0,
+      "dependency_lock_digest": 0,
+      "dependency_versions": 0,
+      "environment_object": 1414,
+      "input_digest": 0,
+      "random_seed": 0,
+      "source_file_digest": 12,
+      "source_revision": 0
+    },
+    "declared_success_true_with_error_or_unusable_marker": [
+      {
+        "declared_input_sha256": "b39e745229ec0d90ecf8eed13445e7e35b97c0d24b8669582620ffc53843945d",
+        "output_sha256": "a158ab7db5553d2b1aca8c25343886c4d7d3f8d0d79992ba9fd80d66e848b6f4",
+        "path": "data/experiments/astronomy_astropy_cosmology_20260702_075329/provenance.json",
+        "tool_name": "astropy_cosmology"
+      },
+      {
+        "declared_input_sha256": "7d6f4f79afcff99404b06608e3973c9667ecd0a49d7fbef3849e0342dfe09667",
+        "output_sha256": "3c8f1da8f9cb9a54377950ea35606c34df6f033e6df31a6cfc9814bb9e77c1b0",
+        "path": "data/experiments/mathematics_prime_gap_analysis_20260529_051113/provenance.json",
+        "tool_name": "prime_gap_analysis"
+      },
+      {
+        "declared_input_sha256": "b509d5a74b913bedcc25bec4935822a76c2eb12d935c30d45220928c1f3dfc90",
+        "output_sha256": "38d660e6452a590bf9fbfa4ac5387cb89e9e66d0dfe55b93496c12d6ffb34b3d",
+        "path": "data/experiments/mathematics_prime_gap_analysis_20260529_051123/provenance.json",
+        "tool_name": "prime_gap_analysis"
+      },
+      {
+        "declared_input_sha256": "68d420488470fb5305cad01a6fc7238cb5737005298daabb8bb4a3ac1c994178",
+        "output_sha256": "7e89cacbb50e199ef0d5331dfd6aaf99b9dce6b8e082d514f0383594bbb2f7d1",
+        "path": "data/experiments/mathematics_sympy_prime_analysis_20260702_170153/provenance.json",
+        "tool_name": "sympy_prime_analysis"
+      },
+      {
+        "declared_input_sha256": "a7b7bcdcee214824fce2c223636f56a9c9eb1c0d064c0f4f67d02ec58ceea7ba",
+        "output_sha256": "16470c19cf1610c4feca2bd905ed9a0dd1dcfb6e00a7ac7b75d07b117a78609b",
+        "path": "data/experiments/statistics_numpy_statistics_20260702_075019/provenance.json",
+        "tool_name": "numpy_statistics"
+      }
+    ],
+    "direct_numeric_prime_limit_mismatches": [
+      {
+        "declared_input_limit": 1000000,
+        "declared_success": true,
+        "output_sha256": "38f08377ed47e6086781b787893b41141a9d6788b2adfe0b29d35fb87228647b",
+        "path": "data/experiments/mathematics_prime_gap_analysis_20260521_195209_8155bc7/provenance.json",
+        "reported_output_limit": 100000,
+        "timestamp": "2026-05-21T19:52:09.450392+00:00"
+      }
+    ],
+    "duplicate_output_groups_with_multiple_tool_input_pairs": [
+      {
+        "declared_success_false_count": 34,
+        "declared_success_true_count": 0,
+        "output_sha256": "112ac59b1243dc9a3613ddb2ca66ac8c0a57a3bed937d13ce77af42b6046098d",
+        "record_count": 34,
+        "sample_record_paths": [
+          "data/experiments/astronomy_numpy_distribution_20260706_160058/provenance.json",
+          "data/experiments/astronomy_numpy_distribution_20260706_160733/provenance.json",
+          "data/experiments/astronomy_numpy_distribution_20260706_162802/provenance.json",
+          "data/experiments/astronomy_numpy_distribution_20260706_171736/provenance.json",
+          "data/experiments/astronomy_numpy_distribution_20260706_174503/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 6,
+        "unique_tool_input_pair_count": 6,
+        "unique_tool_names": [
+          "numpy_distribution"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 26,
+        "output_sha256": "4f8cf96569dd41bda97d6215c64eeae926d0bb7887edbb2e76f048538927801b",
+        "record_count": 26,
+        "sample_record_paths": [
+          "data/experiments/chemistry_molecular_orbital_energy_20260702_225706/provenance.json",
+          "data/experiments/chemistry_molecular_orbital_energy_20260702_235526/provenance.json",
+          "data/experiments/chemistry_molecular_orbital_energy_20260702_235631/provenance.json",
+          "data/experiments/chemistry_molecular_orbital_energy_20260702_235844/provenance.json",
+          "data/experiments/chemistry_molecular_orbital_energy_20260703_000100/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 2,
+        "unique_tool_input_pair_count": 2,
+        "unique_tool_names": [
+          "molecular_orbital_energy"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 24,
+        "output_sha256": "38f08377ed47e6086781b787893b41141a9d6788b2adfe0b29d35fb87228647b",
+        "record_count": 24,
+        "sample_record_paths": [
+          "data/experiments/mathematics_prime_gap_analysis_20260521_195003_14ee222/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260521_195209_14ee226/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260521_195209_8155bc7/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260521_195341_14ee226/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260522_001642_14ee222/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 3,
+        "unique_tool_input_pair_count": 3,
+        "unique_tool_names": [
+          "prime_gap_analysis"
+        ]
+      },
+      {
+        "declared_success_false_count": 22,
+        "declared_success_true_count": 0,
+        "output_sha256": "8635d2e744821361cad473fde3d29638eb602bd54b6b76fb884cf6c42fe27d40",
+        "record_count": 22,
+        "sample_record_paths": [
+          "data/experiments/astronomy_calculus_engine_20260511_002434_2/provenance.json",
+          "data/experiments/astronomy_calculus_engine_20260706_161842/provenance.json",
+          "data/experiments/astronomy_calculus_engine_20260706_173409_2/provenance.json",
+          "data/experiments/climate_calculus_engine_20260706_162003/provenance.json",
+          "data/experiments/climate_calculus_engine_20260706_170449/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 4,
+        "unique_tool_input_pair_count": 4,
+        "unique_tool_names": [
+          "calculus_engine"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 19,
+        "output_sha256": "4ef7e668e184fb716047b49564304b5e975723f722beb91bba0582d7554ea4f9",
+        "record_count": 19,
+        "sample_record_paths": [
+          "data/experiments/mathematics_prime_gap_analysis_20260521_195341_8155bc7/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260522_001642_8155bc3/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260604_044239/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260609_224920/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260609_225006/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 2,
+        "unique_tool_input_pair_count": 2,
+        "unique_tool_names": [
+          "prime_gap_analysis"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 15,
+        "output_sha256": "1ad2d8818a824208bb23d320fb4d896e0e7ffb2e2da579601f52950606f1e0f0",
+        "record_count": 15,
+        "sample_record_paths": [
+          "data/experiments/neuroscience_numpy_correlation_20260706_154529/provenance.json",
+          "data/experiments/neuroscience_numpy_correlation_20260706_160428/provenance.json",
+          "data/experiments/neuroscience_numpy_correlation_20260706_162854/provenance.json",
+          "data/experiments/neuroscience_numpy_correlation_20260706_165940/provenance.json",
+          "data/experiments/neuroscience_numpy_correlation_20260706_171035/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 3,
+        "unique_tool_input_pair_count": 3,
+        "unique_tool_names": [
+          "numpy_correlation"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 13,
+        "output_sha256": "5a191394fcf943fbef029fb45d76e5e6121b70f44bdfa41001bd8f62d9a48e81",
+        "record_count": 13,
+        "sample_record_paths": [
+          "data/experiments/replication_statistical_distributions_numpy_statistics_20260501_174323/provenance.json",
+          "data/experiments/statistics_numpy_statistics_20260521_194033_b93b61/provenance.json",
+          "data/experiments/statistics_numpy_statistics_20260521_195003_49db1e0/provenance.json",
+          "data/experiments/statistics_numpy_statistics_20260609_231051/provenance.json",
+          "data/experiments/statistics_numpy_statistics_20260609_231735/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 3,
+        "unique_tool_input_pair_count": 3,
+        "unique_tool_names": [
+          "numpy_statistics"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 12,
+        "output_sha256": "fb699887cfde2d4a90979469a792939bb5cf448d7bfcedd1688b3558dee8b041",
+        "record_count": 12,
+        "sample_record_paths": [
+          "data/experiments/chemistry_molecular_orbital_energy_20260426_171550/provenance.json",
+          "data/experiments/chemistry_molecular_orbital_energy_20260426_172652/provenance.json",
+          "data/experiments/chemistry_molecular_orbital_energy_20260426_180538/provenance.json",
+          "data/experiments/chemistry_molecular_orbital_energy_20260426_183910/provenance.json",
+          "data/experiments/chemistry_molecular_orbital_energy_20260426_215531/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 2,
+        "unique_tool_input_pair_count": 2,
+        "unique_tool_names": [
+          "molecular_orbital_energy"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 12,
+        "output_sha256": "e12c1022e2bbea9c8e3faf861ec18b0907d540efc9f51ea32ffcbdddaf24dcb9",
+        "record_count": 12,
+        "sample_record_paths": [
+          "data/experiments/climate_hypothesis_tester_20260706_155113/provenance.json",
+          "data/experiments/climate_hypothesis_tester_20260706_161009/provenance.json",
+          "data/experiments/climate_hypothesis_tester_20260706_173629/provenance.json",
+          "data/experiments/climate_hypothesis_tester_20260706_221921/provenance.json",
+          "data/experiments/neuroscience_hypothesis_tester_20260706_154110/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 2,
+        "unique_tool_input_pair_count": 2,
+        "unique_tool_names": [
+          "hypothesis_tester"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 6,
+        "output_sha256": "410eb507cffae50a48ff2927656a135953d5e8fa5ac4150b199aa640399bd406",
+        "record_count": 6,
+        "sample_record_paths": [
+          "data/experiments/biomedical_engineering_service_additivemanufacturingservice_20260521_235505_88007d0/provenance.json",
+          "data/experiments/engineering_service_additivemanufacturingservice_20260521_235256_5dac7d1/provenance.json",
+          "data/experiments/engineering_service_additivemanufacturingservice_20260521_235256_c48aeb0/provenance.json",
+          "data/experiments/manufacturing_service_additivemanufacturingservice_20260521_235515_ac3eae1/provenance.json",
+          "data/experiments/manufacturing_service_additivemanufacturingservice_20260521_235515_caaa9f0/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 6,
+        "unique_tool_input_pair_count": 6,
+        "unique_tool_names": [
+          "service_additivemanufacturingservice"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 6,
+        "output_sha256": "c819a2b329e1e9c36e8c84676538e44852fb5c422e2a830f87e7ae2d18237722",
+        "record_count": 6,
+        "sample_record_paths": [
+          "data/experiments/mathematics_prime_gap_analysis_20260522_001646_d1ca3a4/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260604_044352/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260604_155015/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260620_042900/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260620_042918/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 5,
+        "unique_tool_input_pair_count": 5,
+        "unique_tool_names": [
+          "prime_gap_analysis"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 5,
+        "output_sha256": "f7169558d358516d27695449bac43e4929def07199c222ec30100e835eb7db00",
+        "record_count": 5,
+        "sample_record_paths": [
+          "data/experiments/mathematics_calculus_engine_20260706_154751/provenance.json",
+          "data/experiments/mathematics_calculus_engine_20260706_162457/provenance.json",
+          "data/experiments/mathematics_calculus_engine_20260706_162656/provenance.json",
+          "data/experiments/mathematics_calculus_engine_20260706_170320/provenance.json",
+          "data/experiments/physics_calculus_engine_20260609_231201_2/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 2,
+        "unique_tool_input_pair_count": 2,
+        "unique_tool_names": [
+          "calculus_engine"
+        ]
+      },
+      {
+        "declared_success_false_count": 3,
+        "declared_success_true_count": 1,
+        "output_sha256": "16470c19cf1610c4feca2bd905ed9a0dd1dcfb6e00a7ac7b75d07b117a78609b",
+        "record_count": 4,
+        "sample_record_paths": [
+          "data/experiments/replication_statistical_distributions_numpy_distribution_20260501_172047/provenance.json",
+          "data/experiments/replication_statistical_distributions_numpy_distribution_20260501_172703/provenance.json",
+          "data/experiments/replication_statistical_distributions_numpy_distribution_20260501_173107/provenance.json",
+          "data/experiments/statistics_numpy_statistics_20260702_075019/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 2,
+        "unique_tool_input_pair_count": 2,
+        "unique_tool_names": [
+          "numpy_distribution",
+          "numpy_statistics"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 4,
+        "output_sha256": "21fc6ebe3bbd78345833379cce0656a0aa4eae6a8d4b99988b4087864a9c5ef1",
+        "record_count": 4,
+        "sample_record_paths": [
+          "data/experiments/statistics_numpy_correlation_20260521_194033_9b0f66/provenance.json",
+          "data/experiments/statistics_numpy_correlation_20260706_154631/provenance.json",
+          "data/experiments/statistics_numpy_correlation_20260706_165819/provenance.json",
+          "data/experiments/statistics_numpy_correlation_20260706_174713/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 2,
+        "unique_tool_input_pair_count": 2,
+        "unique_tool_names": [
+          "numpy_correlation"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 2,
+        "output_sha256": "81ffe90d6db8a93c7c2a7fb2eb1cfa3da13e04f5872f5df303db649f99e07ba5",
+        "record_count": 2,
+        "sample_record_paths": [
+          "data/experiments/medicine_validate_hypothesis_20260521_235237_4734cf4/provenance.json",
+          "data/experiments/research_validate_hypothesis_20260521_235717_7687941/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 2,
+        "unique_tool_input_pair_count": 2,
+        "unique_tool_names": [
+          "validate_hypothesis"
+        ]
+      }
+    ],
+    "experiment_id_mismatches": [],
+    "interpretation_limits": [
+      "A matching stored SHA-256 establishes current byte equality with the unauthenticated declaration; it does not establish who made the declaration.",
+      "The record family does not by itself establish that declared inputs, environment fields, or tool identity are truthful.",
+      "Duplicate output digests may be legitimate repeated computations and are not treated as fabrication evidence."
+    ],
+    "largest_duplicate_output_groups": [
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 53,
+        "output_sha256": "57603e6a72a6c5807202193242ce1b2093f59a0a4b5d10f1b275aa08590b344b",
+        "record_count": 53,
+        "sample_record_paths": [
+          "data/experiments/mathematics_prime_gap_analysis_20260609_183019/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260609_183019_3/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260609_183033/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260609_183129/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260609_183231/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 1,
+        "unique_tool_input_pair_count": 1,
+        "unique_tool_names": [
+          "prime_gap_analysis"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 53,
+        "output_sha256": "ab3dc7be0148c5e0342f11809a83ec8824ec7f30b81e8472050dd9b1bba1f7c9",
+        "record_count": 53,
+        "sample_record_paths": [
+          "data/experiments/mathematics_prime_gap_analysis_20260609_183019_2/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260609_183019_4/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260609_183033_2/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260609_183129_2/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260609_183231_2/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 1,
+        "unique_tool_input_pair_count": 1,
+        "unique_tool_names": [
+          "prime_gap_analysis"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 51,
+        "output_sha256": "bb61b48009158e852b31a85a64ec862c477d68d74a58a8f4248682d0c713fdcb",
+        "record_count": 51,
+        "sample_record_paths": [
+          "data/experiments/mathematics_prime_gap_analysis_20260426_171353/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260426_172520/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260426_180336/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260426_183504/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260426_183739/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 1,
+        "unique_tool_input_pair_count": 1,
+        "unique_tool_names": [
+          "prime_gap_analysis"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 48,
+        "output_sha256": "16162e32b73af7fdbddcf8f6b4370ccc6698288bac5762585084393964f7b811",
+        "record_count": 48,
+        "sample_record_paths": [
+          "data/experiments/chemistry_molecular_orbital_energy_20260609_183852/provenance.json",
+          "data/experiments/chemistry_molecular_orbital_energy_20260609_183858/provenance.json",
+          "data/experiments/chemistry_molecular_orbital_energy_20260609_183901/provenance.json",
+          "data/experiments/chemistry_molecular_orbital_energy_20260609_184134/provenance.json",
+          "data/experiments/chemistry_molecular_orbital_energy_20260609_184209/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 1,
+        "unique_tool_input_pair_count": 1,
+        "unique_tool_names": [
+          "molecular_orbital_energy"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 48,
+        "output_sha256": "bb28400d1b1da9f2982289d39a604d5debac1dae61eebe3ab1255936fc4d45dd",
+        "record_count": 48,
+        "sample_record_paths": [
+          "data/experiments/chemistry_molecular_orbital_energy_20260609_183852_2/provenance.json",
+          "data/experiments/chemistry_molecular_orbital_energy_20260609_183858_2/provenance.json",
+          "data/experiments/chemistry_molecular_orbital_energy_20260609_183901_2/provenance.json",
+          "data/experiments/chemistry_molecular_orbital_energy_20260609_184134_2/provenance.json",
+          "data/experiments/chemistry_molecular_orbital_energy_20260609_184209_2/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 1,
+        "unique_tool_input_pair_count": 1,
+        "unique_tool_names": [
+          "molecular_orbital_energy"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 48,
+        "output_sha256": "80e6a4b706fcebaa62825ab2f15347b24d660953a62c6da3c4bad74767d49b43",
+        "record_count": 48,
+        "sample_record_paths": [
+          "data/experiments/physics_quantum_energy_levels_20260609_183854/provenance.json",
+          "data/experiments/physics_quantum_energy_levels_20260609_183905/provenance.json",
+          "data/experiments/physics_quantum_energy_levels_20260609_184139/provenance.json",
+          "data/experiments/physics_quantum_energy_levels_20260609_184207/provenance.json",
+          "data/experiments/physics_quantum_energy_levels_20260609_184238/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 1,
+        "unique_tool_input_pair_count": 1,
+        "unique_tool_names": [
+          "quantum_energy_levels"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 35,
+        "output_sha256": "992bef36f30b382556795be3d713d64f2abca1ebbd19bc8938ed43984e7253be",
+        "record_count": 35,
+        "sample_record_paths": [
+          "data/experiments/mathematics_sympy_prime_analysis_20260522_134537/provenance.json",
+          "data/experiments/mathematics_sympy_prime_analysis_20260527_160714/provenance.json",
+          "data/experiments/mathematics_sympy_prime_analysis_20260527_200610/provenance.json",
+          "data/experiments/mathematics_sympy_prime_analysis_20260609_233510/provenance.json",
+          "data/experiments/mathematics_sympy_prime_analysis_20260619_222353/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 1,
+        "unique_tool_input_pair_count": 1,
+        "unique_tool_names": [
+          "sympy_prime_analysis"
+        ]
+      },
+      {
+        "declared_success_false_count": 34,
+        "declared_success_true_count": 0,
+        "output_sha256": "112ac59b1243dc9a3613ddb2ca66ac8c0a57a3bed937d13ce77af42b6046098d",
+        "record_count": 34,
+        "sample_record_paths": [
+          "data/experiments/astronomy_numpy_distribution_20260706_160058/provenance.json",
+          "data/experiments/astronomy_numpy_distribution_20260706_160733/provenance.json",
+          "data/experiments/astronomy_numpy_distribution_20260706_162802/provenance.json",
+          "data/experiments/astronomy_numpy_distribution_20260706_171736/provenance.json",
+          "data/experiments/astronomy_numpy_distribution_20260706_174503/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 6,
+        "unique_tool_input_pair_count": 6,
+        "unique_tool_names": [
+          "numpy_distribution"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 32,
+        "output_sha256": "df6fba5df1ee324278624dd89c427bfb190524c97c923c36f5d3600fbce3a546",
+        "record_count": 32,
+        "sample_record_paths": [
+          "data/experiments/mathematics_number_theory_advanced_20260521_195003_1928bb3/provenance.json",
+          "data/experiments/mathematics_number_theory_advanced_20260522_134537/provenance.json",
+          "data/experiments/mathematics_number_theory_advanced_20260527_160714/provenance.json",
+          "data/experiments/mathematics_number_theory_advanced_20260527_200610/provenance.json",
+          "data/experiments/mathematics_number_theory_advanced_20260609_233510/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 1,
+        "unique_tool_input_pair_count": 1,
+        "unique_tool_names": [
+          "number_theory_advanced"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 26,
+        "output_sha256": "20773ed0e3c6bd89bc09dede0955735df391a6197721ee6bc462052ea5e5b17d",
+        "record_count": 26,
+        "sample_record_paths": [
+          "data/experiments/astronomy_quantum_energy_levels_20260511_002809/provenance.json",
+          "data/experiments/astronomy_quantum_energy_levels_20260706_170352/provenance.json",
+          "data/experiments/astronomy_quantum_energy_levels_20260706_172249_2/provenance.json",
+          "data/experiments/astronomy_quantum_energy_levels_20260706_173409_2/provenance.json",
+          "data/experiments/astronomy_quantum_energy_levels_20260706_173702_2/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 1,
+        "unique_tool_input_pair_count": 1,
+        "unique_tool_names": [
+          "quantum_energy_levels"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 26,
+        "output_sha256": "4f8cf96569dd41bda97d6215c64eeae926d0bb7887edbb2e76f048538927801b",
+        "record_count": 26,
+        "sample_record_paths": [
+          "data/experiments/chemistry_molecular_orbital_energy_20260702_225706/provenance.json",
+          "data/experiments/chemistry_molecular_orbital_energy_20260702_235526/provenance.json",
+          "data/experiments/chemistry_molecular_orbital_energy_20260702_235631/provenance.json",
+          "data/experiments/chemistry_molecular_orbital_energy_20260702_235844/provenance.json",
+          "data/experiments/chemistry_molecular_orbital_energy_20260703_000100/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 2,
+        "unique_tool_input_pair_count": 2,
+        "unique_tool_names": [
+          "molecular_orbital_energy"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 26,
+        "output_sha256": "0520678e4d4f7d53d81767363f5736b23d572149ed02bc7881cd2e9a6e419269",
+        "record_count": 26,
+        "sample_record_paths": [
+          "data/experiments/physics_quantum_energy_levels_20260426_171511/provenance.json",
+          "data/experiments/physics_quantum_energy_levels_20260426_172618/provenance.json",
+          "data/experiments/physics_quantum_energy_levels_20260426_180455/provenance.json",
+          "data/experiments/physics_quantum_energy_levels_20260426_183635/provenance.json",
+          "data/experiments/physics_quantum_energy_levels_20260426_183836/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 1,
+        "unique_tool_input_pair_count": 1,
+        "unique_tool_names": [
+          "quantum_energy_levels"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 24,
+        "output_sha256": "38f08377ed47e6086781b787893b41141a9d6788b2adfe0b29d35fb87228647b",
+        "record_count": 24,
+        "sample_record_paths": [
+          "data/experiments/mathematics_prime_gap_analysis_20260521_195003_14ee222/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260521_195209_14ee226/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260521_195209_8155bc7/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260521_195341_14ee226/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260522_001642_14ee222/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 3,
+        "unique_tool_input_pair_count": 3,
+        "unique_tool_names": [
+          "prime_gap_analysis"
+        ]
+      },
+      {
+        "declared_success_false_count": 22,
+        "declared_success_true_count": 0,
+        "output_sha256": "8635d2e744821361cad473fde3d29638eb602bd54b6b76fb884cf6c42fe27d40",
+        "record_count": 22,
+        "sample_record_paths": [
+          "data/experiments/astronomy_calculus_engine_20260511_002434_2/provenance.json",
+          "data/experiments/astronomy_calculus_engine_20260706_161842/provenance.json",
+          "data/experiments/astronomy_calculus_engine_20260706_173409_2/provenance.json",
+          "data/experiments/climate_calculus_engine_20260706_162003/provenance.json",
+          "data/experiments/climate_calculus_engine_20260706_170449/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 4,
+        "unique_tool_input_pair_count": 4,
+        "unique_tool_names": [
+          "calculus_engine"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 22,
+        "output_sha256": "f531fb689931b69503468be4922ad50ff2d3bd20b12cc54f66f6d8f85103a7b7",
+        "record_count": 22,
+        "sample_record_paths": [
+          "data/experiments/statistics_hypothesis_tester_20260522_134537/provenance.json",
+          "data/experiments/statistics_hypothesis_tester_20260527_160714/provenance.json",
+          "data/experiments/statistics_hypothesis_tester_20260527_200610/provenance.json",
+          "data/experiments/statistics_hypothesis_tester_20260609_233510/provenance.json",
+          "data/experiments/statistics_hypothesis_tester_20260619_222442/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 1,
+        "unique_tool_input_pair_count": 1,
+        "unique_tool_names": [
+          "hypothesis_tester"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 22,
+        "output_sha256": "25713c955c9864b38ebf2d81ed7126486e706af06a13668c08135f64c09ddce0",
+        "record_count": 22,
+        "sample_record_paths": [
+          "data/experiments/statistics_numpy_statistics_20260522_134537/provenance.json",
+          "data/experiments/statistics_numpy_statistics_20260527_160714/provenance.json",
+          "data/experiments/statistics_numpy_statistics_20260527_200610/provenance.json",
+          "data/experiments/statistics_numpy_statistics_20260609_233510/provenance.json",
+          "data/experiments/statistics_numpy_statistics_20260619_222442/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 1,
+        "unique_tool_input_pair_count": 1,
+        "unique_tool_names": [
+          "numpy_statistics"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 21,
+        "output_sha256": "44c5fe60d601d16068bba179a59ce94f711f811111b72dc8c2846e31f0159f46",
+        "record_count": 21,
+        "sample_record_paths": [
+          "data/experiments/chemistry_molecular_orbital_energy_20260702_235526_2/provenance.json",
+          "data/experiments/chemistry_molecular_orbital_energy_20260702_235631_2/provenance.json",
+          "data/experiments/chemistry_molecular_orbital_energy_20260702_235844_2/provenance.json",
+          "data/experiments/chemistry_molecular_orbital_energy_20260703_000100_2/provenance.json",
+          "data/experiments/chemistry_molecular_orbital_energy_20260703_000242_2/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 1,
+        "unique_tool_input_pair_count": 1,
+        "unique_tool_names": [
+          "molecular_orbital_energy"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 20,
+        "output_sha256": "49d81f3a5b2b13f4f2e125e22b7cf03947c611d104c6d41f1c6455b4784b5e57",
+        "record_count": 20,
+        "sample_record_paths": [
+          "data/experiments/astronomy_quantum_energy_levels_20260511_002434_2/provenance.json",
+          "data/experiments/astronomy_quantum_energy_levels_20260706_170549/provenance.json",
+          "data/experiments/astronomy_quantum_energy_levels_20260706_171736/provenance.json",
+          "data/experiments/astronomy_quantum_energy_levels_20260706_174312_3/provenance.json",
+          "data/experiments/physics_quantum_energy_levels_20260521_194033_092d77/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 1,
+        "unique_tool_input_pair_count": 1,
+        "unique_tool_names": [
+          "quantum_energy_levels"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 19,
+        "output_sha256": "10331f2e546fad49e77f4dd6b2f3e5f871820a90d3d5e70b2afd4f729bbff73a",
+        "record_count": 19,
+        "sample_record_paths": [
+          "data/experiments/mathematics_prime_gap_analysis_20260426_171418/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260426_172535/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260426_180402/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260426_183529/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260426_183754/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 1,
+        "unique_tool_input_pair_count": 1,
+        "unique_tool_names": [
+          "prime_gap_analysis"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 19,
+        "output_sha256": "4ef7e668e184fb716047b49564304b5e975723f722beb91bba0582d7554ea4f9",
+        "record_count": 19,
+        "sample_record_paths": [
+          "data/experiments/mathematics_prime_gap_analysis_20260521_195341_8155bc7/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260522_001642_8155bc3/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260604_044239/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260609_224920/provenance.json",
+          "data/experiments/mathematics_prime_gap_analysis_20260609_225006/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 2,
+        "unique_tool_input_pair_count": 2,
+        "unique_tool_names": [
+          "prime_gap_analysis"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 18,
+        "output_sha256": "7c938b2248515ca544029279de06df997874348c059b8ee7850b6502cc32a25c",
+        "record_count": 18,
+        "sample_record_paths": [
+          "data/experiments/astronomy_quantum_energy_levels_20260511_002434/provenance.json",
+          "data/experiments/astronomy_quantum_energy_levels_20260511_002809_2/provenance.json",
+          "data/experiments/astronomy_quantum_energy_levels_20260706_161842/provenance.json",
+          "data/experiments/astronomy_quantum_energy_levels_20260706_162155/provenance.json",
+          "data/experiments/astronomy_quantum_energy_levels_20260706_172249/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 1,
+        "unique_tool_input_pair_count": 1,
+        "unique_tool_names": [
+          "quantum_energy_levels"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 16,
+        "output_sha256": "a7bcda407b57cea58838b36f9519ad684902b2427942423ddd457df57680e71d",
+        "record_count": 16,
+        "sample_record_paths": [
+          "data/experiments/engineering_topology_invariants_20260706_163110/provenance.json",
+          "data/experiments/engineering_topology_invariants_20260706_173519/provenance.json",
+          "data/experiments/mathematics_topology_invariants_20260706_154259/provenance.json",
+          "data/experiments/mathematics_topology_invariants_20260706_165127_2/provenance.json",
+          "data/experiments/mathematics_topology_invariants_20260706_170319/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 1,
+        "unique_tool_input_pair_count": 1,
+        "unique_tool_names": [
+          "topology_invariants"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 15,
+        "output_sha256": "06b08ecad39043c147675d5ee7f7403c24c2db6193746533c0c64829d342cc7a",
+        "record_count": 15,
+        "sample_record_paths": [
+          "data/experiments/chemistry_bond_alternated_polyene_scaling_20260703_004916/provenance.json",
+          "data/experiments/chemistry_bond_alternated_polyene_scaling_20260703_005147/provenance.json",
+          "data/experiments/chemistry_bond_alternated_polyene_scaling_20260703_005400/provenance.json",
+          "data/experiments/chemistry_bond_alternated_polyene_scaling_20260704_153108/provenance.json",
+          "data/experiments/chemistry_bond_alternated_polyene_scaling_20260704_153239/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 1,
+        "unique_tool_input_pair_count": 1,
+        "unique_tool_names": [
+          "bond_alternated_polyene_scaling"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 15,
+        "output_sha256": "35c0fbc856b0450220fdb36d2f6999a6b93ba4e60a3c1e62dea5ca9d73b29197",
+        "record_count": 15,
+        "sample_record_paths": [
+          "data/experiments/chemistry_pyscf_polyene_hf_gap_20260703_004916/provenance.json",
+          "data/experiments/chemistry_pyscf_polyene_hf_gap_20260703_005147/provenance.json",
+          "data/experiments/chemistry_pyscf_polyene_hf_gap_20260703_005400/provenance.json",
+          "data/experiments/chemistry_pyscf_polyene_hf_gap_20260704_153108/provenance.json",
+          "data/experiments/chemistry_pyscf_polyene_hf_gap_20260704_153239/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 1,
+        "unique_tool_input_pair_count": 1,
+        "unique_tool_names": [
+          "pyscf_polyene_hf_gap"
+        ]
+      },
+      {
+        "declared_success_false_count": 0,
+        "declared_success_true_count": 15,
+        "output_sha256": "1ad2d8818a824208bb23d320fb4d896e0e7ffb2e2da579601f52950606f1e0f0",
+        "record_count": 15,
+        "sample_record_paths": [
+          "data/experiments/neuroscience_numpy_correlation_20260706_154529/provenance.json",
+          "data/experiments/neuroscience_numpy_correlation_20260706_160428/provenance.json",
+          "data/experiments/neuroscience_numpy_correlation_20260706_162854/provenance.json",
+          "data/experiments/neuroscience_numpy_correlation_20260706_165940/provenance.json",
+          "data/experiments/neuroscience_numpy_correlation_20260706_171035/provenance.json"
+        ],
+        "unique_declared_input_sha256_count": 3,
+        "unique_tool_input_pair_count": 3,
+        "unique_tool_names": [
+          "numpy_correlation"
+        ]
+      }
+    ],
+    "malformed_stored_output_digests": [],
+    "missing_outputs": [],
+    "output_digest_failures": [],
+    "output_length_mismatches": [],
+    "parse_failures": [],
+    "provenance_version_counts": {
+      "1.0": 1415,
+      "MISSING": 238
+    },
+    "record_family": "data/experiments/<experiment_id>/provenance.json + output.txt",
+    "records_missing_declared_output_length": [
+      "data/experiments/test_audit_tmp/provenance.json"
+    ],
+    "records_with_test_fixture_or_tmp_like_id": [
+      "data/experiments/test_audit_tmp/provenance.json"
+    ],
+    "summary": {
+      "authenticated_records": 0,
+      "declared_success_counts": {
+        "False": 98,
+        "True": 1555
+      },
+      "declared_success_true_with_error_or_unusable_marker": 5,
+      "direct_numeric_prime_limit_checks": 128,
+      "direct_numeric_prime_limit_mismatches": 1,
+      "duplicate_output_digest_groups": 168,
+      "duplicate_output_groups_with_multiple_tool_input_pairs": 15,
+      "maximum_records_sharing_one_output_digest": 53,
+      "output_files": 1653,
+      "parseable_object_records": 1653,
+      "provenance_records": 1653,
+      "records_in_duplicate_groups_with_multiple_tool_input_pairs": 204,
+      "records_in_duplicate_output_digest_groups": 1513,
+      "records_missing_declared_output_length": 1,
+      "records_with_test_fixture_or_tmp_like_id": 1,
+      "stored_output_sha256_matches_current_bytes": 1653,
+      "stored_output_sha256_mismatches": 0,
+      "unique_current_output_sha256": 308,
+      "well_formed_stored_output_sha256": 1653
+    }
+  },
+  "flat_experiments": {
+    "audited_inventory_sha256": "defd02525619b1178d18481113cd969cb53723298cfcdbff7194550b334425c1",
+    "coverage": {
+      "authentication_material": 0,
+      "container_image_digest": 0,
+      "dependency_lock_digest": 0,
+      "dependency_versions": 0,
+      "environment": 0,
+      "input_digest": 0,
+      "output_digest": 0,
+      "random_seed": 0,
+      "source_file_digest": 0,
+      "source_revision": 0
+    },
+    "identifier_binds": [
+      "generated_code",
+      "declared_inputs"
+    ],
+    "identifier_definition": "first 32 hexadecimal characters of SHA-256(json.dumps({code, inputs}, sort_keys=True))",
+    "identifier_does_not_bind": [
+      "hypothesis",
+      "language",
+      "executed_or_repaired_code",
+      "output",
+      "dependencies",
+      "execution_environment",
+      "random_seed_unless_present_in_code_or_inputs"
+    ],
+    "identifier_failures": [],
+    "interpretation_limits": [
+      "The truncated identifier is a content label for selected declared fields, not an authenticated signature.",
+      "A matching identifier does not establish that the code ran or that stored outputs came from that code."
+    ],
+    "parse_failures": [],
+    "record_family": "data/experiments/<128-bit-code-input-id>.json",
+    "summary": {
+      "embedded_result_files": 7,
+      "identifier_failures": 0,
+      "identifier_recomputation_matches": 165,
+      "parseable_object_records": 165,
+      "records": 165,
+      "records_where_executed_code_differs": 2,
+      "records_with_executed_code": 6,
+      "successful_records": 78
+    }
+  },
+  "paper_watermarks": {
+    "audited_inventory_sha256": "99dac7cd14374a499e45aa4ba2db9a2e4c7d98895ad3067564eedeccb9f681ad",
+    "interpretation_limit": "The watermark body digest is self-declared inside the same mutable manuscript and has no signature; a matching value is an internal consistency check, not author authentication.",
+    "mismatches": [],
+    "summary": {
+      "cryptographically_authenticated_watermarks": 0,
+      "papers_with_watermark": 679,
+      "top_level_markdown_papers": 1411,
+      "watermark_body_sha256_failures": 0,
+      "watermark_body_sha256_matches": 679
+    }
+  },
+  "publication_manifests": {
+    "audited_inventory_sha256": "ead34993987a8103a56a49cf94e4903ab8ad39662034e34482fe05fced1a4b73",
+    "interpretation_limit": "Auditor-computed digests inventory current bytes; because the manifests do not authenticate those digests, they are not release signatures or historical provenance.",
+    "manifests": [
+      {
+        "declared_digest_or_signature_field_count": 0,
+        "file_sha256": "27331a5e172b2842be44b4c98929bfbb88295fcb8114a5c257d930e74ce7ea47",
+        "path": "experiments/e2e_validation/papers/artifacts/E2E_Validation_SSH_polyene_finite-chain_identifiability_Peierls_gaps_versus_edge/manifest.json",
+        "references": [
+          {
+            "auditor_computed_sha256": "c80c1789fa7be64d94f9f06fde19ed0acbac25ba3928ad42f4e2738b01e64f3d",
+            "declared_path": "artifacts/E2E_Validation_SSH_polyene_finite-chain_identifiability_Peierls_gaps_versus_edge/numeric_tool_results.csv",
+            "exists": true,
+            "resolved_path": "experiments/e2e_validation/papers/artifacts/E2E_Validation_SSH_polyene_finite-chain_identifiability_Peierls_gaps_versus_edge/numeric_tool_results.csv"
+          },
+          {
+            "auditor_computed_sha256": "d5408697beb2866c032cdcb16cc79a3a771774e8a470d5096fcab73292139e09",
+            "declared_path": "artifacts/E2E_Validation_SSH_polyene_finite-chain_identifiability_Peierls_gaps_versus_edge/numeric_tool_results.json",
+            "exists": true,
+            "resolved_path": "experiments/e2e_validation/papers/artifacts/E2E_Validation_SSH_polyene_finite-chain_identifiability_Peierls_gaps_versus_edge/numeric_tool_results.json"
+          },
+          {
+            "auditor_computed_sha256": "a537f967ffcd7783f1fec5f8299aa799546ab2f769a6a597d0b4ef892a6d79e6",
+            "declared_path": "artifacts/E2E_Validation_SSH_polyene_finite-chain_identifiability_Peierls_gaps_versus_edge/figure_1_ssh_finite_chain_diagnostic.png",
+            "exists": true,
+            "resolved_path": "experiments/e2e_validation/papers/artifacts/E2E_Validation_SSH_polyene_finite-chain_identifiability_Peierls_gaps_versus_edge/figure_1_ssh_finite_chain_diagnostic.png"
+          },
+          {
+            "auditor_computed_sha256": "992355e187173d45a824640b0ca001ac3bd187d70b82983acb30d7a0dc2f7b0a",
+            "declared_path": "artifacts/E2E_Validation_SSH_polyene_finite-chain_identifiability_Peierls_gaps_versus_edge/literature_novelty_audit.json",
+            "exists": true,
+            "resolved_path": "experiments/e2e_validation/papers/artifacts/E2E_Validation_SSH_polyene_finite-chain_identifiability_Peierls_gaps_versus_edge/literature_novelty_audit.json"
+          }
+        ]
+      },
+      {
+        "declared_digest_or_signature_field_count": 0,
+        "file_sha256": "3168168639c507c8d19630e2ed22a347ac89d8453486821c6315c88e0bdf6a86",
+        "path": "experiments/ssh_disorder_study/release/paper/artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/manifest.json",
+        "references": [
+          {
+            "auditor_computed_sha256": "0090a39d83857a34d72e4d2565138eec708a8eb2919690e7b5a327cefc04336f",
+            "declared_path": "artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/numeric_tool_results.csv",
+            "exists": true,
+            "resolved_path": "experiments/ssh_disorder_study/release/paper/artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/numeric_tool_results.csv"
+          },
+          {
+            "auditor_computed_sha256": "f9ae7ab4565763dce0530f6b27ff49d25c653ce6fa9df1a7f598ff53fd888f46",
+            "declared_path": "artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/numeric_tool_results.json",
+            "exists": true,
+            "resolved_path": "experiments/ssh_disorder_study/release/paper/artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/numeric_tool_results.json"
+          },
+          {
+            "auditor_computed_sha256": "a92cb1f2ac4f0885cac9d90e971dde361abcc6136181ea433ba40462f366d9bc",
+            "declared_path": "artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/figure_1_ssh_disorder_paired_error.png",
+            "exists": true,
+            "resolved_path": "experiments/ssh_disorder_study/release/paper/artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/figure_1_ssh_disorder_paired_error.png"
+          },
+          {
+            "auditor_computed_sha256": "5ead6abd5eab377fd6b665a1efb9c56e055affdec1176e34bb431d4f3398e77a",
+            "declared_path": "artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/figure_2_ssh_diagonal_negative_control.png",
+            "exists": true,
+            "resolved_path": "experiments/ssh_disorder_study/release/paper/artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/figure_2_ssh_diagonal_negative_control.png"
+          }
+        ]
+      },
+      {
+        "declared_digest_or_signature_field_count": 0,
+        "file_sha256": "ef6147750a3491a5bbb4bf473900b7e5e104f76e54d05a1f06e708d3cb4cf193",
+        "path": "papers/artifacts/Computational_Analysis_of_Climate_Dynamics_and_Environmental_Analysis/manifest.json",
+        "references": [
+          {
+            "auditor_computed_sha256": "5b50fcbb4e0e66f97b7e4778b5a324e9536c0cd9f03e7010d31dee55f31411af",
+            "declared_path": "artifacts/Computational_Analysis_of_Climate_Dynamics_and_Environmental_Analysis/numeric_tool_results.csv",
+            "exists": true,
+            "resolved_path": "papers/artifacts/Computational_Analysis_of_Climate_Dynamics_and_Environmental_Analysis/numeric_tool_results.csv"
+          },
+          {
+            "auditor_computed_sha256": "361c008ccf3dcff4cb5d4a40edcf7c4cc2cb60079379f00f73cce8080b27cbb6",
+            "declared_path": "artifacts/Computational_Analysis_of_Climate_Dynamics_and_Environmental_Analysis/numeric_tool_results.json",
+            "exists": true,
+            "resolved_path": "papers/artifacts/Computational_Analysis_of_Climate_Dynamics_and_Environmental_Analysis/numeric_tool_results.json"
+          },
+          {
+            "auditor_computed_sha256": "61dffe3eaee1d9c2247686132ada974b3a671aa63c718cd532e2a01ca2ccf2ce",
+            "declared_path": "artifacts/Computational_Analysis_of_Climate_Dynamics_and_Environmental_Analysis/figure_1_numeric_sweep.png",
+            "exists": true,
+            "resolved_path": "papers/artifacts/Computational_Analysis_of_Climate_Dynamics_and_Environmental_Analysis/figure_1_numeric_sweep.png"
+          },
+          {
+            "auditor_computed_sha256": "d8fe1e57102f69a5b650d45019b189a50270dadc9a017261045aaf9b1eb89ca1",
+            "declared_path": "artifacts/Computational_Analysis_of_Climate_Dynamics_and_Environmental_Analysis/literature_novelty_audit.json",
+            "exists": true,
+            "resolved_path": "papers/artifacts/Computational_Analysis_of_Climate_Dynamics_and_Environmental_Analysis/literature_novelty_audit.json"
+          }
+        ]
+      },
+      {
+        "declared_digest_or_signature_field_count": 0,
+        "file_sha256": "4968b96aa840cd561e3ab13ec15bc528f30ea2786565ea0ada5a33dea3e95d99",
+        "path": "papers/artifacts/Computational_Analysis_of_DNA_Sequence_and_Protein_Analysis/manifest.json",
+        "references": [
+          {
+            "auditor_computed_sha256": "682c2430ea519a961c4ac96a94e17bfad0d4d2a3c48ef5f5e1352a18605c5961",
+            "declared_path": "artifacts/Computational_Analysis_of_DNA_Sequence_and_Protein_Analysis/numeric_tool_results.csv",
+            "exists": true,
+            "resolved_path": "papers/artifacts/Computational_Analysis_of_DNA_Sequence_and_Protein_Analysis/numeric_tool_results.csv"
+          },
+          {
+            "auditor_computed_sha256": "0918e60a288b2c058b317462433dd0823ce7642b39555617c54a6c87fa07eab5",
+            "declared_path": "artifacts/Computational_Analysis_of_DNA_Sequence_and_Protein_Analysis/numeric_tool_results.json",
+            "exists": true,
+            "resolved_path": "papers/artifacts/Computational_Analysis_of_DNA_Sequence_and_Protein_Analysis/numeric_tool_results.json"
+          },
+          {
+            "auditor_computed_sha256": "3d6adb363184534b436f9ae29219e48c7e925bb9be5bfe872d80de5e94031f30",
+            "declared_path": "artifacts/Computational_Analysis_of_DNA_Sequence_and_Protein_Analysis/literature_novelty_audit.json",
+            "exists": true,
+            "resolved_path": "papers/artifacts/Computational_Analysis_of_DNA_Sequence_and_Protein_Analysis/literature_novelty_audit.json"
+          }
+        ]
+      },
+      {
+        "declared_digest_or_signature_field_count": 0,
+        "file_sha256": "3e289ebb3853a494387805fd35bc54ebe8e7fb2f46e86a4daff471e156ca8aa7",
+        "path": "papers/artifacts/Computational_Analysis_of_Mathematical_Analysis/manifest.json",
+        "references": [
+          {
+            "auditor_computed_sha256": "27415eecce66ddec2cb4d2ef0a3635148f76a9322b09c22dfdd6abc1ea7faad1",
+            "declared_path": "artifacts/Computational_Analysis_of_Mathematical_Analysis/literature_novelty_audit.json",
+            "exists": true,
+            "resolved_path": "papers/artifacts/Computational_Analysis_of_Mathematical_Analysis/literature_novelty_audit.json"
+          }
+        ]
+      },
+      {
+        "declared_digest_or_signature_field_count": 0,
+        "file_sha256": "7782223eca2ef6effa198dd58a9b8af60a34c7ad5e79f1a71818c61b325d9505",
+        "path": "papers/artifacts/Computational_Analysis_of_Molecular_Structure_and_Energetics/manifest.json",
+        "references": [
+          {
+            "auditor_computed_sha256": "2911d213ad81a67ef6348b0b38e9720673aa1e87d1c866d6f668442d6af8c1cc",
+            "declared_path": "artifacts/Computational_Analysis_of_Molecular_Structure_and_Energetics/literature_novelty_audit.json",
+            "exists": true,
+            "resolved_path": "papers/artifacts/Computational_Analysis_of_Molecular_Structure_and_Energetics/literature_novelty_audit.json"
+          }
+        ]
+      },
+      {
+        "declared_digest_or_signature_field_count": 0,
+        "file_sha256": "998ec80b28bf443c4d48998fd7a5b51042cf4ef24457e5b01dbdaa667bd79e08",
+        "path": "papers/artifacts/Computational_Analysis_of_Neural_Signal_and_Network_Analysis/manifest.json",
+        "references": [
+          {
+            "auditor_computed_sha256": "a63c51675dd40970468b3afdb8d1f3a2d196154d0ea81f3a1f494ce6d98d5736",
+            "declared_path": "artifacts/Computational_Analysis_of_Neural_Signal_and_Network_Analysis/literature_novelty_audit.json",
+            "exists": true,
+            "resolved_path": "papers/artifacts/Computational_Analysis_of_Neural_Signal_and_Network_Analysis/literature_novelty_audit.json"
+          }
+        ]
+      },
+      {
+        "declared_digest_or_signature_field_count": 0,
+        "file_sha256": "901565b7b2eb3ab84a8337594b63cf34aa79f41bc63edb08d0dbe02b698bec8b",
+        "path": "papers/artifacts/Computational_Analysis_of_Quantum_Mechanics_and_Energy_Levels/manifest.json",
+        "references": [
+          {
+            "auditor_computed_sha256": "ea7eea689c61ad6fd9b86991573a9a97dfebb41d276f3807a85377b5177fc2bb",
+            "declared_path": "artifacts/Computational_Analysis_of_Quantum_Mechanics_and_Energy_Levels/literature_novelty_audit.json",
+            "exists": true,
+            "resolved_path": "papers/artifacts/Computational_Analysis_of_Quantum_Mechanics_and_Energy_Levels/literature_novelty_audit.json"
+          }
+        ]
+      },
+      {
+        "declared_digest_or_signature_field_count": 0,
+        "file_sha256": "4f9a7d4d969a10933e08283735b6c00c8f0c9c21cab2f8391a73dace2b5e4386",
+        "path": "papers/artifacts/Computational_Analysis_of_Statistical_Analysis_and_Inference/manifest.json",
+        "references": [
+          {
+            "auditor_computed_sha256": "c568aee912300c0d35fe86a4da8dd269fc2a10978b8d468aadc73114771cda72",
+            "declared_path": "artifacts/Computational_Analysis_of_Statistical_Analysis_and_Inference/numeric_tool_results.csv",
+            "exists": true,
+            "resolved_path": "papers/artifacts/Computational_Analysis_of_Statistical_Analysis_and_Inference/numeric_tool_results.csv"
+          },
+          {
+            "auditor_computed_sha256": "668684b95ba35f154afd999d2a31edd463aef3d6fc66a384dca735d8e3a2f723",
+            "declared_path": "artifacts/Computational_Analysis_of_Statistical_Analysis_and_Inference/numeric_tool_results.json",
+            "exists": true,
+            "resolved_path": "papers/artifacts/Computational_Analysis_of_Statistical_Analysis_and_Inference/numeric_tool_results.json"
+          },
+          {
+            "auditor_computed_sha256": "4740f9fcc6fa3ab659715e018d242a9bbf1e8b02b4efc075d6064172a788f9b1",
+            "declared_path": "artifacts/Computational_Analysis_of_Statistical_Analysis_and_Inference/literature_novelty_audit.json",
+            "exists": true,
+            "resolved_path": "papers/artifacts/Computational_Analysis_of_Statistical_Analysis_and_Inference/literature_novelty_audit.json"
+          }
+        ]
+      },
+      {
+        "declared_digest_or_signature_field_count": 0,
+        "file_sha256": "c03bbd1d831eb5a08e98175f42069108e18ec8308091b47d8ba18e1697db0686",
+        "path": "papers/artifacts/Computational_Analysis_of_Stellar_Physics_and_Cosmological_Analysis/manifest.json",
+        "references": [
+          {
+            "auditor_computed_sha256": "9979f62823d993158a4256b87a5b86f60f2391cbf22dcf8dd6c2bf78c7806b16",
+            "declared_path": "artifacts/Computational_Analysis_of_Stellar_Physics_and_Cosmological_Analysis/literature_novelty_audit.json",
+            "exists": true,
+            "resolved_path": "papers/artifacts/Computational_Analysis_of_Stellar_Physics_and_Cosmological_Analysis/literature_novelty_audit.json"
+          }
+        ]
+      },
+      {
+        "declared_digest_or_signature_field_count": 0,
+        "file_sha256": "cdfa7cc2fe071c8b88867d14e29bdb3e7fc26989b49c30cca79f6766da335252",
+        "path": "papers/artifacts/Computational_Analysis_of_Structural_and_Network_Engineering_Analysis/manifest.json",
+        "references": [
+          {
+            "auditor_computed_sha256": "a55bf12bafcc53484486fbdc1e71fd6dc434978633ea49ff69a0ad360f360d8a",
+            "declared_path": "artifacts/Computational_Analysis_of_Structural_and_Network_Engineering_Analysis/literature_novelty_audit.json",
+            "exists": true,
+            "resolved_path": "papers/artifacts/Computational_Analysis_of_Structural_and_Network_Engineering_Analysis/literature_novelty_audit.json"
+          }
+        ]
+      }
+    ],
+    "parse_failures": [],
+    "summary": {
+      "manifest_files": 11,
+      "manifests_with_any_declared_digest_or_signature_field": 0,
+      "parseable_object_manifests": 11,
+      "referenced_files": 24,
+      "referenced_files_missing": 0,
+      "referenced_files_present": 24
+    }
+  },
+  "repository": {
+    "console_entry_point": "amy:_cli",
+    "declared_project_version": "1.0.0",
+    "entry_module_version": "1.0.0",
+    "git_commit": "40663854cfc2a2cf8e8e828cc0ac7c031db58963",
+    "git_describe": "v1.0.0-68-g4066385-dirty",
+    "git_object_format": "sha1",
+    "pyproject_sha256": "c6c0c7a86fabdd3fd1a2eda1ee64cb2008920e7abb6b07eccc283dadb86546bf",
+    "tracked_status_sha256": "ab70f5f4c18a3e9a3d705e55a9b86b95dcec39bc06a3638ad218b7c64c43e6b5",
+    "tracked_worktree_dirty": true
+  },
+  "safety": {
+    "deserializes_models": false,
+    "executes_product_code": false,
+    "imports_amy": false,
+    "mutates_audited_artifacts": false,
+    "reads_secret_values": false,
+    "runs_experiments": false,
+    "uses_network": false
+  },
+  "schema_version": "amy.integrity-audit.v1",
+  "static_code": {
+    "call_sites": {
+      "network_io": [
+        {
+          "call": "urllib.request.urlopen",
+          "code": "with urllib.request.urlopen(req, timeout=15) as resp:",
+          "line": 65,
+          "path": "communication/citation_verifier.py"
+        },
+        {
+          "call": "urllib.request.urlopen",
+          "code": "with urllib.request.urlopen(req, timeout=15) as resp:",
+          "line": 95,
+          "path": "communication/citation_verifier.py"
+        },
+        {
+          "call": "urllib.request.urlopen",
+          "code": "with urllib.request.urlopen(req, timeout=15) as resp:",
+          "line": 118,
+          "path": "communication/citation_verifier.py"
+        },
+        {
+          "call": "urllib.request.urlopen",
+          "code": "with urllib.request.urlopen(req, timeout=15) as resp:",
+          "line": 148,
+          "path": "communication/citation_verifier.py"
+        },
+        {
+          "call": "httpx.AsyncClient",
+          "code": "async with httpx.AsyncClient(timeout=timeout_cfg, headers=headers,",
+          "line": 317,
+          "path": "core/literature_search.py"
+        },
+        {
+          "call": "httpx.AsyncClient",
+          "code": "self._http = httpx.AsyncClient(",
+          "line": 129,
+          "path": "core/ollama_client.py"
+        },
+        {
+          "call": "httpx.AsyncClient",
+          "code": "self._http = httpx.AsyncClient(timeout=30.0)",
+          "line": 28,
+          "path": "senses/api_sensor.py"
+        },
+        {
+          "call": "urllib.request.urlopen",
+          "code": "with urllib.request.urlopen(req, timeout=timeout) as resp:",
+          "line": 57,
+          "path": "senses/web_sensor.py"
+        },
+        {
+          "call": "urllib.request.urlopen",
+          "code": "with urllib.request.urlopen(req, timeout=60) as response:",
+          "line": 45,
+          "path": "skills/data_analysis.py"
+        }
+      ],
+      "provenance_hmac": [
+        {
+          "call": "hmac.new",
+          "code": "signature = hmac.new(",
+          "line": 214,
+          "path": "core/security_hardening.py"
+        },
+        {
+          "call": "hmac.new",
+          "code": "expected_sig = hmac.new(",
+          "line": 237,
+          "path": "core/security_hardening.py"
+        },
+        {
+          "call": "sign_provenance",
+          "code": "return sign_provenance(record)",
+          "line": 420,
+          "path": "core/security_hardening.py"
+        },
+        {
+          "call": "verify_provenance",
+          "code": "return verify_provenance(record)",
+          "line": 423,
+          "path": "core/security_hardening.py"
+        }
+      ],
+      "subprocess_execution": [
+        {
+          "call": "subprocess.run",
+          "code": "proc = subprocess.run(",
+          "line": 319,
+          "path": "core/atlas_bridge.py"
+        },
+        {
+          "call": "asyncio.create_subprocess_exec",
+          "code": "self._worker = await asyncio.create_subprocess_exec(",
+          "line": 270,
+          "path": "core/atlas_tools.py"
+        },
+        {
+          "call": "subprocess.run",
+          "code": "proc = subprocess.run(",
+          "line": 575,
+          "path": "core/atlas_tools.py"
+        },
+        {
+          "call": "subprocess.run",
+          "code": "proc = subprocess.run(",
+          "line": 77,
+          "path": "sandbox/executor.py"
+        },
+        {
+          "call": "asyncio.create_subprocess_exec",
+          "code": "proc = await asyncio.create_subprocess_exec(",
+          "line": 270,
+          "path": "sandbox/executor.py"
+        },
+        {
+          "call": "asyncio.create_subprocess_exec",
+          "code": "proc = await asyncio.create_subprocess_exec(",
+          "line": 344,
+          "path": "sandbox/executor.py"
+        },
+        {
+          "call": "asyncio.create_subprocess_exec",
+          "code": "proc = await asyncio.create_subprocess_exec(",
+          "line": 426,
+          "path": "sandbox/executor.py"
+        }
+      ]
+    },
+    "direct_hashlib_constructor_counts": {
+      "sha256": 11
+    },
+    "function_evidence": {
+      "communication.numeric_verifier.NumericVerifier.verify_text": {
+        "end_line": 103,
+        "found": true,
+        "source": "    def verify_text(self, text: str, experiment_ids: list[str] | None = None) -> dict:\n        \"\"\"\n        Check numeric claims in text.\n        If the paper does not explicitly cite experiment_ids or dataset URLs,\n        ALL numeric claims are flagged as simulated.\n        \"\"\"\n        claims = self.extract_numeric_claims(text)\n        if not claims:\n            return {\"claims\": [], \"flagged\": [], \"safe\": True}\n\n        flagged = []\n        safe = True\n\n        # If experiment_ids are provided, we consider those as valid provenance.\n        # Otherwise we look for explicit experiment_id mentions in the text.\n        has_explicit_provenance = bool(experiment_ids)\n\n        for claim in claims:\n            idx = text.find(claim)\n            if idx == -1:\n                continue\n\n            context = text[max(0, idx - 200):idx + len(claim) + 200]\n\n            # Already marked\n            if \"[SIMULATED\" in context:\n                continue\n\n            # Explicit experiment_id in local context\n            if \"experiment_\" in context:\n                continue\n\n            # Explicit dataset URL in local context\n            if \"http\" in context and (\"dataset\" in context.lower() or \"data\" in context.lower()):\n                continue\n\n            if not has_explicit_provenance:\n                flagged.append(claim)\n                safe = False\n            else:\n                # With explicit provenance, still flag high-risk clinical stats\n                # unless they mention the experiment or a trial\n                lower_claim = claim.lower()\n                if \"median overall survival\" in lower_claim or \"hr=\" in lower_claim or \"or=\" in lower_claim:\n                    if \"clinical trial\" not in context.lower():\n                        flagged.append(claim)\n                        safe = False\n\n        return {\"claims\": claims, \"flagged\": flagged, \"safe\": safe}\n",
+        "source_sha256": "4bfdbf586f4d24a085030e01813698fdccbc33f342343082f34faa7427d7a773",
+        "start_line": 55
+      },
+      "communication.paper_generator.PaperGenerator._prepublication_gate": {
+        "end_line": 314,
+        "found": true,
+        "source": "    def _prepublication_gate(self, md_content: str, experiment_ids: list[str]) -> dict:\n        \"\"\"Reject drafts that cite experiments without verifiable provenance.\"\"\"\n        reasons = []\n\n        missing_hash_ids = [\n            eid for eid in dict.fromkeys(experiment_ids)\n            if not _provenance_output_hash(eid)\n        ]\n        if missing_hash_ids:\n            reasons.append(\"missing provenance output hash\")\n\n        code_blocks = re.findall(r\"```(?:[a-zA-Z0-9_-]+)?\\n(.*?)```\", md_content, flags=re.DOTALL)\n        unusable_blocks = []\n        for block in code_blocks:\n            assessment = assess_tool_output(block)\n            if not assessment.get(\"usable\", False):\n                unusable_blocks.append(assessment)\n        full_text_assessment = assess_tool_output(md_content)\n        if full_text_assessment.get(\"markers\") and not any(\n            set(full_text_assessment.get(\"markers\", [])).issubset(set(block.get(\"markers\", [])))\n            for block in unusable_blocks\n        ):\n            unusable_blocks.append(full_text_assessment)\n        if unusable_blocks:\n            reasons.append(\"unusable tool output in manuscript\")\n\n        return {\"passed\": not reasons, \"reasons\": reasons}\n",
+        "source_sha256": "3393e6909278f453ab64cf338cea22f9f0637f1123a9453ab831d8078aca70f3",
+        "start_line": 288
+      },
+      "communication.paper_generator._provenance_output_hash": {
+        "end_line": 59,
+        "found": true,
+        "source": "def _provenance_output_hash(experiment_id: str) -> str | None:\n    \"\"\"Return the real SHA-256 output hash recorded in provenance, if present.\"\"\"\n    prov_path = EXPERIMENTS_DIR / experiment_id / \"provenance.json\"\n    try:\n        record = json.loads(prov_path.read_text(encoding=\"utf-8\"))\n    except OSError as exc:\n        log.warning(\"provenance.read_error\", experiment_id=experiment_id, error=str(exc))\n        return None\n    except json.JSONDecodeError as exc:\n        log.warning(\"provenance.json_error\", experiment_id=experiment_id, error=str(exc))\n        return None\n\n    output_hash = record.get(\"tool\", {}).get(\"output_hash\")\n    if isinstance(output_hash, str) and re.fullmatch(r\"[a-fA-F0-9]{64}\", output_hash):\n        return output_hash.lower()\n    return None\n",
+        "source_sha256": "bf7ff7c0d033f9a10219b210a5c1d13ea0e19bc1228e25ae96a2fc821b11d577",
+        "start_line": 44
+      },
+      "core.provenance.ProvenanceManager.verify_experiment_id": {
+        "end_line": 133,
+        "found": true,
+        "source": "    def verify_experiment_id(self, experiment_id: str) -> dict:\n        \"\"\"\n        Verify that an experiment_id has a real provenance file.\n\n        Returns dict with 'exists', 'path', and 'record' (if exists).\n        \"\"\"\n        prov_path = self.base_dir / experiment_id / \"provenance.json\"\n        if prov_path.exists():\n            try:\n                record = json.loads(prov_path.read_text(encoding=\"utf-8\"))\n                return {\"exists\": True, \"path\": str(prov_path), \"record\": record}\n            except (json.JSONDecodeError, OSError):\n                return {\"exists\": False, \"path\": str(prov_path), \"record\": None}\n        return {\"exists\": False, \"path\": str(prov_path), \"record\": None}\n",
+        "source_sha256": "4a783ed42f0f70a03ed9d9c48c3bcc8e044150e9b06d65a1600442e09de3d3b0",
+        "start_line": 120
+      },
+      "core.security_hardening.sign_provenance": {
+        "end_line": 221,
+        "found": true,
+        "source": "def sign_provenance(record: dict) -> dict:\n    \"\"\"Add HMAC-SHA256 signature and anti-replay fields to a provenance record.\n\n    This strengthens the existing SHA-256 output hash with:\n    - HMAC signature over the full record (not just output)\n    - Timestamp + nonce binding to prevent replays\n    - Input hash (not just output hash)\n    \"\"\"\n    # Add anti-replay fields\n    record.setdefault(\"security\", {})\n    record[\"security\"][\"timestamp_epoch\"] = int(time.time())\n    record[\"security\"][\"nonce\"] = _secrets.token_hex(16)\n\n    # Hash the input alongside the output\n    tool = record.get(\"tool\", {})\n    tool_input = str(tool.get(\"input\", \"\"))\n    tool_output = str(tool.get(\"output\", record.get(\"output_preview\", \"\")))\n    record[\"security\"][\"input_hash\"] = hashlib.sha256(tool_input.encode(\"utf-8\")).hexdigest()\n    record[\"security\"][\"combined_hash\"] = hashlib.sha256(\n        (tool_input + tool_output).encode(\"utf-8\")\n    ).hexdigest()\n    record[\"security\"][\"signature_version\"] = \"1.0\"\n\n    # HMAC signature over the canonical record (excluding hmac_signature itself)\n    canonical = _canonical_record(record)\n    signature = hmac.new(\n        _get_hmac_key(),\n        canonical.encode(\"utf-8\"),\n        hashlib.sha256,\n    ).hexdigest()\n    record[\"security\"][\"hmac_signature\"] = signature\n\n    return record\n",
+        "source_sha256": "1dece038c3239d3fee3a571350e6f00ba33266b624d1fd2472a9c64afd39f4fa",
+        "start_line": 189
+      },
+      "core.security_hardening.verify_provenance": {
+        "end_line": 243,
+        "found": true,
+        "source": "def verify_provenance(record: dict) -> bool:\n    \"\"\"Verify the HMAC signature on a provenance record.\n\n    Returns True if the signature is valid, False otherwise.\n    Records without a signature are treated as invalid.\n    \"\"\"\n    sec = record.get(\"security\", {})\n    stored_sig = sec.get(\"hmac_signature\")\n    if not stored_sig:\n        return False\n\n    # Reconstruct the same canonical payload used for signing\n    canonical = _canonical_record(record)\n    expected_sig = hmac.new(\n        _get_hmac_key(),\n        canonical.encode(\"utf-8\"),\n        hashlib.sha256,\n    ).hexdigest()\n\n    return hmac.compare_digest(stored_sig, expected_sig)\n",
+        "source_sha256": "0a6a0a704bde9178d4207f987ef32af12c791dcd75eec960596828906b80810f",
+        "start_line": 224
+      }
+    },
+    "parse_failures": [],
+    "scope": {
+      "imports_amy": false,
+      "package_directories": [
+        "core",
+        "cognition",
+        "memory",
+        "senses",
+        "skills",
+        "communication",
+        "sandbox",
+        "evolution"
+      ],
+      "python_files_scanned": 60
+    },
+    "source_facts": {
+      "active_provenance_manager_calls_sign_provenance": false,
+      "active_workflow_mentions_hmac_provenance_verification": false,
+      "active_workflow_mentions_sigstore_or_attestation": false,
+      "hmac_helper_git_tracked": false,
+      "hmac_helper_has_random_per_process_fallback": true,
+      "hmac_helper_present": true,
+      "hmac_key_environment_variable_named": "AMY_PROVENANCE_HMAC_KEY",
+      "hmac_verify_reads_output_txt": false,
+      "manager_verify_reads_output_txt": false,
+      "manager_verify_requires_stored_output_hash": false,
+      "numeric_verifier_resolves_each_experiment_record": false,
+      "numeric_verifier_treats_nonempty_experiment_id_list_as_explicit_provenance": true,
+      "paper_gate_calls_verify_provenance": false,
+      "paper_gate_hash_reader_accepts_declared_64_hex_format": true,
+      "paper_gate_hash_reader_reads_output_txt": false,
+      "paper_gate_hash_reader_recomputes_sha256": false
+    },
+    "source_sha256": {
+      "amy.py": "7506c12b050262adab75b9da36b9ef062dd027c9f7cada01fa525b15d09adc79",
+      "cognition/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "cognition/curiosity.py": "a63b37358a32535a6f08929c013697a489155334fada012f126fc6f609b30b7f",
+      "cognition/evolution_agent.py": "107fc893fbfca564ce1fbc8c6557951992cc8b25bb1efe9e556750136c231ffd",
+      "cognition/goal_stack.py": "cac28b1b20ae7807b5a5d8ac763b03d672c18fad35cb878c7be00315f653ee83",
+      "cognition/meta_review_agent.py": "e6dd70a7bc1077f761d32d06b10357ac5bb5d21ea545ed7fa8f41b581c7ac998",
+      "cognition/ranking_agent.py": "2378e5a17eb2f470216036a55c19e8b04edeceb4c41eff017191625f73a4a09a",
+      "cognition/reasoning.py": "355684af5c69255256f5489282eafdc2f4296a46b137ef81bf91ada4dbc881a5",
+      "cognition/reflection.py": "180123e2a6318c238bf4e63a57fbf64b20708e54040b8229d8eb61a794b75a6e",
+      "cognition/reflection_agent.py": "891083488bdee357dd5ce6c68e4d2245ceb631c52beebd4b313795cef0f9d6f8",
+      "communication/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "communication/atlas_quality_gate.py": "3d22d805dc1f6a568f59ebd5431a0b890ea4cd28760708c0288525d8ba95851a",
+      "communication/breakthrough_detector.py": "01f0228bd762ecb15f5063df84fb9ba25da3a7b370f88132198e4a6fb86a0e76",
+      "communication/citation_verifier.py": "1c8a80ffe1b40f8c5f7c7427dc028c0213ab21fa7b9516bc6070d5eaf86fd386",
+      "communication/grounding_repair.py": "e20e40ddf502f813bd0e93011a9c5bfc5ebc72e4955781301b02714878544662",
+      "communication/llm_enhancer.py": "dc84d83c1827e116f07e2f20d94dd9c44a546442770e00cd61e85c05a7ba987e",
+      "communication/numeric_verifier.py": "2b2676bbf98d947062e679aa2788b8f518b02c63fc11ba5533f1ce5e569ad805",
+      "communication/paper_enhancer.py": "61e66f03d56e1cdb473137cd64e9181ffaeb22c5b9078534bddf0cd0ab167d67",
+      "communication/paper_generator.py": "ddc154b4eba15c0716a5df3b0aaa31541ec13234b2e56e314cf01b7c2bab72df",
+      "communication/publication_artifacts.py": "d7b5af4497f3c32be3ad1ab9d0e9703b5d2bc11cfe73c4fbf154fb0a5028a6f7",
+      "communication/report_generator.py": "2ea1d1034b68c47f0c374e49998b9039e0eb2f5084c680ddc4cdb40054da8e88",
+      "core/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "core/atlas_bridge.py": "a131b0178bbdea7195d1018432bb5861483a2fde31a2fc4849d87f2525be8b1c",
+      "core/atlas_real_tools.py": "893a05b459eef23d6864b30ef36fe830307cb29b46f15448d30bf28c62065a84",
+      "core/atlas_tools.py": "47a78f5b623f8ac3457334d46611fe2f860bfd7995712046de35c6a829be439e",
+      "core/atlas_worker.py": "2fd01fa2fc1b5181a39730ae6d3a79a96adce054712036c72177fdf38f9e3ef3",
+      "core/global_workspace.py": "426af1e4559eaa335eb641ebd1bd60bddbc27efac7730e9d4ab1891d32d84aa0",
+      "core/heartbeat.py": "8590e718af19d5aae26690646ef1b2d67094273b5bbadff5f14891aa02e7e881",
+      "core/literature_search.py": "0f141a19935598870a44641ddb40817ce36a5be777fd25971bbc6a5b6fbe9e0b",
+      "core/metrics.py": "0eddc25b6d206d73657c8cfa63e1c304b17630bd38dc015d87db4364f40dc711",
+      "core/ollama_client.py": "a8ee76947e3d35c5bcdda2ff2dbb1d192f5ad670512c7a947821e2a0e97d2667",
+      "core/provenance.py": "c33b35eadd317c018f5e68629a450138d5f2a3d1575b5d4d2a53f7bf269e3684",
+      "core/safety_kernel.py": "237c1d24bc48f66e8424f0a6aa926a26e43adcb6c31157cc1394cbe67b08a387",
+      "core/security_hardening.py": "afcf529184c21d258750e5be949c1aaaa7f5ed39bc6d01007426a1dbae730750",
+      "core/security_hardening_v2.py": "bd6711248e857fa3664aea74a759529576b4371ff7c2705f27b02aff4f06a4ab",
+      "core/world_model.py": "405d1c672ed4167b39927ac8d8f8dfa5c2a0511bcde8880503f4e454b6f14a76",
+      "evolution/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evolution/curriculum.py": "a945b09adafed1ba19cffd1eee02c7d9a3d7a455981102e8e7d37973b155925c",
+      "evolution/self_retrain.py": "e53c67659e423764fcab1dbd0f0a8b8c70de564c8f3051bbdc70f0c3345cdc4f",
+      "evolution/strategy_optimizer.py": "acd076095713dcda7453a56a872775a00a00b1d40aa4617ae0f17d0caafe208b",
+      "memory/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "memory/consolidation.py": "24ac4eb98b54ec866f669fe2f1ae257e8ef9200f27620a0508d5c4d7822e3664",
+      "memory/episodic.py": "3f35f2f9006af65fd32b59b69b5907f2315a4f4210ad84d0fe6de88d46471f35",
+      "memory/procedural.py": "1a39c99d93c7821081b32fbdd575ad67b67d00bfb0f3769b18e1bcdf78173360",
+      "memory/semantic.py": "4abb59b0f5e06cb82aa6712d1672c770926bac815b0a4761179536c7ba2669ec",
+      "memory/semantic_index.py": "92be0a10be5066a83cff037913e205014dbc37780f1dd8e58378ebc1c6985d6b",
+      "sandbox/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sandbox/executor.py": "3e55dcb3b907bec367da542f3b21dfed4945be495cdffd389b33040dbcb05cd1",
+      "sandbox/validator.py": "cb32490114b7866bbd879635f7568447b77137be271ac25cce113b9f6b8974fc",
+      "senses/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "senses/api_sensor.py": "a19e0990d8884a035c57d58fb0b7b7e131cec9a5d6f623af4ee9ff223e77a319",
+      "senses/file_sensor.py": "d582abc35b0b61210529804d9b0e8e510436523797f18f4265b12c2c1f237d67",
+      "senses/time_sensor.py": "f13afa5ed43b37814c5f9c462a751ca7647c24954dca7562f1efb2f32df8c2b3",
+      "senses/web_sensor.py": "e6d0b4f5d70db9c11d7459e8af07458e90bae7a36756ba0f6753b68fbbed3be0",
+      "skills/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "skills/code_experiment.py": "bcfe093a2bce6b9b7f945d1e4757e792fed3060ba87bc5eb38a8c31530822a06",
+      "skills/data_analysis.py": "e6e79d650216baf94dcebc339827ec678d7e865d3826cc652a00ae0f8b631da8",
+      "skills/hypothesis_test.py": "942e23929e49dd70e1c8f88344a163ea3d23d10da01188ca982a305299af8a06",
+      "skills/library.py": "2021742e4c3157b83d93bbe5cfbdc9cc3091a5dc0262e64495ba9bfe723423b7",
+      "skills/web_research.py": "170e7205b735011e62a4bbd84445b12eb5cfa5e178a853ba5fecbcb5e7408023"
+    },
+    "source_snapshot_sha256": "a0678015499d01b2a7eacaf212e5ae5146d8aaecf89ffba0196f54fd7fe64768",
+    "tracked_source_files": 58,
+    "untracked_source_files": [
+      "core/security_hardening.py",
+      "core/security_hardening_v2.py"
+    ],
+    "workflow_files": [
+      ".github/workflows/cd.yml",
+      ".github/workflows/ci.yml",
+      ".github/workflows/release-hygiene.yml"
+    ]
+  },
+  "trust_boundary": {
+    "authentication": "not established for A.M.Y provenance records, publication manifests, checksum manifests, or paper watermarks",
+    "current_byte_integrity": "recomputed by this read-only auditor where an expected digest exists",
+    "historical_time": "not established by mutable local timestamps",
+    "independent_reproduction": "not performed by this audit",
+    "scientific_truth": "never inferred from a matching digest or signature"
+  }
+}

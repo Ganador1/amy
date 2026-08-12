@@ -1,0 +1,24 @@
+[project]
+name = "amy-verifiable-release-study"
+version = "0.3.1.dev0"
+description = "Reference verifier and finite adversarial corpus for verifiable scientific releases"
+requires-python = ">=3.11,<3.15"
+dependencies = [
+  "jsonschema==4.26.0",
+  "rfc8785==0.1.4",
+]
+
+[project.optional-dependencies]
+pilot = [
+  "cryptography==49.0.0",
+  "pytest==9.0.3",
+]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"

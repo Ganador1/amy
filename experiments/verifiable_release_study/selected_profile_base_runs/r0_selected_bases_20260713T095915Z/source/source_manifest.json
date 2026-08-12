@@ -1,0 +1,117 @@
+[
+  {
+    "bytes": 606,
+    "path": "amy_verifier/__init__.py",
+    "sha256": "9e34fa0b311ac84f55ba2c383ef712130646bedd0be0c8437989a0e19dfdd732"
+  },
+  {
+    "bytes": 15064,
+    "path": "amy_verifier/attestation.py",
+    "sha256": "109e84010c5cce3a7ae06e11626282434cde3f4457810fa138189f532d286966"
+  },
+  {
+    "bytes": 14399,
+    "path": "amy_verifier/base_corpus.py",
+    "sha256": "4419f9db9e4f1db09fe5ff47d3e1d4626da5f0462578d6ba0dc57e2f919b5fce"
+  },
+  {
+    "bytes": 12039,
+    "path": "amy_verifier/fixture_crypto.py",
+    "sha256": "f880fda8820b6edf1e53569353472d748e0e48c1689abaaf729bf7757138282e"
+  },
+  {
+    "bytes": 41457,
+    "path": "amy_verifier/github_attestation.py",
+    "sha256": "6da0f8258dc2fb7929086567ab3a30268935e247a412496b1a12b683d9070fbb"
+  },
+  {
+    "bytes": 5768,
+    "path": "amy_verifier/json_tools.py",
+    "sha256": "2c0d7c6a3a5558ac60639f558d9e9b61f64bff70d77c5226cfdcf5b6ed6cc903"
+  },
+  {
+    "bytes": 7629,
+    "path": "amy_verifier/manifest.py",
+    "sha256": "b267ac496d4120ab14fb0d789d35d4d32774ab70f672de6e10f9e7099dc262ee"
+  },
+  {
+    "bytes": 1478,
+    "path": "amy_verifier/model.py",
+    "sha256": "f1eee6d48fd0c9abbf38d96d68dc659c71735bc1003032f280089fa5cba3638b"
+  },
+  {
+    "bytes": 13370,
+    "path": "amy_verifier/path_policy.py",
+    "sha256": "30f8ebab8c16c3ddc968e778ce0933c097b3439f912781c9854104aa9f90323a"
+  },
+  {
+    "bytes": 24397,
+    "path": "amy_verifier/pilot.py",
+    "sha256": "b4f204510212f8d11e5dc14164460605741922797e37fdf5825dafde6829af30"
+  },
+  {
+    "bytes": 22794,
+    "path": "amy_verifier/selected_profile_fixture.py",
+    "sha256": "7aba9c5dd4c2b9412ea7317fc93f89afe05280e16aa6a6a35c71b0bbcfca1ed0"
+  },
+  {
+    "bytes": 6703,
+    "path": "amy_verifier/verifier.py",
+    "sha256": "6aa7b16cc5ed6f4bc470fcb07bdd407491ce0271abd5a20779e618597db3316f"
+  },
+  {
+    "bytes": 17066,
+    "path": "corpus/BASE_REGISTRY_DRAFT.json",
+    "sha256": "553352619f5b1f4e96b9ccc482070e0fba4398298ba15d9a27457698117dc015"
+  },
+  {
+    "bytes": 5302,
+    "path": "protocol/GITHUB_ATTESTATION_POLICY_TEMPLATE.json",
+    "sha256": "68ea605c25a8e73ebe955a1bfd3977a309f13b40b9a112aee6b2e9bc5cd38c26"
+  },
+  {
+    "bytes": 1560,
+    "path": "protocol/PRODUCTION_REASON_CODES_DRAFT.json",
+    "sha256": "4f1070c3d4cc3496ad14d023526b0b75d604d0dbe9cdcbc30e3c982ec9554c94"
+  },
+  {
+    "bytes": 5748,
+    "path": "protocol/REASON_CODES.json",
+    "sha256": "5ea73e4cea02ec265fadeb2995879ef0c8dad99e0308212b67e5a8e9bc89b02b"
+  },
+  {
+    "bytes": 3178,
+    "path": "protocol/SELECTED_PROFILE_FIXTURE_POLICY_DRAFT.json",
+    "sha256": "93830e93f18428df461bdb865557ada52a8c3dbfdb427d2ab524226f16898731"
+  },
+  {
+    "bytes": 497,
+    "path": "pyproject.toml",
+    "sha256": "8d1042a03fe74f320d6b71ee80a05da3e7e190bd64808914c5bf05460ec86af0"
+  },
+  {
+    "bytes": 6105,
+    "path": "schemas/manifest-production-v0.2.schema.json",
+    "sha256": "08f22071779168458fc89806a144c1aab89133c3a235f5deb3a40c5da8915562"
+  },
+  {
+    "bytes": 5687,
+    "path": "schemas/selected-profile-fixture-result.schema.json",
+    "sha256": "442553ed9bbb291bffd3de20b79d5beb4089dbbaa7ba629f8bb5172a3303930c"
+  },
+  {
+    "bytes": 12465,
+    "path": "scripts/build_selected_profile_bases.py",
+    "sha256": "ed386b6e2b156a811cbdb74cda13026a0a9989bba1c84828ef5e94782df37597"
+  },
+  {
+    "bytes": 21862,
+    "path": "scripts/validate_selected_profile_base_run.py",
+    "sha256": "f5c7ee05a961577674bc46c48c4c02c5249ee463ce234e0216d6abab7d07ff7a"
+  },
+  {
+    "bytes": 74227,
+    "path": "uv.lock",
+    "sha256": "ada446114e2534983167988f875dea92b5d1d895a6a12a9db70e63626a3d9f41"
+  }
+]

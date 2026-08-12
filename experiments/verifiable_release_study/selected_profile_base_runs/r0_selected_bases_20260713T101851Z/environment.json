@@ -1,0 +1,9 @@
+{
+  "implementation": "CPython",
+  "locale": "C/C.UTF-8/C/C/C/C",
+  "machine": "arm64",
+  "platform": "macOS-26.5.2-arm64-arm-64bit",
+  "python": "3.12.12",
+  "recorded_at": "2026-07-13T10:18:57.349389Z",
+  "timezone_env": null
+}

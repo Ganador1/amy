@@ -24,9 +24,66 @@ log = structlog.get_logger()
 
 try:
     from core.atlas_tools import assess_tool_output
-except ImportError:
-    def assess_tool_output(output: object, tool_name: str | None = None) -> dict:
-        return {"usable": bool(str(output or "").strip()), "markers": [], "warnings": []}
+except Exception:
+    assess_tool_output = None
+
+
+def _usable_tool_results(
+    results: list[dict],
+    *,
+    require_explicit_success: bool = True,
+) -> list[dict]:
+    """Return only explicitly successful outputs accepted by the evidence gate.
+
+    Scientific prose must fail closed when the shared classifier is unavailable,
+    raises, returns a malformed assessment, or does not explicitly set
+    ``usable=True``.
+    """
+    if not callable(assess_tool_output):
+        return []
+
+    usable = []
+    for result in results:
+        if not isinstance(result, dict):
+            continue
+        if require_explicit_success and result.get("success") is not True:
+            continue
+        if not require_explicit_success and result.get("success") is False:
+            continue
+        try:
+            assessment = assess_tool_output(
+                result.get("result", ""),
+                result.get("tool"),
+            )
+        except Exception as exc:
+            log.warning(
+                "paper_enhancer.tool_output_assessment_failed",
+                tool=result.get("tool"),
+                error=str(exc),
+            )
+            continue
+        if isinstance(assessment, dict) and assessment.get("usable") is True:
+            usable.append(result)
+    return usable
+
+
+def _render_usable_results(results: list[dict]) -> str:
+    """Render a Results section exclusively from outputs that passed the gate."""
+    if not results:
+        return (
+            "No tool output passed both the explicit success gate and the "
+            "scientific-usability assessment; no computational result is reported."
+        )
+
+    rendered = []
+    for index, result in enumerate(results, start=1):
+        label = (
+            str(result.get("description") or result.get("tool") or f"Result {index}")
+            .strip()
+        )
+        output = str(result.get("result", "")).strip()
+        rendered.append(f"### {label}\n\n{output}")
+    return "\n\n".join(rendered)
 
 # Import provenance manager for experiment ID verification
 try:
@@ -53,7 +110,7 @@ DOMAIN_INSIGHTS = {
             "conjecture_engine": "Generated conjectures are ideation artifacts produced by an automated system. They require independent literature verification, larger-scale computation, and formal proof attempts before they can be treated as scientific claims. Well-known unsolved problems (Goldbach, Twin Prime, Collatz, Riemann) listed by the conjecture engine are not novel predictions; they are canonical open problems in number theory.",
         },
         "novelty_templates": [
-            "The observed gap distribution suggests a potential refinement of the Cramér model for prime spacing in the range [n, n+√n].",
+            "Finite-range prime-gap deviations should be quantified against explicit Cramér and Hardy-Littlewood baselines before any model refinement is proposed.",
             "The symmetry properties of the solutions may indicate an underlying group structure worth exploring through Galois theory.",
             "The derivative patterns suggest a connection to dynamical systems that could yield new insights into the function's long-term behavior.",
         ],
@@ -89,6 +146,7 @@ DOMAIN_INSIGHTS = {
             "huckel_polyene_scaling": "The Hückel polyene scaling series is a falsifiable model-comparison control: linear finite-chain Hückel theory predicts a frontier gap proportional to sin(pi/(2(N+1))), which is nearly inverse-length over moderate N. Autschbach's particle-in-a-box analysis warns that real polyenes with bond-length alternation approach a finite absorption limit, so this computation should be framed as a baseline Hückel model test rather than a quantitative prediction of experimental spectra.",
             "ssh_polyene_gap_map": "The SSH/polyene gap map is a boundary-condition stress test for gap-only inference. Trivial termination estimates the Peierls-like bulk opening, while topological termination can compress the frontier gap through in-gap boundary states. The useful claim is therefore not that Peierls physics is new, but that finite-chain HOMO-LUMO gaps are not identifiable without recording boundary orientation and threshold sensitivity.",
             "ssh_edge_localization_map": "The SSH edge-localization map tests the gap-only interpretation with eigenvectors rather than eigenvalues alone. Edge weight, inverse participation ratio, and participation-sites diagnostics distinguish boundary-localized frontier states from delocalized bulk frontier states. This is the stronger control for the candidate claim: a small topological frontier gap supports edge-state contamination only if the corresponding frontier eigenvectors also concentrate at the chain ends.",
+            "ssh_disorder_diagnostic_benchmark": "The SSH disorder diagnostic benchmark is a paired methodological comparison, not a new-phase search. Its confirmatory estimand compares gap-only and joint gap/edge-weight/IPR errors on identical hash-seeded off-diagonal-disorder realizations using an exact McNemar test. Diagonal disorder is a descriptive negative control: because onsite disorder breaks chiral symmetry, it has no chiral topological reference label, and localization-positive outputs cannot be interpreted as topology. The finite tight-binding computation is not an experimental material result.",
             "molecular_weight_calc": "The computed molecular weights confirm standard atomic mass contributions and stoichiometric ratios. The precision of these calculations enables verification of empirical formulas and distinction between isomeric compounds with identical mass ratios.",
             "bond_energy_analyzer": "Bond energy analysis reveals the thermodynamic stability hierarchy of molecular interactions. The C-C bond energy (347 kJ/mol) compared to C=C (614 kJ/mol) and C≡C (839 kJ/mol) demonstrates the relationship between bond order and bond strength, consistent with molecular orbital theory predictions.",
             "reaction_predictor": "The predicted reaction pathways follow established mechanistic principles including Markovnikov's rule and Zaitsev's orientation. The thermodynamic favorability of products correlates with stability of the transition state.",
@@ -258,6 +316,157 @@ def _tool_category(tool: str) -> str:
     return "_".join(tool_words[:2]) if len(tool_words) >= 2 else tool
 
 
+def _method_framework(tool: str) -> str:
+    """Map tool names to methodologically distinct scientific frameworks."""
+    tool_l = (tool or "").lower()
+    if any(
+        key in tool_l
+        for key in (
+            "ssh_",
+            "huckel",
+            "bond_alternated_polyene",
+            "molecular_orbital_energy",
+        )
+    ):
+        return "tight_binding_exact_diagonalization"
+    if "pyscf" in tool_l:
+        if "dft" in tool_l:
+            return "ab_initio_dft"
+        return "ab_initio_rhf"
+    if "sympy" in tool_l or "equation" in tool_l or "derivative" in tool_l:
+        return "symbolic_computation"
+    if "prime_gap" in tool_l or "number_theory" in tool_l:
+        return "finite_enumeration_model_comparison"
+    if "astropy" in tool_l or "cosmology" in tool_l or "rydberg" in tool_l:
+        return "physics_model_evaluation"
+    if "literature" in tool_l or "search" in tool_l:
+        return "literature_evidence"
+    if "statistics" in tool_l or "two_sample" in tool_l or "numpy" in tool_l:
+        return "statistical_inference"
+    return tool_l or "unknown"
+
+
+def _framework_label(framework: str) -> str:
+    labels = {
+        "tight_binding_exact_diagonalization": "tight-binding exact diagonalization",
+        "ab_initio_rhf": "RHF ab initio",
+        "ab_initio_dft": "DFT ab initio",
+        "symbolic_computation": "symbolic computation",
+        "finite_enumeration_model_comparison": "finite enumeration/model comparison",
+        "physics_model_evaluation": "physics model evaluation",
+        "literature_evidence": "literature evidence",
+        "statistical_inference": "statistical inference",
+    }
+    return labels.get(framework, framework.replace("_", " "))
+
+
+def _method_framework_summary(results: list[dict]) -> dict:
+    frameworks: dict[str, list[str]] = {}
+    tool_names = []
+    for r in results:
+        tool = str(r.get("tool", "unknown"))
+        tool_names.append(tool)
+        frameworks.setdefault(_method_framework(tool), [])
+        if tool not in frameworks[_method_framework(tool)]:
+            frameworks[_method_framework(tool)].append(tool)
+
+    n_total = len(results)
+    n_tools = len(set(tool_names))
+    n_frameworks = len(frameworks)
+    labels = [_framework_label(name) for name in frameworks]
+    if n_frameworks == 0:
+        description = "no usable computational analyses"
+    elif n_frameworks == 1 and n_total > 1:
+        description = (
+            f"a single computational method applied across {n_total} parameter "
+            f"configurations ({labels[0]})"
+        )
+    elif n_frameworks == 1:
+        description = f"a single computational analysis within {labels[0]}"
+    else:
+        description = (
+            f"{n_total} total analyses across {n_frameworks} methodologically "
+            f"distinct frameworks ({'; '.join(labels)})"
+        )
+    return {
+        "frameworks": frameworks,
+        "labels": labels,
+        "n_total": n_total,
+        "n_tools": n_tools,
+        "n_frameworks": n_frameworks,
+        "description": description,
+    }
+
+
+def _benchmark_guidance(domain: str) -> str:
+    """Return validation advice that cannot leak another domain's template."""
+    return {
+        "mathematics": (
+            "an independent implementation, formal analysis, or comparison "
+            "with established numerical bounds"
+        ),
+        "physics": (
+            "independent numerical methods, analytical predictions, or "
+            "experimental measurements"
+        ),
+        "chemistry": (
+            "independent quantum-chemistry calculations, spectroscopy, or "
+            "experimental measurements"
+        ),
+        "biology": (
+            "an independent dataset, orthogonal assay, or established "
+            "biological benchmark"
+        ),
+        "statistics": (
+            "held-out data, simulation-based calibration, or an independent "
+            "statistical implementation"
+        ),
+    }.get(
+        domain,
+        "an independent method, external dataset, or established domain benchmark",
+    )
+
+
+def _has_external_ssh_benchmark(results: list[dict]) -> bool:
+    benchmark_markers = (
+        "dft",
+        "quantum_espresso",
+        "vasp",
+        "coupled_cluster",
+        "gw",
+        "experimental",
+        "spectroscopy",
+        "stm",
+    )
+    return any(
+        any(marker in str(r.get("tool", "")).lower() for marker in benchmark_markers)
+        for r in results
+    )
+
+
+def _govern_novelty_confidence(domain: str, hypotheses: list[dict], results: list[dict]) -> list[dict]:
+    """Downgrade fragile novelty labels when evidence lacks external validation."""
+    tools = {str(r.get("tool", "")).lower() for r in results}
+    if domain != "chemistry" or not any(tool.startswith("ssh_") for tool in tools):
+        return hypotheses
+    if _has_external_ssh_benchmark(results):
+        return hypotheses
+
+    governed = []
+    for h in hypotheses:
+        item = dict(h)
+        if item.get("novelty_status") in {"candidate_novelty", "testable_hypothesis"}:
+            item["confidence"] = min(float(item.get("confidence", 0.5)), 0.50)
+            item["novelty_status"] = "candidate_methodological_observation"
+            item["evidence_level"] = "single_framework_no_external_benchmark"
+            item["novelty_downgrade_reason"] = (
+                "SSH/polyene candidate relies on finite tight-binding-style evidence "
+                "without DFT, experimental, or literature-benchmark triangulation."
+            )
+        governed.append(item)
+    return governed
+
+
 def _decimal_claims(text: str) -> list[str]:
     return [
         raw.replace("−", "-")
@@ -277,15 +486,64 @@ def _evidence_decimal_values(results: list[dict]) -> tuple[str, list[float]]:
 
 
 def _decimal_is_grounded(token: str, evidence_text: str, evidence_values: list[float]) -> bool:
-    if token in evidence_text:
-        return True
-    if re.search(re.escape(token) + r"\d*", evidence_text):
+    if re.search(r"(?<![\d.])" + re.escape(token) + r"(?![\d.])", evidence_text):
         return True
     try:
         value = float(token)
     except ValueError:
         return False
     return any(math.isclose(value, known, rel_tol=5e-4, abs_tol=5e-6) for known in evidence_values)
+
+
+def _hypothesis_science_guard_reasons(hypothesis: dict, results: list[dict]) -> list[str]:
+    """Catch scientifically unsafe claims that numeric grounding alone misses."""
+    claim_text = " ".join(
+        str(hypothesis.get(key, ""))
+        for key in ("hypothesis", "method", "test_procedure")
+    )
+    text_lower = claim_text.lower()
+    reasons: list[str] = []
+
+    unhedged_overclaims = (
+        "true topological bulk gap",
+        "fully decoupled edge state",
+        "fully decoupled edge states",
+        "fully separates from the peierls",
+        "fully separate from the peierls",
+    )
+    for phrase in unhedged_overclaims:
+        if phrase in text_lower:
+            reasons.append(f"unhedged overclaim: {phrase}")
+
+    if re.search(r"\b(proves?|proving)\b", text_lower) and not re.search(
+        r"\b(does not|do not|cannot|not)\s+prov", text_lower
+    ):
+        reasons.append("unhedged proof claim")
+
+    evidence_text = "\n".join(str(r.get("result", "")) for r in results)
+    tools = {str(r.get("tool", "")) for r in results}
+    if "ssh_edge_localization_map" in tools:
+        ipr_values = [
+            float(match.group(1))
+            for match in re.finditer(
+                r"(?:max_pair_ipr|frontier_pair_ipr)=([0-9]+(?:\.[0-9]+)?)",
+                evidence_text,
+                flags=re.IGNORECASE,
+            )
+        ]
+        if ipr_values:
+            max_observed_ipr = max(ipr_values)
+            for match in re.finditer(
+                r"\bipr\)?\s*(?:>|>=|exceeds|above|greater than)\s*([0-9]+(?:\.[0-9]+)?)",
+                text_lower,
+            ):
+                threshold = float(match.group(1))
+                if threshold > max_observed_ipr + 5e-4:
+                    reasons.append(
+                        f"unsupported IPR threshold {threshold:.6f} > observed max {max_observed_ipr:.6f}"
+                    )
+
+    return reasons
 
 
 def _filter_ungrounded_hypotheses(hypotheses: list[dict], results: list[dict]) -> list[dict]:
@@ -306,10 +564,12 @@ def _filter_ungrounded_hypotheses(hypotheses: list[dict], results: list[dict]) -
             for token in _decimal_claims(claim_text)
             if not _decimal_is_grounded(token, evidence_text, evidence_values)
         ]
-        if unsupported:
+        guard_reasons = _hypothesis_science_guard_reasons(hypothesis, results)
+        if unsupported or guard_reasons:
             dropped.append({
                 "hypothesis": str(hypothesis.get("hypothesis", ""))[:120],
                 "unsupported": unsupported[:8],
+                "guard_reasons": guard_reasons[:4],
             })
             continue
         kept.append(hypothesis)
@@ -387,15 +647,15 @@ def _strengthen_branch_contract(
                 additions = [
                     _hypothesis(
                         "The SSH boundary-orientation effect is falsifiable by extending the finite chain-length grid and checking whether the recorded edge-state onset remains ordered across the same alternation sweep.",
-                        0.58,
-                        "Rerun ssh_polyene_gap_map with denser chain lengths and an independent diagonalization backend; weaken the claim if the edge-state onset row disappears or changes ordering under the same Hamiltonian.",
+                        0.50,
+                        "Rerun ssh_polyene_gap_map with denser chain lengths and an independent diagonalization backend; weaken the claim if the edge-state onset row disappears or changes ordering under the same Hamiltonian, and require an external benchmark before treating it as novelty.",
                         novelty_status="finite_computational_observation",
                         evidence_level="model_comparison",
                     ),
                     _hypothesis(
                         "The gap-only identifiability boundary is threshold-dependent and should remain stable only under a sensitivity sweep over the recorded finite SSH grid.",
-                        0.55,
-                        "Repeat the SSH map with stricter and looser threshold rules; reject a robust identifiability interpretation if the nonzero alternation rows change classification under small threshold changes.",
+                        0.50,
+                        "Repeat the SSH map with stricter and looser threshold rules; reject a robust identifiability interpretation if the nonzero alternation rows change classification under small threshold changes, and require an external benchmark before treating it as novelty.",
                         novelty_status="finite_computational_observation",
                         evidence_level="controlled_comparison",
                     ),
@@ -428,7 +688,9 @@ def _strengthen_branch_contract(
                     "a novelty claim, the boundary-orientation effect must be "
                     "quantified with denser length and alternation grids and "
                     "should be compared against independent diagonalization or "
-                    "DFT-based controls. Because this is a deterministic grid "
+                    "DFT-based controls. An external benchmark against DFT, "
+                    "experiment, GW/coupled-cluster, or published oligomer data "
+                    "is required before novelty can be sustained. Because this is a deterministic grid "
                     "rather than sampled experimental data, no p-value or "
                     "confidence interval is estimated; the relevant effect size "
                     "is the recorded gap contrast, and the sample size is the "
@@ -437,7 +699,7 @@ def _strengthen_branch_contract(
                 if "does not claim" not in discussion.lower():
                     discussion = discussion.rstrip() + "\n\n" + non_claims
 
-                return discussion, strengthened
+                return discussion, _govern_novelty_confidence(domain, strengthened, results)
 
             if domain == "astronomy" and "cosmology_residual_comparison" in tools:
                 strengthened = list(hypotheses)
@@ -758,7 +1020,41 @@ def generate_hypothesis(domain: str, results: list[dict]) -> list[dict]:
                 ))
                 
         elif domain == "chemistry":
-            if "ssh_edge_localization_map" in tool:
+            if "ssh_disorder_diagnostic_benchmark" in tool:
+                pooled_match = re.search(
+                    r"pooled;.*?gap_accuracy=([0-9.]+);\s*"
+                    r"(?:gap_accuracy_ci95=[^;]+;\s*)?"
+                    r"joint_accuracy=([0-9.]+);.*?"
+                    r"error_gap_minus_error_joint=([-0-9.]+);.*?"
+                    r"gap_wrong_joint_right=([0-9]+);\s*"
+                    r"gap_right_joint_wrong=([0-9]+);\s*"
+                    r"mcnemar_pvalue=([0-9.eE+-]+)",
+                    result_text,
+                    flags=re.IGNORECASE | re.DOTALL,
+                )
+                if pooled_match:
+                    gap_accuracy = pooled_match.group(1)
+                    joint_accuracy = pooled_match.group(2)
+                    error_difference = pooled_match.group(3)
+                    improved = pooled_match.group(4)
+                    harmed = pooled_match.group(5)
+                    p_value = pooled_match.group(6)
+                    observed = (
+                        f"gap_accuracy={gap_accuracy}, joint_accuracy={joint_accuracy}, "
+                        f"error_gap_minus_error_joint={error_difference}, "
+                        f"discordant counts={improved}/{harmed}, and "
+                        f"mcnemar_pvalue={p_value}"
+                    )
+                else:
+                    observed = "the recorded pooled accuracy, paired error difference, discordant counts, and exact p-value"
+                hypotheses.append(_hypothesis(
+                    "The candidate methodological novelty is a preregistered paired benchmark: the joint gap/edge-weight/IPR rule should reduce error relative to the gap-only rule on the same hash-seeded off-diagonal-disorder SSH realizations.",
+                    0.50,
+                    f"Evaluate {observed} with the exact paired McNemar test, then require the direction and conclusion to reproduce under the independent namespace; treat diagonal disorder only as a chiral-symmetry-breaking negative control with no topological reference label.",
+                    novelty_status="candidate_methodological_observation",
+                    evidence_level="paired_computational_benchmark",
+                ))
+            elif "ssh_edge_localization_map" in tool:
                 localization_match = re.search(
                     r"delta=([0-9.]+);\s*orientation=topological;\s*"
                     r"localization_onset_n=([0-9]+|not_observed);\s*"
@@ -781,11 +1077,11 @@ def generate_hypothesis(domain: str, results: list[dict]) -> list[dict]:
                     ipr = "the recorded"
                     participation = "the recorded"
                 hypotheses.append(_hypothesis(
-                    f"The SSH/polyene edge-state interpretation is directly testable by eigenvector localization: for delta={delta_value}, localization_onset_n={onset_n}, max_pair_edge_weight={edge_weight}, max_pair_ipr={ipr}, and min_participation_sites={participation} should co-occur with the small topological frontier gap rather than with the trivial Peierls gap.",
-                    0.66,
-                    f"Rerun ssh_edge_localization_map with denser chain lengths and require the topological edge weight/IPR signal at delta={delta_value} to remain localized at or before localization_onset_n={onset_n}; reject the gap-only edge-state interpretation if frontier eigenvectors delocalize while the small gap remains.",
-                    novelty_status="candidate_novelty",
-                    evidence_level="eigenvector_diagnostic",
+                    f"The SSH/polyene edge-state interpretation is directly testable beyond gap-only evidence by eigenvector localization: for delta={delta_value}, localization_onset_n={onset_n}, max_pair_edge_weight={edge_weight}, max_pair_ipr={ipr}, and min_participation_sites={participation} should co-occur with the small topological frontier gap rather than with the trivial Peierls gap.",
+                    0.50,
+                    f"Rerun ssh_edge_localization_map with denser chain lengths and require the topological edge weight/IPR signal at delta={delta_value} to remain localized at or before localization_onset_n={onset_n}; compare against an external DFT, experimental, or literature benchmark before treating the pattern as novelty.",
+                    novelty_status="candidate_methodological_observation",
+                    evidence_level="single_framework_no_external_benchmark",
                 ))
             elif "ssh_polyene_gap_map" in tool:
                 summary_row = _select_ssh_gap_summary_row(result_text)
@@ -811,10 +1107,10 @@ def generate_hypothesis(domain: str, results: list[dict]) -> list[dict]:
                     edge_onset = edge_onset_match.group(1) if edge_onset_match else "the recorded"
                 hypotheses.append(_hypothesis(
                     f"Finite SSH/polyene gap-only evidence has an identifiability boundary: for delta={delta_value} in the {orientation} orientation, smallest_identifiable_n={identifiable_n} and edge_state_onset_n={edge_onset} under the recorded threshold, while topological boundary orientation can introduce edge-state frontier gaps that decouple from the Peierls bulk gap.",
-                    0.68,
-                    f"Rerun ssh_polyene_gap_map with denser lengths and swapped boundary orientation; reject the identifiability claim if smallest_identifiable_n={identifiable_n} or edge_state_onset_n={edge_onset} shifts outside the recorded threshold rule under the same delta grid.",
-                    novelty_status="candidate_novelty",
-                    evidence_level="model_comparison",
+                    0.50,
+                    f"Rerun ssh_polyene_gap_map with denser lengths and swapped boundary orientation; reject the identifiability claim if smallest_identifiable_n={identifiable_n} or edge_state_onset_n={edge_onset} shifts outside the recorded threshold rule under the same delta grid, and require external benchmarking before calling it novel.",
+                    novelty_status="candidate_methodological_observation",
+                    evidence_level="single_framework_no_external_benchmark",
                 ))
             elif "bond_alternated_polyene_scaling" in tool:
                 asymptotic_match = re.search(
@@ -981,6 +1277,10 @@ def generate_references(domain: str, results: list[dict]) -> list[str]:
             tool_refs.append("Pomerance, C. (2009). Prime Numbers. Springer Berlin Heidelberg.")
         elif "quantum" in tool or "energy" in tool:
             tool_refs.append("Griffiths, D.J. (2018). Introduction to Quantum Mechanics. Cambridge University Press.")
+        elif "ssh_disorder_diagnostic_benchmark" in tool:
+            tool_refs.append("Pérez-González, B., Bello, M., Gómez-León, A. & Platero, G. (2019). SSH model with long-range hoppings: topology, driving and disorder. Physical Review B, 99, 035146. doi:10.1103/PhysRevB.99.035146.")
+            tool_refs.append("Yao, Y., Schlömer, H., Ma, Z., Campos Venuti, L. & Haas, S. (2021). Topological protection of coherence in disordered open quantum systems. Physical Review A, 104, 012216. doi:10.1103/PhysRevA.104.012216.")
+            tool_refs.append("Kvande, C.I., Hill, D.B. & Blume, D. (2023). Finite SSH chains coupled to a two-level emitter: Hybridization of edge and emitter states. arXiv:2307.05824.")
         elif "ssh_polyene_gap_map" in tool or "ssh_edge_localization_map" in tool:
             tool_refs.append("Su, W.P., Schrieffer, J.R. & Heeger, A.J. (1979). Solitons in polyacetylene. Physical Review Letters, 42(25), 1698-1701. doi:10.1103/PhysRevLett.42.1698.")
             tool_refs.append("Valli, A. & Tomczak, J.M. (2023). Resistance saturation in semi-conducting polyacetylene molecular wires. Journal of Computational Electronics, 22, 1363-1376. doi:10.1007/s10825-023-02043-7.")
@@ -1008,7 +1308,12 @@ def generate_references(domain: str, results: list[dict]) -> list[str]:
 
 class PeerReviewer:
     """Automated peer review with scoring and feedback."""
-    
+
+    def __init__(self, provenance_manager=None):
+        self._provenance = (
+            provenance_manager if provenance_manager is not None else _provenance
+        )
+
     def review_paper(self, domain: str, topic: str, results: list[dict], 
                      sections: list[dict], hypotheses: list[dict],
                      references: list[str], experiment_ids: list[str] | None = None) -> dict:
@@ -1025,30 +1330,40 @@ class PeerReviewer:
         feedback = []
         
         # 1. Methodology (0-10) — penalize claiming independence when tools are the same
-        successful = [
-            r for r in results
-            if r.get("success", True)
-            and assess_tool_output(r.get("result", ""), r.get("tool")).get("usable", False)
-        ]
-        num_tools = len(successful)
-        unique_tools = set(r.get("tool", "unknown") for r in successful)
-        num_unique = len(unique_tools)
+        successful = _usable_tool_results(
+            results,
+            require_explicit_success=False,
+        )
+        method_summary = _method_framework_summary(successful)
+        num_tools = method_summary["n_total"]
+        num_frameworks = method_summary["n_frameworks"]
+        framework_desc = method_summary["description"]
         
-        if num_unique >= 3:
+        if num_frameworks >= 3:
             scores["methodology"] = 8.0
-            feedback.append("[PASS] Strong methodology with 3+ distinct computational tools providing genuine cross-validation.")
-        elif num_unique == 2:
+            feedback.append(
+                f"[PASS] Strong methodology with {num_frameworks} methodologically distinct "
+                f"frameworks across {num_tools} analyses, supporting genuine cross-validation."
+            )
+        elif num_frameworks == 2:
             scores["methodology"] = 6.5
-            if num_tools > num_unique:
-                feedback.append(f"[NOTE] Adequate methodology with {num_unique} distinct tools, but {num_tools - num_unique} analyses reuse the same tool with different parameters. This is parameter variation, not methodological independence.")
-            else:
-                feedback.append("[NOTE] Adequate methodology with 2 distinct tools. Consider adding complementary analyses.")
-        elif num_unique == 1 and num_tools > 1:
+            feedback.append(
+                f"[NOTE] Adequate methodology with {framework_desc}. This supports limited "
+                f"triangulation but not full cross-validation; validation against "
+                f"{_benchmark_guidance(domain)} would strengthen the claim."
+            )
+        elif num_frameworks == 1 and num_tools > 1:
             scores["methodology"] = 3.5
-            feedback.append(f"[FAIL] Weak methodology: {num_tools} analyses all use the same tool (`{list(unique_tools)[0]}`) with different parameters. This constitutes parameter variation, not independent methods. Cross-validation requires fundamentally different algorithms.")
-        elif num_unique == 1:
+            label = method_summary["labels"][0] if method_summary["labels"] else "one framework"
+            feedback.append(
+                f"[FAIL] Weak methodology: {num_tools} analyses remain inside a single "
+                f"methodological framework ({label}). This is parameter variation/internal "
+                f"consistency, not independent cross-validation."
+            )
+        elif num_frameworks == 1:
             scores["methodology"] = 4.0
-            feedback.append("[FAIL] Weak methodology with only 1 tool. Results lack cross-validation.")
+            label = method_summary["labels"][0] if method_summary["labels"] else "one framework"
+            feedback.append(f"[FAIL] Weak methodology with only one framework ({label}). Results lack cross-validation.")
         else:
             scores["methodology"] = 2.0
             feedback.append("[FAIL] No computational tools used.")
@@ -1073,7 +1388,7 @@ class PeerReviewer:
         ]
         known_controls = [
             h for h in hypotheses
-            if h.get("novelty_status") in {"known_control", "observation", "finite_computational_observation"}
+            if h.get("novelty_status") in {"known_control", "observation", "finite_computational_observation", "candidate_methodological_observation"}
         ]
         if candidate_hypotheses:
             avg_conf = sum(h.get("confidence", 0.5) for h in candidate_hypotheses) / len(candidate_hypotheses)
@@ -1111,27 +1426,42 @@ class PeerReviewer:
         # Verify that experiment IDs have real provenance files
         provenance_verified_count = 0
         provenance_total = 0
-        if _provenance and experiment_ids:
+        if self._provenance and experiment_ids:
             for eid in experiment_ids:
                 provenance_total += 1
-                verification = _provenance.verify_experiment_id(eid)
-                if verification["exists"]:
+                try:
+                    verification = self._provenance.verify_experiment_id(eid)
+                except (OSError, ValueError):
+                    verification = {}
+                if verification.get("integrity_verified") is True:
                     provenance_verified_count += 1
         
         if has_real_hashes and (has_experiment_ids or provenance_total > 0):
             if provenance_total > 0 and provenance_verified_count == provenance_total:
-                scores["reproducibility"] = 9.0
-                feedback.append(f"[PASS] Excellent reproducibility: all {provenance_total} experiment IDs have real provenance files with SHA-256 hashes.")
+                scores["reproducibility"] = 8.0
+                feedback.append(
+                    f"[PASS] All {provenance_total} retained outputs pass local SHA-256 "
+                    "integrity checks. This does not authenticate provenance, prevent "
+                    "rollback, or establish scientific truth."
+                )
             elif provenance_total > 0 and provenance_verified_count > 0:
-                scores["reproducibility"] = 7.0
-                feedback.append(f"[NOTE] Good reproducibility: {provenance_verified_count}/{provenance_total} experiment IDs have provenance files. SHA-256 hashes provided for traceability.")
+                scores["reproducibility"] = 6.0
+                feedback.append(
+                    f"[NOTE] {provenance_verified_count}/{provenance_total} retained "
+                    "outputs pass local SHA-256 integrity checks; the remainder must "
+                    "not be treated as verified evidence."
+                )
             else:
                 scores["reproducibility"] = 5.0
                 feedback.append("[NOTE] SHA-256 hashes provided but provenance files not yet verified. Consider linking to persistent repositories.")
         elif (has_experiment_ids or provenance_total > 0) and has_tool_info:
             if provenance_total > 0 and provenance_verified_count == provenance_total:
-                scores["reproducibility"] = 9.0
-                feedback.append(f"[PASS] All {provenance_total} experiment IDs have verified provenance files. Consider adding SHA-256 output hashes for complete traceability.")
+                scores["reproducibility"] = 7.0
+                feedback.append(
+                    f"[PASS] All {provenance_total} retained outputs pass local digest "
+                    "checks, but the manuscript does not expose those hashes and the "
+                    "records remain unauthenticated."
+                )
             elif provenance_total > 0 and provenance_verified_count > 0:
                 scores["reproducibility"] = 5.0
                 feedback.append(f"[NOTE] Partial reproducibility: {provenance_verified_count}/{provenance_total} experiment IDs have provenance files. Missing SHA-256 hashes for output verification.")
@@ -1224,10 +1554,17 @@ class PaperEnhancer:
             domain_key = "mathematics"  # fallback
         
         domain_data = DOMAIN_INSIGHTS[domain_key]
-        successful = [r for r in results if r.get("success", True)]
+        successful = _usable_tool_results(results)
+        rejected_result_count = len(results) - len(successful)
+        if rejected_result_count:
+            log.warning(
+                "paper_enhancer.tool_outputs_rejected",
+                rejected=rejected_result_count,
+                accepted=len(successful),
+            )
         
         # 1. GENERATE HYPOTHESES — Predictions from results with explicit novelty status
-        hypotheses = generate_hypothesis(domain_key, successful)
+        hypotheses = generate_hypothesis(domain_key, successful) if successful else []
 
         # 1b. RANK HYPOTHESES — Google Co-Scientist-style Elo tournament so the
         #     paper foregrounds the strongest candidates. Falls back silently
@@ -1311,6 +1648,7 @@ class PaperEnhancer:
                 log.warning("paper_enhancer.evolution_failed", error=str(exc))
 
         hypotheses = _filter_ungrounded_hypotheses(hypotheses, successful)
+        hypotheses = _govern_novelty_confidence(domain_key, hypotheses, successful)
 
         # 2. ENHANCE DISCUSSION
         #    Preferred path (AMY_USE_LLM_ENHANCER=1): an LLM writes the Discussion
@@ -1375,6 +1713,10 @@ class PaperEnhancer:
             elif "novelty" in heading:
                 # Merge novelty analysis into Results section (academic standard)
                 # Don't create a separate "Novelty Analysis" section
+                if rejected_result_count:
+                    # This prose cannot be reliably separated from rejected
+                    # evidence, so omit it instead of merging it into Results.
+                    continue
                 novelty_content = sec.get("content", "")
                 # Add novelty findings to the end of Results
                 results_sec = next((s for s in enhanced_sections if "results" in s.get("heading", "").lower()), None)
@@ -1382,6 +1724,16 @@ class PaperEnhancer:
                     results_sec["content"] += "\n\n" + novelty_content
                 else:
                     enhanced_sections.append({"heading": "Results", "content": novelty_content})
+            elif "results" in heading and rejected_result_count:
+                # The incoming section may contain prose derived from rejected
+                # outputs. Once any record fails the gate, rebuild Results only
+                # from the accepted records instead of trying to redact prose.
+                enhanced_sections.append(
+                    {
+                        "heading": "Results",
+                        "content": _render_usable_results(successful),
+                    }
+                )
             else:
                 enhanced_sections.append(sec)
         
@@ -1497,22 +1849,15 @@ class PaperEnhancer:
         )
         control_count = sum(
             1 for h in hypotheses
-            if h.get("novelty_status") in {"known_control", "observation", "finite_computational_observation"}
+            if h.get("novelty_status") in {"known_control", "observation", "finite_computational_observation", "candidate_methodological_observation"}
         )
 
-        unique_tools = set(r.get("tool", "unknown") for r in results)
-        n_unique = len(unique_tools)
-        n_total = len(results)
-
-        if n_unique == 1 and n_total > 1:
-            methods_desc = f"a single computational method applied across {n_total} parameter configurations"
-        elif n_unique > 1:
-            methods_desc = f"{n_unique} distinct computational methods"
-        else:
-            methods_desc = "a computational analysis"
+        method_summary = _method_framework_summary(results)
+        methods_desc = method_summary["description"]
 
         # Deterministic variation: same topic+results → same abstract; different topic → different opening
-        seed_material = f"{domain}|{topic}|{'|'.join(sorted(unique_tools))}|{n_total}"
+        framework_seed = "|".join(sorted(method_summary["frameworks"]))
+        seed_material = f"{domain}|{topic}|{framework_seed}|{method_summary['n_total']}"
         seed = int(hashlib.sha256(seed_material.encode()).hexdigest()[:8], 16)
         rng = _random.Random(seed)
 
@@ -1562,17 +1907,11 @@ class PaperEnhancer:
         """Build a domain-specific introduction."""
         refs = domain_data.get("references", [])
         ref_citations = "; ".join([r.split("(")[0].strip().rstrip(".") for r in refs[:3]]) if refs else "established literature"
-        unique_tools = {r.get("tool", "unknown") for r in results}
-        n_unique = len(unique_tools)
-        n_total = len(results)
-        if n_unique == 1 and n_total > 1:
-            methods_desc = f"a single computational method applied across {n_total} parameter configurations"
-        elif n_unique > 1 and n_total > n_unique:
-            methods_desc = f"{n_unique} distinct computational methods across {n_total} total analyses"
-        elif n_unique > 1:
-            methods_desc = f"{n_unique} distinct computational methods"
-        else:
-            methods_desc = "a computational analysis"
+        method_summary = _method_framework_summary(results)
+        methods_desc = method_summary["description"]
+        has_ssh = domain == "chemistry" and any(
+            str(r.get("tool", "")).lower().startswith("ssh_") for r in results
+        )
         
         intro = (
             f"The study of {topic.lower()} represents a fundamental challenge in {domain}, "
@@ -1580,6 +1919,16 @@ class PaperEnhancer:
             f"({ref_citations}). "
             f"Recent advances in computational tools have enabled systematic verification of "
             f"theoretical predictions at unprecedented scale and precision.\n\n"
+        )
+        if has_ssh:
+            intro += (
+                "The SSH model was introduced by Su, Schrieffer and Heeger (1979) "
+                "as the canonical polyacetylene model for solitons and boundary-sensitive "
+                "electronic structure; the present work treats that framework as a known "
+                "baseline and asks only whether finite-chain diagnostics remain identifiable "
+                "under boundary-orientation stress tests.\n\n"
+            )
+        intro += (
             f"In this work, we employ {methods_desc} to analyze "
             f"{topic.lower()}, verifying established results while separating finite-range "
             f"candidate patterns from novelty claims. Our approach combines symbolic computation, "
@@ -1591,8 +1940,9 @@ class PaperEnhancer:
     
     def _build_methods(self, domain: str, results: list) -> str:
         """Build a detailed methods section with honest tool categorization."""
-        # Group results by unique tool name to avoid claiming "independent methods"
-        # when the same tool is run with different parameters
+        method_summary = _method_framework_summary(results)
+        # Group results by unique tool name for traceability while reporting
+        # independence at the framework level.
         tool_groups = {}
         for r in results:
             tool = r.get("tool", "unknown")
@@ -1600,24 +1950,24 @@ class PaperEnhancer:
                 tool_groups[tool] = []
             tool_groups[tool].append(r)
         
-        n_unique_tools = len(tool_groups)
         n_total_runs = len(results)
+        n_frameworks = method_summary["n_frameworks"]
         
-        if n_unique_tools == 1 and n_total_runs > 1:
+        if n_frameworks == 1 and n_total_runs > 1:
+            label = method_summary["labels"][0] if method_summary["labels"] else "one framework"
             methods = (
-                f"We employed a single computational tool (`{list(tool_groups.keys())[0]}`) "
-                f"with {n_total_runs} different parameter configurations. "
+                f"We employed {n_total_runs} total analyses within a single methodological "
+                f"framework ({label}). "
                 f"While these configurations test different input conditions, they share the same "
-                f"underlying algorithm and implementation, and therefore do not constitute independent "
-                f"methodological approaches. Cross-validation between parameter variations can confirm "
+                f"underlying framework, and therefore do not constitute independent "
+                f"methodological approaches. Agreement between parameter variations can confirm "
                 f"internal consistency but cannot establish methodological independence.\n\n"
             )
-        elif n_unique_tools > 1:
+        elif n_frameworks > 1:
             methods = (
-                f"We employed {n_unique_tools} distinct computational tools from the AXIOM Atlas platform. "
-                f"Note that some tools were executed with multiple parameter configurations, "
-                f"yielding {n_total_runs} total analyses. Only tools with fundamentally different "
-                f"algorithms are counted as methodologically independent.\n\n"
+                f"We employed {method_summary['description']} from the AXIOM Atlas platform. "
+                f"Individual tools are listed below for reproducibility, but methodological "
+                f"independence is counted by framework rather than by tool-name variants.\n\n"
             )
         else:
             methods = (
@@ -1721,19 +2071,31 @@ class PaperEnhancer:
                         f"supporting theoretical models in {domain}."
                     )
         
-        # Cross-tool synthesis
-        if len(tool_groups) > 1:
+        # Cross-framework synthesis
+        method_summary = _method_framework_summary(results)
+        n_frameworks = method_summary["n_frameworks"]
+        if n_frameworks >= 3:
             discussion_parts.append(
-                f"\n**Cross-validation:** The consistency across {len(tool_groups)} distinct "
-                f"computational methods strengthens confidence in our findings. The convergence "
-                f"of results from different analytical approaches suggests robust underlying "
-                f"phenomena rather than artifacts of any single method."
+                f"\n**Cross-validation:** The consistency across {n_frameworks} methodologically "
+                f"distinct frameworks strengthens confidence in the reported findings. The "
+                f"convergence of results from different analytical approaches suggests robust "
+                f"underlying phenomena rather than artifacts of any single framework."
             )
-        elif len(tool_groups) == 1 and len(results) > 1:
+        elif n_frameworks == 2:
             discussion_parts.append(
-                f"\n**Internal consistency:** All {len(results)} analyses were produced by a single "
-                f"computational method with different input parameters. While this confirms internal "
-                f"consistency of the implementation, it does not constitute methodological independence. "
+                f"\n**Limited triangulation:** The run contains {method_summary['description']}. "
+                f"This is stronger than a single-method control, but it is not sufficient to "
+                f"sustain novelty on its own. Validation against {_benchmark_guidance(domain)} remains "
+                f"necessary before these results can be promoted beyond candidate "
+                f"methodological observations."
+            )
+        elif n_frameworks == 1 and len(results) > 1:
+            label = method_summary["labels"][0] if method_summary["labels"] else "one framework"
+            discussion_parts.append(
+                f"\n**Internal consistency:** All {len(results)} analyses remain within a single "
+                f"methodological framework ({label}) with different input parameters. While this "
+                f"confirms internal consistency of the implementation, it does not constitute "
+                f"methodological independence. "
                 f"Independent verification using fundamentally different algorithms or experimental "
                 f"approaches would be required to strengthen these findings."
             )
@@ -1753,17 +2115,8 @@ class PaperEnhancer:
     
     def _build_conclusion(self, domain: str, topic: str, hypotheses: list, results: list) -> str:
         """Build a conclusion with hypotheses and future work."""
-        # Count unique tools for honest reporting
-        unique_tools = set(r.get("tool", "unknown") for r in results)
-        n_unique = len(unique_tools)
-        n_total = len(results)
-        
-        if n_unique == 1 and n_total > 1:
-            methods_desc = f"a single computational method applied across {n_total} parameter configurations"
-        elif n_unique > 1:
-            methods_desc = f"{n_unique} distinct computational methods"
-        else:
-            methods_desc = "a computational analysis"
+        method_summary = _method_framework_summary(results)
+        methods_desc = method_summary["description"]
         
         conclusion = (
             f"This computational study of {topic.lower()} has verified theoretical predictions "
@@ -1776,7 +2129,7 @@ class PaperEnhancer:
         ]
         known_controls = [
             h for h in hypotheses
-            if h.get("novelty_status") in {"known_control", "observation", "finite_computational_observation"}
+            if h.get("novelty_status") in {"known_control", "observation", "finite_computational_observation", "candidate_methodological_observation"}
         ]
 
         if candidate_hypotheses:

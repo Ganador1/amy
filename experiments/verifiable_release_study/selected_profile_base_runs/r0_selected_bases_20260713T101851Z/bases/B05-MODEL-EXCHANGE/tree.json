@@ -1,0 +1,86 @@
+[
+  {
+    "bytes": 2459,
+    "kind": "regular",
+    "path": "MANIFEST.jcs.json",
+    "sha256": "f7f3de31abc314d8c60f6d49d516db9979be40ab435557ac8d1464cd68abada1"
+  },
+  {
+    "bytes": 2421,
+    "kind": "regular",
+    "path": "attestation.sigstore.json",
+    "sha256": "a51ab05f0b981e3e20c334f2c48b021a813fd4e89bcf6c75ca7c25d32d264f1c"
+  },
+  {
+    "kind": "directory",
+    "path": "payload"
+  },
+  {
+    "kind": "directory",
+    "path": "payload/exchange"
+  },
+  {
+    "bytes": 96,
+    "kind": "regular",
+    "path": "payload/exchange/metadata.json",
+    "sha256": "2e6cb537a9d7cc9f934fbfc9a9122248860836ac03bc2108040483defb2e6c39"
+  },
+  {
+    "bytes": 92,
+    "kind": "regular",
+    "path": "payload/exchange/request.json",
+    "sha256": "1948bb3e419d66da5099e7b48b0d76269497fff969d8d4dc65b51e764752571a"
+  },
+  {
+    "bytes": 83,
+    "kind": "regular",
+    "path": "payload/exchange/response.json",
+    "sha256": "472142346da2de0727c8c66561d07e1b08ff45db7e976e66b8c04f708980eb6d"
+  },
+  {
+    "kind": "directory",
+    "path": "payload/fixtures"
+  },
+  {
+    "bytes": 22,
+    "kind": "regular",
+    "path": "payload/fixtures/pair-a.txt",
+    "sha256": "db2b54a47b58b3dc4b68c9a95ec665a998a2ad8943e4a88b611ec955438ae71b"
+  },
+  {
+    "bytes": 22,
+    "kind": "regular",
+    "path": "payload/fixtures/pair-b.txt",
+    "sha256": "db2b54a47b58b3dc4b68c9a95ec665a998a2ad8943e4a88b611ec955438ae71b"
+  },
+  {
+    "kind": "directory",
+    "path": "payload/prompt"
+  },
+  {
+    "bytes": 68,
+    "kind": "regular",
+    "path": "payload/prompt/system.txt",
+    "sha256": "e1bddfa9eefad4c8f0af8f0056547216571f13c5445956dd2e8a16b46ff0a3f4"
+  },
+  {
+    "kind": "directory",
+    "path": "payload/provenance"
+  },
+  {
+    "bytes": 12,
+    "kind": "regular",
+    "path": "payload/provenance/dependency.lock",
+    "sha256": "dbab12665d98aef021ba64953c61b0ed8a908cfb56a1c01e2fcb4b052b71a2a1"
+  },
+  {
+    "kind": "directory",
+    "path": "payload/source"
+  },
+  {
+    "bytes": 10240,
+    "kind": "regular",
+    "path": "payload/source/source.tar",
+    "sha256": "2bc8dc879609cf564b390de1036df57ea3e2dc6f6d16d7529a916d93eb58e8dd"
+  }
+]

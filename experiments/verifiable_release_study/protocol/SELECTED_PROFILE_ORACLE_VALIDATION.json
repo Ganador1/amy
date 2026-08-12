@@ -1,0 +1,31 @@
+{
+  "builder_sha256": "cd05f2f0e4364dd933ccb272e7507b6641d3feb77e89b2bc5562edb02fe8806a",
+  "case_count": 41,
+  "catalog_sha256": "098563afc029f8c1532999e3cc5c058c8bf3bdc33cfcfd01423decf56f4693b1",
+  "confirmatory_cases_executed": false,
+  "confirmatory_outcomes_read": false,
+  "development_fixture_cases_executed_by_this_validator": false,
+  "errors": [],
+  "independent_human_review_complete": false,
+  "limitations": [
+    "The oracle is a deterministic rendering of same-author catalog expectations, not independent validation of those expectations.",
+    "This validator performs static/replay checks only and does not execute a mutation or verifier.",
+    "Development tests may exercise temporary public-PKI fixtures, but no result from them is confirmatory evidence."
+  ],
+  "module_separation_static_check": true,
+  "module_sha256": {
+    "evaluator": "c30885f135bffbbc502adba8752831c82d34f8052b778e6ac0704d745798e3c6",
+    "generator": "528ac758b11c5389a26d250eb265f998bea42c835dcc7bce12d026f6e0aa05fe",
+    "oracle": "3d607070f66e8767751b66bb5cc421224ffba998d90debb30b88931872fb8305",
+    "verifier": "d091d745f0fad38b852b9e9c5084ed5355c7300b9dadce3fb6d5b5880d72bedb"
+  },
+  "oracle_path": "protocol/SELECTED_PROFILE_ORACLE_DRAFT.json",
+  "oracle_sha256": "23a21bcfc834bd2638e283964f40e5129ee151f5c798a6eb1197be2c26403295",
+  "result_schema_sha256": "442553ed9bbb291bffd3de20b79d5beb4089dbbaa7ba629f8bb5172a3303930c",
+  "row_count": 164,
+  "schema_path": "schemas/selected-profile-oracle.schema.json",
+  "schema_sha256": "18659dec019159e0ce9e7b708ac226d1da60fb42f6600445a1cf6641279f3153",
+  "schema_version": "amy.selected-profile-oracle-validation.v1-draft",
+  "valid": true,
+  "validator_sha256": "0266a426678de703240a984af08443dc7b7571a7924e77c2849aad804c095f52"
+}

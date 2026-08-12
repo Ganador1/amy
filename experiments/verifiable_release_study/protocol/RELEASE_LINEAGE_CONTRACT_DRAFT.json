@@ -1,0 +1,223 @@
+{
+  "schema_version": "amy.release-lineage-contract.v1-draft",
+  "record_status": "draft_not_frozen",
+  "classification": "pre_registration_identity_contract_no_confirmatory_evidence",
+  "lineage_id": "amy-verifiable-release-study-lineage-001",
+  "prepared_date": "2026-07-13",
+  "normative_source_ids": [
+    "S01",
+    "S02",
+    "S03",
+    "S04",
+    "S07",
+    "S08",
+    "S10",
+    "S11",
+    "S13",
+    "S16",
+    "S19",
+    "S20",
+    "S22",
+    "S25",
+    "S30",
+    "S31",
+    "S32",
+    "S33",
+    "S35",
+    "S36"
+  ],
+  "identity_rules": {
+    "artifact_hash_algorithm": "sha256",
+    "artifact_digest_scope": "exact_bytes",
+    "git_oid_label": "git-object-id-with-explicit-object-format",
+    "git_oid_is_artifact_sha256": false,
+    "software_version_is_execution_identity": false,
+    "latest_is_execution_identity": false,
+    "version_labels_are_immutable": true,
+    "new_bytes_require_new_version": true,
+    "new_bytes_require_new_manifest": true,
+    "new_bytes_require_new_attestation": true,
+    "published_bytes_may_be_replaced": false,
+    "self_hash_field_allowed": false,
+    "record_digest_location": "external_parent_reference_and_deposit_metadata",
+    "signature_proves_scientific_truth": false,
+    "signature_proves_authorized_workflow_identity_only_under_policy": true,
+    "rollback_protection_is_stateless": false
+  },
+  "required_release_identity_fields": [
+    "stage",
+    "stage_version",
+    "repository_uri",
+    "git_object_format",
+    "source_commit_oid",
+    "source_tree_oid",
+    "source_snapshot_sha256",
+    "dependency_lock_sha256",
+    "execution_image_digest",
+    "payload_manifest_sha256",
+    "attestation_policy_sha256",
+    "trusted_root_sha256",
+    "attestation_bundle_sha256",
+    "verifier_binary_sha256",
+    "result_schema_sha256",
+    "transport_archive_sha256",
+    "version_doi",
+    "publication_timestamp"
+  ],
+  "software_components": [
+    {
+      "name": "A.M.Y",
+      "distribution_identity": null,
+      "declared_version": null,
+      "git_object_format": null,
+      "source_commit_oid": null,
+      "source_tree_oid": null,
+      "source_snapshot_sha256": null,
+      "dependency_lock_sha256": null,
+      "execution_image_digest": null,
+      "resolution_status": "unresolved_before_R0"
+    },
+    {
+      "name": "Atlas",
+      "distribution_identity": null,
+      "declared_version": null,
+      "git_object_format": null,
+      "source_commit_oid": null,
+      "source_tree_oid": null,
+      "source_snapshot_sha256": null,
+      "dependency_lock_sha256": null,
+      "execution_image_digest": null,
+      "resolution_status": "unresolved_before_R0"
+    },
+    {
+      "name": "AXIOM",
+      "distribution_identity": null,
+      "declared_version": null,
+      "git_object_format": null,
+      "source_commit_oid": null,
+      "source_tree_oid": null,
+      "source_snapshot_sha256": null,
+      "dependency_lock_sha256": null,
+      "execution_image_digest": null,
+      "resolution_status": "unresolved_before_R0"
+    }
+  ],
+  "study_toolchain_component": {
+    "name": "amy-verifiable-release-study",
+    "distribution_identity": null,
+    "declared_version": null,
+    "git_object_format": null,
+    "source_commit_oid": null,
+    "source_tree_oid": null,
+    "source_snapshot_sha256": null,
+    "dependency_lock_sha256": null,
+    "execution_image_digest": null,
+    "resolution_status": "unresolved_before_R0"
+  },
+  "stage_rules": {
+    "R0": {
+      "freeze_before_confirmatory_generation": true,
+      "may_contain_confirmatory_outputs": false,
+      "required_parent_stages": []
+    },
+    "R1": {
+      "generated_only_after_R0_registration": true,
+      "must_be_generated_by_exact_R0": true,
+      "may_rewrite_R0": false,
+      "required_parent_stages": [
+        "R0"
+      ]
+    },
+    "R2": {
+      "must_cite_exact_R0_and_R1": true,
+      "may_rewrite_R0_or_R1": false,
+      "correction_creates_new_R2": true,
+      "correction_records_are_append_only": true,
+      "correction_supersedes_exact_prior_R2": true,
+      "prior_R2_records_must_be_preserved": true,
+      "required_parent_stages": [
+        "R0",
+        "R1"
+      ]
+    }
+  },
+  "r2_release_records": [],
+  "stages": [
+    {
+      "stage": "R0",
+      "status": "draft_not_frozen",
+      "version_label": "protocol-v0.3.0-draft",
+      "contains_or_derives_from_confirmatory_outputs": false,
+      "parents": [],
+      "identity": null,
+      "registration_identifier": null,
+      "external_record_sha256": null,
+      "unresolved_fields": [
+        "/software_components/0",
+        "/software_components/1",
+        "/software_components/2",
+        "/study_toolchain_component",
+        "/stages/0/identity",
+        "/stages/0/registration_identifier",
+        "/stages/0/external_record_sha256"
+      ],
+      "freeze_permitted": false
+    },
+    {
+      "stage": "R1",
+      "status": "not_created",
+      "version_label": null,
+      "contains_or_derives_from_confirmatory_outputs": false,
+      "parents": [],
+      "identity": null,
+      "registration_identifier": null,
+      "external_record_sha256": null,
+      "unresolved_fields": [
+        "/stages/1/version_label",
+        "/stages/1/parents",
+        "/stages/1/identity"
+      ],
+      "freeze_permitted": false
+    },
+    {
+      "stage": "R2",
+      "status": "not_created",
+      "version_label": null,
+      "contains_or_derives_from_confirmatory_outputs": false,
+      "parents": [],
+      "identity": null,
+      "registration_identifier": null,
+      "external_record_sha256": null,
+      "unresolved_fields": [
+        "/stages/2/version_label",
+        "/stages/2/parents",
+        "/stages/2/identity"
+      ],
+      "freeze_permitted": false
+    }
+  ],
+  "current_decision": {
+    "decision": "NO-GO",
+    "freeze_permitted_now": false,
+    "blocking_reasons": [
+      "The study bytes are not yet represented by a clean externally published R0 source identity.",
+      "A.M.Y, Atlas, AXIOM, and the study toolchain execution identities are unresolved in this draft contract.",
+      "The release-specific GitHub/Sigstore policy still contains unresolved values.",
+      "The selected oracle, propositions, and compatibility decisions lack signed non-implementer review.",
+      "No time-stamped read-only preregistration or version DOI exists.",
+      "No real A.M.Y P3 release result exists.",
+      "R1 confirmatory evidence and R2 paper releases do not exist."
+    ]
+  },
+  "limitations": [
+    "A software version label communicates a compatibility claim but never substitutes for exact execution bytes.",
+    "A Git object ID identifies a Git object under its declared object format and is not relabeled as an artifact SHA-256.",
+    "A SHA-256 match establishes equality to named bytes under the hash assumption, not author identity, publication time, or scientific truth.",
+    "A valid signature establishes only the authenticated subject and authorized identity under the exact frozen policy and trust root.",
+    "An authorized workflow can sign incomplete, fabricated, or scientifically invalid material.",
+    "A valid old release remains valid; selecting a current or minimum version requires separately trusted state.",
+    "A version DOI is a persistent version identifier, not a cryptographic signature or proof that repository bytes cannot be corrected.",
+    "A correction is a new immutable R2 record linked to the exact prior R2 record; it never replaces or mutates prior R2 bytes.",
+    "Provider-opaque model weights and serving state cannot be assigned invented reproducible hashes."
+  ]
+}

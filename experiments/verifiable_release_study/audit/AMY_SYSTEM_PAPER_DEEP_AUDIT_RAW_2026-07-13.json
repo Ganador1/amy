@@ -1,0 +1,1084 @@
+{
+  "benchmark": {
+    "design_accounting": {
+      "arms": {
+        "full": 180,
+        "hash_only": 180,
+        "raw": 180
+      },
+      "case_count": 18,
+      "evidence_packet_count": 6,
+      "request_files": 540,
+      "response_files": 540,
+      "run_rows": 540,
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "successful_rows": 540,
+      "unique_run_ids": 540
+    },
+    "evidence_integrity": {
+      "all_current_output_bytes_match_index_and_provenance": true,
+      "authentication_observed": false,
+      "digest_errors": [],
+      "packets": 6
+    },
+    "measurement_boundaries": {
+      "expected_relations_independently_annotated": false,
+      "false_novelty_detector": "\\b(?:novel discovery|new scientific law|proves? a new)\\b",
+      "prohibited_claim_detector": "case-authored exact case-insensitive substring matching",
+      "schema_types_strictly_enforced": false,
+      "unsupported_decimal_detector_checks_integers": false,
+      "unsupported_decimal_detector_context_or_unit_aware": false,
+      "unsupported_decimal_numeric_tolerance": {
+        "absolute": 0.0005,
+        "relative": 0.005
+      },
+      "word_limits_enforced_by_parser_or_score": false
+    },
+    "recomputed_inference": {
+      "key_sensitivity_conclusion": "The pair-level unsupported-decimal result does not cross 0.05 under exact case- or domain-cluster sign-flip sensitivities.",
+      "primary": {
+        "case_cluster_sensitivity": {
+          "cluster_level": "case_id",
+          "cluster_mean_differences": {
+            "astronomy_refute_hubble_within_threshold": 0.0,
+            "biology_refute_nonpositive_gc_difference": 0.0,
+            "chemistry_refute_joint_superiority": 0.0,
+            "mathematics_refute_log_linear_best_fit": 0.0,
+            "physics_refute_quantum_defect_best": 0.0,
+            "statistics_refute_nonpositive_difference": 0.0
+          },
+          "clusters": 6,
+          "exact_two_sided_sign_flip_pvalue": 1.0,
+          "interpretation": "unregistered dependence sensitivity, not the preregistered test",
+          "leave_one_cluster_out_mean_differences": {
+            "astronomy_refute_hubble_within_threshold": 0.0,
+            "biology_refute_nonpositive_gc_difference": 0.0,
+            "chemistry_refute_joint_superiority": 0.0,
+            "mathematics_refute_log_linear_best_fit": 0.0,
+            "physics_refute_quantum_defect_best": 0.0,
+            "statistics_refute_nonpositive_difference": 0.0
+          },
+          "nonzero_cluster_mean_differences": {}
+        },
+        "complete_pairs": 60,
+        "discordant_full_only": 0,
+        "discordant_hash_only_only": 0,
+        "domain_cluster_sensitivity": {
+          "cluster_level": "domain",
+          "cluster_mean_differences": {
+            "astronomy": 0.0,
+            "biology": 0.0,
+            "chemistry": 0.0,
+            "mathematics": 0.0,
+            "physics": 0.0,
+            "statistics": 0.0
+          },
+          "clusters": 6,
+          "exact_two_sided_sign_flip_pvalue": 1.0,
+          "interpretation": "unregistered dependence sensitivity, not the preregistered test",
+          "leave_one_cluster_out_mean_differences": {
+            "astronomy": 0.0,
+            "biology": 0.0,
+            "chemistry": 0.0,
+            "mathematics": 0.0,
+            "physics": 0.0,
+            "statistics": 0.0
+          },
+          "nonzero_cluster_mean_differences": {}
+        },
+        "endpoint": "false_support",
+        "full_rate": 0.0,
+        "hash_only_rate": 0.0,
+        "mcnemar_exact_two_sided_pvalue": 1.0,
+        "relation": "refute",
+        "risk_difference_full_minus_hash_only": 0.0
+      },
+      "secondary": {
+        "contradiction_retained": {
+          "case_cluster_sensitivity": {
+            "cluster_level": "case_id",
+            "cluster_mean_differences": {
+              "astronomy_refute_hubble_within_threshold": 0.0,
+              "biology_refute_nonpositive_gc_difference": 0.0,
+              "chemistry_refute_joint_superiority": 0.0,
+              "mathematics_refute_log_linear_best_fit": 0.0,
+              "physics_refute_quantum_defect_best": 0.0,
+              "statistics_refute_nonpositive_difference": 0.0
+            },
+            "clusters": 6,
+            "exact_two_sided_sign_flip_pvalue": 1.0,
+            "interpretation": "unregistered dependence sensitivity, not the preregistered test",
+            "leave_one_cluster_out_mean_differences": {
+              "astronomy_refute_hubble_within_threshold": 0.0,
+              "biology_refute_nonpositive_gc_difference": 0.0,
+              "chemistry_refute_joint_superiority": 0.0,
+              "mathematics_refute_log_linear_best_fit": 0.0,
+              "physics_refute_quantum_defect_best": 0.0,
+              "statistics_refute_nonpositive_difference": 0.0
+            },
+            "nonzero_cluster_mean_differences": {}
+          },
+          "complete_pairs": 60,
+          "discordant_full_only": 0,
+          "discordant_hash_only_only": 0,
+          "domain_cluster_sensitivity": {
+            "cluster_level": "domain",
+            "cluster_mean_differences": {
+              "astronomy": 0.0,
+              "biology": 0.0,
+              "chemistry": 0.0,
+              "mathematics": 0.0,
+              "physics": 0.0,
+              "statistics": 0.0
+            },
+            "clusters": 6,
+            "exact_two_sided_sign_flip_pvalue": 1.0,
+            "interpretation": "unregistered dependence sensitivity, not the preregistered test",
+            "leave_one_cluster_out_mean_differences": {
+              "astronomy": 0.0,
+              "biology": 0.0,
+              "chemistry": 0.0,
+              "mathematics": 0.0,
+              "physics": 0.0,
+              "statistics": 0.0
+            },
+            "nonzero_cluster_mean_differences": {}
+          },
+          "endpoint": "contradiction_retained",
+          "full_rate": 1.0,
+          "hash_only_rate": 1.0,
+          "holm_adjusted_pair_level_pvalue": 1.0,
+          "mcnemar_exact_two_sided_pvalue": 1.0,
+          "relation": "refute",
+          "risk_difference_full_minus_hash_only": 0.0
+        },
+        "correct_abstention": {
+          "case_cluster_sensitivity": {
+            "cluster_level": "case_id",
+            "cluster_mean_differences": {
+              "astronomy_underdetermined_dark_energy_cause": 0.0,
+              "biology_underdetermined_fitness": -0.1,
+              "chemistry_underdetermined_interactions": 0.0,
+              "mathematics_underdetermined_cramer_asymptotic": 0.0,
+              "physics_underdetermined_beyond_standard_model": 0.0,
+              "statistics_underdetermined_causality": 0.0
+            },
+            "clusters": 6,
+            "exact_two_sided_sign_flip_pvalue": 1.0,
+            "interpretation": "unregistered dependence sensitivity, not the preregistered test",
+            "leave_one_cluster_out_mean_differences": {
+              "astronomy_underdetermined_dark_energy_cause": -0.02,
+              "biology_underdetermined_fitness": 0.0,
+              "chemistry_underdetermined_interactions": -0.02,
+              "mathematics_underdetermined_cramer_asymptotic": -0.02,
+              "physics_underdetermined_beyond_standard_model": -0.02,
+              "statistics_underdetermined_causality": -0.02
+            },
+            "nonzero_cluster_mean_differences": {
+              "biology_underdetermined_fitness": -0.1
+            }
+          },
+          "complete_pairs": 60,
+          "discordant_full_only": 0,
+          "discordant_hash_only_only": 1,
+          "domain_cluster_sensitivity": {
+            "cluster_level": "domain",
+            "cluster_mean_differences": {
+              "astronomy": 0.0,
+              "biology": -0.1,
+              "chemistry": 0.0,
+              "mathematics": 0.0,
+              "physics": 0.0,
+              "statistics": 0.0
+            },
+            "clusters": 6,
+            "exact_two_sided_sign_flip_pvalue": 1.0,
+            "interpretation": "unregistered dependence sensitivity, not the preregistered test",
+            "leave_one_cluster_out_mean_differences": {
+              "astronomy": -0.02,
+              "biology": 0.0,
+              "chemistry": -0.02,
+              "mathematics": -0.02,
+              "physics": -0.02,
+              "statistics": -0.02
+            },
+            "nonzero_cluster_mean_differences": {
+              "biology": -0.1
+            }
+          },
+          "endpoint": "correct_abstention",
+          "full_rate": 0.0,
+          "hash_only_rate": 0.016666666666666666,
+          "holm_adjusted_pair_level_pvalue": 1.0,
+          "mcnemar_exact_two_sided_pvalue": 1.0,
+          "relation": "underdetermined",
+          "risk_difference_full_minus_hash_only": -0.016666666666666666
+        },
+        "prohibited_claim_present": {
+          "case_cluster_sensitivity": {
+            "cluster_level": "case_id",
+            "cluster_mean_differences": {
+              "astronomy_refute_hubble_within_threshold": 0.0,
+              "astronomy_support_hubble_breakdown": 0.0,
+              "astronomy_underdetermined_dark_energy_cause": 0.0,
+              "biology_refute_nonpositive_gc_difference": 0.0,
+              "biology_support_gc_panel_difference": 0.0,
+              "biology_underdetermined_fitness": -0.5,
+              "chemistry_refute_joint_superiority": 0.0,
+              "chemistry_support_gap_accuracy": -0.1,
+              "chemistry_underdetermined_interactions": 0.4,
+              "mathematics_refute_log_linear_best_fit": 0.0,
+              "mathematics_support_finite_log_squared_fit": 0.0,
+              "mathematics_underdetermined_cramer_asymptotic": 0.0,
+              "physics_refute_quantum_defect_best": 0.0,
+              "physics_support_inverse_square": 0.0,
+              "physics_underdetermined_beyond_standard_model": 0.0,
+              "statistics_refute_nonpositive_difference": 0.0,
+              "statistics_support_positive_difference": 0.0,
+              "statistics_underdetermined_causality": 0.3
+            },
+            "clusters": 18,
+            "exact_two_sided_sign_flip_pvalue": 1.0,
+            "interpretation": "unregistered dependence sensitivity, not the preregistered test",
+            "leave_one_cluster_out_mean_differences": {
+              "astronomy_refute_hubble_within_threshold": 0.0058823529411764705,
+              "astronomy_support_hubble_breakdown": 0.0058823529411764705,
+              "astronomy_underdetermined_dark_energy_cause": 0.0058823529411764705,
+              "biology_refute_nonpositive_gc_difference": 0.0058823529411764705,
+              "biology_support_gc_panel_difference": 0.0058823529411764705,
+              "biology_underdetermined_fitness": 0.03529411764705882,
+              "chemistry_refute_joint_superiority": 0.0058823529411764705,
+              "chemistry_support_gap_accuracy": 0.011764705882352941,
+              "chemistry_underdetermined_interactions": -0.017647058823529415,
+              "mathematics_refute_log_linear_best_fit": 0.0058823529411764705,
+              "mathematics_support_finite_log_squared_fit": 0.0058823529411764705,
+              "mathematics_underdetermined_cramer_asymptotic": 0.0058823529411764705,
+              "physics_refute_quantum_defect_best": 0.0058823529411764705,
+              "physics_support_inverse_square": 0.0058823529411764705,
+              "physics_underdetermined_beyond_standard_model": 0.0058823529411764705,
+              "statistics_refute_nonpositive_difference": 0.0058823529411764705,
+              "statistics_support_positive_difference": 0.0058823529411764705,
+              "statistics_underdetermined_causality": -0.011764705882352941
+            },
+            "nonzero_cluster_mean_differences": {
+              "biology_underdetermined_fitness": -0.5,
+              "chemistry_support_gap_accuracy": -0.1,
+              "chemistry_underdetermined_interactions": 0.4,
+              "statistics_underdetermined_causality": 0.3
+            }
+          },
+          "complete_pairs": 180,
+          "discordant_full_only": 9,
+          "discordant_hash_only_only": 8,
+          "domain_cluster_sensitivity": {
+            "cluster_level": "domain",
+            "cluster_mean_differences": {
+              "astronomy": 0.0,
+              "biology": -0.16666666666666666,
+              "chemistry": 0.1,
+              "mathematics": 0.0,
+              "physics": 0.0,
+              "statistics": 0.1
+            },
+            "clusters": 6,
+            "exact_two_sided_sign_flip_pvalue": 1.0,
+            "interpretation": "unregistered dependence sensitivity, not the preregistered test",
+            "leave_one_cluster_out_mean_differences": {
+              "astronomy": 0.0066666666666666706,
+              "biology": 0.04,
+              "chemistry": -0.01333333333333333,
+              "mathematics": 0.0066666666666666706,
+              "physics": 0.0066666666666666706,
+              "statistics": -0.01333333333333333
+            },
+            "nonzero_cluster_mean_differences": {
+              "biology": -0.16666666666666666,
+              "chemistry": 0.1,
+              "statistics": 0.1
+            }
+          },
+          "endpoint": "prohibited_claim_present",
+          "full_rate": 0.1388888888888889,
+          "hash_only_rate": 0.13333333333333333,
+          "holm_adjusted_pair_level_pvalue": 1.0,
+          "mcnemar_exact_two_sided_pvalue": 1.0,
+          "relation": "all",
+          "risk_difference_full_minus_hash_only": 0.005555555555555564
+        },
+        "stance_correct": {
+          "case_cluster_sensitivity": {
+            "cluster_level": "case_id",
+            "cluster_mean_differences": {
+              "astronomy_refute_hubble_within_threshold": 0.0,
+              "astronomy_support_hubble_breakdown": -0.6,
+              "astronomy_underdetermined_dark_energy_cause": 0.0,
+              "biology_refute_nonpositive_gc_difference": 0.0,
+              "biology_support_gc_panel_difference": 0.0,
+              "biology_underdetermined_fitness": -0.1,
+              "chemistry_refute_joint_superiority": 0.0,
+              "chemistry_support_gap_accuracy": 0.0,
+              "chemistry_underdetermined_interactions": 0.0,
+              "mathematics_refute_log_linear_best_fit": 0.0,
+              "mathematics_support_finite_log_squared_fit": 0.0,
+              "mathematics_underdetermined_cramer_asymptotic": 0.0,
+              "physics_refute_quantum_defect_best": 0.0,
+              "physics_support_inverse_square": 0.0,
+              "physics_underdetermined_beyond_standard_model": 0.0,
+              "statistics_refute_nonpositive_difference": 0.0,
+              "statistics_support_positive_difference": 0.0,
+              "statistics_underdetermined_causality": 0.0
+            },
+            "clusters": 18,
+            "exact_two_sided_sign_flip_pvalue": 0.5,
+            "interpretation": "unregistered dependence sensitivity, not the preregistered test",
+            "leave_one_cluster_out_mean_differences": {
+              "astronomy_refute_hubble_within_threshold": -0.041176470588235294,
+              "astronomy_support_hubble_breakdown": -0.0058823529411764705,
+              "astronomy_underdetermined_dark_energy_cause": -0.041176470588235294,
+              "biology_refute_nonpositive_gc_difference": -0.041176470588235294,
+              "biology_support_gc_panel_difference": -0.041176470588235294,
+              "biology_underdetermined_fitness": -0.03529411764705882,
+              "chemistry_refute_joint_superiority": -0.041176470588235294,
+              "chemistry_support_gap_accuracy": -0.041176470588235294,
+              "chemistry_underdetermined_interactions": -0.041176470588235294,
+              "mathematics_refute_log_linear_best_fit": -0.041176470588235294,
+              "mathematics_support_finite_log_squared_fit": -0.041176470588235294,
+              "mathematics_underdetermined_cramer_asymptotic": -0.041176470588235294,
+              "physics_refute_quantum_defect_best": -0.041176470588235294,
+              "physics_support_inverse_square": -0.041176470588235294,
+              "physics_underdetermined_beyond_standard_model": -0.041176470588235294,
+              "statistics_refute_nonpositive_difference": -0.041176470588235294,
+              "statistics_support_positive_difference": -0.041176470588235294,
+              "statistics_underdetermined_causality": -0.041176470588235294
+            },
+            "nonzero_cluster_mean_differences": {
+              "astronomy_support_hubble_breakdown": -0.6,
+              "biology_underdetermined_fitness": -0.1
+            }
+          },
+          "complete_pairs": 180,
+          "discordant_full_only": 0,
+          "discordant_hash_only_only": 7,
+          "domain_cluster_sensitivity": {
+            "cluster_level": "domain",
+            "cluster_mean_differences": {
+              "astronomy": -0.2,
+              "biology": -0.03333333333333333,
+              "chemistry": 0.0,
+              "mathematics": 0.0,
+              "physics": 0.0,
+              "statistics": 0.0
+            },
+            "clusters": 6,
+            "exact_two_sided_sign_flip_pvalue": 0.5,
+            "interpretation": "unregistered dependence sensitivity, not the preregistered test",
+            "leave_one_cluster_out_mean_differences": {
+              "astronomy": -0.006666666666666666,
+              "biology": -0.04,
+              "chemistry": -0.04666666666666667,
+              "mathematics": -0.04666666666666667,
+              "physics": -0.04666666666666667,
+              "statistics": -0.04666666666666667
+            },
+            "nonzero_cluster_mean_differences": {
+              "astronomy": -0.2,
+              "biology": -0.03333333333333333
+            }
+          },
+          "endpoint": "stance_correct",
+          "full_rate": 0.6333333333333333,
+          "hash_only_rate": 0.6722222222222223,
+          "holm_adjusted_pair_level_pvalue": 0.0625,
+          "mcnemar_exact_two_sided_pvalue": 0.015625,
+          "relation": "all",
+          "risk_difference_full_minus_hash_only": -0.03888888888888897
+        },
+        "unsupported_decimal_present": {
+          "case_cluster_sensitivity": {
+            "cluster_level": "case_id",
+            "cluster_mean_differences": {
+              "astronomy_refute_hubble_within_threshold": 0.0,
+              "astronomy_support_hubble_breakdown": 0.0,
+              "astronomy_underdetermined_dark_energy_cause": 0.0,
+              "biology_refute_nonpositive_gc_difference": -0.3,
+              "biology_support_gc_panel_difference": -0.5,
+              "biology_underdetermined_fitness": -0.3,
+              "chemistry_refute_joint_superiority": -0.9,
+              "chemistry_support_gap_accuracy": 0.0,
+              "chemistry_underdetermined_interactions": -0.5,
+              "mathematics_refute_log_linear_best_fit": 0.2,
+              "mathematics_support_finite_log_squared_fit": -0.7,
+              "mathematics_underdetermined_cramer_asymptotic": 0.0,
+              "physics_refute_quantum_defect_best": 0.1,
+              "physics_support_inverse_square": 0.5,
+              "physics_underdetermined_beyond_standard_model": 0.0,
+              "statistics_refute_nonpositive_difference": 0.0,
+              "statistics_support_positive_difference": 0.0,
+              "statistics_underdetermined_causality": -0.8
+            },
+            "clusters": 18,
+            "exact_two_sided_sign_flip_pvalue": 0.0703125,
+            "interpretation": "unregistered dependence sensitivity, not the preregistered test",
+            "leave_one_cluster_out_mean_differences": {
+              "astronomy_refute_hubble_within_threshold": -0.18823529411764706,
+              "astronomy_support_hubble_breakdown": -0.18823529411764706,
+              "astronomy_underdetermined_dark_energy_cause": -0.18823529411764706,
+              "biology_refute_nonpositive_gc_difference": -0.17058823529411765,
+              "biology_support_gc_panel_difference": -0.15882352941176472,
+              "biology_underdetermined_fitness": -0.17058823529411765,
+              "chemistry_refute_joint_superiority": -0.13529411764705881,
+              "chemistry_support_gap_accuracy": -0.18823529411764706,
+              "chemistry_underdetermined_interactions": -0.15882352941176472,
+              "mathematics_refute_log_linear_best_fit": -0.19999999999999998,
+              "mathematics_support_finite_log_squared_fit": -0.14705882352941177,
+              "mathematics_underdetermined_cramer_asymptotic": -0.18823529411764706,
+              "physics_refute_quantum_defect_best": -0.1941176470588235,
+              "physics_support_inverse_square": -0.21764705882352942,
+              "physics_underdetermined_beyond_standard_model": -0.18823529411764706,
+              "statistics_refute_nonpositive_difference": -0.18823529411764706,
+              "statistics_support_positive_difference": -0.18823529411764706,
+              "statistics_underdetermined_causality": -0.1411764705882353
+            },
+            "nonzero_cluster_mean_differences": {
+              "biology_refute_nonpositive_gc_difference": -0.3,
+              "biology_support_gc_panel_difference": -0.5,
+              "biology_underdetermined_fitness": -0.3,
+              "chemistry_refute_joint_superiority": -0.9,
+              "chemistry_underdetermined_interactions": -0.5,
+              "mathematics_refute_log_linear_best_fit": 0.2,
+              "mathematics_support_finite_log_squared_fit": -0.7,
+              "physics_refute_quantum_defect_best": 0.1,
+              "physics_support_inverse_square": 0.5,
+              "statistics_underdetermined_causality": -0.8
+            }
+          },
+          "complete_pairs": 180,
+          "discordant_full_only": 10,
+          "discordant_hash_only_only": 42,
+          "domain_cluster_sensitivity": {
+            "cluster_level": "domain",
+            "cluster_mean_differences": {
+              "astronomy": 0.0,
+              "biology": -0.36666666666666664,
+              "chemistry": -0.4666666666666667,
+              "mathematics": -0.16666666666666666,
+              "physics": 0.2,
+              "statistics": -0.26666666666666666
+            },
+            "clusters": 6,
+            "exact_two_sided_sign_flip_pvalue": 0.1875,
+            "interpretation": "unregistered dependence sensitivity, not the preregistered test",
+            "leave_one_cluster_out_mean_differences": {
+              "astronomy": -0.21333333333333332,
+              "biology": -0.13999999999999999,
+              "chemistry": -0.12,
+              "mathematics": -0.18,
+              "physics": -0.2533333333333333,
+              "statistics": -0.15999999999999998
+            },
+            "nonzero_cluster_mean_differences": {
+              "biology": -0.36666666666666664,
+              "chemistry": -0.4666666666666667,
+              "mathematics": -0.16666666666666666,
+              "physics": 0.2,
+              "statistics": -0.26666666666666666
+            }
+          },
+          "endpoint": "unsupported_decimal_present",
+          "full_rate": 0.2,
+          "hash_only_rate": 0.37777777777777777,
+          "holm_adjusted_pair_level_pvalue": 4.531635958482383e-05,
+          "mcnemar_exact_two_sided_pvalue": 9.063271916964766e-06,
+          "relation": "all",
+          "risk_difference_full_minus_hash_only": -0.17777777777777776
+        }
+      }
+    },
+    "response_and_schema_audit": {
+      "abstract_word_range_violations": 27,
+      "conclusion_word_range_violations": 22,
+      "exact_response_contents": 540,
+      "markdown_fenced_json_responses": 526,
+      "parse_failures": [],
+      "parser_projection_mismatches": [],
+      "stored_score_mismatches_under_independent_reimplementation": [],
+      "strict_schema_type_violations": [
+        {
+          "field": "limitations",
+          "observed_type": "list",
+          "run_id": "statistics_underdetermined_causality__hash_only__seed-002"
+        }
+      ],
+      "unexpected_response_keys": [],
+      "unique_exact_response_contents": 540
+    },
+    "time_observations": {
+      "first_response_created_at": "2026-07-09T06:54:10.118120812Z",
+      "last_response_created_at": "2026-07-09T07:24:09.34830875Z",
+      "response_created_at_count": 540,
+      "timestamps_authenticated": false,
+      "unique_response_created_at": 540
+    },
+    "transport_record": {
+      "classification": "parsed and reserialized API JSON artifacts, not byte-exact HTTP exchanges",
+      "request_artifacts_with_exact_body_bytes": 0,
+      "request_artifacts_with_http_headers": 0,
+      "request_artifacts_with_max_tokens": 0,
+      "request_field_counts": {
+        "arm": 540,
+        "case_id": 540,
+        "domain": 540,
+        "evidence_key": 540,
+        "evidence_sha256": 540,
+        "format_json": 540,
+        "messages": 540,
+        "model": 540,
+        "run_id": 540,
+        "seed": 540,
+        "temperature": 540,
+        "think": 540
+      },
+      "request_row_mismatches": [],
+      "response_artifacts_with_exact_body_bytes": 0,
+      "response_artifacts_with_http_headers": 0,
+      "response_artifacts_with_http_status": 0,
+      "response_artifacts_with_model_digest": 0,
+      "response_artifacts_with_model_revision": 0,
+      "response_artifacts_with_seed": 0,
+      "response_artifacts_with_server_version": 0,
+      "response_field_counts": {
+        "created_at": 540,
+        "done": 540,
+        "done_reason": 540,
+        "eval_count": 540,
+        "message": 540,
+        "model": 540,
+        "prompt_eval_count": 540,
+        "total_duration": 540
+      },
+      "response_model_counts": {
+        "glm-5.2": 540
+      }
+    }
+  },
+  "classification": "exploratory_same_host_read_only_audit",
+  "limitations": [
+    "The audit uses the same host and repository; it is not independent reproduction.",
+    "Git metadata and local file timestamps establish local ordering only and are unauthenticated here.",
+    "Cluster sign-flip calculations are unregistered sensitivity analyses, not replacements for the preregistered endpoint.",
+    "The audit checks retained bytes and deterministic code paths; it cannot identify the hosted model weights or backend used in July 2026.",
+    "Scientific relation labels and phrase-based scores still require independent human validation."
+  ],
+  "local_timeline": {
+    "benchmark_commit": {
+      "authenticated_timestamp": false,
+      "author_timestamp": "2026-07-09T03:24:50-04:00",
+      "commit": "4bc8013cce68a4f33b16ac42f47e8513ccc24bb0",
+      "committer_timestamp": "2026-07-09T03:24:50-04:00",
+      "path": "experiments/amy_system_paper/release/benchmark/runs.jsonl",
+      "signature_status": "N",
+      "signer": null,
+      "subject": "research: record preregistered falsification benchmark"
+    },
+    "benchmark_completed_utc": "2026-07-09T07:24:09.401054+00:00",
+    "first_response_created_at": "2026-07-09T06:54:10.118120812Z",
+    "independently_trusted_registration_timestamp_observed": false,
+    "local_metadata_order_is_preregistration_then_run": true,
+    "paper_commit": {
+      "authenticated_timestamp": false,
+      "author_timestamp": "2026-07-09T10:25:57-04:00",
+      "commit": "26ab9939cce194540e609cb315772a8b15975a05",
+      "committer_timestamp": "2026-07-09T10:25:57-04:00",
+      "path": "experiments/amy_system_paper/release/paper/amy_atlas_system_paper.pdf",
+      "signature_status": "N",
+      "signer": null,
+      "subject": "research: publish reproducible A.M.Y Atlas system paper"
+    },
+    "preregistration_commit": {
+      "authenticated_timestamp": false,
+      "author_timestamp": "2026-07-09T02:48:24-04:00",
+      "commit": "1359bd41d2e445efb124c1ff39e2e89666ac27af",
+      "committer_timestamp": "2026-07-09T02:48:24-04:00",
+      "path": "experiments/amy_system_paper/preregistration.json",
+      "signature_status": "N",
+      "signer": null,
+      "subject": "research: preregister A.M.Y falsification benchmark"
+    },
+    "protocol_started_utc": "2026-07-09T06:53:25Z",
+    "runner_commit": {
+      "authenticated_timestamp": false,
+      "author_timestamp": "2026-07-09T02:49:11-04:00",
+      "commit": "45d058c628c464919d834607788acf9e92147528",
+      "committer_timestamp": "2026-07-09T02:49:11-04:00",
+      "path": "scripts/run/run_falsification_retention_benchmark.py",
+      "signature_status": "N",
+      "signer": null,
+      "subject": "fix: make benchmark runner directly executable"
+    },
+    "verification_declared_registered_utc": "2026-07-09T00:00:00Z"
+  },
+  "manuscript_claim_checks": {
+    "immutable_wording_supported_by_authenticated_immutable_archive": false,
+    "matches": {
+      "cluster_dependence": [
+        {
+          "line": 110,
+          "text": "The benchmark uses one model, 18 hand-constructed cases, six domains, and short JSON assessments rather than full papers. Expected relations are deterministic contracts chosen by the system investigators, not independent expert annotations. The primary McNemar analysis treats case--seed responses as paired observations; dependence among seeds for the same case limits generalization, so domain and leave-one-domain-out summaries are supplied."
+        },
+        {
+          "line": 120,
+          "text": "Future work should add independently authored cases, multiple models, clustered or case-level inference, standardized Workflow Run RO-Crate export, and external domain review. A scientific agent should be judged by whether its claims survive these checks, not by how many documents it can generate."
+        }
+      ],
+      "data_availability": [
+        {
+          "line": 122,
+          "text": "## Data Availability"
+        }
+      ],
+      "hosted_model_drift": [
+        {
+          "line": 112,
+          "text": "Hosted model behavior can change behind a stable name, making the committed raw responses authoritative and reruns replications rather than exact reproductions. The unsupported-number detector covers decimal forms with tolerance and does not verify every mathematical transformation. Prohibited-claim matching is phrase-based. The Atlas curated audit covers only 24 of 95 registered tools. The historical local census is explicitly nonportable and may contain user-generated artifacts absent from a clean clone."
+        }
+      ],
+      "immutable_raw_responses": [
+        {
+          "line": 21,
+          "text": "1. a preregistered, paired falsification-retention benchmark with immutable raw responses, deterministic scoring, exact tests, confidence intervals, and explicit failure reporting;"
+        }
+      ],
+      "improves": [
+        {
+          "line": 83,
+          "text": "| Unsupported decimals | all cases | 37.8% | 20.0% | improves, Holm p=4.532e-05 |"
+        }
+      ],
+      "raw_responses": [
+        {
+          "line": 9,
+          "text": "Scientific-agent systems can execute code and draft papers while still losing the meaning of negative evidence. A.M.Y/Atlas addresses that failure mode as a system problem: a controller delegates computation to an isolated Atlas tool process, records tool outputs with SHA-256 provenance, and packages synthesis requests, raw responses, scores, audits, and manifests as a reviewable release. We evaluate one preregistered claim: whether an explicit evidence policy reduces false support when fixed computational evidence refutes a hypothesis, beyond attaching a hash and provenance identifier alone. The benchmark contains 18 cases in six domains, three synthesis arms, and ten paired model seeds (540 planned outputs). Among 60 complete refuting-evidence pairs, false-support rates were 0.0% for hash-only and 0.0% for the full policy (risk difference 0.0 percentage points, 95% bootstrap CI [0.0, 0.0], exact McNemar p=1); the preregistered hypothesis was therefore not supported. The null result is the point of the artifact: the release keeps the failed hypothesis, raw model outputs, tool coverage gap, and provenance debt inspectable rather than hiding them behind fluent prose. Secondary analysis found unsupported-decimal rates of 37.8%/20.0%, the only endpoint surviving Holm correction (adjusted p=4.532e-05). The paper contributes an auditable evaluation pattern for scientific agents, not a claim that A.M.Y autonomously made a scientific discovery."
+        },
+        {
+          "line": 21,
+          "text": "1. a preregistered, paired falsification-retention benchmark with immutable raw responses, deterministic scoring, exact tests, confidence intervals, and explicit failure reporting;"
+        },
+        {
+          "line": 54,
+          "text": "For each unique Atlas tool/input pair, the runner stores `output.txt` and `provenance.json`. The provenance record includes the input, success state, duration, environment, and SHA-256 digest of the complete UTF-8 output. Every synthesis request stores the evidence digest and a relative provenance identifier. Requests, raw responses, parsed outputs, and scores are retained separately and joined by a case--arm--seed identifier."
+        },
+        {
+          "line": 112,
+          "text": "Hosted model behavior can change behind a stable name, making the committed raw responses authoritative and reruns replications rather than exact reproductions. The unsupported-number detector covers decimal forms with tolerance and does not verify every mathematical transformation. Prohibited-claim matching is phrase-based. The Atlas curated audit covers only 24 of 95 registered tools. The historical local census is explicitly nonportable and may contain user-generated artifacts absent from a clean clone."
+        },
+        {
+          "line": 124,
+          "text": "The release contains the preregistration, frozen case file, protocol record, Atlas evidence and provenance, all model requests and raw responses, parsed scores, analysis tables, figures, manuscript sources, and SHA-256 manifests. Paths are relative to the release root. API credentials and unrelated user artifacts are excluded. The evidence ledger maps primary manuscript numbers to source files and JSON fields."
+        }
+      ]
+    },
+    "permitted_reproducibility_wording": "The archived package permits recomputation of the reported deterministic scores from retained API JSON artifacts. A fresh hosted-model run is a replication, not an exact reproduction.",
+    "public_persistent_identifier_observed_in_data_availability": false,
+    "raw_response_wording_is_byte_exact_http_exchange": false
+  },
+  "overall_assessment": {
+    "committed_release_digest_consistent": true,
+    "cryptographically_authenticated_release": false,
+    "current_revision_digest_consistent": false,
+    "exact_hosted_model_rerun_supported": false,
+    "fit_for_citation_as_confirmatory_scientific_evidence": false,
+    "fit_for_use_as_exploratory_design_input": true,
+    "pair_level_secondary_improvement_robust_to_case_and_domain_clustering": false,
+    "trusted_public_preregistration": false
+  },
+  "release_integrity": {
+    "committed_head": {
+      "classification": "internally digest-consistent Git commit bytes",
+      "manifest": {
+        "entries": 1148,
+        "manifest_sha256": "ce9b9c6129c65d905465e5631169e630d084eb0cbf2d1ecbc526c32a9a40640c",
+        "matches": 1148,
+        "mismatches": [],
+        "missing": [],
+        "path": "MANIFEST.sha256",
+        "syntax_or_path_errors": [],
+        "valid": true
+      },
+      "payload_manifest": {
+        "entries": 1146,
+        "manifest_sha256": "83fac5a1579f0faa04409fe3901c34de231dfb2d187773a60f46089c83b6152a",
+        "matches": 1146,
+        "mismatches": [],
+        "missing": [],
+        "path": "PAYLOAD_MANIFEST.sha256",
+        "syntax_or_path_errors": [],
+        "valid": true
+      },
+      "revision": "26ab9939cce194540e609cb315772a8b15975a05"
+    },
+    "current_format_hashes": {
+      "markdown_sha256": "b2e4806d13d4988fb87160ac8a12e64fcdd35d0df1cf43cf5d84795fe3671231",
+      "pdf_sha256": "1a4dc8c06776823102d1e3dba3cd7908b3306e6c584cefb305ce776983e24c09",
+      "tex_sha256": "e1b2d186b53153473c6a53585242b64d18644a15fe1506ee6261965d6245c74b",
+      "verification_record_matches_current_pdf": false,
+      "verification_record_pdf_sha256": "34df8dcb03a4b245f17d4d5b67cba33d7c02b94cda49929d13be42e32fb3c8c6"
+    },
+    "current_worktree": {
+      "classification": "unsealed revision; validity depends on current manifest result",
+      "manifest": {
+        "entries": 1148,
+        "manifest_sha256": "ce9b9c6129c65d905465e5631169e630d084eb0cbf2d1ecbc526c32a9a40640c",
+        "matches": 1135,
+        "mismatches": [
+          {
+            "actual_sha256": "b78436746bb98d6dbd5bbf76641f03f12f8bc32629223dcb10c12878ed7b5651",
+            "expected_sha256": "047280d782579a5aeca44901b797293db978b612221912aade7538a7dfa5d9a4",
+            "path": "figures/figure_1_architecture.pdf"
+          },
+          {
+            "actual_sha256": "5abba069eb378866533266a248e216419158d4927f46a9ca5484d8ce2031384c",
+            "expected_sha256": "fc8b681ac6b9b4f3413c0d12a4e90f98a1251293094d920c93f0be9f8a34841e",
+            "path": "figures/figure_1_architecture.svg"
+          },
+          {
+            "actual_sha256": "e4cc8a548abe70b7e6295315c8c3a56593ff58e76839fbdc9ff69d8530ba1179",
+            "expected_sha256": "45df9d594b90e20bec947de9858c0f6e2911c69439d9032502f1d5b52a963a55",
+            "path": "figures/figure_2_evidence_lineage.pdf"
+          },
+          {
+            "actual_sha256": "1ce8e72726334148f776e0cf12b62420bc48525dc869229fdd79598892aa0c4f",
+            "expected_sha256": "a9ef8abd69bb6fb9f0a370540cc63703f8ebe264c26c8f38130d1cf87534e8d4",
+            "path": "figures/figure_2_evidence_lineage.svg"
+          },
+          {
+            "actual_sha256": "f7e4c42ad3c272fe7970ec01db6451cbe263b85617175a5de752891de3e5c777",
+            "expected_sha256": "1f2daa015e6bee893fabe6937b04c53249578be49f67b742ae61b7a1644f88c1",
+            "path": "figures/figure_3_primary_rates.pdf"
+          },
+          {
+            "actual_sha256": "4cea73d4b8d803b529ac8363143e9de6a95a8184fc44f9451e7f941528c465b1",
+            "expected_sha256": "2cd2566ed0f9499665a656730db27bcf111a9c6e662d57084a0decce205f0d55",
+            "path": "figures/figure_3_primary_rates.svg"
+          },
+          {
+            "actual_sha256": "aa4e237f7ec70468570c29d87bc8e8149e47afb02cf8c4a181ed5f8bd3d135df",
+            "expected_sha256": "fea3c38bd559e35ada7ca10bb060ae796425ca6f6ff8a200ec13a2ab6ccd8e6b",
+            "path": "figures/figure_4_corpus_traceability.pdf"
+          },
+          {
+            "actual_sha256": "5cf9d7cb404db04aaed4743e30c9f21ba17a93fa0ac2d9615b9904e621a36dcd",
+            "expected_sha256": "8b1a545a971f0eb545aef4b4560699c33421c4a57e90aebd955d5d2f8efaa01e",
+            "path": "figures/figure_4_corpus_traceability.svg"
+          },
+          {
+            "actual_sha256": "a25cff8989a1bcf462b8433fa37d21d5903b75412c3cb996d4cb1514d6ff9674",
+            "expected_sha256": "20b3cd5554e1f62781af5a9cc842da573b108f9c3c4e40be471962e12b1e3105",
+            "path": "figures/figure_5_ssh_flow.pdf"
+          },
+          {
+            "actual_sha256": "9ba9337aca10613e75d9ca243e1d46aa19f6ab970a1e7f16a0e19f8805f82de8",
+            "expected_sha256": "cf7cda68760ce4d69b396ebee81c18112d1de61163a971e068d22b4406ff388f",
+            "path": "figures/figure_5_ssh_flow.svg"
+          },
+          {
+            "actual_sha256": "b2e4806d13d4988fb87160ac8a12e64fcdd35d0df1cf43cf5d84795fe3671231",
+            "expected_sha256": "9eff8877f332b5e16b588efe1294d1afc90cb8bb639d1f1672083eef3c37bf4e",
+            "path": "paper/amy_atlas_system_paper.md"
+          },
+          {
+            "actual_sha256": "1a4dc8c06776823102d1e3dba3cd7908b3306e6c584cefb305ce776983e24c09",
+            "expected_sha256": "34df8dcb03a4b245f17d4d5b67cba33d7c02b94cda49929d13be42e32fb3c8c6",
+            "path": "paper/amy_atlas_system_paper.pdf"
+          },
+          {
+            "actual_sha256": "e1b2d186b53153473c6a53585242b64d18644a15fe1506ee6261965d6245c74b",
+            "expected_sha256": "cd02c8400264e176d97e40ecfab033c21880aec6630b696bfadee572c6e9384c",
+            "path": "paper/amy_atlas_system_paper.tex"
+          }
+        ],
+        "missing": [],
+        "path": "MANIFEST.sha256",
+        "syntax_or_path_errors": [],
+        "valid": false
+      },
+      "payload_manifest": {
+        "entries": 1146,
+        "manifest_sha256": "83fac5a1579f0faa04409fe3901c34de231dfb2d187773a60f46089c83b6152a",
+        "matches": 1133,
+        "mismatches": [
+          {
+            "actual_sha256": "b78436746bb98d6dbd5bbf76641f03f12f8bc32629223dcb10c12878ed7b5651",
+            "expected_sha256": "047280d782579a5aeca44901b797293db978b612221912aade7538a7dfa5d9a4",
+            "path": "figures/figure_1_architecture.pdf"
+          },
+          {
+            "actual_sha256": "5abba069eb378866533266a248e216419158d4927f46a9ca5484d8ce2031384c",
+            "expected_sha256": "fc8b681ac6b9b4f3413c0d12a4e90f98a1251293094d920c93f0be9f8a34841e",
+            "path": "figures/figure_1_architecture.svg"
+          },
+          {
+            "actual_sha256": "e4cc8a548abe70b7e6295315c8c3a56593ff58e76839fbdc9ff69d8530ba1179",
+            "expected_sha256": "45df9d594b90e20bec947de9858c0f6e2911c69439d9032502f1d5b52a963a55",
+            "path": "figures/figure_2_evidence_lineage.pdf"
+          },
+          {
+            "actual_sha256": "1ce8e72726334148f776e0cf12b62420bc48525dc869229fdd79598892aa0c4f",
+            "expected_sha256": "a9ef8abd69bb6fb9f0a370540cc63703f8ebe264c26c8f38130d1cf87534e8d4",
+            "path": "figures/figure_2_evidence_lineage.svg"
+          },
+          {
+            "actual_sha256": "f7e4c42ad3c272fe7970ec01db6451cbe263b85617175a5de752891de3e5c777",
+            "expected_sha256": "1f2daa015e6bee893fabe6937b04c53249578be49f67b742ae61b7a1644f88c1",
+            "path": "figures/figure_3_primary_rates.pdf"
+          },
+          {
+            "actual_sha256": "4cea73d4b8d803b529ac8363143e9de6a95a8184fc44f9451e7f941528c465b1",
+            "expected_sha256": "2cd2566ed0f9499665a656730db27bcf111a9c6e662d57084a0decce205f0d55",
+            "path": "figures/figure_3_primary_rates.svg"
+          },
+          {
+            "actual_sha256": "aa4e237f7ec70468570c29d87bc8e8149e47afb02cf8c4a181ed5f8bd3d135df",
+            "expected_sha256": "fea3c38bd559e35ada7ca10bb060ae796425ca6f6ff8a200ec13a2ab6ccd8e6b",
+            "path": "figures/figure_4_corpus_traceability.pdf"
+          },
+          {
+            "actual_sha256": "5cf9d7cb404db04aaed4743e30c9f21ba17a93fa0ac2d9615b9904e621a36dcd",
+            "expected_sha256": "8b1a545a971f0eb545aef4b4560699c33421c4a57e90aebd955d5d2f8efaa01e",
+            "path": "figures/figure_4_corpus_traceability.svg"
+          },
+          {
+            "actual_sha256": "a25cff8989a1bcf462b8433fa37d21d5903b75412c3cb996d4cb1514d6ff9674",
+            "expected_sha256": "20b3cd5554e1f62781af5a9cc842da573b108f9c3c4e40be471962e12b1e3105",
+            "path": "figures/figure_5_ssh_flow.pdf"
+          },
+          {
+            "actual_sha256": "9ba9337aca10613e75d9ca243e1d46aa19f6ab970a1e7f16a0e19f8805f82de8",
+            "expected_sha256": "cf7cda68760ce4d69b396ebee81c18112d1de61163a971e068d22b4406ff388f",
+            "path": "figures/figure_5_ssh_flow.svg"
+          },
+          {
+            "actual_sha256": "b2e4806d13d4988fb87160ac8a12e64fcdd35d0df1cf43cf5d84795fe3671231",
+            "expected_sha256": "9eff8877f332b5e16b588efe1294d1afc90cb8bb639d1f1672083eef3c37bf4e",
+            "path": "paper/amy_atlas_system_paper.md"
+          },
+          {
+            "actual_sha256": "1a4dc8c06776823102d1e3dba3cd7908b3306e6c584cefb305ce776983e24c09",
+            "expected_sha256": "34df8dcb03a4b245f17d4d5b67cba33d7c02b94cda49929d13be42e32fb3c8c6",
+            "path": "paper/amy_atlas_system_paper.pdf"
+          },
+          {
+            "actual_sha256": "e1b2d186b53153473c6a53585242b64d18644a15fe1506ee6261965d6245c74b",
+            "expected_sha256": "cd02c8400264e176d97e40ecfab033c21880aec6630b696bfadee572c6e9384c",
+            "path": "paper/amy_atlas_system_paper.tex"
+          }
+        ],
+        "missing": [],
+        "path": "PAYLOAD_MANIFEST.sha256",
+        "syntax_or_path_errors": [],
+        "valid": false
+      }
+    },
+    "release_authentication": {
+      "classification": "unsigned local SHA-256 manifests; no authenticated release identity observed",
+      "signature_or_attestation_candidate_paths": [],
+      "signed_release_commit_observed": false,
+      "signed_release_tag_observed": false
+    }
+  },
+  "safety": {
+    "contacts_model_or_network_service": false,
+    "imports_or_executes_amy": false,
+    "infers_scientific_truth_from_hash_or_signature": false,
+    "loads_serialized_model": false,
+    "mutates_audited_paper_worktree": false,
+    "reads_secret_values": false
+  },
+  "schema_version": "amy.system-paper-integrity-audit.v1",
+  "snapshot": {
+    "branch": "codex/amy-system-paper",
+    "git_object_format": "sha1",
+    "head": "26ab9939cce194540e609cb315772a8b15975a05",
+    "paper_worktree": ".worktrees/amy-system-paper",
+    "release_git_status": [
+      " M experiments/amy_system_paper/release/figures/figure_1_architecture.pdf",
+      " M experiments/amy_system_paper/release/figures/figure_1_architecture.svg",
+      " M experiments/amy_system_paper/release/figures/figure_2_evidence_lineage.pdf",
+      " M experiments/amy_system_paper/release/figures/figure_2_evidence_lineage.svg",
+      " M experiments/amy_system_paper/release/figures/figure_3_primary_rates.pdf",
+      " M experiments/amy_system_paper/release/figures/figure_3_primary_rates.svg",
+      " M experiments/amy_system_paper/release/figures/figure_4_corpus_traceability.pdf",
+      " M experiments/amy_system_paper/release/figures/figure_4_corpus_traceability.svg",
+      " M experiments/amy_system_paper/release/figures/figure_5_ssh_flow.pdf",
+      " M experiments/amy_system_paper/release/figures/figure_5_ssh_flow.svg",
+      " M experiments/amy_system_paper/release/paper/amy_atlas_system_paper.md",
+      " M experiments/amy_system_paper/release/paper/amy_atlas_system_paper.pdf",
+      " M experiments/amy_system_paper/release/paper/amy_atlas_system_paper.tex",
+      "?? experiments/amy_system_paper/release/.DS_Store"
+    ]
+  },
+  "static_pipeline": {
+    "analysis_freeze": {
+      "analysis_code_in_release_payload": false,
+      "analysis_methods_declared_in_preregistration": true,
+      "analysis_source_history": [
+        {
+          "commit": "20bb65d350f923355e4e4ceec5d2a7f5e872ca01",
+          "subject": "feat: add preregistered system benchmark analysis",
+          "timestamp": "2026-07-09T02:56:21-04:00"
+        },
+        {
+          "commit": "f327523c126316bd2e65368bbe41395cf03291c8",
+          "subject": "feat: generate evidence-backed system manuscript",
+          "timestamp": "2026-07-09T03:04:34-04:00"
+        },
+        {
+          "commit": "34f56844c2ac946af19aa2e8f187c9c9961ec493",
+          "subject": "feat: add preregistered missing-output sensitivity",
+          "timestamp": "2026-07-09T03:09:01-04:00"
+        },
+        {
+          "commit": "3872accd80de4d12b02df033c4cc0d0cd4196178",
+          "subject": "docs: disclose shared benchmark evidence packets",
+          "timestamp": "2026-07-09T03:12:27-04:00"
+        },
+        {
+          "commit": "d16ac1e3a1b77960880eaef8cd4ec2720b9b31ba",
+          "subject": "research: analyze A.M.Y falsification retention",
+          "timestamp": "2026-07-09T03:28:03-04:00"
+        }
+      ],
+      "executable_analysis_frozen_before_first_response": false,
+      "first_analysis_code_commit": {
+        "commit": "20bb65d350f923355e4e4ceec5d2a7f5e872ca01",
+        "subject": "feat: add preregistered system benchmark analysis",
+        "timestamp": "2026-07-09T02:56:21-04:00"
+      },
+      "first_analysis_code_commit_after_first_response": true,
+      "first_response_created_at": "2026-07-09T06:54:10.118120812Z",
+      "interpretation": "The statistical methods were declared in the preregistration, but the first executable analysis implementation was committed after response collection had begun. This is a chronology risk, not evidence that results were manipulated."
+    },
+    "generation_chain": {
+      "missing_or_blank_response_model_is_accepted": true,
+      "model_match_compares_only_alias_before_colon": true,
+      "relevant_lines": {
+        "evidence_reuse_starts": 130,
+        "max_tokens_call": 317,
+        "model_match": 69,
+        "response_json_decode": 312,
+        "resume_skip": 282
+      },
+      "response_persisted_after_json_decode_and_reserialization": true,
+      "resume_revalidates_existing_request_and_response_bytes": false,
+      "resume_skips_existing_run_id_without_reexecution": true,
+      "reused_evidence_output_digest_recomputed_before_use": false,
+      "reused_evidence_provenance_digest_revalidated_before_use": false,
+      "reused_evidence_validation_observed": "required_output_markers_only",
+      "successful_failover_preserves_attempt_level_error_history_in_returned_response": false
+    },
+    "measurement_code": {
+      "decimal_detector_context_or_unit_aware": false,
+      "integer_claims_checked_by_decimal_detector": false,
+      "limitations_value_coerced_with_str": true,
+      "prohibited_claims_use_exact_substring_matching": true,
+      "strict_json_field_types_enforced": false
+    },
+    "protocol_runner_tree_sha256": {
+      "client": "b7147478229662c928753fbe7154e6110068948a7f91b2d93fa2aa7b3058be2b",
+      "runner": "55e3d2cd39c4bd6621f27986dce697778efb790eb2c8b8bc4983f5594a21e0a6",
+      "scorer": "c5e01cb4e042ac0affeb643e5601201ade547b099c011e37dcf6396a59b68f72"
+    },
+    "source_files": {
+      "analysis": {
+        "current_matches_head": false,
+        "current_sha256": "a7dfcd89670a794009c66d723c8b1c4b6598fa0076b8664af4e4c4714a429f86",
+        "head_sha256": "eca66b82800623eac7de41a3b2c8ddd60693753742408124671a97eb926b4da9",
+        "last_commit": {
+          "authenticated_timestamp": false,
+          "author_timestamp": "2026-07-09T03:28:03-04:00",
+          "commit": "d16ac1e3a1b77960880eaef8cd4ec2720b9b31ba",
+          "committer_timestamp": "2026-07-09T03:28:03-04:00",
+          "path": "scripts/analysis/build_amy_system_paper.py",
+          "signature_status": "N",
+          "signer": null,
+          "subject": "research: analyze A.M.Y falsification retention"
+        },
+        "path": "scripts/analysis/build_amy_system_paper.py"
+      },
+      "client": {
+        "current_matches_head": true,
+        "current_sha256": "b7147478229662c928753fbe7154e6110068948a7f91b2d93fa2aa7b3058be2b",
+        "head_sha256": "b7147478229662c928753fbe7154e6110068948a7f91b2d93fa2aa7b3058be2b",
+        "last_commit": {
+          "authenticated_timestamp": false,
+          "author_timestamp": "2026-07-09T02:35:47-04:00",
+          "commit": "63a53962480f35cb8ca004c67e64062a55ea3226",
+          "committer_timestamp": "2026-07-09T02:35:47-04:00",
+          "path": "core/ollama_client.py",
+          "signature_status": "N",
+          "signer": null,
+          "subject": "feat: support seeded Ollama generations"
+        },
+        "path": "core/ollama_client.py"
+      },
+      "renderer": {
+        "current_matches_head": false,
+        "current_sha256": "eb7cdd95af4a83c3e0186e96be295e1ea346b67767aea351f802c86e085fd685",
+        "head_sha256": "e2cb058c76c9c28318e304dfc156c72f01821502b698db79a975dcd0f1a00903",
+        "last_commit": {
+          "authenticated_timestamp": false,
+          "author_timestamp": "2026-07-09T03:12:03-04:00",
+          "commit": "52b52bba1b5008440a7566a0f823eb38ae6c9c24",
+          "committer_timestamp": "2026-07-09T03:12:03-04:00",
+          "path": "scripts/analysis/render_amy_system_paper_pdf.py",
+          "signature_status": "N",
+          "signer": null,
+          "subject": "fix: render bibliography accents cleanly"
+        },
+        "path": "scripts/analysis/render_amy_system_paper_pdf.py"
+      },
+      "runner": {
+        "current_matches_head": true,
+        "current_sha256": "55e3d2cd39c4bd6621f27986dce697778efb790eb2c8b8bc4983f5594a21e0a6",
+        "head_sha256": "55e3d2cd39c4bd6621f27986dce697778efb790eb2c8b8bc4983f5594a21e0a6",
+        "last_commit": {
+          "authenticated_timestamp": false,
+          "author_timestamp": "2026-07-09T02:49:11-04:00",
+          "commit": "45d058c628c464919d834607788acf9e92147528",
+          "committer_timestamp": "2026-07-09T02:49:11-04:00",
+          "path": "scripts/run/run_falsification_retention_benchmark.py",
+          "signature_status": "N",
+          "signer": null,
+          "subject": "fix: make benchmark runner directly executable"
+        },
+        "path": "scripts/run/run_falsification_retention_benchmark.py"
+      },
+      "scorer": {
+        "current_matches_head": true,
+        "current_sha256": "c5e01cb4e042ac0affeb643e5601201ade547b099c011e37dcf6396a59b68f72",
+        "head_sha256": "c5e01cb4e042ac0affeb643e5601201ade547b099c011e37dcf6396a59b68f72",
+        "last_commit": {
+          "authenticated_timestamp": false,
+          "author_timestamp": "2026-07-09T02:48:24-04:00",
+          "commit": "1359bd41d2e445efb124c1ff39e2e89666ac27af",
+          "committer_timestamp": "2026-07-09T02:48:24-04:00",
+          "path": "communication/falsification_benchmark.py",
+          "signature_status": "N",
+          "signer": null,
+          "subject": "research: preregister A.M.Y falsification benchmark"
+        },
+        "path": "communication/falsification_benchmark.py"
+      }
+    }
+  }
+}

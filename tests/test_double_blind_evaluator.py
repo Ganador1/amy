@@ -86,6 +86,24 @@ Status: ALL VERIFIED [PASS]
     assert "[provenance_record_abc12345]" in anon
 
 
+def test_evaluator_construction_is_offline_until_a_review_is_requested(
+    monkeypatch, tmp_path
+):
+    for name in (
+        "OLLAMA_CLOUD_API_KEY",
+        "OLLAMA_CLOUD_API_KEY_1",
+        "OLLAMA_CLOUD_API_KEY_2",
+    ):
+        monkeypatch.delenv(name, raising=False)
+
+    evaluator = DoubleBlindEvaluator(
+        papers_dir=tmp_path,
+        output_dir=tmp_path / "out",
+    )
+
+    assert evaluator.client is None
+
+
 def test_run_evaluation_uses_independent_reviewer_orders():
     async def _run():
         with TemporaryDirectory() as tmp:

@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://amy.example/schemas/analysis-summary.schema.json",
+  "title": "A.M.Y finite-corpus analysis summary",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "classification", "input_sha256", "input_schema_sha256",
+    "output_schema_sha256", "analyzer_sha256", "attack_catalog_sha256",
+    "compatibility_matrix_sha256", "oracle_sha256", "proposition_matrix_sha256",
+    "planned_row_count", "category_counts", "category_sum_matches_denominator",
+    "terminal_only_denominator_used", "conformance_mismatch_count",
+    "conformance_mismatch_row_ids", "target_invalid_breakdown", "propositions",
+    "all_required_propositions_evaluable_and_supported", "authorization_blockers",
+    "manuscript_claims_authorized",
+    "read_scope"
+  ],
+  "properties": {
+    "schema_version": {"const": "amy.analysis-summary.v1-draft"},
+    "classification": {
+      "enum": ["dummy_no_confirmatory_evidence", "confirmatory_R1"]
+    },
+    "input_sha256": {"$ref": "#/$defs/sha256"},
+    "input_schema_sha256": {"$ref": "#/$defs/sha256"},
+    "output_schema_sha256": {"$ref": "#/$defs/sha256"},
+    "analyzer_sha256": {"$ref": "#/$defs/sha256"},
+    "attack_catalog_sha256": {"$ref": "#/$defs/sha256"},
+    "compatibility_matrix_sha256": {"$ref": "#/$defs/sha256"},
+    "oracle_sha256": {"$ref": "#/$defs/sha256"},
+    "proposition_matrix_sha256": {"$ref": "#/$defs/sha256"},
+    "planned_row_count": {"type": "integer", "minimum": 1},
+    "category_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ACCEPT", "REJECT", "ERROR", "MISSING_EXECUTION", "GENERATION_FAILURE"],
+      "properties": {
+        "ACCEPT": {"type": "integer", "minimum": 0},
+        "REJECT": {"type": "integer", "minimum": 0},
+        "ERROR": {"type": "integer", "minimum": 0},
+        "MISSING_EXECUTION": {"type": "integer", "minimum": 0},
+        "GENERATION_FAILURE": {"type": "integer", "minimum": 0}
+      }
+    },
+    "category_sum_matches_denominator": {"const": true},
+    "terminal_only_denominator_used": {"const": false},
+    "conformance_mismatch_count": {"type": "integer", "minimum": 0},
+    "conformance_mismatch_row_ids": {
+      "type": "array", "uniqueItems": true, "items": {"type": "string"}
+    },
+    "target_invalid_breakdown": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "planned_row_count", "category_counts", "by_profile_and_family",
+        "subtotals_reconcile", "pooled_primary_result_permitted"
+      ],
+      "properties": {
+        "planned_row_count": {"type": "integer", "minimum": 1},
+        "category_counts": {"$ref": "#/$defs/categoryCounts"},
+        "by_profile_and_family": {
+          "type": "array", "minItems": 1,
+          "items": {"$ref": "#/$defs/profileFamilyBreakdown"}
+        },
+        "subtotals_reconcile": {"const": true},
+        "pooled_primary_result_permitted": {"const": false}
+      }
+    },
+    "propositions": {
+      "type": "array", "minItems": 12, "maxItems": 12,
+      "items": {"$ref": "#/$defs/propositionResult"}
+    },
+    "all_required_propositions_evaluable_and_supported": {"type": "boolean"},
+    "authorization_blockers": {
+      "type": "array", "minItems": 2, "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "manuscript_claims_authorized": {"const": false},
+    "read_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dummy_input_only", "confirmatory_artifacts_read", "model_outputs_read",
+        "network_used", "independent_review_performed"
+      ],
+      "properties": {
+        "dummy_input_only": {"type": "boolean"},
+        "confirmatory_artifacts_read": {"type": "boolean"},
+        "model_outputs_read": {"const": false},
+        "network_used": {"const": false},
+        "independent_review_performed": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "categoryCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ACCEPT", "REJECT", "ERROR", "MISSING_EXECUTION", "GENERATION_FAILURE"],
+      "properties": {
+        "ACCEPT": {"type": "integer", "minimum": 0},
+        "REJECT": {"type": "integer", "minimum": 0},
+        "ERROR": {"type": "integer", "minimum": 0},
+        "MISSING_EXECUTION": {"type": "integer", "minimum": 0},
+        "GENERATION_FAILURE": {"type": "integer", "minimum": 0}
+      }
+    },
+    "profileFamilyBreakdown": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile_id", "operator_family", "planned_row_count",
+        "category_counts", "accepted_unit_ids"
+      ],
+      "properties": {
+        "profile_id": {"enum": ["P0", "P1", "P2", "P3"]},
+        "operator_family": {"type": "string", "minLength": 1},
+        "planned_row_count": {"type": "integer", "minimum": 1},
+        "category_counts": {"$ref": "#/$defs/categoryCounts"},
+        "accepted_unit_ids": {
+          "type": "array", "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "propositionResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "status", "planned_row_count", "category_counts",
+        "mismatch_count", "mismatch_row_ids", "not_evaluable_reasons",
+        "would_support_positive_wording",
+        "abstract_eligible", "conclusion_eligible", "required_negative_wording"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^PR-[0-9]{3}$"},
+        "status": {
+          "enum": ["SUPPORTED", "FALSIFIED_OR_INCOMPLETE", "DESCRIPTIVE_COMPLETE", "NOT_EVALUABLE"]
+        },
+        "planned_row_count": {"type": "integer", "minimum": 0},
+        "category_counts": {"$ref": "#/$defs/categoryCounts"},
+        "mismatch_count": {"type": "integer", "minimum": 0},
+        "mismatch_row_ids": {
+          "type": "array", "uniqueItems": true, "items": {"type": "string"}
+        },
+        "not_evaluable_reasons": {
+          "type": "array", "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "would_support_positive_wording": {"type": "boolean"},
+        "abstract_eligible": {"type": "boolean"},
+        "conclusion_eligible": {"type": "boolean"},
+        "required_negative_wording": {"type": "boolean"}
+      }
+    }
+  }
+}

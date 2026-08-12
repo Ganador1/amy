@@ -1,0 +1,29 @@
+{
+  "byte_identical_after_canonicalization": true,
+  "classification": "same_environment_exploratory_replay",
+  "command_contract": "uv run --frozen python scripts/validate_system_paper_audit.py",
+  "errors": [],
+  "fresh_canonical_json_sha256": "aa9ec157617b9d6eb7e85fee873803004b5e3748a063464c90913b0ff27a6673",
+  "limitations": [
+    "Replay is on the same host and same dirty paper worktree, not an independent environment.",
+    "Canonical identity validates deterministic audit replay, not scientific truth.",
+    "Any legitimate paper-worktree edit requires a new retained audit revision rather than overwriting this record."
+  ],
+  "record_path": "audit/AMY_SYSTEM_PAPER_DEEP_AUDIT_RAW_2026-07-13.json",
+  "retained_canonical_json_sha256": "aa9ec157617b9d6eb7e85fee873803004b5e3748a063464c90913b0ff27a6673",
+  "retained_pretty_json_sha256": "36a1a81c780c6f7436b5fd80fd25eb9876ab8703dbcfa722aa50e858a5e09f7b",
+  "scanner_sha256": "d160503d8d2e9f10e8285849c2f00d24c482ecf11829e68d762673bf7b866370",
+  "schema_version": "amy.system-paper-integrity-audit-replay-validation.v1",
+  "summary": {
+    "abstract_word_range_violations": 27,
+    "benchmark_rows": 540,
+    "committed_manifest_valid": true,
+    "conclusion_word_range_violations": 22,
+    "strict_schema_type_violations": 1,
+    "unsupported_decimal_case_cluster_pvalue": 0.0703125,
+    "unsupported_decimal_domain_cluster_pvalue": 0.1875,
+    "working_manifest_mismatches": 13,
+    "working_manifest_valid": false
+  },
+  "valid": true
+}

@@ -1,0 +1,173 @@
+{
+  "base_count": 6,
+  "classification": "exploratory_R0_selected_profile_clean_bases_no_adversarial_cases",
+  "confirmatory_cases_generated": false,
+  "confirmatory_outcomes_read": false,
+  "errors": [],
+  "production_sigstore_conformance": false,
+  "retained_source_archive_self_valid": true,
+  "retained_source_drift_paths": [
+    "amy_verifier/github_attestation.py",
+    "amy_verifier/selected_profile_fixture.py",
+    "scripts/validate_selected_profile_base_run.py"
+  ],
+  "retained_source_matches_current_study": false,
+  "run_summary_sha256": "987be28d37cdc5219dabb36be8908087a08cbc35e99cdf749e8f182019cae4e8",
+  "schema_version": "amy.selected-profile-r0-base-validation.v1-draft",
+  "valid": true,
+  "validated_bases": [
+    {
+      "archive_sha256": "0fa82dc3309dff17f66137e148657ddab237db295c3d2feca10fe36c7004c3eb",
+      "attestation_sha256": "f563c3d7167aa109a7243e45b396ebfe43691052fccca5c30c4c717864bb13a8",
+      "base_id": "B01-TABULAR",
+      "clean_profile_results": {
+        "P0": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P1": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P2": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P3": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        }
+      },
+      "manifest_sha256": "7598203c027eca6402434b9a88b9cda9e2d65371d0a3f76bc255ed7b1c5d94ca",
+      "tree_sha256": "9ec2c5e7ed39b159763c158efec7d6a199303f709815817375aa49f71ff40a0e"
+    },
+    {
+      "archive_sha256": "068908b4852c92ccec83893cb0f211b26d7e457b1ddc5d75e70bd7ef7f864535",
+      "attestation_sha256": "4dee4f69043517704b6dae7894530886e63266544d332df5c611cfbdbf29f3ee",
+      "base_id": "B02-PAPER",
+      "clean_profile_results": {
+        "P0": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P1": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P2": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P3": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        }
+      },
+      "manifest_sha256": "1a668502ee143ba81048b658e874262080ad2496d6a051dfabe0af3de813af55",
+      "tree_sha256": "fa795c8d00010a8ec1d0dabe7ed0993dd04abaada4a4d6b2ab906ee058419bda"
+    },
+    {
+      "archive_sha256": "67e089e73b7795a70b9baa17460e15c16b2e64cb9445d1aa20e1c315cff34b2d",
+      "attestation_sha256": "227dab995edd1e53887e215a95540abc5f979980846033831c3d6b940e3a2e92",
+      "base_id": "B03-MODEL",
+      "clean_profile_results": {
+        "P0": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P1": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P2": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P3": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        }
+      },
+      "manifest_sha256": "a9ce9a6593ad820a5531b98572d1a4bf1dd94db2c83b76d79f8a109229480bf5",
+      "tree_sha256": "aa07625b3ea5393701046708c91143ee0dc7766d0da8f2434b66e98a28cbeddf"
+    },
+    {
+      "archive_sha256": "52a3280383df8fd387cc264cba59bfdb9f6f80a221067fcbc82047a3430d0fc7",
+      "attestation_sha256": "87e3632cb9ecc743ee540f88ce918a4ee30669739951ea78fc12c104e343ddc0",
+      "base_id": "B04-SOFTWARE",
+      "clean_profile_results": {
+        "P0": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P1": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P2": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P3": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        }
+      },
+      "manifest_sha256": "a0b8170309d4962f9d368c8c89ce4d1f3060bbc0a6c796e5f7a4b31c0bcc4ac6",
+      "tree_sha256": "8581c668d4b1883f6b789fb69444c7cb867c9fd1bf0835610bc8e58c93987dd3"
+    },
+    {
+      "archive_sha256": "a24f42053103361f8d1d275fb3c520adca5e823f05c1dd757255461bc933c78e",
+      "attestation_sha256": "a51ab05f0b981e3e20c334f2c48b021a813fd4e89bcf6c75ca7c25d32d264f1c",
+      "base_id": "B05-MODEL-EXCHANGE",
+      "clean_profile_results": {
+        "P0": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P1": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P2": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P3": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        }
+      },
+      "manifest_sha256": "f7f3de31abc314d8c60f6d49d516db9979be40ab435557ac8d1464cd68abada1",
+      "tree_sha256": "28cb05c45de3f2dd9cb305eab9161c632834fbe8bc5c996074351f277cf20428"
+    },
+    {
+      "archive_sha256": "d2cee2db286aa16ca15dd01ff2075edbb98884ad3ed3b6074ca87501f3c89830",
+      "attestation_sha256": "655302a6f83018a35a8537db3417a3a0876160a454578a6006f8b710a5d92a54",
+      "base_id": "B06-MIXED-RESEARCH",
+      "clean_profile_results": {
+        "P0": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P1": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P2": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        },
+        "P3": {
+          "decision": "ACCEPT",
+          "primary_reason": "OK"
+        }
+      },
+      "manifest_sha256": "d3586053ae2e94474df5e73be45b72f98d31e67a88d6f2fee4c982806475084f",
+      "tree_sha256": "237652ff5844f345a1aa58c0e1e22730a84ed566d330cfc3811865732a1a4ecd"
+    }
+  ],
+  "warnings": [
+    "retained source snapshot differs from the current study source at 3 path(s): amy_verifier/github_attestation.py, amy_verifier/selected_profile_fixture.py, scripts/validate_selected_profile_base_run.py"
+  ]
+}

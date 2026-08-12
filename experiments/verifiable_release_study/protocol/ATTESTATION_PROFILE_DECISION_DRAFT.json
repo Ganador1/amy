@@ -1,0 +1,154 @@
+{
+  "schema_version": "amy.attestation-profile-decision.v1-draft",
+  "status": "selected_for_implementation_not_frozen",
+  "selected_profile": "standard_provenance_plus_authenticated_manifest_metadata",
+  "recommended_profile": "standard_provenance_plus_authenticated_manifest_metadata",
+  "blocking_registration_gate": "RG-009",
+  "upstream_audit": "audit/UPSTREAM_ATTESTATION_SEMANTICS_2026-07-13.json",
+  "problem": "The pinned default GitHub provenance predicate lacked the custom source.dirty and A.M.Y material fields required by the pre-selection P3 adapter retained in the upstream audit.",
+  "selection_record": {
+    "selected_at": "2026-07-13",
+    "classification": "pre_registration_design_decision",
+    "confirmatory_outcomes_observed": false,
+    "basis": [
+      "The selected construction preserves the pinned action's standard GitHub SLSA predicate without claiming that it emits A.M.Y-specific fields.",
+      "One authenticated subject avoids cross-attestation subject or identity ambiguity.",
+      "Platform-derived provenance and workflow-authored release assertions remain structurally and linguistically separate.",
+      "Source snapshot and dependency-lock assertions can be cross-bound to payload entries authenticated by the same manifest.",
+      "The source snapshot is deliberately specified as opaque exact bytes; this profile makes no package-only claim that its tar members reconstruct the declared Git tree."
+    ],
+    "rejected_tradeoffs": {
+      "dual_standard_and_custom_attestations": "Adds a second predicate, cross-attestation equality rules, and another ambiguity/failure surface without making workflow-authored values independently true.",
+      "custom_slsa_build_type": "Would require a new public build-type specification and could be mistaken for GitHub's default provenance assurance.",
+      "reduce_p3_to_default_fields_only": "Would remove the clean-source and material controls that motivate the P3 research question."
+    },
+    "not_yet_evidence": "Selection is not a frozen profile, real A.M.Y attestation, independent review, or registration gate completion."
+  },
+  "trust_boundary": {
+    "platform_or_certificate_derived": [
+      "repository identity",
+      "workflow identity",
+      "source commit and ref",
+      "event and runner environment",
+      "signature and public transparency evidence"
+    ],
+    "workflow_authored": [
+      "clean-check result",
+      "source-snapshot digest",
+      "dependency-lock digest",
+      "execution-image selection",
+      "any custom predicate or manifest metadata"
+    ],
+    "never_established_by_attestation": [
+      "scientific truth",
+      "absence of omitted evidence",
+      "honesty of a compromised authorized workflow"
+    ]
+  },
+  "candidate_profiles": [
+    {
+      "id": "standard_provenance_plus_authenticated_manifest_metadata",
+      "recommendation": "preferred_for_independent_review",
+      "construction": "Use the unmodified default actions/attest SLSA predicate. Put schema-validated A.M.Y clean-state and material assertions in the exact manifest bytes authenticated as the sole Statement subject.",
+      "advantages": [
+        "Retains the upstream GitHub build type without adding undeclared external parameters.",
+        "Requires one attestation and one unambiguous verified result.",
+        "Makes platform-derived and workflow-authored claims structurally separable."
+      ],
+      "required_changes": [
+        "Add a versioned build-metadata object to the manifest schema and policy.",
+        "Revise P3 to validate the upstream workflow/source dependency plus authenticated manifest metadata.",
+        "Revise provenance operators, oracle, fixtures, and proposition wording before registration."
+      ]
+    },
+    {
+      "id": "dual_standard_and_custom_attestations",
+      "recommendation": "acceptable_if_complexity_is_justified",
+      "construction": "Require one default GitHub SLSA provenance attestation and one separately typed A.M.Y custom-policy attestation over the same manifest digest.",
+      "advantages": [
+        "Preserves standard provenance while isolating custom assertions in a distinct predicate type."
+      ],
+      "required_changes": [
+        "Publish and freeze the custom predicate schema and URI.",
+        "Require exactly one verified result for each expected predicate type.",
+        "Define cross-attestation identity and subject-equality checks."
+      ]
+    },
+    {
+      "id": "custom_slsa_build_type",
+      "recommendation": "not_preferred",
+      "construction": "Use custom action mode with a documented A.M.Y-specific SLSA build type containing the extra external parameters and dependencies.",
+      "advantages": [
+        "Can encode all current P3 fields in one predicate."
+      ],
+      "required_changes": [
+        "Publish a complete build-type specification and verifier rules.",
+        "Do not describe it as the default GitHub-generated predicate or inherit GitHub's default-provenance assurance without separate justification."
+      ]
+    },
+    {
+      "id": "reduce_p3_to_default_fields_only",
+      "recommendation": "scientifically_honest_but_reduces_scope",
+      "construction": "Keep only fields emitted by default actions/attest and remove dirty/material claims from P3.",
+      "advantages": [
+        "Smallest production implementation and clearest upstream interoperability."
+      ],
+      "required_changes": [
+        "Remove unsupported operators and narrow every claim, RQ, conclusion, and threat-model statement accordingly."
+      ]
+    }
+  ],
+  "freeze_requirements": [
+    "Independent human review of the selected profile and trust-boundary wording.",
+    "Machine-readable schema and exact JSON pointers for every enforced field.",
+    "Keep every protocol, oracle, proposition, and manuscript statement within the selected opaque snapshot-byte boundary; any future Git-tree-equivalence claim requires a separately specified and tested verifier.",
+    "Real clean A.M.Y run plus negative controls under the selected profile.",
+    "No remaining policy/template or implementation disagreement.",
+    "Protocol, oracle, catalog, proposition matrix, and manuscript use identical claim boundaries."
+  ],
+  "implementation_state": {
+    "production_manifest_schema": "schemas/manifest-production-v0.2.schema.json",
+    "historical_v1_result_schema": "schemas/github-production-verification-result.schema.json",
+    "historical_v1_policy_template": "protocol/GITHUB_ATTESTATION_POLICY_TEMPLATE.json",
+    "historical_v1_cli": "scripts/verify_github_attestation.py",
+    "historical_v1_cryptographic_core": "amy_verifier/github_attestation.py",
+    "production_policy_schema": "schemas/github-attestation-policy-v2.schema.json",
+    "production_result_schema": "schemas/github-production-verification-result-v2.schema.json",
+    "production_policy_template": "protocol/GITHUB_ATTESTATION_POLICY_TEMPLATE_V2.json",
+    "production_cryptographic_core": "amy_verifier/github_attestation_v2_core.py",
+    "production_adapter": "amy_verifier/github_attestation_v2.py",
+    "production_cli": "scripts/verify_github_attestation_v2.py",
+    "production_output_schema_complete": true,
+    "production_policy_schema_closed": true,
+    "production_policy_external_sha_required": true,
+    "production_api_evidence_contract_identity_complete": true,
+    "production_api_accept_schema_validation_complete": true,
+    "historical_v1_bytes_preserved": true,
+    "source_snapshot_claim_boundary": "exact_opaque_bytes_only_no_git_tree_equivalence_claim",
+    "selected_fixture_semantic_cases_implemented": true,
+    "selected_fixture_snapshot_is_valid_deterministic_ustar": true,
+    "selected_clean_base_migration_complete": true,
+    "selected_clean_base_count": 6,
+    "selected_clean_profile_result_count": 24,
+    "selected_catalog_migration_complete": true,
+    "selected_catalog_case_count": 41,
+    "selected_compatibility_matrix_complete": true,
+    "selected_compatibility_candidate_unit_count": 246,
+    "full_41_case_generator_migration_complete": true,
+    "selected_oracle_draft_complete": true,
+    "selected_oracle_row_count": 164,
+    "selected_generator_verifier_oracle_evaluator_separated": true,
+    "selected_development_case_profile_checks": 164,
+    "selected_development_checks_are_confirmatory_evidence": false,
+    "oracle_and_proposition_independent_review_complete": false,
+    "release_workflow_complete": false,
+    "pilot_profile_migration_complete": false,
+    "real_amy_p3_run_complete": false,
+    "independent_human_review_complete": false
+  },
+  "forbidden_until_frozen": [
+    "A real A.M.Y release has passed the selected P3 profile with default actions/attest provenance.",
+    "GitHub or Sigstore independently certifies a clean checkout or every A.M.Y material.",
+    "A valid attestation establishes scientific correctness."
+  ]
+}

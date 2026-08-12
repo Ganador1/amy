@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Ganador1/amy/experiments/verifiable_release_study/schemas/selected-profile-development-check.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "classification", "started_at", "ended_at", "command",
+    "command_contract", "environment", "source_inventory",
+    "source_inventory_pre_sha256", "source_inventory_post_sha256",
+    "source_inventory_unchanged_during_execution", "execution",
+    "declared_coverage", "boundaries"
+  ],
+  "properties": {
+    "schema_version": {"const": "amy.selected-profile-development-check.v2-draft"},
+    "classification": {"const": "pre_registration_disposable_fixture_development_check_not_confirmatory"},
+    "started_at": {"type": "string", "format": "date-time"},
+    "ended_at": {"type": "string", "format": "date-time"},
+    "command": {
+      "type": "array", "minItems": 5, "maxItems": 5,
+      "prefixItems": [
+        {"type": "string", "minLength": 1}, {"const": "-m"},
+        {"const": "pytest"}, {"const": "-q"},
+        {"const": "tests/test_selected_profile_full_generator_oracle.py"}
+      ],
+      "items": false
+    },
+    "command_contract": {"const": "python -m pytest -q tests/test_selected_profile_full_generator_oracle.py"},
+    "environment": {
+      "type": "object", "additionalProperties": false,
+      "required": ["python", "python_implementation", "platform", "machine", "git"],
+      "properties": {
+        "python": {"type": "string"}, "python_implementation": {"type": "string"},
+        "platform": {"type": "string"}, "machine": {"type": "string"},
+        "git": {
+          "type": "object", "additionalProperties": false,
+          "required": ["commit", "dirty_or_untracked"],
+          "properties": {
+            "commit": {"type": "string", "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$"},
+            "dirty_or_untracked": {"type": "boolean"}
+          }
+        }
+      }
+    },
+    "source_inventory": {
+      "type": "array", "minItems": 20, "uniqueItems": true,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["path", "bytes", "sha256"],
+        "properties": {
+          "path": {"type": "string", "pattern": "^[^/].+$"},
+          "bytes": {"type": "integer", "minimum": 0},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        }
+      }
+    },
+    "source_inventory_pre_sha256": {"$ref": "#/$defs/sha256"},
+    "source_inventory_post_sha256": {"$ref": "#/$defs/sha256"},
+    "source_inventory_unchanged_during_execution": {"const": true},
+    "execution": {
+      "type": "object", "additionalProperties": false,
+      "required": ["exit_code", "stdout", "stdout_sha256", "stderr", "stderr_sha256"],
+      "properties": {
+        "exit_code": {"const": 0}, "stdout": {"type": "string", "minLength": 1},
+        "stdout_sha256": {"$ref": "#/$defs/sha256"}, "stderr": {"const": ""},
+        "stderr_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "declared_coverage": {
+      "const": {
+        "catalog_case_count": 41,
+        "oracle_row_count": 164,
+        "development_case_profile_evaluations": 164,
+        "semantic_authenticated_pointer_isolation_cases": 11,
+        "same_environment_tree_replay_cases": 41
+      }
+    },
+    "boundaries": {
+      "const": {
+        "confirmatory_case_archives_created": false,
+        "confirmatory_outcomes_read": false,
+        "production_sigstore_conformance": false,
+        "real_amy_p3_execution": false,
+        "independent_oracle_review": false,
+        "expected_labels_independently_validated": false
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

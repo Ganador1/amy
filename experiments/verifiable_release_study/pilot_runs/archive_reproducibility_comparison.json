@@ -1,0 +1,214 @@
+{
+  "first_run": "pilot_20260713T054657Z",
+  "second_run": "pilot_20260713T054931Z",
+  "first_archive_count": 34,
+  "second_archive_count": 34,
+  "same_name_set": true,
+  "all_archives_identical": true,
+  "records": [
+    {
+      "archive": "ATTESTATION-MALFORMED-001.tar",
+      "first_sha256": "01ff43be7f2c4000420922318d625a7b7a19cefd111cfdc202e304441cf22b77",
+      "second_sha256": "01ff43be7f2c4000420922318d625a7b7a19cefd111cfdc202e304441cf22b77",
+      "identical": true
+    },
+    {
+      "archive": "ATTESTATION-MISSING-001.tar",
+      "first_sha256": "f1a84f081259f29142a7a4085d09e857348a6fc40a638d92ecf67499a681c7cd",
+      "second_sha256": "f1a84f081259f29142a7a4085d09e857348a6fc40a638d92ecf67499a681c7cd",
+      "identical": true
+    },
+    {
+      "archive": "BUILD-DIRTY-001.tar",
+      "first_sha256": "2f5222d6047745405f64961a86a6ccee17949e67aa97977cdf497a9ea1ca501b",
+      "second_sha256": "2f5222d6047745405f64961a86a6ccee17949e67aa97977cdf497a9ea1ca501b",
+      "identical": true
+    },
+    {
+      "archive": "CERTIFICATE-TIME-001.tar",
+      "first_sha256": "2e5d9ed68e64c646417ba218a46951c340b4902890041914d7d23a7c3d71f6ce",
+      "second_sha256": "2e5d9ed68e64c646417ba218a46951c340b4902890041914d7d23a7c3d71f6ce",
+      "identical": true
+    },
+    {
+      "archive": "CLEAN-001.tar",
+      "first_sha256": "bd0dd32c035ffff69bbc48f7ecf041e75911a50c2c6ade4dcfe5961eec1195e9",
+      "second_sha256": "bd0dd32c035ffff69bbc48f7ecf041e75911a50c2c6ade4dcfe5961eec1195e9",
+      "identical": true
+    },
+    {
+      "archive": "CONTENT-BITFLIP-001.tar",
+      "first_sha256": "73c91c7bd801ca55a5a84c824cb37350f0f5748d745fff53182f570a527b4830",
+      "second_sha256": "73c91c7bd801ca55a5a84c824cb37350f0f5748d745fff53182f570a527b4830",
+      "identical": true
+    },
+    {
+      "archive": "CONTENT-SAME-SIZE-001.tar",
+      "first_sha256": "710ee0cb90bddb129d16df80296fd118fc5d6bd4b40bdeeeea107658047b244d",
+      "second_sha256": "710ee0cb90bddb129d16df80296fd118fc5d6bd4b40bdeeeea107658047b244d",
+      "identical": true
+    },
+    {
+      "archive": "CONTENT-TRUNCATE-001.tar",
+      "first_sha256": "abfd58ee53f3118cb8feb0ecd94ae8740718172becab7c6ea0a9e1754a7dc01d",
+      "second_sha256": "abfd58ee53f3118cb8feb0ecd94ae8740718172becab7c6ea0a9e1754a7dc01d",
+      "identical": true
+    },
+    {
+      "archive": "IDENTITY-WORKFLOW-001.tar",
+      "first_sha256": "75d169f60e0ec1fb94b1faa01cc46e4f91adca3292fd7a515f2193f608534c87",
+      "second_sha256": "75d169f60e0ec1fb94b1faa01cc46e4f91adca3292fd7a515f2193f608534c87",
+      "identical": true
+    },
+    {
+      "archive": "INVENTORY-EXTRA-001.tar",
+      "first_sha256": "e8d6208720a1a90f8aa7ae4ab6a5a46eb22462f4f6d55c71251a712ea6c1aa75",
+      "second_sha256": "e8d6208720a1a90f8aa7ae4ab6a5a46eb22462f4f6d55c71251a712ea6c1aa75",
+      "identical": true
+    },
+    {
+      "archive": "INVENTORY-MISSING-001.tar",
+      "first_sha256": "b747312640197c84e4f49d855633d57c45dc27fa4633be2d531ba318a40006ec",
+      "second_sha256": "b747312640197c84e4f49d855633d57c45dc27fa4633be2d531ba318a40006ec",
+      "identical": true
+    },
+    {
+      "archive": "INVENTORY-OMIT-ROLE-001.tar",
+      "first_sha256": "4e02365f9ce335c5411090da930b9f15d1ff4a72eacee1d90325c730d802242d",
+      "second_sha256": "4e02365f9ce335c5411090da930b9f15d1ff4a72eacee1d90325c730d802242d",
+      "identical": true
+    },
+    {
+      "archive": "MANIFEST-DUPLICATE-KEY-001.tar",
+      "first_sha256": "ea33009685f497bcdbb6cd087aaa79e0a1b1879487febbce7aaac0c42e0ff052",
+      "second_sha256": "ea33009685f497bcdbb6cd087aaa79e0a1b1879487febbce7aaac0c42e0ff052",
+      "identical": true
+    },
+    {
+      "archive": "MANIFEST-MALFORMED-001.tar",
+      "first_sha256": "4074d04e562d51eb3ea3bca2228b5cec78714a3b41181595ac0b18c2002979a7",
+      "second_sha256": "4074d04e562d51eb3ea3bca2228b5cec78714a3b41181595ac0b18c2002979a7",
+      "identical": true
+    },
+    {
+      "archive": "MANIFEST-MISSING-001.tar",
+      "first_sha256": "1737085739eeb9fde16f43891dda04d594d79683c7d7798e6cfff6d541693b9c",
+      "second_sha256": "1737085739eeb9fde16f43891dda04d594d79683c7d7798e6cfff6d541693b9c",
+      "identical": true
+    },
+    {
+      "archive": "MANIFEST-NONCANONICAL-001.tar",
+      "first_sha256": "24138e7efd9561839ff5c729f61c2bf1d7513cd18902cc12934c459f296c88cf",
+      "second_sha256": "24138e7efd9561839ff5c729f61c2bf1d7513cd18902cc12934c459f296c88cf",
+      "identical": true
+    },
+    {
+      "archive": "MANIFEST-SCHEMA-001.tar",
+      "first_sha256": "a2c46072bafafc3defed6d8a3b04beca50a04ca31800c71189f02a4c0f38315e",
+      "second_sha256": "a2c46072bafafc3defed6d8a3b04beca50a04ca31800c71189f02a4c0f38315e",
+      "identical": true
+    },
+    {
+      "archive": "MANIFEST-SELF-HASH-001.tar",
+      "first_sha256": "a1047af441bf596127866ebe495f8d9139c7f6291d5b902373c867a865e0e840",
+      "second_sha256": "a1047af441bf596127866ebe495f8d9139c7f6291d5b902373c867a865e0e840",
+      "identical": true
+    },
+    {
+      "archive": "MATERIAL-LOCK-MISMATCH-001.tar",
+      "first_sha256": "1d2b32c094defc111beda85fc014353c7c81a21ba5e6245b237dcd6b38023e43",
+      "second_sha256": "1d2b32c094defc111beda85fc014353c7c81a21ba5e6245b237dcd6b38023e43",
+      "identical": true
+    },
+    {
+      "archive": "PATH-DUPLICATE-NORMALIZED-001.tar",
+      "first_sha256": "12d68cf32ed3567934d7b451e7f0a0fde3a53456b4a52fddb6e436d811ec0111",
+      "second_sha256": "12d68cf32ed3567934d7b451e7f0a0fde3a53456b4a52fddb6e436d811ec0111",
+      "identical": true
+    },
+    {
+      "archive": "PATH-HARDLINK-001.tar",
+      "first_sha256": "73c1275f71930dfa2616c69d87f6bd3f172b2ce14296d04d0316d418af4520b3",
+      "second_sha256": "73c1275f71930dfa2616c69d87f6bd3f172b2ce14296d04d0316d418af4520b3",
+      "identical": true
+    },
+    {
+      "archive": "PATH-NONREGULAR-001.tar",
+      "first_sha256": "ed7c7c08548e8c12d261674022a7d58194e92346af69b8c5d79d6b830ab63aff",
+      "second_sha256": "ed7c7c08548e8c12d261674022a7d58194e92346af69b8c5d79d6b830ab63aff",
+      "identical": true
+    },
+    {
+      "archive": "PATH-PARENT-001.tar",
+      "first_sha256": "c7e757a7f33729e2a1c21c0c13f0b0ac7b48a4bc4d0b8ed6a250fce14e2fda12",
+      "second_sha256": "c7e757a7f33729e2a1c21c0c13f0b0ac7b48a4bc4d0b8ed6a250fce14e2fda12",
+      "identical": true
+    },
+    {
+      "archive": "PATH-SYMLINK-001.tar",
+      "first_sha256": "91d10795c0080e284a8ee1fef7e2d5824a109a8c6e337ec5fd6500115ef72ac9",
+      "second_sha256": "91d10795c0080e284a8ee1fef7e2d5824a109a8c6e337ec5fd6500115ef72ac9",
+      "identical": true
+    },
+    {
+      "archive": "PREDICATE-WRONG-TYPE-001.tar",
+      "first_sha256": "096ffba03ac6a82edce1f13cd50b2b612d5bfaa955767a934e4d88eb12ba9e9e",
+      "second_sha256": "096ffba03ac6a82edce1f13cd50b2b612d5bfaa955767a934e4d88eb12ba9e9e",
+      "identical": true
+    },
+    {
+      "archive": "RESOURCE-MANIFEST-LIMIT-001.tar",
+      "first_sha256": "f63c8a9208df6cba355d4f8b56f400acb62bda6390635136483231e141f72065",
+      "second_sha256": "f63c8a9208df6cba355d4f8b56f400acb62bda6390635136483231e141f72065",
+      "identical": true
+    },
+    {
+      "archive": "SIGNATURE-ALGORITHM-001.tar",
+      "first_sha256": "ca4c5be8789980a143fa92d708b03a23368c5f70e7a0e3cd45180089f7e68a4e",
+      "second_sha256": "ca4c5be8789980a143fa92d708b03a23368c5f70e7a0e3cd45180089f7e68a4e",
+      "identical": true
+    },
+    {
+      "archive": "SIGNATURE-CORRUPT-001.tar",
+      "first_sha256": "54bfb36cb152842ab3f0934a2b18fdbae69c68ad8a8a7b495ae18bc1a1de29be",
+      "second_sha256": "54bfb36cb152842ab3f0934a2b18fdbae69c68ad8a8a7b495ae18bc1a1de29be",
+      "identical": true
+    },
+    {
+      "archive": "SOURCE-WRONG-REVISION-001.tar",
+      "first_sha256": "8df18fada9e97fc0c3a38121b9374897c751e24cd8f44e7fccf42d667df7e46e",
+      "second_sha256": "8df18fada9e97fc0c3a38121b9374897c751e24cd8f44e7fccf42d667df7e46e",
+      "identical": true
+    },
+    {
+      "archive": "STATEMENT-MALFORMED-001.tar",
+      "first_sha256": "99a5bae66a2c916ab15b83c10f615d9bc927522dcda1c544222a953ba0e96ecb",
+      "second_sha256": "99a5bae66a2c916ab15b83c10f615d9bc927522dcda1c544222a953ba0e96ecb",
+      "identical": true
+    },
+    {
+      "archive": "SUBJECT-REPLAY-001.tar",
+      "first_sha256": "1fc0dcc9cb2aa9474539c5b68632d2e9a4d7284512119ca6344462a6effbd712",
+      "second_sha256": "1fc0dcc9cb2aa9474539c5b68632d2e9a4d7284512119ca6344462a6effbd712",
+      "identical": true
+    },
+    {
+      "archive": "SUBSTITUTION-COHERENT-001.tar",
+      "first_sha256": "91ef01c2d12694754c6d60bb2475b160c9104e26f0bb09b3b4c6e09b993ea037",
+      "second_sha256": "91ef01c2d12694754c6d60bb2475b160c9104e26f0bb09b3b4c6e09b993ea037",
+      "identical": true
+    },
+    {
+      "archive": "SUBSTITUTION-UNAUTHORIZED-001.tar",
+      "first_sha256": "9609b842a3acd2c5b081af0fae0125a8926403478707137332b96a24be5ef36a",
+      "second_sha256": "9609b842a3acd2c5b081af0fae0125a8926403478707137332b96a24be5ef36a",
+      "identical": true
+    },
+    {
+      "archive": "TRANSPARENCY-MISSING-001.tar",
+      "first_sha256": "6c41f0952b2586f3e7d183c421f730e0f428f5a615bf9fe1d120f21f62ff96d4",
+      "second_sha256": "6c41f0952b2586f3e7d183c421f730e0f428f5a615bf9fe1d120f21f62ff96d4",
+      "identical": true
+    }
+  ]
+}

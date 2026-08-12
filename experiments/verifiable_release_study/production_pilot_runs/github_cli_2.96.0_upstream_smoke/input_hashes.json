@@ -1,0 +1,57 @@
+{
+  "schema_version": "0.1.0",
+  "recorded_at": "2026-07-13T06:14:02Z",
+  "classification": "exploratory_upstream_p2_interoperability_only",
+  "subject": {
+    "name": "gh_2.96.0_linux_amd64.tar.gz",
+    "source_url": "https://github.com/cli/cli/releases/download/v2.96.0/gh_2.96.0_linux_amd64.tar.gz",
+    "bytes": 14652560,
+    "sha256": "83d5c2ccad5498f58bf6368acb1ab32588cf43ab3a4b1c301bf36328b1c8bd60",
+    "retained_locally": false
+  },
+  "retained_files": [
+    {
+      "path": "policy.json",
+      "bytes": 2585,
+      "sha256": "a2a651a937d831330ff1f2d49c1ccd88a9b70577b2c67f288f0996ef9216bfcb"
+    },
+    {
+      "path": "result.json",
+      "bytes": 6037,
+      "sha256": "444615e874774a01679e55098885a5e790d78a70a8f5fa0cc39caab28e545baa"
+    },
+    {
+      "path": "inputs/attestation.sigstore.jsonl",
+      "bytes": 13931,
+      "sha256": "83afd51f7e58fa9e1ee884fc22dbbfefe16b2ed4c41109622a6556c0714e97ff"
+    },
+    {
+      "path": "inputs/trusted_root.jsonl",
+      "bytes": 34634,
+      "sha256": "65ca537f6ed8a47fd0e560c421baa1f6c1efb8b25fc200d8c5c02c0e92eb2b9c"
+    }
+  ],
+  "tool": {
+    "release": "https://github.com/cli/cli/releases/tag/v2.96.0",
+    "source_commit": "b300f2ec7ec9dc9addc39b2ad88c54097ded7ca0",
+    "linux_archive_sha256": "83d5c2ccad5498f58bf6368acb1ab32588cf43ab3a4b1c301bf36328b1c8bd60",
+    "linux_binary_sha256": "56b8bbbb27b066ecb33dbef9a256dc9d1314adaeff0908a752feba6c34053b40"
+  },
+  "execution_image": {
+    "name": "ghcr.io/astral-sh/uv:0.9.17-python3.12-bookworm-slim",
+    "linux_amd64_manifest_digest": "sha256:c8367d14e6e5f9311689792032852506d7188f487c6db2967c386a26ebeecff1",
+    "network": "disabled_during_verification"
+  },
+  "same_environment_replay": {
+    "attempts": 2,
+    "result_sha256": "444615e874774a01679e55098885a5e790d78a70a8f5fa0cc39caab28e545baa",
+    "byte_identical": true,
+    "independent_reproduction": false
+  },
+  "limitations": [
+    "The subject belongs to cli/cli, not A.M.Y.",
+    "Only P2 was exercised; the A.M.Y-specific P3 predicate policy was not.",
+    "The upstream Statement contains multiple subjects; the A.M.Y template forbids that.",
+    "The trusted root still requires an independent trust bootstrap; co-location is not sufficient."
+  ]
+}

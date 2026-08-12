@@ -1,0 +1,49 @@
+{
+  "title": "Paired finite-chain SSH diagnostic reliability under quenched disorder",
+  "tables": [
+    {
+      "id": "table_1",
+      "csv_path": "artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/numeric_tool_results.csv",
+      "json_path": "artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/numeric_tool_results.json",
+      "row_count": 182,
+      "columns": [
+        "tool",
+        "row_index",
+        "delta",
+        "n",
+        "strength",
+        "effective_realizations_per_orientation",
+        "total",
+        "gap_accuracy",
+        "joint_accuracy",
+        "gap_false_positive_rate",
+        "joint_false_positive_rate",
+        "gap_false_negative_rate",
+        "joint_false_negative_rate",
+        "error_gap_minus_error_joint",
+        "gap_wrong_joint_right",
+        "gap_right_joint_wrong",
+        "mcnemar_pvalue",
+        "reference_label_flips_from_clean_parent",
+        "gap_positive_rate",
+        "joint_positive_rate",
+        "gap_accuracy_ci95",
+        "joint_accuracy_ci95",
+        "error_difference_ci95"
+      ],
+      "caption": "Machine-readable numeric values extracted from evidence-grade tool output."
+    }
+  ],
+  "figures": [
+    {
+      "id": "figure_1",
+      "path": "artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/figure_1_ssh_disorder_paired_error.png",
+      "caption": "Figure 1. Pooled paired diagnostic error for the gap-only and joint two-of-three rules across the primary and replication Atlas runs."
+    },
+    {
+      "id": "figure_2",
+      "path": "artifacts/Paired_finite-chain_SSH_diagnostic_reliability_under_quenched_disorder/figure_2_ssh_diagonal_negative_control.png",
+      "caption": "Figure 2. Diagnostic-positive rates under diagonal disorder, reported as a symmetry-breaking negative control rather than topological accuracy."
+    }
+  ]
+}

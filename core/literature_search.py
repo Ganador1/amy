@@ -54,6 +54,98 @@ OPENALEX_KEY = os.getenv("OPENALEX_API_KEY", "")
 SEMANTIC_SCHOLAR_KEY = os.getenv("SEMANTIC_SCHOLAR_API_KEY", "")
 CORE_KEY = os.getenv("CORE_API_KEY", "")
 
+# Terms used only to keep a literature result inside the requested scientific
+# domain.  They are deliberately broad: topic-token overlap remains the main
+# signal, while this vocabulary prevents a highly cited but unrelated paper
+# from ranking above a less-cited relevant result.
+DOMAIN_TERMS: dict[str, set[str]] = {
+    "mathematics": {
+        "algebra", "calculus", "conjecture", "equation", "geometry",
+        "integer", "mathematics", "number", "prime", "proof", "theorem",
+    },
+    "physics": {
+        "atom", "energy", "field", "particle", "physics", "quantum",
+        "spectrum", "wave",
+    },
+    "chemistry": {
+        "bond", "chemical", "chemistry", "compound", "molecular",
+        "molecule", "organic", "reaction",
+    },
+    "biology": {
+        "bioinformatics", "biology", "cell", "dna", "gene", "genome",
+        "protein", "sequence",
+    },
+    "medicine": {
+        "clinical", "disease", "drug", "medicine", "patient", "therapy",
+        "treatment", "vaccine",
+    },
+    "statistics": {
+        "confidence", "correlation", "distribution", "regression",
+        "sample", "statistical", "statistics", "variance",
+    },
+    "astronomy": {
+        "astronomy", "cosmic", "exoplanet", "galaxy", "planet", "star",
+        "stellar",
+    },
+    "neuroscience": {
+        "brain", "neural", "neuron", "neuroscience", "synaptic",
+    },
+    "climate": {
+        "atmosphere", "climate", "co2", "emissions", "temperature",
+    },
+    "engineering": {
+        "engineering", "manufacturing", "material", "structural", "system",
+    },
+}
+
+_GENERIC_QUERY_TERMS = {
+    "analysis", "computational", "evidence", "experiment", "investigation",
+    "research", "result", "study", "verification", "using",
+}
+
+
+def _text_tokens(text: str) -> set[str]:
+    """Return stable lexical tokens suitable for conservative relevance QA."""
+    return {
+        token
+        for token in re.findall(r"[a-z0-9]+", (text or "").lower())
+        if len(token) >= 3 and token not in _GENERIC_QUERY_TERMS
+    }
+
+
+def _paper_relevance(paper: "Paper", query: str, domain: str | None) -> dict[str, Any]:
+    """Score explainable lexical relevance without inventing semantic certainty.
+
+    This is intentionally a precision-oriented publication safeguard, not a
+    general-purpose scholarly ranker.  A result must share at least one useful
+    topic term (or, for an entirely generic query, a domain term) to be handed
+    to the paper writer.
+    """
+    query_terms = _text_tokens(query)
+    title_terms = _text_tokens(paper.title)
+    abstract_terms = _text_tokens(paper.abstract)
+    normalized_domain = (domain or "").strip().lower()
+    domain_terms = DOMAIN_TERMS.get(normalized_domain, set())
+
+    query_title = query_terms & title_terms
+    query_abstract = query_terms & abstract_terms
+    domain_matches = domain_terms & (title_terms | abstract_terms)
+    topic_matches = query_title | query_abstract
+    relevant = bool(topic_matches) if query_terms else bool(domain_matches)
+
+    score = (
+        4 * len(query_title)
+        + len(query_abstract)
+        + 2 * len(domain_terms & title_terms)
+        + len(domain_terms & abstract_terms)
+    )
+    return {
+        "relevant": relevant,
+        "score": score,
+        "topic_matches": sorted(topic_matches),
+        "domain_matches": sorted(domain_matches),
+    }
+
 
 @dataclass
 class Paper:
@@ -288,6 +380,7 @@ async def _run_one(name, fn, client, query, k, per_timeout) -> tuple[str, list[P
 async def search_literature_async(
     query: str,
     *,
+    domain: str | None = None,
     max_results: int = DEFAULT_MAX_RESULTS,
     sources: dict | None = None,
     per_source_timeout: float = DEFAULT_PER_SOURCE_TIMEOUT,
@@ -365,9 +458,33 @@ async def search_literature_async(
             seen_title.add(nt)
         merged.append(p)
 
-    # Rank: papers with abstracts and citations first, then by recency.
-    merged.sort(key=lambda p: (bool(p.abstract), p.citations or 0, p.year or 0),
-                reverse=True)
+    # Publication-facing calls provide a domain.  In that mode, remove papers
+    # with no lexical connection to the topic before citation count can lift an
+    # unrelated but popular result to the top.  Raw/general searches that omit
+    # a domain preserve the historical broad-search behavior.
+    relevance_by_id: dict[int, dict[str, Any]] = {}
+    filtered_irrelevant = 0
+    if domain:
+        relevant_papers: list[Paper] = []
+        for paper in merged:
+            relevance = _paper_relevance(paper, query, domain)
+            relevance_by_id[id(paper)] = relevance
+            if relevance["relevant"]:
+                relevant_papers.append(paper)
+            else:
+                filtered_irrelevant += 1
+        merged = relevant_papers
+
+    # Relevance leads; abstracts, citations and recency break ties.
+    merged.sort(
+        key=lambda p: (
+            relevance_by_id.get(id(p), {}).get("score", 0),
+            bool(p.abstract),
+            p.citations or 0,
+            p.year or 0,
+        ),
+        reverse=True,
+    )
 
     # Transparent support score: more independent sources + more papers = more
     # confidence, capped at 1.0. NOT a p-value, just an evidence-breadth signal.
@@ -379,12 +496,25 @@ async def search_literature_async(
               query=query[:80], papers=len(merged),
               sources_ok=succeeded, errors=errors, elapsed=round(elapsed, 2))
 
+    paper_dicts = []
+    for paper in merged[:max_results * 2]:
+        item = paper.to_dict()
+        if domain:
+            relevance = relevance_by_id[id(paper)]
+            item["relevance_score"] = relevance["score"]
+            item["relevance_matches"] = relevance["topic_matches"]
+            item["domain_matches"] = relevance["domain_matches"]
+        paper_dicts.append(item)
+
     return {
-        "papers": [p.to_dict() for p in merged[:max_results * 2]],
+        "papers": paper_dicts,
         "support_score": round(support, 3),
         "sources_queried": list(sources.keys()),
         "sources_succeeded": succeeded,
         "source_errors": errors,
+        "domain": domain,
+        "relevance_filter_applied": bool(domain),
+        "papers_filtered_irrelevant": filtered_irrelevant,
         "elapsed": round(elapsed, 2),
     }
 
